@@ -81,6 +81,7 @@
     <Content Include="scripts\vendor\ydn.db-is-core-qry.js.map" />
     <Content Include="appcache.manifest" />
     <Content Include="robots.txt" />
+    <Content Include="favicon.ico" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Global.asax.cs">
