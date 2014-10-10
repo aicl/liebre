@@ -1,12 +1,2 @@
 ﻿<%@ Page Language="C#" Inherits="Aicl.Liebre.WebHost.Default" %>
-<!DOCTYPE html>
-<html>
-<head runat="server">
-	<title>Default</title>
-</head>
-<body>
-	<form id="form1" runat="server">
-	</form>
-</body>
-</html>
-
+<!doctype html><html manifest="appcache.manifest"><head><meta charset="utf-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><title>Diagnostico SGSST</title><meta name="description" content="Diagnostico SGSST, Decreto 1443 de 2014"><meta name="mobile-web-app-capable" content="yes"><meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0"><link rel="stylesheet" href="styles/main.css"><script src="bower_components/platform/platform.js"></script><script src="bower_components/polymer/polymer.js"></script><link rel="import" href="bower_components/polymer/layout.html"><script src="flatiron-director/director.min.js"></script><link rel="import" href="flatiron-director/flatiron-director.html"><link rel="import" href="elements/elements.vulcanized.html"></head><body fullbleed unresolved><read-ajax id="read"></read-ajax><create-ajax id="create"></create-ajax><update-ajax id="update"></update-ajax><delete-ajax id="delete"></delete-ajax><x-app id="app"></x-app><script src="scripts/vendor/ydn.db-is-core-qry.js"></script><script src="scripts/app.js"></script></body></html>
