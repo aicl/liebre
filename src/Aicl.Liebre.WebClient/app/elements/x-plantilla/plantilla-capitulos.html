@@ -1,0 +1,109 @@
+<link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../../bower_components/core-icons/core-icons.html">
+<link rel="import" href="../../bower_components/core-icons/image-icons.html">
+<link rel="import" href="../../bower_components/paper-dialog/paper-dialog.html">
+<link rel="import" href="../../bower_components/paper-input/paper-input.html">
+<link rel="import" href="plantilla-cap-card.html">
+<link rel="import" href="../common/app-header-panel.html">
+
+<polymer-element name="plantilla-capitulos">
+
+  <template>
+	  <style>
+		:host {
+			display: block;
+			position: relative;
+			padding: 0px;    
+		}			
+	  </style>
+	  	  
+	  <app-header-panel on-l-icon-tap="{{ fireCapitulosBack }}"	licon="arrow-back" ricon="add-circle"
+						on-r-icon-tap="{{handlerShowNuevoCapitulo}}"
+						titulo="{{plantilla.Titulo +' - '+ plantilla.Version}}">
+		  <div layout vertical center>
+			  <template repeat="{{item in capitulos}}">
+				  <plantilla-cap-card item="{{item}}"
+								  on-edit-capitulo="{{ handlerShowEditCapitulo }}"
+								  on-delete-capitulo="{{handlerShowDeleteCapitulo}}"
+								  on-mostrar-preguntas ="{{ delegateMostrarPreguntas }}"
+								  >
+				  </plantilla-cap-card>
+			  </template>
+		  </div>
+	  </app-header-panel>
+	    
+	  <paper-dialog id="dialog" backdrop style="top:0px;">
+		  <paper-input label="Titulo" required floatinglabel id="Titulo" value="{{_onedit.Titulo}}"></paper-input>
+		  <paper-input label="Estadar" floatinglabel id="Version" value="{{_onedit.Estandar}}"></paper-input>			
+		  <paper-icon-button icon="cancel" dismissive></paper-icon-button>
+		  <paper-icon-button icon="check" 
+							 on-tap="{{ delegateSaveCapitulo }}"
+							 affirmative autofocus>
+		  </paper-icon-button>
+		</paper-dialog>
+	    <paper-dialog id="borrar" backdrop style="top:0px;">
+			<paper-input disabled label="Titulo" required floatinglabel value="{{_onedit.Titulo}}">
+			</paper-input>
+			<paper-input disabled label="Estandar" floatinglabel  value="{{_onedit.Estandar}}"></paper-input>
+			
+			<paper-icon-button icon="cancel" dismissive></paper-icon-button>
+			<paper-icon-button icon="check" 
+							   on-tap="{{ delegateDeleteCapitulo }}"
+							   affirmative autofocus>
+			</paper-icon-button>
+		</paper-dialog>
+	   
+  </template>
+  <script>
+    Polymer({
+		created:function(){
+			this.plantilla={};
+			this.capitulos =[]	
+			this._current={};
+			this._onedit={};	
+		},
+		
+		fireCapitulosBack:function(){
+			this.fire("capitulos-back");
+		},
+				
+		handlerShowEditCapitulo:function(e, detail, sender){	
+			this._current=sender.templateInstance.model.item;
+			this._onedit= Object.clone(this._current);
+			this.$.dialog.toggle();
+		},
+				
+		handlerShowNuevoCapitulo:function(){
+			this._current={Titulo:"", Estandar:"", IdPlantilla:""};
+			this._onedit= Object.clone(this._current);
+			this.$.dialog.toggle();
+		},
+							
+		handlerShowDeleteCapitulo:function(e, detail, sender){	
+			this._onedit=sender.templateInstance.model.item;
+			this.$.borrar.toggle();
+		},
+		
+		delegateDeleteCapitulo:function(e, detail, sender){
+			if(this.handlerDeleteCapitulo){
+				this.handlerDeleteCapitulo(e, {item:this._onedit}, sender);
+			}
+		},
+		
+		delegateSaveCapitulo:function(e, detail, sender){		
+			if(this.$.Titulo.invalid || Object.compare(this._current, this._onedit)) return;
+			console.log("Capitulo vamos a guardar..:", this._onedit);
+			if(this.handlerSaveCapitulo){
+				this._onedit.IdPlantilla=this.plantilla.Id;
+				this.handlerSaveCapitulo(e, {item:this._onedit}, sender);
+			}			
+		},
+		
+		delegateMostrarPreguntas:function(e, detail, sender){
+			if(this.handlerMostrarPreguntas){
+				this.handlerMostrarPreguntas(e, detail, sender);
+			}
+		}
+    });
+  </script>
+</polymer-element>

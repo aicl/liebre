@@ -1,0 +1,564 @@
+<link rel="import" href="../../bower_components/core-pages/core-pages.html">
+<link rel="import" href="../../bower_components/paper-toast/paper-toast.html">
+<link rel="import" href="../common/menu-panel.html">
+<link rel="import" href="../common/web-loader.html">
+<link rel="import" href="plantilla-list.html">
+<link rel="import" href="plantilla-capitulos.html">
+<link rel="import" href="plantilla-guias.html">
+<link rel="import" href="pl-cap-preguntas.html">
+<link rel="import" href="select-guias.html">
+
+<polymer-element name="x-plantilla" attributes="route">
+  <template>
+    <style>
+		.page{
+			height: 100vh;
+			overflow: auto; 
+			width: 100vw;
+		}
+		
+		paper-toast {
+			bottom: 0;
+			left: 0;
+			width: 100%;
+		}
+		
+		#error, #error_connection{
+			background-color: #620000;
+			color:#fff;
+		}
+		#complete{
+			background-color: #000f62;
+			color:#fff;
+		}
+		
+		
+    </style>
+	  
+	  <web-loader id='wl' display='none'></web-loader>
+	  <core-pages selected="{{route}}" valueattr="hash">
+		  <div hash="plantillas" class="page">      
+			  <menu-panel id="menuPanel" 
+						  on-item-menu-tap="{{ itemMenuTap }}"
+						  on-main-icon-tap="{{ mainIconTap }}" 
+						  icon="arrow-back"
+						  titulo="Gestión de Plantillas" >
+				  <plantilla-list id="pl" >
+				  </plantilla-list>
+			  </menu-panel>
+		  </div>
+		  <div hash="plantillas/capitulos" class="page" id="capitulos">
+			  <plantilla-capitulos id="pc" on-capitulos-back="{{ handlerBack}}"</plantilla-capitulos>
+		  </div>
+		  <div hash="plantillas/guias" class="page" id="guias">
+			  <plantilla-guias id="pg" on-guias-back="{{ handlerBack}}"</plantilla-guias>
+		  </div>
+		  <div hash="plantillas/capitulos/preguntas" class="page" id="preguntas">
+			  <pl-cap-preguntas id="pcp" on-preguntas-back="{{ handlerBack }}"></pl-cap-preguntas>
+		  </div>
+		  <div hash="plantillas/capitulos/preguntas/sg" class="page" >
+			  <select-guias id="sg" on-sg-back="{{ handlerBack }}"
+							on-check-selected="{{handlerCheckSelectedGuias}}"></select-guias>
+		  </div>	  
+	  </core-pages>
+	  <paper-toast id="error" role="alert" text="Error"></paper-toast>
+	  <paper-toast id="error_connection" role="alert"></paper-toast>
+	  <paper-toast id="complete" text="Operación realizada!"></paper-toast>
+	  
+	 
+  </template>
+
+  <script>
+
+	  Polymer({		  		   
+		  route:"plantillas",
+		  routeChanged:function(old, current){
+			  location.hash=current;
+		  },
+		  	
+		  get menuPanel() {
+			return this.$.menuPanel;
+		  },
+		  
+		  		  
+		  __bajarTap:function(event){
+			  console.log("bajartap", this);		
+		  },
+		  
+		  __nuevoTap:function(event){
+			  console.log("nuevotap", this);
+			  this.$.pl.handlerShowNuevaPlantilla();
+		  },
+		  
+		  created:function(){
+			  this.rqReadPlantillas = {
+				  model:'plantilla',
+				  response:this.readPlantillasResponse.bind(this),
+				  error:this.readError.bind(this),
+				  errorConnection: this.readErrorConnection.bind(this),
+				  complete:this.readComplete.bind(this)
+			  };
+			  this.rqUpdatePlantilla = {
+				  model:'plantilla',
+				  response:this.updatePlantillaResponse.bind(this),
+				  error:this.readError.bind(this),
+				  errorConnection: this.readErrorConnection.bind(this),
+				  complete:this.readComplete.bind(this)
+			  };
+			  this.rqCreatePlantilla = {
+				  model:'plantilla',
+				  response:this.createPlantillaResponse.bind(this),
+				  error:this.readError.bind(this),
+				  errorConnection: this.readErrorConnection.bind(this),
+				  complete:this.readComplete.bind(this)
+			  };
+			  this.rqDeletePlantilla = {
+				  model:'plantilla',
+				  response:this.deletePlantillaResponse.bind(this),
+				  error:this.readError.bind(this),
+				  errorConnection: this.readErrorConnection.bind(this),
+				  complete:this.readComplete.bind(this)
+			  };
+			  
+			  this.rqReadCapitulos = {
+				  model:'capitulo',
+				  response:this.readCapitulosResponse.bind(this),
+				  error:this.readError.bind(this),
+				  errorConnection: this.readErrorConnection.bind(this),
+				  complete:this.readComplete.bind(this),
+				  urlparams:{}
+			  };
+			  this.rqUpdateCapitulo = {
+				  model:'capitulo',
+				  response:this.updateCapituloResponse.bind(this),
+				  error:this.readError.bind(this),
+				  errorConnection: this.readErrorConnection.bind(this),
+				  complete:this.readComplete.bind(this)
+			  };
+			  this.rqCreateCapitulo = {
+				  model:'capitulo',
+				  response:this.createCapituloResponse.bind(this),
+				  error:this.readError.bind(this),
+				  errorConnection: this.readErrorConnection.bind(this),
+				  complete:this.readComplete.bind(this)
+			  };
+			  this.rqDeleteCapitulo = {
+				  model:'capitulo',
+				  response:this.deleteCapituloResponse.bind(this),
+				  error:this.readError.bind(this),
+				  errorConnection: this.readErrorConnection.bind(this),
+				  complete:this.readComplete.bind(this)
+			  }
+			  
+			  this.rqReadGuias = {
+				  model:'guia',
+				  response:this.readGuiasResponse.bind(this),
+				  error:this.readError.bind(this),
+				  errorConnection: this.readErrorConnection.bind(this),
+				  complete:this.readComplete.bind(this),
+				  urlparams:{}
+			  };
+			   this.rqUpdateGuia = {
+				  model:'guia',
+				  response:this.updateGuiaResponse.bind(this),
+				  error:this.readError.bind(this),
+				  errorConnection: this.readErrorConnection.bind(this),
+				  complete:this.readComplete.bind(this)
+			  };
+			  this.rqCreateGuia = {
+				  model:'guia',
+				  response:this.createGuiaResponse.bind(this),
+				  error:this.readError.bind(this),
+				  errorConnection: this.readErrorConnection.bind(this),
+				  complete:this.readComplete.bind(this)
+			  };
+			  this.rqDeleteGuia = {
+				  model:'guia',
+				  response:this.deleteGuiaResponse.bind(this),
+				  error:this.readError.bind(this),
+				  errorConnection: this.readErrorConnection.bind(this),
+				  complete:this.readComplete.bind(this)
+			  };
+			  
+			  this.rqReadPreguntas = {
+				  model:'pregunta',
+				  response:this.readPreguntasResponse.bind(this),
+				  error:this.readError.bind(this),
+				  errorConnection: this.readErrorConnection.bind(this),
+				  complete:this.readComplete.bind(this),
+				  urlparams:{}
+			  }; 
+			  this.rqUpdatePregunta = {
+				  model:'pregunta',
+				  response:this.updatePreguntaResponse.bind(this),
+				  error:this.readError.bind(this),
+				  errorConnection: this.readErrorConnection.bind(this),
+				  complete:this.readComplete.bind(this)
+			  };
+			  this.rqCreatePregunta = {
+				  model:'pregunta',
+				  response:this.createPreguntaResponse.bind(this),
+				  error:this.readError.bind(this),
+				  errorConnection: this.readErrorConnection.bind(this),
+				  complete:this.readComplete.bind(this)
+			  };
+			  this.rqDeletePregunta = {
+				  model:'pregunta',
+				  response:this.deletePreguntaResponse.bind(this),
+				  error:this.readError.bind(this),
+				  errorConnection: this.readErrorConnection.bind(this),
+				  complete:this.readComplete.bind(this)
+			  }
+			  
+		  },
+		  
+		  ready:function(){
+			  var self=this;
+			  var t = document.createElement('template');
+			  t.innerHTML = 
+				  '<paper-icon-button id="_nuevo" on-tap="{{}}" icon="add-circle"></paper-icon-button>';
+			  this.$.menuPanel.tb.appendChild(this.instanceTemplate(t));
+			  			  
+			  t = document.createElement('template');
+			  t.innerHTML = 
+				  '<paper-icon-button id="_down" on-tap="{{}}" icon="cloud-download"></paper-icon-button>';
+			  this.$.menuPanel.tb.appendChild(this.instanceTemplate(t));
+			  
+			  var x =this.$.menuPanel.tb.querySelector("#_nuevo");
+			  x.addEventListener("tap", this.__nuevoTap.bind(this) );
+			  
+			  x =this.$.menuPanel.tb.querySelector("#_down");
+			  x.addEventListener("tap", this.__bajarTap.bind(this) ); 			  
+			  			  
+			  this.$.pl.handlerMostrarCapitulos=this.handlerMostrarCapitulos.bind(this);
+			  this.$.pl.handlerSavePlantilla= this.handlerSavePlantilla.bind(this);
+			  this.$.pl.handlerDeletePlantilla= this.handlerDeletePlantilla.bind(this);
+			  this.$.pl.handlerMostrarGuias= this.handlerMostrarGuias.bind(this);
+			  
+			  this.$.pc.handlerMostrarPreguntas=this.handlerMostrarPreguntas.bind(this);
+			  this.$.pc.handlerSaveCapitulo= this.handlerSaveCapitulo.bind(this);
+			  this.$.pc.handlerDeleteCapitulo= this.handlerDeleteCapitulo.bind(this);
+			  
+			  this.$.pg.handlerSaveGuia= this.handlerSaveGuia.bind(this);
+			  this.$.pg.handlerDeleteGuia= this.handlerDeleteGuia.bind(this);
+			  
+			  this.$.pcp.handlerSavePregunta= this.handlerSavePregunta.bind(this);
+			  this.$.pcp.handlerDeletePregunta= this.handlerDeletePregunta.bind(this);		  
+			  this.$.pcp.handlerShowGuiasToSelect= this.handlerShowGuiasToSelect.bind(this);
+			  this.$.pcp.handlerRemoveGuia=this.handlerSavePregunta.bind(this);
+		  },
+		  
+		  domReady:function(){
+			  this.fire("element-ready");
+		  },
+		  
+		  go:function(){
+			  window.liebre.remote.read(this.rqReadPlantillas);
+			  this.$.wl.display="block";
+		  },
+		  
+		  mainIconTap: function(){
+			 this.fire("x-back");
+		  },
+		  
+		  handlerBack:function(){
+			  this.route=this.route.substring(0,this.route.lastIndexOf("/"));
+		  },
+		  
+		  handlerMostrarCapitulos:function(e,detail, sender){
+			  this.$.pc.plantilla=detail.item;
+			  this.$.pc.capitulos=[];
+			  this.rqReadCapitulos.urlparams.IdPlantilla= detail.item.Id;
+			  window.liebre.remote.read(this.rqReadCapitulos);
+			  this.$.wl.display="block";
+		  },
+		  
+		  handlerMostrarGuias:function(e,detail, sender){
+			  this.$.pg.plantilla=detail.item;
+			  this.$.pg.guias=[];
+			  this.rqReadGuias.urlparams.IdPlantilla= detail.item.Id;
+			  window.liebre.remote.read(this.rqReadGuias);
+			  this.$.wl.display="block";
+		  },
+		  
+		  handlerMostrarPreguntas:function(e, detail, sender){
+			  
+			  this.$.pcp.capitulo=detail.item;
+			  this.$.pcp.preguntas=[];
+			  
+			  this.route="plantillas/capitulos/preguntas";
+			  this.rqReadGuias.urlparams.IdPlantilla= this.$.pc.plantilla.Id;
+			  window.liebre.remote.read(this.rqReadGuias);
+			  this.$.wl.display="block";		  
+			  
+		  },
+		  
+		  handlerShowGuiasToSelect:function(e, detail, sender){
+			  this.$.sg.plantilla=this.$.pc.plantilla;
+			  this.$.sg.clearSelected();
+			  this.route="plantillas/capitulos/preguntas/sg";
+		  },
+		  
+		  handlerSavePlantilla:function(e, detail, sender){
+			if(detail.item.Id){
+				window.liebre.remote.update(detail.item, this.rqUpdatePlantilla);
+			}
+			else{
+				window.liebre.remote.create(detail.item, this.rqCreatePlantilla);
+			}
+		  },
+		  
+		  handlerDeletePlantilla:function(e, detail, sender){
+			  window.liebre.remote.delete(detail.item, this.rqDeletePlantilla);
+		  },
+		  	
+		  handlerSaveCapitulo:function(e, detail, sender){
+			  if(detail.item.Id){
+				  liebre.remote.update(detail.item, this.rqUpdateCapitulo);
+			  }
+			  else{
+				  liebre.remote.create(detail.item, this.rqCreateCapitulo);
+			  }
+		  },
+		  
+		  handlerDeleteCapitulo:function(e, detail, sender){
+			  liebre.remote.delete(detail.item, this.rqDeleteCapitulo);
+		  },
+		  	
+		  
+		  handlerSaveGuia:function(e, detail, sender){
+			  if(detail.item.Id){
+				  liebre.remote.update(detail.item, this.rqUpdateGuia);
+			  }
+			  else{
+				  liebre.remote.create(detail.item, this.rqCreateGuia);
+			  }
+		  },
+		  
+		  handlerDeleteGuia:function(e, detail, sender){
+			  liebre.remote.delete(detail.item, this.rqDeleteGuia);
+		  },
+		  		  
+		  
+		  handlerSavePregunta:function(e, detail, sender){
+			if(detail.item.Id){
+				liebre.remote.update(detail.item, this.rqUpdatePregunta);
+			}
+			else{
+				liebre.remote.create(detail.item, this.rqCreatePregunta);
+			}
+		  },
+		  
+		  handlerDeletePregunta:function(e, detail, sender){
+			  liebre.remote.delete(detail.item, this.rqDeletePregunta);
+		  },
+		  
+		  handlerCheckSelectedGuias:function(e, detail, sender){
+			  
+			  if(detail.selected!=null){
+				  var current = this.$.pcp.current;
+				  var s=[]
+				  for (var i in detail.selected){
+					  var found=false;
+					  for(var g in current.IdGuias){
+						  if(detail.selected[i]===current.IdGuias[g]){
+							  found=true;
+							  break;
+						  }
+					  }
+					  if(!found){
+						  s.push(detail.selected[i])
+					  }
+				  }
+				  for(var z in s){
+					  current.IdGuias.push(s[z]);
+				  }
+				  if(s.length>0){
+					  liebre.remote.update(current, this.rqUpdatePregunta);
+				  }
+				  
+			  }
+			  this.handlerBack();
+		  },
+		  		  
+		  readPlantillasResponse:function(event){
+			  var data = event.detail.data;
+			  for (var d in data){
+				  data[d].FechaInicial=window.liebre.tools.formatDate(data[d].FechaInicial);
+				  data[d].FechaFinal=window.liebre.tools.formatDate(data[d].FechaFinal);
+			  }
+			  this.$.pl.plantillas= data;
+		  },
+		  
+		  readCapitulosResponse:function(event){
+			  this.$.pc.capitulos = event.detail.data;
+			  this.route="plantillas/capitulos";
+		  },
+		  		  
+		  readGuiasResponse:function(event){
+			  if(this.route==='plantillas'){
+				 this.$.pg.guias = event.detail.data;
+				 this.route="plantillas/guias";
+			  }
+			  else{
+				  this.$.pcp.guias = event.detail.data;
+				  this.$.sg.guias = event.detail.data;				  
+				  this.rqReadPreguntas.urlparams.IdCapitulo= this.$.pcp.capitulo.Id;
+				  window.liebre.remote.read(this.rqReadPreguntas);
+				  this.$.wl.display="block";
+			  }
+		  },
+		  
+		  readPreguntasResponse:function(event){
+			  this.$.pcp.preguntas = event.detail.data;
+		  },
+		  
+		  readError:function(event){
+			  console.log("error", event);
+			  this.$.error.text= "Error: "+ event.type+". "+ event.detail.xhr.response;
+			  this.$.error.show();
+			  
+		  },
+		  readComplete:function(event){
+			  console.log("complete", event);
+			  this.$.wl.display="none";
+			  if( event.detail.xhr.status!=0 
+				 && event.type.lastIndexOf('-error')<0 
+				 && event.type.lastIndexOf('read')<0 ) {
+				  this.$.complete.text="Operación realizada: "+ event.type;
+				  this.$.complete.show();
+			  }
+		  },
+		  readErrorConnection:function(event){
+			  console.log("error-connection", event);
+			  this.$.error_connection.text="Error de conexión: "+
+				  event.type+ ". Servidor:"+ liebre.tools.getBaseUrl();
+			  this.$.error_connection.show();
+		  },
+		  
+		  createPlantillaResponse:function(event){	
+			var data = event.detail.data;
+			data.FechaInicial=window.liebre.tools.formatDate(data.FechaInicial);
+			data.FechaFinal=window.liebre.tools.formatDate(data.FechaFinal);
+			this.$.pl.plantillas.unshift(data);
+		  },
+		  updatePlantillaResponse:function(event){	
+			var data = event.detail.data;
+			data.FechaInicial=window.liebre.tools.formatDate(data.FechaInicial);
+			data.FechaFinal=window.liebre.tools.formatDate(data.FechaFinal);
+			for (var d in this.$.pl.plantillas){
+				if( this.$.pl.plantillas[d].Id=== data.Id){
+					this.$.pl.plantillas[d]= data;
+					break;
+				}
+			}	
+		  },
+		  deletePlantillaResponse:function(event){	
+			var data = event.detail.data;
+			var index=-1;
+			for (var d in this.$.pl.plantillas){
+				if( this.$.pl.plantillas[d].Id=== data.Id){
+					index= this.$.pl.plantillas.indexOf(this.$.pl.plantillas[d]);
+					break;
+				}
+			}
+			if(index>=0){
+				this.$.pl.plantillas.splice(index,1);
+			}
+		  },
+		  
+		  
+		  createCapituloResponse:function(event){	
+			console.log("Capitulo reponse: create", event);
+			this.$.pc.capitulos.unshift(event.detail.data);
+		  },
+		  updateCapituloResponse:function(event){	
+			console.log("Capitulo reponse: upadte", event);
+			var data = event.detail.data;
+			for (var d in this.$.pc.capitulos){
+				if( this.$.pc.capitulos[d].Id=== data.Id){
+					this.$.pc.capitulos[d]= data;
+					break;
+				}
+			}
+		  },
+		  deleteCapituloResponse:function(event){	
+			console.log("Capitulo reponse: delete", event);
+			var data = event.detail.data;
+			var index=-1;
+			for (var d in this.$.pc.capitulos){
+				if( this.$.pc.capitulos[d].Id=== data.Id){
+					index= this.$.pc.capitulos.indexOf(this.$.pc.capitulos[d]);
+					break;
+				}
+			}
+			if(index>=0){
+				this.$.pc.capitulos.splice(index,1);
+			}
+		  },
+		  
+		  
+		  createGuiaResponse:function(event){	
+			console.log("Guia reponse: create", event);
+			this.$.pg.guias.unshift(event.detail.data);
+		  },
+		  updateGuiaResponse:function(event){	
+			console.log("Guia reponse: upadte", event);
+			var data = event.detail.data;
+			for (var d in this.$.pg.guias){
+				if( this.$.pg.guias[d].Id=== data.Id){
+					this.$.pg.guias[d]= data;
+					break;
+				}
+			}
+		  },
+		  deleteGuiaResponse:function(event){	
+			console.log("Guia reponse: delete", event);
+			var data = event.detail.data;
+			var index=-1;
+			for (var d in this.$.pg.guias){
+				if( this.$.pg.guias[d].Id=== data.Id){
+					index= this.$.pg.guias.indexOf(this.$.pg.guias[d]);
+					break;
+				}
+			}
+			if(index>=0){
+				this.$.pg.guias.splice(index,1);
+			}
+		  },
+		  
+		  
+		  createPreguntaResponse:function(event){	
+			console.log("Pregunta reponse: create", event);
+			this.$.pcp.preguntas.unshift(event.detail.data);
+		  },
+		  updatePreguntaResponse:function(event){	
+			console.log("Pregunta reponse: update", event);
+			var data = event.detail.data;
+			for (var d in this.$.pcp.preguntas){
+				if( this.$.pcp.preguntas[d].Id=== data.Id){
+					this.$.pcp.preguntas[d]= data;
+					break;
+				}
+			}
+		  },
+		  deletePreguntaResponse:function(event){	
+			console.log("Pregunta reponse: delete", event);
+			var data = event.detail.data;
+			var index=-1;
+			for (var d in this.$.pcp.preguntas){
+				if( this.$.pcp.preguntas[d].Id=== data.Id){
+					index= this.$.pcp.preguntas.indexOf(this.$.pcp.preguntas[d]);
+					break;
+				}
+			}
+			if(index>=0){
+				this.$.pcp.preguntas.splice(index,1);
+			}
+		  }
+		  		
+    });
+
+  </script>
+
+</polymer-element>

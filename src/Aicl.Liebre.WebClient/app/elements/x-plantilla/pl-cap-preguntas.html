@@ -1,0 +1,168 @@
+<link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../../bower_components/core-icons/core-icons.html">
+<link rel="import" href="../../bower_components/core-icons/image-icons.html">
+<link rel="import" href="../../bower_components/paper-dialog/paper-dialog.html">
+<link rel="import" href="../../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../../bower_components/paper-checkbox/paper-checkbox.html">
+<link rel="import" href="../common/app-header-panel.html">
+<link rel="import" href="pl-cap-pregunta-card.html">
+
+<polymer-element name="pl-cap-preguntas">
+  <template>
+	  <style>
+		  :host { 
+			  display: block;
+			  padding: 0px;  
+		  }
+		
+		paper-checkbox + span{
+			padding: 10px 0px 0px 10px
+		}
+		
+		paper-checkbox {
+			padding: 10px 0px 0px 0px
+		}
+	  </style>
+	  
+	  <app-header-panel on-l-icon-tap="{{ firePreguntasBack }}"	licon="arrow-back" ricon="add-circle"
+						on-r-icon-tap="{{handlerShowNuevaPregunta}}"
+						titulo="{{capitulo.Titulo}}">
+		  <div layout vertical center>
+			  <template repeat="{{item in preguntas}}">
+				  <pl-cap-pregunta-card item="{{item}}"  guias="{{guias}}"
+									on-edit-pregunta="{{handlerShowEditPregunta}}"
+									on-delete-pregunta="{{handlerShowDeletePregunta}}"
+									on-mostrar-guias-to-select="{{delegateShowGuiasToSelect}}"
+									on-remove-guia="{{ handlerShowRemoveGuia }}">
+				  </pl-cap-pregunta-card>
+			  </template>
+		  </div>
+	  </app-header-panel>
+	  	  
+	  <paper-dialog id="dialog" backdrop style="top:0px;">
+		  <paper-input label="Enunciado" required floatinglabel id="Enunciado" value="{{_onedit.Enunciado}}"
+					   multiline rows="4">
+		  </paper-input>
+		  <div horizontal layout>
+			  <paper-checkbox id="NoAplicaDisponible" checked="{{ _onedit.NoAplicaDisponible }}"></paper-checkbox>
+			  <span>Disponible 'No Aplica'</span>
+		  </div>
+		  <paper-input label="Metodo" floatinglabel id="Metodo" value="{{_onedit.Metodo}}"
+					   multiline rows="2"></paper-input>			
+		  <paper-icon-button icon="cancel" dismissive></paper-icon-button>
+		  <paper-icon-button icon="check" 
+							 on-tap="{{ delegateSavePregunta }}"
+							 affirmative autofocus>
+		  </paper-icon-button>
+		</paper-dialog>
+	    <paper-dialog id="borrar" backdrop style="top:0px;">
+			<paper-input disabled label="Enunciado"  floatinglabel value="{{_onedit.Enunciado}}"
+						 multiline rows="4">
+			</paper-input>
+			<div horizontal layout>
+			  <paper-checkbox disabled checked="{{ _onedit.NoAplicaDisponible }}"></paper-checkbox>
+			  <span>Disponible 'No Aplica'</span>
+		  </div>
+			<paper-input disabled label="Metodo" floatinglabel  value="{{_onedit.Metodo}}"
+						 multiline rows="2"></paper-input>
+			<paper-icon-button icon="cancel" dismissive></paper-icon-button>
+			<paper-icon-button icon="check" 
+							   on-tap="{{ delegateDeletePregunta }}"
+							   affirmative autofocus>
+			</paper-icon-button>
+		</paper-dialog>
+	  
+	  
+	  <paper-dialog id="removeGuia" heading="Remover Guia?" backdrop style="top:0px;">
+			<paper-icon-button icon="cancel" dismissive></paper-icon-button>
+			<paper-icon-button icon="check" 
+							   on-tap="{{ delegateRemoveGuia }}"
+							   affirmative autofocus>
+			</paper-icon-button>
+	  </paper-dialog>
+	  
+  </template>
+  <script>
+    Polymer({						
+		 get current() {
+			return this._current;
+		  },
+		
+		created:function(){
+			this.capitulo={};
+			this.preguntas =[]	
+			this.guias=[];
+			this._current={};
+			this._onedit={};
+		},
+		
+		firePreguntasBack:function(){
+			this.fire("preguntas-back");
+		},
+		
+		handlerShowEditPregunta:function(e, detail, sender){	
+			this._current=sender.templateInstance.model.item;
+			this._onedit= Object.clone(this._current);
+			this.$.dialog.toggle();
+		},
+				
+		handlerShowNuevaPregunta:function(){
+			this._current={Enunciado:"", Metodo:"", NoAplicaDisponible:false, IdCapitulo:"", IdGuias:[]};
+			this._onedit= Object.clone(this._current);
+			this.$.dialog.toggle();
+		},
+				
+		handlerShowDeletePregunta:function(e, detail, sender){	
+			this._onedit=sender.templateInstance.model.item;
+			this.$.borrar.toggle();
+		},
+		
+		delegateDeletePregunta:function(e, detail, sender){
+			if(this.handlerDeletePregunta){
+				this.handlerDeletePregunta(e, {item:this._onedit}, sender);
+			}
+		},
+		
+		delegateSavePregunta:function(e, detail, sender){				
+			if(this.$.Enunciado.invalid || Object.compare(this._current, this._onedit)) return;
+			console.log("vamos a guardar..:", this._onedit, this.$.NoAplicaDisponible.checked, this.capitulo);
+						
+			if(this.handlerSavePregunta){
+				this._onedit.IdCapitulo= this.capitulo.Id;
+				this.handlerSavePregunta(e, {item:this._onedit}, sender);
+			}			
+		},
+		
+		delegateRemoveGuia:function(e, detail, sender){
+			if(this.handlerRemoveGuia){
+				var index=-1;
+				for (var d in this._onedit.IdGuias){
+					if( this._onedit.IdGuias[d]=== this.guiaToRemove){
+						index= this._onedit.IdGuias.indexOf(this._onedit.IdGuias[d]);
+						break;
+					}
+				}
+				if(index>=0){
+					this._onedit.IdGuias.splice(index,1);
+					this.handlerRemoveGuia(e, {item:this._onedit, guia:this.guiaToRemove}, sender);
+				}
+			}
+		},
+					
+		delegateShowGuiasToSelect:function(e, detail, sender){
+			this._current=sender.templateInstance.model.item;
+			this._onedit= Object.clone(this._current);
+			if(this.handlerShowGuiasToSelect){
+				this.handlerShowGuiasToSelect(e, {item:this._current}, sender);
+			}
+		},
+		
+		handlerShowRemoveGuia:function(e,detail, sender){
+			this._current= sender.templateInstance.model.item;
+			this._onedit= Object.clone(this._current);
+			this.guiaToRemove= detail.guia;
+			this.$.removeGuia.toggle();
+		}
+    });
+  </script>
+</polymer-element>

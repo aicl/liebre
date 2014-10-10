@@ -1,0 +1,105 @@
+<link rel="import" href="../common/menu-panel.html">
+<link rel="import" href="../x-plantilla/x-plantilla.html">
+
+<polymer-element name="x-app" attributes="route">
+  <template>
+    <style>
+    </style>
+    
+	  <flatiron-director route="{{route}}" autoHash></flatiron-director>
+	  <menu-panel id="menuPanel" hidden?="{{ tag!='' }}" 
+				  on-item-menu-tap="{{ itemMenuTap }}"
+				  on-main-icon-tap="{{ mainIconTap }}" titulo="LiebrePro-SGSST" >
+	  </menu-panel>
+	  <!--<x-plantilla id="Plantillas" hidden=true on-x-back="{{ xBackHandler }}" route="{{route}}"></x-plantilla>
+      !-->
+	  <div id='frameContainer'>
+		  <div hidden></div>
+	  </div>
+	 	  	 
+  </template>
+
+  <script>
+	  Polymer({   
+		  route:"",
+		  tag:"",
+		  
+		  get menuPanel() {
+			return this.$.menuPanel;
+		  },
+		  		  
+		  ready:function(){
+			  
+			  this.$.menuPanel.config.items=[
+				  {text:"Plantillas", tag:'x-plantilla', route:'plantillas'},
+				  {text:"Empresas", tag:'x-empresa', route:'empresas'},
+				  {text:"Diagnosticos", tag:'x-diagnostico', route:'diagnosticos'},
+				  {text:"Cuestionarios", tag:'x-cuestionario', route:'cuestionario'}
+			  ]
+		  },
+		  
+		  mainIconTap: function(){
+		  },
+		  
+		  itemMenuTap:function(event, detail, sender){			  
+			  this.tag=detail.getAttribute("tag");
+			  this.route=detail.getAttribute("route");
+		  },
+		  
+		  xBackHandler:function(){
+			  this.route='';
+		  },
+		  
+		  tagChanged:function(old, current){
+			  if(current===''){
+				  return;
+			  }
+			  			  
+			  var t = document.createElement(this.tag);
+			  var fc = this.$.frameContainer;
+			  fc.removeChild(fc.firstElementChild);
+			  fc.appendChild(t);
+			  t.addEventListener('element-ready', function(e){
+				  t.go();
+			  });
+			  t.addEventListener('x-back', function(e){
+				  this.route='';
+			  }.bind(this));
+			  
+			  t.route=this.route;
+		  },
+		  
+		  routeChanged:function(old, current){
+			  console.log("x-app routeChanged old:%s current:%s", old, current);
+			  if(current==='main' || current==='' || current=== window.location.origin+"/") {
+				  this.route='';
+				  this.tag='';
+				  
+				  var t = document.createElement('div');
+				  
+				  var fc = this.$.frameContainer;
+				  fc.removeChild(fc.firstElementChild);
+				  fc.appendChild(t);
+				  
+				  return ;
+			  }
+			  
+			  // actualizar el route del elemente activo....
+			  this.$.frameContainer.firstElementChild.route=current;
+			  this.tag= this.findTag(current);
+		  },
+		  
+		  findTag:function(rt){
+			  var tg = this.tag;
+			  var items = this.$.menuPanel.config.items;
+			  for(var i in items){
+				  if(items[i].route===rt){
+					  tg= items[i].tag;
+					  break;
+				  }
+			  }
+			  return tg;
+		  } 
+    });
+  </script>
+</polymer-element>

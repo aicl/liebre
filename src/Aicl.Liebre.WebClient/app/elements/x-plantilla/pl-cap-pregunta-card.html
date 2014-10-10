@@ -1,0 +1,105 @@
+<link rel="import" href="../../bower_components/core-icon-button/core-icon-button.html">
+<link rel="import" href="../../bower_components/core-item/core-item.html">
+<link rel="import" href="../../bower_components/core-icons/core-icons.html">
+<link rel="import" href="../../bower_components/core-icons/image-icons.html">
+
+<polymer-element name="pl-cap-pregunta-card" attributes="item,guias">
+  <template>
+    <style>    
+      :host {
+		  display: block;
+		  position: relative;
+			padding: 10px 5px 10px 5px ;    
+			margin: 10px 0px 10px 0px;
+			box-shadow: 0 1px 2px 0 ;
+			border-radius: 2px;
+			overflow: hidden;	
+			max-width: 512px;
+			background-color: rgb(212, 212, 212);
+			width: 100vw;  
+	  }
+		
+		core-icon-button {
+		}		
+		
+		span[raisedbutton]{
+			background-color: rgb(8, 13, 49); ;
+			color: white;
+			font-size: small;
+			padding: 8px;
+			border-radius: 4px;
+			width: 40px;
+			margin: 0px 4px;
+		}
+		
+		.titulo{
+			padding:10px 5px 0px 5px;
+		}
+		.text{
+			padding:5px 5px 0px 5px;
+			margin-bottom:  6px;
+			font-size: small;
+		}
+
+	</style>
+	  			  <div layout vertical>
+					  <div layout horizontal>
+						  <div flex class="titulo">{{item.Enunciado}}</div>
+						  <core-icon-button icon="delete"  on-tap="{{ fireDelete }}"></core-icon-button>
+						  <core-icon-button icon="create"  on-tap="{{ fireEdit }}"></core-icon-button>
+					  </div>
+					  <div class="text">Disponible 'No Aplica': {{item.NoAplicaDisponible?'SI':'NO'}}</div>
+					  <div class="text">{{item.Metodo}}</div>
+					  <span raisedbutton on-tap="{{ fireMostrarGuiasToSelect }}" >Guias</span>
+					  <template repeat="{{g in item.IdGuias}}">
+						  <div layout horizontal center>
+							  <core-icon-button icon="delete" 
+								 on-tap="{{ fireRemoveGuia }}"></core-icon-button>
+							  <div flex class="text">{{g | formatGuia }}</div>
+							  
+						  </div>
+					  </template>
+				  </div>
+				  				  
+	  	<content></content>  
+  </template>
+  <script>
+
+    Polymer({
+		fireDelete:function(e, detail, sender){
+			liebre.tools.blink(sender);
+			this.fire("delete-pregunta");
+		},
+		
+		fireEdit:function(e, detail, sender){	
+			
+			liebre.tools.blink(sender);
+			this.fire("edit-pregunta");				
+		},
+		
+		fireRemoveGuia:function(e, detail, sender){
+			var m = sender.templateInstance.model;
+			console.log('preparemos para remover', e, detail, sender);
+			console.log('model', m);
+			this.fire("remove-guia", {guia: m.g});
+		},
+		
+		fireMostrarGuiasToSelect:function(e, detail, sender){
+			liebre.tools.blink(sender);
+			this.fire("mostrar-guias-to-select");
+		},
+		
+		formatGuia:function(v){
+			for(var g in this.guias){
+				if (this.guias[g].Id===v){
+					return this.guias[g].Enunciado;
+				}   
+			}
+			return v;	
+		}
+						
+    });
+
+  </script>
+
+</polymer-element>

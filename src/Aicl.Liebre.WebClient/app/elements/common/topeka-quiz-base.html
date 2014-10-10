@@ -1,0 +1,87 @@
+<!--
+Copyright (c) 2014 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="../../bower_components/paper-toggle-button/paper-toggle-button.html">
+
+<polymer-element name="topeka-quiz-base" attributes="quiz,value,noAplicaChecked" block>
+<template>
+
+  <style>
+  
+    /* default paddings for normal and wide layouts */
+    :host {
+      padding: 10px 6px;
+    }
+    
+    :host-context(.wide) {
+      padding: 10px 14px 18px;
+    }
+	  
+	#na{
+		padding-left: 10px;
+	}
+  
+  </style>
+	
+		<div layout horizontal center 
+			 style="visibility:{{ quiz.NoAplicaDisponible?'visible':'hidden' }};padding-left: 10px;">
+			<paper-radio-button id="rb" toggles class="blue"
+								checked="{{noAplicaChecked}}">
+			</paper-radio-button> 
+			<div id="na" flex>No Aplica</div>
+		</div>
+	
+</template>
+<script>
+
+  (function() {
+    
+    var DEFAULT_POINT = 8;
+
+    Polymer({
+ 
+      eventDelegates: {
+        tap: 'answered',
+        keypress: 'keyPress'
+      },
+      
+      isCorrect: function() {
+        return this.value == this.quiz.answer;
+      },
+      
+      getScore: function() {
+        return this.isCorrect() ? (this.quiz.point || DEFAULT_POINT) : 0;
+      },
+      
+      answered: function(event, detail, source) {
+		  console.log("noAplicaChecked", this.noAplicaChecked);
+		if(this.$.rb.checked){
+			this.value=null;
+		}
+        this.fire('quiz-answered');
+      },
+      
+      reset: function() {
+        this.value = null;
+      },
+      
+      keyPress: function(e) {
+        // enter key
+        if (e.keyCode === 13) {
+          this.fire('quiz-next');
+          e.preventDefault();
+        }
+      }
+		     
+    });
+    
+  })();
+
+</script>
+</polymer-element>

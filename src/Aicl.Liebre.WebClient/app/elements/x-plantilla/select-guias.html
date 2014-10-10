@@ -1,0 +1,91 @@
+<link rel="import" href="../../bower_components/core-selector/core-selector.html">
+<link rel="import" href="../../bower_components/core-icons/core-icons.html">
+<link rel="import" href="../../bower_components/core-icons/image-icons.html">
+<link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
+<polymer-element name="select-guias">
+
+  <template>
+    <style>    
+      :host {  		  
+		display: block;
+		position: relative;
+		padding: 0px;     
+      }
+				
+		.list {
+          display: block;
+          border: 1px solid #ccc;
+          border-bottom: none;
+          background: #666;
+          color: white;
+          list-style: none;
+          margin: 0;
+          padding: 0;
+        }
+        
+        .list > * {
+          padding: 12px 20px;
+          border-bottom: 1px solid #ccc;
+		  font-size: small;
+        }
+        
+        .list > *.core-selected {
+          background: #333;
+        }
+		
+		
+		span.core-selected:after {
+          content: "\2713";
+          position: absolute;
+          padding-left: 10px;
+			
+		}
+		
+		core-selector{
+			max-width: 512px;
+			width: 100vw;  
+			
+		}
+		
+	  </style>
+	  
+	  <app-header-panel on-l-icon-tap="{{ fireBack }}"	licon="arrow-back" ricon="check"
+						on-r-icon-tap="{{fireCheckSelected}}"
+						titulo="{{plantilla.Titulo +'-'+ plantilla.Version}}">
+		  <div layout vertical center>
+			  
+				  <core-selector class="list" multi valueattr="index" id="sl" layout vertical>
+					  <template repeat="{{item in guias}}">
+						  <span index="{{item.Id}}">{{item.Enunciado}}</span>
+					  </template>
+				  </core-selector>
+			  
+		  </div>
+	  </app-header-panel>	  
+	  	   
+  </template>
+
+  <script>
+
+    Polymer({
+		get selected() {
+			return this.$.sl.selected;
+		},	
+		created:function(){
+			this.plantilla={};
+			this.guias =[];	
+		},
+		
+		fireBack:function(){
+			this.fire("sg-back");
+		},
+		
+		fireCheckSelected:function(){
+			this.fire('check-selected', {selected: this.$.sl.selected})
+		},		
+		clearSelected:function(){
+			this.$.sl.selected=null;
+		}
+    });
+  </script>
+</polymer-element>

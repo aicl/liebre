@@ -1,0 +1,81 @@
+<link rel="import" href="../../bower_components/core-icon-button/core-icon-button.html">
+<link rel="import" href="../../bower_components/core-item/core-item.html">
+<link rel="import" href="../../bower_components/core-icons/core-icons.html">
+<link rel="import" href="../../bower_components/core-icons/image-icons.html">
+
+<polymer-element name="plantilla-cap-card" attributes="item">
+  <template>
+    <style>    
+      :host {
+		  display: block;
+		  position: relative;
+			padding: 10px 5px 10px 5px ;    
+			margin: 10px 0px 10px 0px;
+			box-shadow: 0 1px 2px 0 ;
+			border-radius: 2px;
+			overflow: hidden;	
+			max-width: 512px;
+			background-color: rgb(212, 212, 212);
+			width: 100vw;  
+	  }
+		
+		core-icon-button{
+			border-radius: 10px;
+		}
+		core-icon-button, span[raisedbutton] {
+			background-color: rgb(8, 13, 49); ;
+			color: white;
+		}		
+		span[raisedbutton]{
+			font-size: small;
+			padding: 8px;
+			border-radius: 4px;
+		}
+						
+		.titulo{
+			padding:10px 5px 0px 5px;
+		}
+		.text{
+			padding:5px 5px 0px 5px;
+			margin-bottom:  6px;
+			font-size: small;
+		}
+
+	</style>
+	  			  <div layout horizontal>
+					  <div flex class="titulo">{{item.Titulo}}</div>
+
+					  <core-icon-button icon="delete" 
+								 on-tap="{{ fireDelete }}"></core-icon-button>
+					  <core-icon-button  icon="create" 
+										 on-tap="{{ fireEdit }}">
+					  </core-icon-button>
+				  </div>
+				  <div class="text">{{item.Estandar}}</div>
+				  
+				  <div style="padding:5px 5px 0px 5px;">
+					  <span raisedbutton on-tap="{{ fireMostrarPreguntas }}">Preguntas</span>
+					  
+				  </div> 
+	  	<content></content>  
+  </template>
+  <script>
+
+    Polymer({		
+		fireDelete:function(e, detail, sender){
+			this.fire("delete-capitulo");
+		},
+		
+		fireEdit:function(e, detail, sender){	
+			this.fire("edit-capitulo");				
+		},
+		
+		fireMostrarPreguntas:function(e, detail, sender){	
+			liebre.tools.blink(sender);
+			this.fire("mostrar-preguntas",{item:sender.templateInstance.model.item});				
+		}		
+    });
+
+  </script>
+
+</polymer-element>
