@@ -25,7 +25,7 @@ namespace Aicl.Liebre.TestModelCouchDB
 				}
 			}
 			catch (WebServiceException e){
-				return new {error="not_found",reason="missing"};
+				Console.Write (e.Message);
 			}
 
 		}
