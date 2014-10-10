@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectTypeGuids>{349C5851-65DF-11DA-9384-00065B846F21};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <ProjectGuid>{F5386C78-5C4A-4096-AEBF-6B07F6A2034E}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>Aicl.Liebre.WebHost</RootNamespace>
+    <AssemblyName>Aicl.Liebre.WebHost</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin</OutputPath>
+    <DefineConstants>DEBUG;</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>full</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin</OutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="ServiceStack">
+      <HintPath>..\..\lib\ServiceStack.dll</HintPath>
+    </Reference>
+    <Reference Include="ServiceStack.Interfaces">
+      <HintPath>..\..\lib\ServiceStack.Interfaces.dll</HintPath>
+    </Reference>
+    <Reference Include="ServiceStack.OrmLite">
+      <HintPath>..\..\lib\ServiceStack.OrmLite.dll</HintPath>
+    </Reference>
+    <Reference Include="ServiceStack.OrmLite.MySql">
+      <HintPath>..\..\lib\ServiceStack.OrmLite.MySql.dll</HintPath>
+    </Reference>
+    <Reference Include="ServiceStack.Redis">
+      <HintPath>..\..\lib\ServiceStack.Redis.dll</HintPath>
+    </Reference>
+    <Reference Include="MongoDB.Bson">
+      <HintPath>..\..\lib\MongoDB.Bson.dll</HintPath>
+    </Reference>
+    <Reference Include="MongoDB.Driver">
+      <HintPath>..\..\lib\MongoDB.Driver.dll</HintPath>
+    </Reference>
+    <Reference Include="ServiceStack.Text">
+      <HintPath>..\..\lib\ServiceStack.Text.dll</HintPath>
+    </Reference>
+    <Reference Include="ServiceStack.Common">
+      <HintPath>..\..\lib\ServiceStack.Common.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Global.asax" />
+    <Content Include="web.config" />
+    <Content Include="index.html" />
+    <Content Include="404.html" />
+    <Content Include="bower_components\platform\platform.js" />
+    <Content Include="bower_components\polymer\layout.html" />
+    <Content Include="bower_components\polymer\polymer.html" />
+    <Content Include="bower_components\polymer\polymer.js" />
+    <Content Include="elements\elements.vulcanized.html" />
+    <Content Include="flatiron-director\director.min.js" />
+    <Content Include="flatiron-director\flatiron-director.html" />
+    <Content Include="scripts\app.js" />
+    <Content Include="scripts\vendor\ydn.db-is-core-qry.js" />
+    <Content Include="styles\main.css" />
+    <Content Include="bower_components\polymer\polymer.js.map" />
+    <Content Include="bower_components\platform\platform.js.map" />
+    <Content Include="scripts\vendor\ydn.db-is-core-qry.js.map" />
+    <Content Include="appcache.manifest" />
+    <Content Include="robots.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="AppHost.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ProjectExtensions>
+    <MonoDevelop>
+      <Properties>
+        <XspParameters Port="8080" Address="192.168.0.2" SslMode="None" SslProtocol="Default" KeyType="None" CertFile="" KeyFile="" PasswordOptions="None" Password="" Verbose="True" />
+      </Properties>
+    </MonoDevelop>
+  </ProjectExtensions>
+  <ItemGroup>
+    <None Include="bower_components\platform\.bower.json" />
+    <None Include="bower_components\platform\README.md" />
+    <None Include="bower_components\platform\bower.json" />
+    <None Include="bower_components\platform\build.log" />
+    <None Include="bower_components\polymer\.bower.json" />
+    <None Include="bower_components\polymer\README.md" />
+    <None Include="bower_components\polymer\bower.json" />
+    <None Include="bower_components\polymer\build.log" />
+    <None Include="flatiron-director\AUTHORS" />
+    <None Include="flatiron-director\LICENSE" />
+    <None Include="flatiron-director\LICENSE.TXT" />
+    <None Include="flatiron-director\PATENTS" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="bower_components\" />
+    <Folder Include="elements\" />
+    <Folder Include="flatiron-director\" />
+    <Folder Include="scripts\" />
+    <Folder Include="styles\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Aicl.Liebre.Model\Aicl.Liebre.Model.csproj">
+      <Project>{8D3332AB-B6C7-4DF1-AAA0-012694E64E81}</Project>
+      <Name>Aicl.Liebre.Model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Aicl.Liebre.Data\Aicl.Liebre.Data.csproj">
+      <Project>{C64110A4-8A19-4120-87B4-2BF05DB978DE}</Project>
+      <Name>Aicl.Liebre.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Aicl.Liebre.ServiceInterface\Aicl.Liebre.ServiceInterface.csproj">
+      <Project>{698BAC58-2034-4266-8D4C-B68A7D7C9389}</Project>
+      <Name>Aicl.Liebre.ServiceInterface</Name>
+    </ProjectReference>
+  </ItemGroup>
+</Project>

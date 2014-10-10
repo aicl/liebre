@@ -1,0 +1,27 @@
+CACHE MANIFEST
+# @@ 2014-10-09 22:09:31
+
+# Explicitly cached entrie
+
+# Additional resources to cache
+CACHE:
+index.html
+styles/main.css
+bower_components/polymer/polymer.html
+bower_components/polymer/layout.html
+bower_components/polymer/polymer.js
+bower_components/platform/platform.js
+flatiron-director/flatiron-director.html
+flatiron-director/director.min.js
+elements/elements.vulcanized.html
+scripts/vendor/ydn.db-is-core-qry.js
+scripts/app.js
+
+
+# All other resources (e.g. sites) require the user to be online. 
+NETWORK:
+*
+
+# offline.html will be displayed if the user is offline
+#FALLBACK:
+#/ offline.html
