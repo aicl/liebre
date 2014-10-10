@@ -7,8 +7,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aicl.Liebre.Data", "Aicl.Li
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aicl.Liebre.ServiceInterface", "Aicl.Liebre.ServiceInterface\Aicl.Liebre.ServiceInterface.csproj", "{698BAC58-2034-4266-8D4C-B68A7D7C9389}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aicl.Liebre.WebHost", "Aicl.Liebre.WebHost\Aicl.Liebre.WebHost.csproj", "{F5386C78-5C4A-4096-AEBF-6B07F6A2034E}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x86 = Debug|x86
@@ -27,12 +25,8 @@ Global
 		{C64110A4-8A19-4120-87B4-2BF05DB978DE}.Debug|x86.Build.0 = Debug|x86
 		{C64110A4-8A19-4120-87B4-2BF05DB978DE}.Release|x86.ActiveCfg = Release|x86
 		{C64110A4-8A19-4120-87B4-2BF05DB978DE}.Release|x86.Build.0 = Release|x86
-		{F5386C78-5C4A-4096-AEBF-6B07F6A2034E}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{F5386C78-5C4A-4096-AEBF-6B07F6A2034E}.Debug|x86.Build.0 = Debug|Any CPU
-		{F5386C78-5C4A-4096-AEBF-6B07F6A2034E}.Release|x86.ActiveCfg = Release|Any CPU
-		{F5386C78-5C4A-4096-AEBF-6B07F6A2034E}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
-		StartupItem = Aicl.Liebre.WebHost\Aicl.Liebre.WebHost.csproj
+		StartupItem = Aicl.Liebre.Model\Aicl.Liebre.Model.csproj
 	EndGlobalSection
 EndGlobal
