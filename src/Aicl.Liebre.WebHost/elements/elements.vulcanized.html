@@ -2620,16 +2620,16 @@ Example:
 
 <polymer-element name="plantilla-cap-card" attributes="item" assetpath="x-plantilla/">
   <template>
-    <style>:host{display:block;position:relative;padding:10px 5px;margin:10px 0;box-shadow:0 1px 2px 0;border-radius:2px;overflow:hidden;max-width:512px;background-color:#d4d4d4;width:100vw}core-icon-button{border-radius:10px}core-icon-button,span[raisedbutton]{background-color:#080d31;color:#fff}span[raisedbutton]{font-size:small;padding:8px;border-radius:4px}.titulo{padding:10px 5px 0}.text{padding:5px 5px 0;margin-bottom:6px;font-size:small}</style>
-	  			  <div layout="" horizontal="">
-					  <div flex="" class="titulo">{{item.Titulo}}</div>
-
+    <style>:host{display:block;position:relative;padding:10px 5px;margin:10px 0;box-shadow:0 1px 2px 0;border-radius:2px;overflow:hidden;max-width:512px;background-color:#d4d4d4;width:100vw}core-icon-button{border-radius:10px}core-icon-button,span[raisedbutton]{background-color:#080d31;color:#fff}span[raisedbutton]{font-size:small;padding:8px;border-radius:4px}.titulo{padding:0 5px}.text{padding:5px 5px 0;margin-bottom:6px;font-size:small}</style>
+                  <div layout="" horizontal="" center="">   	  
+					  <div flex="" class="text">{{item.Numeral}}</div>
 					  <core-icon-button icon="delete" on-tap="{{ fireDelete }}"></core-icon-button>
 					  <core-icon-button icon="create" on-tap="{{ fireEdit }}">
 					  </core-icon-button>
 				  </div>
+	  			  <div class="titulo">{{item.Titulo}}</div>
+					  
 				  <div class="text">{{item.Estandar}}</div>
-				  
 				  <div style="padding:5px 5px 0px 5px;">
 					  <span raisedbutton="" on-tap="{{ fireMostrarPreguntas }}">Preguntas</span>
 					  
@@ -2647,14 +2647,14 @@ Example:
 
 
 
-<polymer-element name="app-header-panel" attributes="titulo,ricon,licon" assetpath="common/">
+<polymer-element name="app-header-panel" attributes="titulo,ricon,licon,tclass" assetpath="common/">
   <template>
-    <style>#header{width:100vw;height:100vh;left:0;top:0;position:absolute;overflow:auto;-webkit-overflow-scrolling:touch}#toolbar{color:#fff;background-color:#080d31}#section{position:absolute;top:0;bottom:0;left:0;right:0;overflow:auto}</style>
+    <style>#header{width:100vw;height:100vh;left:0;top:0;position:absolute;overflow:auto;-webkit-overflow-scrolling:touch}#toolbar{color:#fff;background-color:#080d31}#section{position:absolute;top:0;bottom:0;left:0;right:0;overflow:auto}.small{font-size:small}.medium{font-size:medium}</style>
     <core-header-panel mode="scroll" id="header">
       <core-toolbar id="toolbar" class="narrow">
-        <paper-icon-button icon="[[licon||&apos;arrow-back&apos;]]" on-tap="{{ fireLiconTap }}"></paper-icon-button>
-        <div flex="">{{titulo}}</div>
-		<paper-icon-button icon="[[ricon||&apos;menu&apos;]]" on-tap="{{ fireRiconTap }}"></paper-icon-button>  
+        <paper-icon-button icon="[[licon||&apos;arrow-back&apos;]]" on-tap="{{ fireLiconTap }}" style="margin: 0px;"></paper-icon-button>
+        <div flex="" class="[[tclass]]">{{titulo}}</div>
+		<paper-icon-button icon="[[ricon||&apos;menu&apos;]]" on-tap="{{ fireRiconTap }}" style="margin: 0px;"></paper-icon-button>  
 		<div id="tb"></div>  
       </core-toolbar>
       <section id="section">
@@ -2682,13 +2682,17 @@ Example:
 	  </app-header-panel>
 	    
 	  <paper-dialog id="dialog" backdrop="" style="top:0px;">
+		  <paper-input label="Numeral" required floatinglabel="" id="Numeral" value="{{_onedit.Numeral}}">
+		  </paper-input>
 		  <paper-input label="Titulo" required floatinglabel="" id="Titulo" value="{{_onedit.Titulo}}"></paper-input>
-		  <paper-input label="Estadar" floatinglabel="" id="Version" value="{{_onedit.Estandar}}"></paper-input>			
+		  <paper-input label="Estandar" floatinglabel="" id="Version" value="{{_onedit.Estandar}}"></paper-input>			
 		  <paper-icon-button icon="cancel" dismissive=""></paper-icon-button>
 		  <paper-icon-button icon="check" on-tap="{{ delegateSaveCapitulo }}" affirmative="" autofocus>
 		  </paper-icon-button>
 		</paper-dialog>
 	    <paper-dialog id="borrar" backdrop="" style="top:0px;">
+			<paper-input disabled label="Numeral" required floatinglabel="" value="{{_onedit.Numeral}}">
+			</paper-input>
 			<paper-input disabled label="Titulo" required floatinglabel="" value="{{_onedit.Titulo}}">
 			</paper-input>
 			<paper-input disabled label="Estandar" floatinglabel="" value="{{_onedit.Estandar}}"></paper-input>
@@ -2699,7 +2703,7 @@ Example:
 		</paper-dialog>
 	   
   </template>
-  <script>Polymer("plantilla-capitulos",{created:function(){this.plantilla={};this.capitulos=[];this._current={};this._onedit={}},fireCapitulosBack:function(){this.fire("capitulos-back")},handlerShowEditCapitulo:function(e,detail,sender){this._current=sender.templateInstance.model.item;this._onedit=Object.clone(this._current);this.$.dialog.toggle()},handlerShowNuevoCapitulo:function(){this._current={Titulo:"",Estandar:"",IdPlantilla:""};this._onedit=Object.clone(this._current);this.$.dialog.toggle()},handlerShowDeleteCapitulo:function(e,detail,sender){this._onedit=sender.templateInstance.model.item;this.$.borrar.toggle()},delegateDeleteCapitulo:function(e,detail,sender){if(this.handlerDeleteCapitulo){this.handlerDeleteCapitulo(e,{item:this._onedit},sender)}},delegateSaveCapitulo:function(e,detail,sender){if(this.$.Titulo.invalid||Object.compare(this._current,this._onedit))return;console.log("Capitulo vamos a guardar..:",this._onedit);if(this.handlerSaveCapitulo){this._onedit.IdPlantilla=this.plantilla.Id;this.handlerSaveCapitulo(e,{item:this._onedit},sender)}},delegateMostrarPreguntas:function(e,detail,sender){if(this.handlerMostrarPreguntas){this.handlerMostrarPreguntas(e,detail,sender)}}});</script>
+  <script>Polymer("plantilla-capitulos",{created:function(){this.plantilla={};this.capitulos=[];this._current={};this._onedit={}},fireCapitulosBack:function(){this.fire("capitulos-back")},handlerShowEditCapitulo:function(e,detail,sender){this._current=sender.templateInstance.model.item;this._onedit=Object.clone(this._current);this.$.dialog.toggle()},handlerShowNuevoCapitulo:function(){this._current={Titulo:"",Estandar:"",IdPlantilla:""};this._onedit=Object.clone(this._current);this.$.dialog.toggle()},handlerShowDeleteCapitulo:function(e,detail,sender){this._onedit=sender.templateInstance.model.item;this.$.borrar.toggle()},delegateDeleteCapitulo:function(e,detail,sender){if(this.handlerDeleteCapitulo){this.handlerDeleteCapitulo(e,{item:this._onedit},sender)}},delegateSaveCapitulo:function(e,detail,sender){if(this.$.Titulo.invalid||this.$.Numeral.invalid||Object.compare(this._current,this._onedit))return;if(this.handlerSaveCapitulo){this._onedit.IdPlantilla=this.plantilla.Id;this.handlerSaveCapitulo(e,{item:this._onedit},sender)}},delegateMostrarPreguntas:function(e,detail,sender){if(this.handlerMostrarPreguntas){this.handlerMostrarPreguntas(e,detail,sender)}}});</script>
 </polymer-element>
 
 
@@ -2926,13 +2930,14 @@ To change the radio unchecked color:
 
 <polymer-element name="pl-cap-pregunta-card" attributes="item,guias" assetpath="x-plantilla/">
   <template>
-    <style>:host{display:block;position:relative;padding:10px 5px;margin:10px 0;box-shadow:0 1px 2px 0;border-radius:2px;overflow:hidden;max-width:512px;background-color:#d4d4d4;width:100vw}span[raisedbutton]{background-color:#080d31;color:#fff;font-size:small;padding:8px;border-radius:4px;width:40px;margin:0 4px}.titulo{padding:10px 5px 0}.text{padding:5px 5px 0;margin-bottom:6px;font-size:small}</style>
+    <style>:host{display:block;position:relative;padding:10px 5px;margin:10px 0;box-shadow:0 1px 2px 0;border-radius:2px;overflow:hidden;max-width:512px;background-color:#d4d4d4;width:100vw}span[raisedbutton]{background-color:#080d31;color:#fff;font-size:small;padding:8px;border-radius:4px;width:40px;margin:0 4px}.titulo{padding:0 5px}.text{padding:5px 5px 0;margin-bottom:6px;font-size:small}</style>
 	  			  <div layout="" vertical="">
-					  <div layout="" horizontal="">
-						  <div flex="" class="titulo">{{item.Enunciado}}</div>
+					  <div layout="" horizontal="" center="">
+						  <div flex="" class="text">{{item.Numeral}}</div>
 						  <core-icon-button icon="delete" on-tap="{{ fireDelete }}"></core-icon-button>
 						  <core-icon-button icon="create" on-tap="{{ fireEdit }}"></core-icon-button>
 					  </div>
+					  <div class="titulo">{{item.Enunciado}}</div>
 					  <div class="text">Disponible 'No Aplica': {{item.NoAplicaDisponible?'SI':'NO'}}</div>
 					  <div class="text">{{item.Metodo}}</div>
 					  <span raisedbutton="" on-tap="{{ fireMostrarGuiasToSelect }}">Guias</span>
@@ -2955,7 +2960,7 @@ To change the radio unchecked color:
   <template>
 	  <style>:host{display:block;padding:0}paper-checkbox+span{padding:10px 0 0 10px}paper-checkbox{padding:10px 0 0}</style>
 	  
-	  <app-header-panel on-l-icon-tap="{{ firePreguntasBack }}" licon="arrow-back" ricon="add-circle" on-r-icon-tap="{{handlerShowNuevaPregunta}}" titulo="{{capitulo.Titulo}}">
+	  <app-header-panel on-l-icon-tap="{{ firePreguntasBack }}" licon="arrow-back" ricon="add-circle" on-r-icon-tap="{{handlerShowNuevaPregunta}}" titulo="{{capitulo.Titulo}}" tclass="small">
 		  <div layout="" vertical="" center="">
 			  <template repeat="{{item in preguntas}}">
 				  <pl-cap-pregunta-card item="{{item}}" guias="{{guias}}" on-edit-pregunta="{{handlerShowEditPregunta}}" on-delete-pregunta="{{handlerShowDeletePregunta}}" on-mostrar-guias-to-select="{{delegateShowGuiasToSelect}}" on-remove-guia="{{ handlerShowRemoveGuia }}">
@@ -2965,6 +2970,8 @@ To change the radio unchecked color:
 	  </app-header-panel>
 	  	  
 	  <paper-dialog id="dialog" backdrop="" style="top:0px;">
+		  <paper-input label="Numeral" required floatinglabel="" id="Numeral" value="{{_onedit.Numeral}}">
+		  </paper-input>
 		  <paper-input label="Enunciado" required floatinglabel="" id="Enunciado" value="{{_onedit.Enunciado}}" multiline="" rows="4">
 		  </paper-input>
 		  <div horizontal="" layout="">
@@ -2977,12 +2984,14 @@ To change the radio unchecked color:
 		  </paper-icon-button>
 		</paper-dialog>
 	    <paper-dialog id="borrar" backdrop="" style="top:0px;">
+		    <paper-input disabled label="Numeral" required floatinglabel="" value="{{_onedit.Numeral}}">
+		    </paper-input>
 			<paper-input disabled label="Enunciado" floatinglabel="" value="{{_onedit.Enunciado}}" multiline="" rows="4">
 			</paper-input>
 			<div horizontal="" layout="">
 			  <paper-checkbox disabled checked="{{ _onedit.NoAplicaDisponible }}"></paper-checkbox>
 			  <span>Disponible 'No Aplica'</span>
-		  </div>
+		    </div>
 			<paper-input disabled label="Metodo" floatinglabel="" value="{{_onedit.Metodo}}" multiline="" rows="2"></paper-input>
 			<paper-icon-button icon="cancel" dismissive=""></paper-icon-button>
 			<paper-icon-button icon="check" on-tap="{{ delegateDeletePregunta }}" affirmative="" autofocus>
@@ -2997,7 +3006,7 @@ To change the radio unchecked color:
 	  </paper-dialog>
 	  
   </template>
-  <script>Polymer("pl-cap-preguntas",{get current(){return this._current},created:function(){this.capitulo={};this.preguntas=[];this.guias=[];this._current={};this._onedit={}},firePreguntasBack:function(){this.fire("preguntas-back")},handlerShowEditPregunta:function(e,detail,sender){this._current=sender.templateInstance.model.item;this._onedit=Object.clone(this._current);this.$.dialog.toggle()},handlerShowNuevaPregunta:function(){this._current={Enunciado:"",Metodo:"",NoAplicaDisponible:false,IdCapitulo:"",IdGuias:[]};this._onedit=Object.clone(this._current);this.$.dialog.toggle()},handlerShowDeletePregunta:function(e,detail,sender){this._onedit=sender.templateInstance.model.item;this.$.borrar.toggle()},delegateDeletePregunta:function(e,detail,sender){if(this.handlerDeletePregunta){this.handlerDeletePregunta(e,{item:this._onedit},sender)}},delegateSavePregunta:function(e,detail,sender){if(this.$.Enunciado.invalid||Object.compare(this._current,this._onedit))return;console.log("vamos a guardar..:",this._onedit,this.$.NoAplicaDisponible.checked,this.capitulo);if(this.handlerSavePregunta){this._onedit.IdCapitulo=this.capitulo.Id;this.handlerSavePregunta(e,{item:this._onedit},sender)}},delegateRemoveGuia:function(e,detail,sender){if(this.handlerRemoveGuia){var index=-1;for(var d in this._onedit.IdGuias){if(this._onedit.IdGuias[d]===this.guiaToRemove){index=this._onedit.IdGuias.indexOf(this._onedit.IdGuias[d]);break}}if(index>=0){this._onedit.IdGuias.splice(index,1);this.handlerRemoveGuia(e,{item:this._onedit,guia:this.guiaToRemove},sender)}}},delegateShowGuiasToSelect:function(e,detail,sender){this._current=sender.templateInstance.model.item;this._onedit=Object.clone(this._current);if(this.handlerShowGuiasToSelect){this.handlerShowGuiasToSelect(e,{item:this._current},sender)}},handlerShowRemoveGuia:function(e,detail,sender){this._current=sender.templateInstance.model.item;this._onedit=Object.clone(this._current);this.guiaToRemove=detail.guia;this.$.removeGuia.toggle()}});</script>
+  <script>Polymer("pl-cap-preguntas",{get current(){return this._current},created:function(){this.capitulo={};this.preguntas=[];this.guias=[];this._current={};this._onedit={}},firePreguntasBack:function(){this.fire("preguntas-back")},handlerShowEditPregunta:function(e,detail,sender){this._current=sender.templateInstance.model.item;this._onedit=Object.clone(this._current);this.$.dialog.toggle()},handlerShowNuevaPregunta:function(){this._current={Enunciado:"",Metodo:"",NoAplicaDisponible:false,IdCapitulo:"",IdGuias:[]};this._onedit=Object.clone(this._current);this.$.dialog.toggle()},handlerShowDeletePregunta:function(e,detail,sender){this._onedit=sender.templateInstance.model.item;this.$.borrar.toggle()},delegateDeletePregunta:function(e,detail,sender){if(this.handlerDeletePregunta){this.handlerDeletePregunta(e,{item:this._onedit},sender)}},delegateSavePregunta:function(e,detail,sender){if(this.$.Enunciado.invalid||this.$.Numeral.invalid||Object.compare(this._current,this._onedit))return;if(this.handlerSavePregunta){this._onedit.IdCapitulo=this.capitulo.Id;this.handlerSavePregunta(e,{item:this._onedit},sender)}},delegateRemoveGuia:function(e,detail,sender){if(this.handlerRemoveGuia){var index=-1;for(var d in this._onedit.IdGuias){if(this._onedit.IdGuias[d]===this.guiaToRemove){index=this._onedit.IdGuias.indexOf(this._onedit.IdGuias[d]);break}}if(index>=0){this._onedit.IdGuias.splice(index,1);this.handlerRemoveGuia(e,{item:this._onedit,guia:this.guiaToRemove},sender)}}},delegateShowGuiasToSelect:function(e,detail,sender){this._current=sender.templateInstance.model.item;this._onedit=Object.clone(this._current);if(this.handlerShowGuiasToSelect){this.handlerShowGuiasToSelect(e,{item:this._current},sender)}},handlerShowRemoveGuia:function(e,detail,sender){this._current=sender.templateInstance.model.item;this._onedit=Object.clone(this._current);this.guiaToRemove=detail.guia;this.$.removeGuia.toggle()}});</script>
 </polymer-element>
 
 

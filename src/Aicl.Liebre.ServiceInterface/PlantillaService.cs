@@ -7,7 +7,7 @@ namespace Aicl.Liebre.ServiceInterface
 	{
 
 		public object Get(ReadPlantilla request){
-			return ServiceBase.CreateResponse (Store.Get<Plantilla> ());
+			return ServiceBase.CreateResponse (Store.Get<Plantilla> (q=>q.Id));
 		}
 
 		public object Get(SinglePlantilla request){

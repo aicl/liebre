@@ -6,7 +6,7 @@ namespace Aicl.Liebre.ServiceInterface
 	public class EmpresaService:ServiceBase
 	{
 		public object Get(ReadEmpresa request){
-			return ServiceBase.CreateResponse (Store.Get<Empresa> ());
+			return ServiceBase.CreateResponse (Store.Get<Empresa> (q=>q.Nombre));
 		}
 
 

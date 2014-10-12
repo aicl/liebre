@@ -6,7 +6,7 @@
 <link rel="import" href="../../bower_components/paper-item/paper-item.html">
 <link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
 
-<polymer-element name="app-header-panel" attributes="titulo,ricon,licon">
+<polymer-element name="app-header-panel" attributes="titulo,ricon,licon,tclass">
   <template>
     <style> 
 		
@@ -31,15 +31,23 @@
         right: 0px;
         overflow: auto;	  
       }
-      
+	  .small{
+		  font-size: small;
+	  }
+		
+	  .medium{
+		  font-size: medium;
+	  }
+	  
+		      
     </style>
     <core-header-panel mode="scroll" id="header">
       <core-toolbar id="toolbar" class="narrow">
         <paper-icon-button icon="[[licon||'arrow-back']]" 
-						  on-tap="{{ fireLiconTap }}"></paper-icon-button>
-        <div flex>{{titulo}}</div>
+						  on-tap="{{ fireLiconTap }}" style="margin: 0px;"></paper-icon-button>
+        <div flex class="[[tclass]]">{{titulo}}</div>
 		<paper-icon-button icon="[[ricon||'menu']]" 
-						  on-tap="{{ fireRiconTap }}"></paper-icon-button>  
+						  on-tap="{{ fireRiconTap }}" style="margin: 0px;"></paper-icon-button>  
 		<div id="tb"></div>  
       </core-toolbar>
       <section id="section">

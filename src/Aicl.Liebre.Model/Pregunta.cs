@@ -16,6 +16,7 @@ namespace Aicl.Liebre.Model
 		[BsonRepresentation(BsonType.ObjectId)]
 		public string Id { get ; set;}
 		public string IdCapitulo { get; set;}
+		public string Numeral { get; set; }
 		public string Enunciado { get; set; }
 		public string Metodo { get; set; } // metodo verificacion
 		public bool NoAplicaDisponible { get; set; }

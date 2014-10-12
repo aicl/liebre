@@ -7,7 +7,7 @@ namespace Aicl.Liebre.ServiceInterface
 		public object Get(ReadGuia request){
 
 			return ServiceBase.CreateResponse (
-				Store.GetByQuery<Guia> (q => q.IdPlantilla == request.IdPlantilla));
+				Store.GetByQuery<Guia> (q => q.IdPlantilla == request.IdPlantilla,q=>q.Id));
 		}
 
 		public object Post(CreateGuia request)

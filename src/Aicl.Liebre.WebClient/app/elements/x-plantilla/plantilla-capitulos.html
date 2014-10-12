@@ -33,8 +33,10 @@
 	  </app-header-panel>
 	    
 	  <paper-dialog id="dialog" backdrop style="top:0px;">
+		  <paper-input label="Numeral" required floatinglabel id="Numeral" value="{{_onedit.Numeral}}">
+		  </paper-input>
 		  <paper-input label="Titulo" required floatinglabel id="Titulo" value="{{_onedit.Titulo}}"></paper-input>
-		  <paper-input label="Estadar" floatinglabel id="Version" value="{{_onedit.Estandar}}"></paper-input>			
+		  <paper-input label="Estandar" floatinglabel id="Version" value="{{_onedit.Estandar}}"></paper-input>			
 		  <paper-icon-button icon="cancel" dismissive></paper-icon-button>
 		  <paper-icon-button icon="check" 
 							 on-tap="{{ delegateSaveCapitulo }}"
@@ -42,6 +44,8 @@
 		  </paper-icon-button>
 		</paper-dialog>
 	    <paper-dialog id="borrar" backdrop style="top:0px;">
+			<paper-input disabled label="Numeral" required floatinglabel  value="{{_onedit.Numeral}}">
+			</paper-input>
 			<paper-input disabled label="Titulo" required floatinglabel value="{{_onedit.Titulo}}">
 			</paper-input>
 			<paper-input disabled label="Estandar" floatinglabel  value="{{_onedit.Estandar}}"></paper-input>
@@ -91,8 +95,8 @@
 		},
 		
 		delegateSaveCapitulo:function(e, detail, sender){		
-			if(this.$.Titulo.invalid || Object.compare(this._current, this._onedit)) return;
-			console.log("Capitulo vamos a guardar..:", this._onedit);
+			if(this.$.Titulo.invalid || this.$.Numeral.invalid ||
+			   Object.compare(this._current, this._onedit)) return;
 			if(this.handlerSaveCapitulo){
 				this._onedit.IdPlantilla=this.plantilla.Id;
 				this.handlerSaveCapitulo(e, {item:this._onedit}, sender);

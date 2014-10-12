@@ -4,6 +4,7 @@ using ServiceStack;
 using Aicl.Liebre.Model;
 using MongoDB.Driver;
 using MongoDB.Driver.Builders;
+using MongoDB.Driver.Linq;
 using System.Linq.Expressions;
 using ServiceStack.Model;
 using System.Linq;
@@ -23,18 +24,18 @@ namespace Aicl.Liebre.Data
 
 		}
 
-		public List<T> Get<T>() where T:class, IDocument
+		public List<T> Get<T>(Func<T, object> orderBy=null) where T:class, IDocument
 		{
 			var cl= GetCollection<T> ();
 			var docs = cl.FindAll (); 
-			return docs.ToList ();
+			return orderBy == null ? docs.ToList () : docs.OrderBy (orderBy).ToList();
 		}
 
-		public List<T> Get<T>(IHasStringId request) where T:class, IDocument
+		public List<T> Get<T>(IHasStringId request,Func<T, object> orderBy=null) where T:class, IDocument
 		{
 			var cl= GetCollection<T> ();
 			var docs = request.Id.IsNullOrEmpty()? cl.FindAll (): cl.Find(Query<T>.EQ(e=>e.Id,request.Id)) ;
-			return docs.ToList ();
+			return orderBy == null ? docs.ToList () : docs.OrderBy (orderBy).ToList();
 		}
 
 		public T GetById<T>(IHasStringId request) where T:class, IDocument, new() 
@@ -50,11 +51,24 @@ namespace Aicl.Liebre.Data
 		}
 
 
-		public List<T> GetByQuery<T>( Expression<Func<T, bool>> predicate) where T:class, IDocument
+		public List<T> GetByQuery<T>( Expression<Func<T, bool>> predicate, Func<T, object> orderBy=null) 
+			where T:class, IDocument
 		{
-			var cl= GetCollection<T> ();
-			var docs= cl.Find(Query<T>.Where(predicate));
-			return docs.ToList ();
+			var cl = GetCollection<T> (); 
+			var docs= cl.Find(Query<T>.Where(predicate));  
+			return orderBy == null ? docs.ToList () : docs.OrderBy (orderBy).ToList();
+		}
+
+		public void Execute<T>(Action<IQueryable<T>> action)
+		{
+			var cl = GetCollection<T> ().AsQueryable(); 
+			action (cl); 
+		}
+
+		public T Execute<T>(Func<IQueryable<T>,T> func)
+		{
+			var cl = GetCollection<T> ().AsQueryable(); 
+			return func (cl);
 		}
 
 

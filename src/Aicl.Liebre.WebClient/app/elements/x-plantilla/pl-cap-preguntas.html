@@ -26,7 +26,7 @@
 	  
 	  <app-header-panel on-l-icon-tap="{{ firePreguntasBack }}"	licon="arrow-back" ricon="add-circle"
 						on-r-icon-tap="{{handlerShowNuevaPregunta}}"
-						titulo="{{capitulo.Titulo}}">
+						titulo="{{capitulo.Titulo}}" tclass="small">
 		  <div layout vertical center>
 			  <template repeat="{{item in preguntas}}">
 				  <pl-cap-pregunta-card item="{{item}}"  guias="{{guias}}"
@@ -40,6 +40,8 @@
 	  </app-header-panel>
 	  	  
 	  <paper-dialog id="dialog" backdrop style="top:0px;">
+		  <paper-input label="Numeral" required floatinglabel id="Numeral" value="{{_onedit.Numeral}}">
+		  </paper-input>
 		  <paper-input label="Enunciado" required floatinglabel id="Enunciado" value="{{_onedit.Enunciado}}"
 					   multiline rows="4">
 		  </paper-input>
@@ -56,13 +58,15 @@
 		  </paper-icon-button>
 		</paper-dialog>
 	    <paper-dialog id="borrar" backdrop style="top:0px;">
+		    <paper-input disabled label="Numeral" required floatinglabel value="{{_onedit.Numeral}}">
+		    </paper-input>
 			<paper-input disabled label="Enunciado"  floatinglabel value="{{_onedit.Enunciado}}"
 						 multiline rows="4">
 			</paper-input>
 			<div horizontal layout>
 			  <paper-checkbox disabled checked="{{ _onedit.NoAplicaDisponible }}"></paper-checkbox>
 			  <span>Disponible 'No Aplica'</span>
-		  </div>
+		    </div>
 			<paper-input disabled label="Metodo" floatinglabel  value="{{_onedit.Metodo}}"
 						 multiline rows="2"></paper-input>
 			<paper-icon-button icon="cancel" dismissive></paper-icon-button>
@@ -124,8 +128,8 @@
 		},
 		
 		delegateSavePregunta:function(e, detail, sender){				
-			if(this.$.Enunciado.invalid || Object.compare(this._current, this._onedit)) return;
-			console.log("vamos a guardar..:", this._onedit, this.$.NoAplicaDisponible.checked, this.capitulo);
+			if(this.$.Enunciado.invalid || this.$.Numeral.invalid ||
+			   Object.compare(this._current, this._onedit)) return;
 						
 			if(this.handlerSavePregunta){
 				this._onedit.IdCapitulo= this.capitulo.Id;

@@ -1,4 +1,5 @@
-﻿using Aicl.Liebre.Model;
+﻿using System.Linq;
+using Aicl.Liebre.Model;
 
 namespace Aicl.Liebre.ServiceInterface
 {
@@ -7,7 +8,7 @@ namespace Aicl.Liebre.ServiceInterface
 		public object Get(ReadPregunta request){
 
 			return ServiceBase.CreateResponse (
-				Store.GetByQuery<Pregunta> (q => q.IdCapitulo == request.IdCapitulo));
+				Store.GetByQuery<Pregunta> (q => q.IdCapitulo == request.IdCapitulo, q=>q.Numeral??q.Id));
 		}
 
 		public object Post(CreatePregunta request)
