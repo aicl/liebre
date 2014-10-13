@@ -2717,14 +2717,14 @@ Example:
 
 <polymer-element name="plantilla-guia-card" attributes="item" assetpath="x-plantilla/">
   <template>
-    <style>:host{display:block;position:relative;padding:10px 5px;margin:10px 0;box-shadow:0 1px 2px 0;border-radius:2px;overflow:hidden;max-width:512px;background-color:#d4d4d4;width:100vw}core-icon-button{border-radius:10px}core-icon-button{background-color:#080d31;color:#fff}.titulo{padding:10px 5px 0}.text{padding:5px 5px 0;margin-bottom:6px;font-size:small}</style>
-	  			  <div layout="" horizontal="">
-					  <div flex="" class="titulo">{{item.Enunciado}}</div>
-
+    <style>:host{display:block;position:relative;padding:10px 5px;margin:10px 0;box-shadow:0 1px 2px 0;border-radius:2px;overflow:hidden;max-width:512px;background-color:#d4d4d4;width:100vw}core-icon-button{border-radius:10px}core-icon-button{background-color:#080d31;color:#fff}.titulo{padding:0 5px}.text{padding:5px 5px 0;margin-bottom:6px;font-size:small}</style>
+	              <div layout="" horizontal="">
+					  <div flex=""></div>
 					  <core-icon-button icon="delete" on-tap="{{ fireDelete }}"></core-icon-button>
 					  <core-icon-button icon="create" on-tap="{{ fireEdit }}">
 					  </core-icon-button>
-				  </div>
+				  </div> 
+				  <div class="titulo">{{item.Enunciado}}</div>
 				  <div class="text">{{item.Tipo}}</div>
 				  				  
 	  	<content></content>  

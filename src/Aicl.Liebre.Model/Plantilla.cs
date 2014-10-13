@@ -21,7 +21,7 @@ namespace Aicl.Liebre.Model
 		public string Titulo { get; set; }
 		public DateTime? FechaInicial { get; set; }
 		public DateTime? FechaFinal { get; set; }
-		public string Name { get; set; }
+		//public string Name { get; set; }
 	}
 
 

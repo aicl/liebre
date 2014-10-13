@@ -28,7 +28,7 @@
 		}		
 					
 		.titulo{
-			padding:10px 5px 0px 5px;
+			padding:0px 5px 0px 5px;
 		}
 		.text{
 			padding:5px 5px 0px 5px;
@@ -37,15 +37,15 @@
 		}
 
 	</style>
-	  			  <div layout horizontal>
-					  <div flex class="titulo">{{item.Enunciado}}</div>
-
+	              <div layout horizontal>
+					  <div flex></div>
 					  <core-icon-button icon="delete" 
 								 on-tap="{{ fireDelete }}"></core-icon-button>
 					  <core-icon-button  icon="create" 
 										 on-tap="{{ fireEdit }}">
 					  </core-icon-button>
-				  </div>
+				  </div> 
+				  <div class="titulo">{{item.Enunciado}}</div>
 				  <div class="text">{{item.Tipo}}</div>
 				  				  
 	  	<content></content>  
