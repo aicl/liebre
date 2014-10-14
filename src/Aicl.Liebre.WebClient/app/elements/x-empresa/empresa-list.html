@@ -1,0 +1,154 @@
+<link rel="import" href="../../bower_components/paper-dialog/paper-dialog-transition.html">
+<link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../../bower_components/core-icons/core-icons.html">
+<link rel="import" href="../../bower_components/core-icons/image-icons.html">
+<link rel="import" href="../../bower_components/paper-dialog/paper-dialog.html">
+<link rel="import" href="../../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../../bower_components/core-pages/core-pages.html">
+
+<polymer-element name="empresa-list">
+
+  <template>
+    <style>
+		:host {  		  
+			display: block;
+			position: relative;
+			padding: 0px;    
+		}
+		paper-icon-button{
+			border-radius: 10px;
+		}
+		paper-icon-button, span[raisedbutton] {
+			background-color: rgb(8, 13, 49); ;
+			color: white;
+		}		
+		span[raisedbutton]{
+			font-size: small;
+			padding: 8px;
+			border-radius: 4px;
+		}
+		.titulo{
+			padding:0px 5px 0px 5px;
+		}
+		.text{
+			padding:5px 5px 0px 5px;
+			margin-bottom:  6px;
+			font-size: small;
+		}
+		.card {
+		  display: block;
+		  position: relative;
+		  padding: 10px 5px 10px 5px ;    
+		  margin: 10px 0px 10px 0px;
+		  box-shadow: 0 1px 2px 0 ;
+		  border-radius: 2px;
+		  overflow: hidden;	
+		  max-width: 512px;
+		  background-color: rgb(212, 212, 212);
+		  width: 100vw;  
+		}
+				
+    </style>
+	  	  
+	  <div layout vertical center>	  
+		  <template repeat="{{item in empresas}}">
+			  <div class="card">
+				  <div layout horizontal center>
+					  <div  flex class="text">{{item.Nit}}</div>
+					  <core-icon-button icon="delete" on-tap="{{ handlerShowDelete }}"></core-icon-button>
+					  <core-icon-button  icon="create"  on-tap="{{ handlerShowEdit }}"></core-icon-button>
+				  </div>
+				  <div class="titulo">{{item.Nombre}}</div>
+				  <div class="text">{{item.Contacto}}</div>
+				  <div class="text">{{item.Email}}</div>
+				  <div class="text">{{item.Telefono}}</div>
+				  <div style="padding:5px 5px 0px 5px;">
+					  <span raisedbutton on-tap="{{ delegateMostrarDiagnosticos }}">Diagnosticos</span>
+				  </div>
+			  </div>
+		  </template>
+	  </div>	  
+	  	  
+		<paper-dialog id="dialog" backdrop style="top:0px;">
+			<paper-input required label="Nit" floatinglabel id="Nit" value="{{_onedit.Nit}}">
+			</paper-input>
+			<paper-input required label="Nombre" floatinglabel id="Nombre" value="{{_onedit.Nombre}}">
+			</paper-input>
+			<paper-input label="Contacto" floatinglabel id="Nombre" value="{{_onedit.Contacto}}"></paper-input>
+			<paper-input label="Email" floatinglabel id="Email" value="{{_onedit.Email}}" type="email">
+			</paper-input>
+			<paper-input label="Teléfono" floatinglabel id="Teléfono" value="{{_onedit.Telefono}}"></paper-input>
+			<paper-icon-button icon="cancel" dismissive></paper-icon-button>
+			<paper-icon-button icon="check" 
+							 on-tap="{{ delegateSave }}"
+							 affirmative autofocus>
+			</paper-icon-button>
+		</paper-dialog>
+	    <paper-dialog id="borrar" backdrop style="top:0px;">
+			<paper-input disabled label="Nit" floatinglabel id="Nit" value="{{_onedit.Nit}}">
+			</paper-input>
+			<paper-input disabled label="Nombre" floatinglabel id="Nombre" value="{{_onedit.Nombre}}">
+			</paper-input>
+			<paper-input disabled label="Contacto" floatinglabel id="Nombre" value="{{_onedit.Contacto}}">
+			</paper-input>
+			<paper-input disabled label="Email" floatinglabel id="Email" value="{{_onedit.Email}}"></paper-input>
+			<paper-input disabledlabel="Teléfono" floatinglabel id="Telefono" value="{{_onedit.Telefono}}">
+			</paper-input>
+			<paper-icon-button icon="cancel" dismissive></paper-icon-button>
+			<paper-icon-button icon="check" 
+							 on-tap="{{ delegateDelete }}"
+							 affirmative autofocus>
+			</paper-icon-button>
+		</paper-dialog>
+	  	  
+  </template>
+
+  <script>
+    Polymer({		
+		created:function(){
+			this._current={};
+			this._onedit={};
+			this.empresas =[];
+		},
+		
+		handlerShowNueva:function(){
+			this._current={Id:"", Nit:"", Nombre:"",  Contacto:"", Email:"", Telefono:""};
+			this._onedit= Object.clone(this._current);
+			this.$.dialog.toggle();
+		},
+		
+		handlerShowDelete:function(e, detail, sender){	
+			this._onedit=sender.templateInstance.model.item;
+			this.$.borrar.toggle();
+		},
+		
+		handlerShowEdit:function(e, detail, sender){	
+			this._current=sender.templateInstance.model.item;
+			this._onedit= Object.clone(this._current);
+			this.$.dialog.toggle();
+		},
+		
+		delegateDelete:function(e, detail, sender){
+			if(this.handlerDelete){
+				this.handlerDelete(e, {item:this._onedit}, sender);
+			}
+		},
+				
+		delegateSave:function(e, detail, sender){
+			if(this.$.Nit.invalid || this.$.Nombre.invalid ||
+			   Object.compare(this._current, this._onedit)) return;
+			if(this.handlerSave){
+				this.handlerSave(e, {item:this._onedit}, sender);
+			}
+		},
+		
+		delegateMostrarDiagnosticos:function(e, detail, sender){
+			liebre.tools.blink(sender);
+			if(this.handlerMostrarDiagnosticos){
+				this.handlerMostrarDiagnosticos(e,  {item:sender.templateInstance.model.item});
+			}
+		}
+		
+    });
+  </script>
+</polymer-element>
