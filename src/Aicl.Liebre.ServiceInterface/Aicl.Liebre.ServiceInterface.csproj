@@ -40,6 +40,8 @@
     <Compile Include="RespuestaService.cs" />
     <Compile Include="DiagnosticoService.cs" />
     <Compile Include="RespuestaGuiaService.cs" />
+    <Compile Include="InstalacionService.cs" />
+    <Compile Include="DescargaService.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="ServiceStack">

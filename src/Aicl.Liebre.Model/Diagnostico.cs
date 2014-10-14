@@ -12,6 +12,7 @@ namespace Aicl.Liebre.Model
 	{
 		public Diagnostico ()
 		{
+			Descargas = new List<Descarga> ();
 		}
 
 		[BsonRepresentation(BsonType.ObjectId)]
@@ -19,7 +20,11 @@ namespace Aicl.Liebre.Model
 		public string IdEmpresa { get; set; }
 		public string IdPlantilla { get; set; }
 		public DateTime Creado { get; set; }
-		public string Responsable { get; set; }
+		public string Descripcion { get; set; }
+		//public DateTime? FechaInicio { get; set; }
+		[BsonIgnore]
+		public List<Descarga> Descargas { get; set; }
+
 
 	}
 	[Route("/read/diagnostico","GET")]
@@ -76,43 +81,4 @@ namespace Aicl.Liebre.Model
 		public WriteResult WriteResult{ get; set; }
 	}
 
-	[Route("/install/diagnostico","GET")]
-	public class InstallDiagnostico:IReturn<InstallDiagnosticoResponse>
-	{
-		public string IdDiagnostico{ get; set; }
-	}
-
-	public class InstallDiagnosticoResponse: IHasResponseStatus
-	{
-		public InstallDiagnosticoResponse()
-		{
-			Guias = new List<ViewGuia> ();
-			Capitulos = new List<Capitulo> ();
-			Preguntas = new List<ViewPregunta> ();
-			ResponseStatus = new ResponseStatus ();
-		}
-
-		public Empresa Empresa { get; set; }
-		public Diagnostico Diagnostico { get; set; }
-		public Plantilla Plantilla { get; set; }
-		public List<Capitulo> Capitulos { get; set; }
-		public List<ViewGuia> Guias { get; set; }
-		public List<ViewPregunta> Preguntas { get; set; }
-		public ResponseStatus ResponseStatus {get;set;}
-	}
-
-
-	public class ViewPregunta
-	{
-		public Pregunta Pregunta { get; set; }
-		public Respuesta Respuesta { get; set; }
-
-	}
-
-	public class ViewGuia
-	{
-		public Guia Guia { get; set; }
-		public RespuestaGuia Respuesta { get; set; }
-
-	}
 }

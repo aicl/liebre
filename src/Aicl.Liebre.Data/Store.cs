@@ -51,12 +51,16 @@ namespace Aicl.Liebre.Data
 		}
 
 
-		public List<T> GetByQuery<T>( Expression<Func<T, bool>> predicate, Func<T, object> orderBy=null) 
+		public List<T> GetByQuery<T>( Expression<Func<T, bool>> predicate, 
+			Func<T, object> orderBy=null, string orderType="") 
 			where T:class, IDocument
 		{
 			var cl = GetCollection<T> (); 
 			var docs= cl.Find(Query<T>.Where(predicate));  
-			return orderBy == null ? docs.ToList () : docs.OrderBy (orderBy).ToList();
+			return orderBy == null ? docs.ToList () :
+				orderType.ToUpper ().StartsWith ("DES", StringComparison.InvariantCulture) ?
+				docs.OrderByDescending (orderBy).ToList () :
+				docs.OrderBy (orderBy).ToList ();
 		}
 
 		public void Execute<T>(Action<IQueryable<T>> action)
@@ -65,7 +69,7 @@ namespace Aicl.Liebre.Data
 			action (cl); 
 		}
 
-		public T Execute<T>(Func<IQueryable<T>,T> func)
+		public IList<T> Execute<T>(Func<IQueryable<T>,IList<T>> func)
 		{
 			var cl = GetCollection<T> ().AsQueryable(); 
 			return func (cl);
@@ -120,31 +124,31 @@ namespace Aicl.Liebre.Data
 		}
 
 
-		public  InstallDiagnosticoResponse GetInstallDiagnosticoResponse(InstallDiagnostico request)
+		public  InstalacionResponse GetInstalacionResponse(ReadInstalacion request)
 		{
-			var response = new InstallDiagnosticoResponse ();
+			var response = new InstalacionResponse ();
 
-			response.Diagnostico = GetById<Diagnostico> (request.IdDiagnostico);
+			response.Diagnostico = GetById<Diagnostico> (request.Token);
 			response.Plantilla = GetById<Plantilla> (response.Diagnostico.IdPlantilla);
 			response.Empresa = GetById<Empresa> ( response.Diagnostico.IdEmpresa);
 
-			response.Capitulos = GetByQuery<Capitulo> (q => q.IdPlantilla == response.Diagnostico.IdPlantilla);
+			response.Capitulos = GetByQuery<Capitulo> (q => q.IdPlantilla == response.Diagnostico.IdPlantilla, q=>q.Numeral);
 
 			var capIds = response.Capitulos.ConvertAll (e => e.Id);
 
-			var p = GetCollection<Pregunta>().Find( Query<Pregunta>.In ((q) => q.IdCapitulo, capIds )).ToList();
-			var r = GetByQuery<Respuesta> (q => q.IdDiagnostico == response.Diagnostico.Id);
+			var p = GetCollection<Pregunta>().Find( Query<Pregunta>.In ((q) => q.IdCapitulo, capIds ))
+				.OrderBy(q=>q.Numeral).ToList();
+			var r = GetByQuery<Respuesta> (q => q.IdDiagnostico == response.Diagnostico.Id, q=>q.IdPregunta);
 
-			var g = GetByQuery<Guia> (q => q.IdPlantilla == response.Plantilla.Id);
-			var rg = GetByQuery<RespuestaGuia> (q => q.IdDiagnostico == response.Diagnostico.Id);
+			var g = GetByQuery<Guia> (q => q.IdPlantilla == response.Plantilla.Id, q=>q.Id);
+			var rg = GetByQuery<RespuestaGuia> (q => q.IdDiagnostico == response.Diagnostico.Id, q=>q.IdGuia);
 
 			p.ForEach (q => response.Preguntas.Add (new ViewPregunta {
 				Pregunta = q,
 				Respuesta = r.FirstOrDefault (rq => rq.IdPregunta == q.Id) ??
 				new Respuesta{ IdPregunta = q.Id, IdDiagnostico = response.Diagnostico.Id }
 			}));
-
-
+					
 			g.ForEach (q => response.Guias.Add (new ViewGuia { 
 				Guia = q, 
 				Respuesta = rg.FirstOrDefault (rq => rq.IdGuia == q.Id) ??
@@ -152,9 +156,51 @@ namespace Aicl.Liebre.Data
 			}));
 
 			return response;
-
-
 		}
+
+		public List<Diagnostico> ReadDiagnostico(ReadDiagnostico request){
+			var f = 
+				!request.Id.IsNullOrEmpty () ?
+				(Expression<Func<Diagnostico, bool>>)(q => q.Id == request.Id) :
+				(!request.IdEmpresa.IsNullOrEmpty () ?
+					(Expression<Func<Diagnostico, bool>>)(q => q.IdEmpresa == request.IdEmpresa) :
+					(Expression<Func<Diagnostico, bool>>)(q=>q.IdPlantilla==request.IdPlantilla)
+				);
+
+			var r= GetByQuery<Diagnostico> (f, q => q.Id, "desc");
+
+			if (!request.IdEmpresa.IsNullOrEmpty ()) {
+				var ids = r.ConvertAll (e => e.Id);
+
+				Execute<Descarga> (q => {
+					var d=q.Where( c=> c.IdDiagnostico.In(ids)).OrderByDescending(c=>c.Id).ToList();
+					r.ForEach( e=>{
+						e.Descargas= d.FindAll(i=>i.IdDiagnostico== e.Id);
+					});
+				});
+			}
+			return r;
+		}
+
+		public Result<Descarga> PostDescarga(CreateDescarga request){
+			request.Data.Fecha = DateTime.UtcNow;
+			request.Data.Token = Store.CreateRandomPassword ();
+			return Post<Descarga> (request.Data);
+		}
+
+		public Result<Diagnostico> PostDiagnostico(CreateDiagnostico request){
+			request.Data.Creado = DateTime.UtcNow;
+			return Post (request.Data);
+		}
+
+		public Result<Diagnostico> PutDiagnostico(UpdateDiagnostico request){
+			var r = Put (request.Data);
+			Execute<Descarga> (q => {
+				r.Data.Descargas= q.Where(c=>c.IdDiagnostico==request.Data.Id).OrderByDescending(e=>e.Id).ToList();
+			});
+			return r;
+		}
+
 
 		MongoCollection<T> GetCollection<T>(){
 			return Db.GetCollection<T> (typeof(T).GetCollectionName());
@@ -180,10 +226,25 @@ namespace Aicl.Liebre.Data
 				Data = data,
 				WriteResult = wc
 			};
+		}
 
+		static string CreateRandomPassword(int passwordLength=32) 
+		{ 
+			const string allowedChars = "abcdefghijkmnpqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ23456789!@$?"; 
+			Byte[] randomBytes = new Byte[passwordLength]; 
+			char[] chars = new char[passwordLength]; 
+			int allowedCharCount = allowedChars.Length; 
+
+			for(int i = 0;i<passwordLength;i++) 
+			{ 
+				Random randomObj = new Random(); 
+				randomObj.NextBytes(randomBytes); 
+				chars[i] = allowedChars[(int)randomBytes[i] % allowedCharCount]; 
+			} 
+
+			return new string(chars); 
 		}
 
 	}
-
 }
 
