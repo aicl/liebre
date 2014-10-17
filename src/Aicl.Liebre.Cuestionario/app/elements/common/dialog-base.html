@@ -1,0 +1,75 @@
+<link rel="import" href="../../bower_components/paper-dialog/paper-dialog-transition.html">
+<link rel="import" href="../../bower_components/paper-dialog/paper-dialog.html">
+<link rel="import" href="../../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
+<polymer-element name="dialog-base" attributes="heading">
+	<template>
+		<content select='paper-dialog'></content>
+	</template>
+	<script>
+		Polymer({	
+						
+			editable:true,
+			
+			get dialog(){
+				return this.__dialog;
+			},
+			
+			set _dialog(value){
+				if(this.__dialog) return;
+				this.__dialog=value;
+				this.__dialog.querySelector("paper-icon-button[affirmative]")
+				.addEventListener("tap", function(e,d,s){
+					this._delegateOkTap(e,d,s);
+				}.bind(this));
+			
+			},
+			
+			set data(value){
+				this._oldValue= value;
+				this._newValue= Object.clone(value);
+			},
+						
+			set validateFn(value){
+				this._validateFn=value;
+			},
+			
+			set handlerOkTap(value){
+				this._handlerOkTap=value;
+			},
+						
+			created:function(){
+				this._newValue={};
+				this._oldValue={};
+			},
+			
+			toggle:function(){
+				this.$.d.toggle();
+			},
+			
+			_delegateOkTap:function(event, detail, sender){
+				var v=true;
+				if(this._validateFn){
+					v= this._validateFn(this._oldValue, this._newValue)
+				}
+				if(v && this._handlerOkTap){
+					var changed= !Object.compare(this._oldValue, this._newValue);
+					this._handlerOkTap(event,
+									   {item:this._newValue, old:this._oldValue, changed:changed,
+										editable:this.editable},
+									   sender)
+					
+				}
+			},
+			editableChanged:function(old, current){
+				console.log("editable changed", old, current);
+				if(!this.__dialog) return;
+				var inputs= this.__dialog.querySelectorAll("[name]");
+				for(var i in inputs){
+					inputs[i].disabled=!this.editable;
+				}
+				console.log(inputs);
+			},
+		})
+	</script>
+</polymer-element>

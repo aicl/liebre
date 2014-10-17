@@ -1,0 +1,63 @@
+<link rel="import" href="../../bower_components/core-pages/core-pages.html">
+<link rel="import" href="../../bower_components/paper-toast/paper-toast.html">
+<link rel="import" href="../common/app-header-panel.html">
+<link rel="import" href="../common/web-loader.html">
+<link rel="import" href="q-select.html">
+<link rel="import" href="q-panel.html">
+<link rel="import" href="q-dialog.html">
+<polymer-element name="x-app">
+  <template>
+    <style>
+		
+    </style>
+	  
+	  <flatiron-director route="{{route}}" autoHash></flatiron-director>
+	  <web-loader id='wl' display='none'></web-loader>
+	  <core-pages selected="{{route}}" valueattr="hash">
+		  <div hash="" class="page">      
+			  <app-header-panel id="menuPanel" on-l-icon-tap="{{ fireBack }}"
+								licon="menu" ricon="add-circle"
+								on-r-icon-tap="{{handlerShowNuevaEmpresa}}"
+								titulo="Questionarios SGSST">
+				  <q-select id="qs" ><h1>aqui vamos!</h1></q-select>
+			  </app-header-panel>
+		  </div>
+		  <div hash="p" class="page">
+			  <q-panel id="qp" on-diagnostico-back="{{handlerBack}}"> panelito que bonito</q-panel>
+		  </div>
+	  </core-pages>
+	  <paper-toast id="te" class="error" role="alert" text="Error"></paper-toast>
+	  <paper-toast id="tec"  class="error_connection" role="alert"></paper-toast>
+	  <paper-toast id="tc" class="complete" text="Operación realizada!"></paper-toast>
+	  <q-dialog id="qd" heading="hello"></q-dialog>
+  </template>
+  <script>
+	  Polymer({		  		   
+		  route:"",
+		  created:function(){
+		  },
+		  ready:function(){
+			  //this.$.qs.go();
+			  console.log(this.$.qd);
+			  this.$.qd.toggle();
+			  this.$.qd.data={hola:"hola"};
+			  this.$.qd.handlerOkTap=this.handlerSaveAlgo;
+		  },
+		  
+		  handlerShowNuevaEmpresa:function(){
+			  //this.$.qs.go();
+			  console.log(this.$.qd);
+			  this.$.qd.dialog.heading="hola";
+			  this.$.qd.toggle();
+			  this.$.qd.editable=!this.$.qd.editable;
+		  },
+		  
+		  handlerSaveAlgo:function(event, detail, sender){
+			  console.log(event, detail, sender);
+		  }
+		  
+		  
+		  
+	  });
+  </script>
+</polymer-element>

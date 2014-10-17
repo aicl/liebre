@@ -1,0 +1,22 @@
+<link rel="import" href="../common/dialog-base.html">
+<polymer-element name="q-dialog" extends="dialog-base">
+	<template>
+		<paper-dialog id="d" backdrop autoCloseDisabled heading=[[heading]]>
+			<paper-input label="Token" floatinglabel name="Token" value="{{_newValue.Token}}"></paper-input>
+			<paper-icon-button icon="cancel" dismissive></paper-icon-button>
+			<paper-icon-button icon="check"  affirmative autofocus>
+			</paper-icon-button>
+		</paper-dialog>
+	</template>
+	<script>
+		Polymer({
+			ready:function(){
+				this._dialog= this.$.d;
+			}
+		})
+	</script>
+</polymer-element>
+
+
+
+	

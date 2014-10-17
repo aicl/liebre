@@ -1,0 +1,82 @@
+<link rel="import" href="../../bower_components/core-icon-button/core-icon-button.html">
+<link rel="import" href="../../bower_components/core-toolbar/core-toolbar.html">
+<link rel="import" href="../../bower_components/core-header-panel/core-header-panel.html">
+<link rel="import" href="../../bower_components/core-icons/core-icons.html">
+<link rel="import" href="../../bower_components/core-icon/core-icon.html">
+<link rel="import" href="../../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
+
+<polymer-element name="app-header-panel" attributes="titulo,ricon,licon,tclass">
+  <template>
+    <style> 
+		
+      #header{
+        width: 100vw;
+        height: 100vh;
+        left: 0px;
+        top: 0px;
+        position: absolute;
+		overflow: auto;  
+		-webkit-overflow-scrolling: touch; 
+      }
+      #toolbar {
+        color: rgb(255, 255, 255);
+        background-color: rgb(8, 13, 49);
+      }
+      #section{
+        position: absolute;
+        top: 0px;
+        bottom: 0px;
+        left: 0px;
+        right: 0px;
+        overflow: auto;	  
+      }
+	  .small{
+		  font-size: small;
+	  }
+		
+	  .medium{
+		  font-size: medium;
+	  }
+	  
+		      
+    </style>
+    <core-header-panel mode="scroll" id="header">
+      <core-toolbar id="toolbar" class="narrow">
+        <paper-icon-button icon="[[licon||'arrow-back']]" 
+						  on-tap="{{ fireLiconTap }}" style="margin: 0px;"></paper-icon-button>
+        <div flex class="[[tclass]]">{{titulo}}</div>
+		<paper-icon-button icon="[[ricon||'menu']]" 
+						  on-tap="{{ fireRiconTap }}" style="margin: 0px;"></paper-icon-button>  
+		<div id="tb"></div>  
+      </core-toolbar>
+      <section id="section">
+		<content></content>
+      </section>
+    </core-header-panel>
+    
+  </template>
+
+  <script>
+	  Polymer({
+		  get tb() {
+			return this.$.tb;
+		  },
+		  		  
+		  get toolbar() {
+			return this.$.toolbar;
+		  },
+		  
+		  get header() {
+			return this.$.header;
+		  },
+		  		  		  
+		  fireLiconTap: function (event, detail, sender) {
+			  this.fire("l-icon-tap", sender);
+		  },
+		  fireRiconTap: function (event, detail, sender) {
+			  this.fire("r-icon-tap", sender);
+		  }
+	  });
+  </script>
+</polymer-element>

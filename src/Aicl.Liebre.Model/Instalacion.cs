@@ -34,7 +34,8 @@ namespace Aicl.Liebre.Model
 		public List<Capitulo> Capitulos { get; set; }
 		public List<ViewGuia> Guias { get; set; }
 		public List<ViewPregunta> Preguntas { get; set; }
-		public ResponseStatus ResponseStatus {get;set;}
+		public ResponseStatus ResponseStatus { get; set; }
+		public Descarga Descarga { get; set; }
 	}
 		
 	public class ViewPregunta

@@ -1,0 +1,60 @@
+<link rel="import" href="../../bower_components/core-ajax/core-ajax.html">
+<polymer-element name="read-ajax"  extends="core-ajax">
+	<script>
+		Polymer({				
+			dataProperty:"Data",
+			action:"read",
+			model:"",
+			baseUrl:"",
+			method:"get",
+			handleAs:"json",
+			
+			created:function(){
+						
+				this.data=[];
+				var self=this;
+								
+				this.addEventListener("core-response", function(e) {
+					if(e.detail.xhr.status===0){
+						self.fire("read-error-connection", {xhr:e.detail.xhr});
+					}
+					else{
+						self.data=e.detail.response[self.dataProperty];
+						self.fire("read-response", {data:self.data});
+					}
+				});
+								
+				this.addEventListener("core-error", function(e) {
+					self.fire("read-error", {xhr:e.detail.xhr});
+				});
+				
+				this.addEventListener("core-complete", function(e) {
+					self.fire("read-complete", {xhr:e.detail.xhr});
+				});
+				this.super(); 
+			},
+			
+			go:function(){
+				var _urlparams='';
+				if(this.urlparams){
+					if(typeof this.urlparams ==='object'){
+						_urlparams = Object.keys(this.urlparams).map(function(k) {
+							return encodeURIComponent(k) + '=' + encodeURIComponent(this.urlparams[k])
+						}.bind(this)).join('&');
+						if(_urlparams){
+							_urlparams= "?"+_urlparams;
+						}
+					}
+					else{
+						_urlparams=this.urlparams;
+					}
+				}
+								
+				this.data=[];
+				this.url=this.baseUrl+"/"+this.action+"/"+ this.model+ _urlparams;
+				this.super();
+			}
+		
+		})
+	</script>
+</polymer-element>

@@ -127,8 +127,9 @@ namespace Aicl.Liebre.Data
 		public  InstalacionResponse GetInstalacionResponse(ReadInstalacion request)
 		{
 			var response = new InstalacionResponse ();
+			response.Descarga = Single<Descarga> (q => q.Token == request.Token);
 
-			response.Diagnostico = GetById<Diagnostico> (request.Token);
+			response.Diagnostico = GetById<Diagnostico> (response.Descarga.IdDiagnostico);
 			response.Plantilla = GetById<Plantilla> (response.Diagnostico.IdPlantilla);
 			response.Empresa = GetById<Empresa> ( response.Diagnostico.IdEmpresa);
 

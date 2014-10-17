@@ -49,8 +49,14 @@ add.sh
 
 #
 src/Aicl.Liebre.WebClient/app/bower_components/
-src/Aicl.Liebre.WebClient/app/api
-src/Aicl.Liebre.WebClient/app/images
+src/Aicl.Liebre.WebClient/app/api/
+src/Aicl.Liebre.WebClient/app/images/
+
+src/Aicl.Liebre.Cuestionario/app/bower_components/
+src/Aicl.Liebre.Cuestionario/node_modules/
+src/Aicl.Liebre.Cuestionario/dist/
+src/Aicl.Liebre.Cuestionario/.tmp/
+
 
 node_modules/
 dist/
