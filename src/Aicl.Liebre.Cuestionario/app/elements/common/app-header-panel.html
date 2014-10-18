@@ -46,7 +46,7 @@
         <paper-icon-button icon="[[licon||'arrow-back']]" 
 						  on-tap="{{ fireLiconTap }}" style="margin: 0px;"></paper-icon-button>
         <div flex class="[[tclass]]">{{titulo}}</div>
-		<paper-icon-button icon="[[ricon||'menu']]" 
+		<paper-icon-button id="ri" icon="[[ricon||'menu']]" 
 						  on-tap="{{ fireRiconTap }}" style="margin: 0px;"></paper-icon-button>  
 		<div id="tb"></div>  
       </core-toolbar>
@@ -59,6 +59,11 @@
 
   <script>
 	  Polymer({
+		  
+		  get ri(){
+			  return this.$.ri;
+		  },
+		  
 		  get tb() {
 			return this.$.tb;
 		  },

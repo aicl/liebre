@@ -66,3 +66,31 @@ body /deep/ span[raised]{
 	padding: 8px;
 	border-radius: 4px;
 }
+
+
+body /deep/ .list {
+  display: block;
+  border: 1px solid #ccc;
+  border-bottom: none;
+  background: #666;
+  color: white;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  max-width: 512px;
+  width: 100vw;  
+}       
+body /deep/   .list > * {
+  padding: 12px 20px;
+  border-bottom: 1px solid #ccc;
+  font-size: small;
+}       
+body /deep/   .list > *.core-selected {
+  background: #333;
+}		
+body /deep/ span.core-selected[check]:after {
+  content: "\2713";
+  position: absolute;
+  padding-left: 10px;
+}
+	

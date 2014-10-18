@@ -3,8 +3,9 @@
 <link rel="import" href="../common/app-header-panel.html">
 <link rel="import" href="../common/web-loader.html">
 <link rel="import" href="q-select.html">
-<link rel="import" href="q-panel.html">
-<link rel="import" href="q-dialog.html">
+<link rel="import" href="q-capitulos.html">
+<link rel="import" href="q-preguntas.html">
+<link rel="import" href="q-dialog-instalacion.html">
 <polymer-element name="x-app">
   <template>
     <style>
@@ -12,7 +13,6 @@
     </style>
 	  
 	  <flatiron-director route="{{route}}" autoHash></flatiron-director>
-	  
 	  <core-pages selected="{{route}}" valueattr="hash">
 		  <div hash="" class="page">      
 			  <app-header-panel id="menuPanel" on-l-icon-tap="{{ fireBack }}"
@@ -22,15 +22,18 @@
 				  <q-select id="qs"></q-select>
 			  </app-header-panel>
 		  </div>
-		  <div hash="p" class="page">
-			  <q-panel id="qp" on-diagnostico-back="{{handlerBack}}"> panelito que bonito</q-panel>
+		  <div hash="capitulos" class="page">
+			  <q-capitulos id="qc" on-capitulos-back="{{handlerBack}}"></q-capitulos>
+		  </div>
+		  <div hash="preguntas" class="page">
+			  <q-preguntas id="qp" on-preguntas-back="{{handlerBack}}" capitulo="{{capitulo}}"></q-preguntas>
 		  </div>
 	  </core-pages>
 	  <web-loader id='wl' display='none'></web-loader>
 	  <paper-toast id="te" class="error" role="alert" text="Error"></paper-toast>
 	  <paper-toast id="tec"  class="error_connection" role="alert"></paper-toast>
 	  <paper-toast id="tc" class="complete" text="Operación realizada!"></paper-toast>
-	  <q-dialog id="qd"></q-dialog>
+	  <q-dialog-instalacion id="qdi"></q-dialog-instalacion>
   </template>
   <script>
 	  Polymer({		  		   
@@ -46,11 +49,16 @@
 			  };
 		  },
 		  ready:function(){
-			  this.$.qd.handlerOkTap=this.handlerSaveDownload.bind(this);
+			  this.$.qdi.handlerOkTap=this.handlerSaveDownload.bind(this);
+			  this.$.qs.handlerShowCapitulos= this.handlerShowCapitulos.bind(this);
+			  this.$.qc.handlerCapituloSelect= this.handlerCapituloSelect.bind(this);
+			  this.$.qp.saveRespuesta=  this.saveRespuesta.bind(this);
+			  this.$.qp.getGuias=  this.getGuias.bind(this);
+			  this.$.qp.saveRespuestaGuia=  this.saveRespuestaGuia.bind(this);
+			  
 			  this.$.wl.display="block";
 			  window.liebre.getDiagnosticos(function(response){
 				  this.$.wl.display="none";
-				  console.log("diagnosticos", response.data);
 				  if(response.status==='ok'){
 					  this.$.qs.diagnosticos= response.data;
 				  }
@@ -61,9 +69,80 @@
 			  }.bind(this));
 		  },
 		  
+		  saveRespuesta:function(respuesta, completeFn){
+			  this.$.wl.display="block";
+			  liebre.putRespuesta(respuesta, function(response){
+				  this.$.wl.display="none";
+				  if(response.status==='error'){
+					  this.$.te.text= response.msg;
+					  this.$.te.show();
+				  }
+				  if(completeFn) {
+					  completeFn(response);
+				  }
+				  
+			  }.bind(this));
+		  },
+		  
+		  getGuias:function(diagnostico, respuesta, completeFn){
+			  this.$.wl.display="block";
+			  liebre.getGuias(diagnostico, respuesta, function(response){
+				  this.$.wl.display="none";
+				  if(response.status==='error'){
+					  this.$.te.text= response.msg;
+					  this.$.te.show();
+				  }
+				  if(completeFn) {
+					  completeFn(response);
+				  }
+			  }.bind(this));
+		  },
+		  
+		  saveRespuestaGuia:function(respuesta, completeFn){
+			  this.$.wl.display="block";
+			  liebre.putRespuestaGuia(respuesta, function(response){
+				  this.$.wl.display="none";
+				  if(response.status==='error'){
+					  this.$.te.text= response.msg;
+					  this.$.te.show();
+				  }
+				  
+				  if(completeFn) {
+					  completeFn(response);
+				  }
+				  
+			  }.bind(this));
+		  },
+
+		  
+		  handlerCapituloSelect:function(event, detail, sender){
+			  console.log(detail);
+			  this.$.qp.diagnostico= detail.diagnostico;
+			  var cap = detail.item;
+			  this.$.wl.display="block";
+			  liebre.getPreguntas(detail.diagnostico, cap,  function(response){
+				  this.$.wl.display="none";
+				  if(response.status==='ok'){
+					  cap.Current=cap.Current||0;
+					  cap.Preguntas=response.data;
+					  this.capitulo= cap;
+				  }
+				  else{
+					  this.$.te.text= response.msg;
+					  this.$.te.show();
+				  }
+				  this.route="preguntas";
+			  }.bind(this));
+		  },
+		  
+		  handlerShowCapitulos:function(event, detail, sender){
+			  console.log(detail);
+			  this.$.qc.diagnostico= detail.item;
+			  this.route="capitulos";
+		  },
+		  		  
 		  handlerShowDownload:function(){
-			  this.$.qd.showNew();
-			  
+			  this.$.qdi.showNew();	  
 		  },
 		  
 		  handlerSaveDownload:function(event, detail){

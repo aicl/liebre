@@ -9,21 +9,24 @@
 					  <div  flex class="text">{{item.Descarga.Id}}</div>
 					  <core-icon-button icon="work" style="color:{{item.Estado}}" ></core-icon-button>
 					  <core-icon-button icon="delete" on-tap="{{ handlerShowDelete }}"></core-icon-button>
-					  <core-icon-button  icon="create"  on-tap="{{ handlerShowEdit }}"></core-icon-button>
+					  <core-icon-button  icon="create"  on-tap="{{ delegateShowCapitulos }}"></core-icon-button>
 					  <core-icon-button  icon="cloud-upload"  on-tap="{{ handlerShowUpload }}"></core-icon-button>
 				  </div>
 				  <div class="titulo">{{item.Diagnostico.Descripcion}}</div>
 				  <div class="text">{{item.Empresa.Nit+ '-'+ item.Empresa.Nombre}}</div>
 				  <div class="text">{{item.Plantilla.Titulo}}</div>
 				  <div class="text">{{item.Plantilla.Version}}</div>
-				  
 			  </div>
 		  </template>
-	  </div>	  
-		
+	  </div>	  	
   </template>
 	<script>
 		Polymer({
+			delegateShowCapitulos:function(event, detail, sender){
+				if(this.handlerShowCapitulos){
+					this.handlerShowCapitulos(event, {item:sender.templateInstance.model.item }, sender);
+				}
+			}
 		});
 	</script>
 </polymer-element>

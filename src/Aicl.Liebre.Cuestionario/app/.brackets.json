@@ -52,6 +52,14 @@
         "/home/angel/projects/liebre/src/Aicl.Liebre.Cuestionario/app/bower_components/web-animations-js/test/testcases/auto-test-perspective-checks.js",
         "/home/angel/projects/liebre/src/Aicl.Liebre.Cuestionario/app/bower_components/web-animations-js/test/testcases/auto-test-svg-color-checks.js",
         "/home/angel/projects/liebre/src/Aicl.Liebre.Cuestionario/app/bower_components/web-animations-js/test/testcases/auto-test-rectangle-checks.js",
-        "/home/angel/projects/liebre/src/Aicl.Liebre.Cuestionario/app/bower_components/web-animations-js/test/testcases/auto-test-fill-values-checks.js"
+        "/home/angel/projects/liebre/src/Aicl.Liebre.Cuestionario/app/bower_components/web-animations-js/test/testcases/auto-test-fill-values-checks.js",
+        "/home/angel/projects/liebre/src/Aicl.Liebre.Cuestionario/app/bower_components/web-animations-js/test/testcases/auto-test-parent-checks.js",
+        "/home/angel/projects/liebre/src/Aicl.Liebre.Cuestionario/app/bower_components/web-animations-js/test/testcases/auto-test-svg-anim-checks.js",
+        "/home/angel/projects/liebre/src/Aicl.Liebre.Cuestionario/app/bower_components/web-animations-js/test/testcases/auto-test-partial-keyframes-checks.js",
+        "/home/angel/projects/liebre/src/Aicl.Liebre.Cuestionario/app/bower_components/web-animations-js/test/testcases/auto-test-keyframe-easing-checks.js",
+        "/home/angel/projects/liebre/src/Aicl.Liebre.Cuestionario/app/bower_components/web-animations-js/test/testcases/auto-test-path-checks.js",
+        "/home/angel/projects/liebre/src/Aicl.Liebre.Cuestionario/app/bower_components/web-animations-js/test/testcases/auto-test-transform-3d-checks.js",
+        "/home/angel/projects/liebre/src/Aicl.Liebre.Cuestionario/app/bower_components/web-animations-js/test/testcases/auto-test-motion-path-checks.js",
+        "/home/angel/projects/liebre/src/Aicl.Liebre.Cuestionario/app/bower_components/web-animations-js/test/perf/perf.js"
     ]
 }

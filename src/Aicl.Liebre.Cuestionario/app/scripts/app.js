@@ -310,10 +310,13 @@
 			name: 'Pregunta',    // required. object store name or TABLE name
 			keyPath: ['Respuesta.IdDiagnostico','Respuesta.IdPregunta'],    // tomar de Diagnostico 
 			autoIncrement: false, // if true, key will be automatically created
+			indexes:[{
+				name:"Pregunta.IdCapitulo",
+				keyPath:['Respuesta.IdDiagnostico','Pregunta.IdCapitulo']
+			}]
 		},{
 			name: 'Descarga',    // required. object store name or TABLE name
 			keyPath: 'Descarga.Token',    // keyPath.
-
 			autoIncrement: false, // if true, key will be automatically created
 			indexes: [{
 				name: 'Diagnostico.Id', // optional
@@ -326,8 +329,93 @@
 	
 	window.liebre._storage= new window.liebre.IndexStorage('sgsst-test', schema);
 	window.liebre._storage.open();
+		
+	window.liebre.getPreguntas=function(diagnostico, capitulo, complete){
+		window.liebre._storage.execute(function(db){
+			var __ready=false;
+			var response= {
+				status:'ok',
+				error:null,
+				msg: 'Preguntas OK',
+				data:[]
+			};
+			var kv= ydn.db.KeyRange.only([diagnostico.Diagnostico.Id, capitulo.Id]);
+			db.values("Pregunta", "Pregunta.IdCapitulo", kv)
+			.done(function(aData){
+				if(aData[0]){
+					response.data= aData;
+					__ready=true;
+				}
+			})
+			.fail(function(e){
+				console.log("error",e);
+				response.status='error';
+				response.error=e;
+				response.msg='Eror al leer Preguntas' ;
+				__ready=true;
+			});
+			
+			(function(){
+				var tId = setInterval(function() {
+					if ( __ready) {
+						onReady()
+					}
+				}, 11);
+				function onReady(){
+					clearInterval(tId);
+					if(complete){
+						complete(response);
+					}
+				};
+			})()
+		});
+	};
 	
-	//window.liebre._storage.execute(function(db){db.values("Guia", [["543d71128bd8c014fc34cb54","543af0d68bd8c00ed554f7df"]]).fail(function(e){console.log("error",e)}).done(function(d){console.log("done", d)})});
+	window.liebre.getGuias=function(diagnostico, ids, complete){
+		window.liebre._storage.execute(function(db){
+			var __ready=false;
+			var response= {
+				status:'ok',
+				error:null,
+				msg: 'Preguntas OK',
+				data:[]
+			};
+			var kv= [];//ydn.db.KeyRange.only([diagnostico.Diagnostico.Id, capitulo.Id]);
+			for( var id in ids){
+				kv.push([diagnostico.Diagnostico.Id, ids[id]])
+			};
+			db.values("Guia",  kv)
+			.done(function(aData){
+				if(aData[0]){
+					console.log("aqui vamos en getGuias 1");
+					response.data= aData;
+					__ready=true;
+				}
+			})
+			.fail(function(e){
+				console.log("error",e);
+				response.status='error';
+				response.error=e;
+				response.msg='Eror al leer Guias' ;
+				__ready=true;
+			});
+			
+			(function(){
+				var tId = setInterval(function() {
+					if ( __ready) {
+						onReady()
+					}
+				}, 11);
+				function onReady(){
+					clearInterval(tId);
+					if(complete){
+						complete(response);
+					}
+				};
+			})()
+		});
+	};
+	
 	
 	// complete : function({status: 'ok' ||'error',  error: null|| error, msg:'' })
 	window.liebre.getDiagnosticos=function(complete){
@@ -342,9 +430,9 @@
 			db.values("Descarga")
 			.done(function(aData){
 				if(aData[0]){
-					response.data= aData;
-					__ready=true;
+					response.data= aData;					
 				}
+				__ready=true;
 			})
 			.fail(function(e){
 				console.log("error",e);
@@ -370,6 +458,165 @@
 		});
 	}
 	
+	window.liebre.putDiagnostico=function(diagnostico,complete){
+		complete = complete || function(r){};
+		window.liebre._storage.execute(function(db){
+			var __ready=false;
+			var response= {
+				status:'ok',
+				error:null,
+				msg: 'Diagnosticos OK',
+				data:[]
+			};
+			db.put("Descarga", diagnostico)
+			.done(function(key){
+				response.data= key;
+				__ready=true;
+				
+			})
+			.fail(function(e){
+				console.log("error",e);
+				response.status='error';
+				response.error=e;
+				response.msg='Eror al leer Diagnosticos' ;
+				__ready=true;
+			});
+			(function(){
+				var tId = setInterval(function() {
+					if ( __ready) {
+						onReady()
+					}
+				}, 11);
+				function onReady(){
+					clearInterval(tId);
+					if(complete){
+						complete(response);
+					}
+				};
+			})()
+		});
+	}
+		
+	
+	window.liebre.putRespuesta=function(respuesta,complete){
+		complete = complete || function(r){};
+		window.liebre._storage.execute(function(db){
+			var __ready=false;
+			var response= {
+				status:'ok',
+				error:null,
+				msg: 'Respuesta OK',
+				data:[]
+			};
+			db.values("Pregunta",  [[respuesta.IdDiagnostico, respuesta.IdPregunta]])
+			.done(function(aData){
+				if(aData[0]){
+					aData[0].Respuesta= respuesta;
+					db.put("Pregunta", aData[0])
+					.done(function(key){
+						response.data= aData;
+						__ready=true;
+					})
+					.fail(function(e){
+						doError('',e );
+					})
+										
+				}
+				else{
+					doError('Error al leer Respuestas. No existe registro');
+				}
+			})
+			.fail(function(e){
+				doError('Error al leer Respuestas',e)
+			});
+			
+			var doError= function(m,e){
+				console.log("error",e);
+				response.status='error';
+				response.error=e;
+				response.msg=m || 'Actualización de la Respuesta fallida!' ;
+				if (e && e.target && e.target.error) {
+					response.msg= response.msg + e.target.error.name + ' ' + e.target.error.message;
+                }
+				__ready=true;
+			};
+			
+			(function(){
+				var tId = setInterval(function() {
+					if ( __ready) {
+						onReady()
+					}
+				}, 11);
+				function onReady(){
+					clearInterval(tId);
+					if(complete){
+						complete(response);
+					}
+				};
+			})()
+		});
+	}
+//
+	
+	window.liebre.putRespuestaGuia=function(respuesta,complete){
+		complete = complete || function(r){};
+		window.liebre._storage.execute(function(db){
+			var __ready=false;
+			var response= {
+				status:'ok',
+				error:null,
+				msg: 'Respuesta Guia OK',
+				data:[]
+			};
+			db.values("Guia",  [[respuesta.IdDiagnostico, respuesta.IdGuia]])
+			.done(function(aData){
+				if(aData[0]){
+					aData[0].Respuesta= respuesta;
+					db.put("Guia", aData[0])
+					.done(function(key){
+						response.data= aData;
+						__ready=true;
+					})
+					.fail(function(e){
+						doError('',e );
+					})
+										
+				}
+				else{
+					doError('Error al leer RespuestasGuias. No existe registro');
+				}
+			})
+			.fail(function(e){
+				doError('Error al leer RespuestasGuias',e)
+			});
+			
+			var doError= function(m,e){
+				console.log("error",e);
+				response.status='error';
+				response.error=e;
+				response.msg=m || 'Actualización de la RespuestaGuia fallida!' ;
+				if (e && e.target && e.target.error) {
+					response.msg= response.msg + e.target.error.name + ' ' + e.target.error.message;
+                }
+				__ready=true;
+			};
+			
+			(function(){
+				var tId = setInterval(function() {
+					if ( __ready) {
+						onReady()
+					}
+				}, 11);
+				function onReady(){
+					clearInterval(tId);
+					if(complete){
+						complete(response);
+					}
+				};
+			})()
+		});
+	}
+		
 	window.liebre.instalarDiagnostico=function(data, complete){
 		window.liebre._storage.execute(function(db){
 			data.Estado="grey";
@@ -380,6 +627,10 @@
 				msg: 'Instalación hecha!',
 				data:{}
 			};
+			
+			for (var cap in data.Capitulos){
+				data.Capitulos[cap].Current=0;
+			}
 				
 			var kv= ydn.db.KeyRange.only(data.Diagnostico.Id);
 			db.values('Descarga',"Diagnostico.Id",  kv)
