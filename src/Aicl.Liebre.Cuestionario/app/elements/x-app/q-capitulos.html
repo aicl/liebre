@@ -1,0 +1,56 @@
+<link rel="import" href="../../bower_components/core-selector/core-selector.html">
+<link rel="import" href="../../bower_components/core-icons/core-icons.html">
+<link rel="import" href="../../bower_components/core-icons/image-icons.html">
+<link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
+<polymer-element name="q-capitulos">
+  <template>
+    <style>    
+      :host {  		  
+		display: block;
+		position: relative;
+		padding: 0px;     
+      }
+	  </style>
+	  
+	  <app-header-panel id="hp" on-l-icon-tap="{{ fireBack }}"	licon="arrow-back" ricon="work"
+						titulo="{{diagnostico.Diagnostico.Descripcion}}">
+		  <div layout vertical center>
+				  <core-selector class="list"  layout vertical>
+					  <template repeat="{{item in diagnostico.Capitulos}}">
+						  <span  on-tap="{{delegateCapituloSelect}}">
+							  {{item.Titulo +'-'+ item.Estandar}}
+						  </span>
+					  </template>
+				  </core-selector>
+		  </div>
+	  </app-header-panel>	  
+	  	   
+  </template>
+
+  <script>
+
+    Polymer({
+		
+		created:function(){
+			this.diagnostico={}
+		},
+		
+		fireBack:function(){
+			this.fire("capitulos-back");
+		},
+		
+		delegateCapituloSelect:function(event, detail, sender){
+			if(this.handlerCapituloSelect){
+				this.handlerCapituloSelect(event, {
+					item: sender.templateInstance.model.item,
+					diagnostico:this.diagnostico
+				}, sender);
+			}
+		},
+		
+		diagnosticoChanged:function(){
+			this.$.hp.ri.style.color= this.diagnostico.Estado;
+		}
+	});
+  </script>
+</polymer-element>
