@@ -2,7 +2,25 @@
 	<template>
 		<style>
 		</style>
-		<content></content>
+		<div layout vertical center>	  
+		  <template repeat="{{item in diagnosticos}}">
+			  <div class="card">
+				  <div layout horizontal center>
+					  <div  flex class="text">{{item.Descarga.Id}}</div>
+					  <core-icon-button icon="work" style="color:{{item.Estado}}" ></core-icon-button>
+					  <core-icon-button icon="delete" on-tap="{{ handlerShowDelete }}"></core-icon-button>
+					  <core-icon-button  icon="create"  on-tap="{{ handlerShowEdit }}"></core-icon-button>
+					  <core-icon-button  icon="cloud-upload"  on-tap="{{ handlerShowUpload }}"></core-icon-button>
+				  </div>
+				  <div class="titulo">{{item.Diagnostico.Descripcion}}</div>
+				  <div class="text">{{item.Empresa.Nit+ '-'+ item.Empresa.Nombre}}</div>
+				  <div class="text">{{item.Plantilla.Titulo}}</div>
+				  <div class="text">{{item.Plantilla.Version}}</div>
+				  
+			  </div>
+		  </template>
+	  </div>	  
+		
   </template>
 	<script>
 		Polymer({

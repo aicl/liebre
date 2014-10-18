@@ -129,6 +129,10 @@ namespace Aicl.Liebre.Data
 			var response = new InstalacionResponse ();
 			response.Descarga = Single<Descarga> (q => q.Token == request.Token);
 
+			if (response.Descarga.Id.IsNullOrEmpty ()) {
+				throw new Exception("No existe informacion para el token:'{0}'".Fmt(request.Token));
+			}
+
 			response.Diagnostico = GetById<Diagnostico> (response.Descarga.IdDiagnostico);
 			response.Plantilla = GetById<Plantilla> (response.Diagnostico.IdPlantilla);
 			response.Empresa = GetById<Empresa> ( response.Diagnostico.IdEmpresa);

@@ -12,50 +12,105 @@
     </style>
 	  
 	  <flatiron-director route="{{route}}" autoHash></flatiron-director>
-	  <web-loader id='wl' display='none'></web-loader>
+	  
 	  <core-pages selected="{{route}}" valueattr="hash">
 		  <div hash="" class="page">      
 			  <app-header-panel id="menuPanel" on-l-icon-tap="{{ fireBack }}"
-								licon="menu" ricon="add-circle"
-								on-r-icon-tap="{{handlerShowNuevaEmpresa}}"
+								licon="menu" ricon="cloud-download"
+								on-r-icon-tap="{{handlerShowDownload}}"
 								titulo="Questionarios SGSST">
-				  <q-select id="qs" ><h1>aqui vamos!</h1></q-select>
+				  <q-select id="qs"></q-select>
 			  </app-header-panel>
 		  </div>
 		  <div hash="p" class="page">
 			  <q-panel id="qp" on-diagnostico-back="{{handlerBack}}"> panelito que bonito</q-panel>
 		  </div>
 	  </core-pages>
+	  <web-loader id='wl' display='none'></web-loader>
 	  <paper-toast id="te" class="error" role="alert" text="Error"></paper-toast>
 	  <paper-toast id="tec"  class="error_connection" role="alert"></paper-toast>
 	  <paper-toast id="tc" class="complete" text="Operación realizada!"></paper-toast>
-	  <q-dialog id="qd" heading="hello"></q-dialog>
+	  <q-dialog id="qd"></q-dialog>
   </template>
   <script>
 	  Polymer({		  		   
 		  route:"",
 		  created:function(){
+			  this.rqReadInstalacion = {
+				  model:'instalacion',
+				  response:this.readInstalacionResponse.bind(this),
+				  error:this.readError.bind(this),
+				  errorConnection: this.readErrorConnection.bind(this),
+				  complete:this.readComplete.bind(this),
+				  urlparams:{}
+			  };
 		  },
 		  ready:function(){
-			  //this.$.qs.go();
-			  console.log(this.$.qd);
-			  this.$.qd.toggle();
-			  this.$.qd.data={hola:"hola"};
-			  this.$.qd.handlerOkTap=this.handlerSaveAlgo;
+			  this.$.qd.handlerOkTap=this.handlerSaveDownload.bind(this);
+			  this.$.wl.display="block";
+			  window.liebre.getDiagnosticos(function(response){
+				  this.$.wl.display="none";
+				  console.log("diagnosticos", response.data);
+				  if(response.status==='ok'){
+					  this.$.qs.diagnosticos= response.data;
+				  }
+				  else{
+					  this.$.te.text= response.msg;
+					  this.$.te.show();
+				  }
+			  }.bind(this));
 		  },
 		  
-		  handlerShowNuevaEmpresa:function(){
-			  //this.$.qs.go();
-			  console.log(this.$.qd);
-			  this.$.qd.dialog.heading="hola";
-			  this.$.qd.toggle();
-			  this.$.qd.editable=!this.$.qd.editable;
+		  handlerShowDownload:function(){
+			  this.$.qd.showNew();
+			  
 		  },
 		  
-		  handlerSaveAlgo:function(event, detail, sender){
-			  console.log(event, detail, sender);
+		  handlerSaveDownload:function(event, detail){
+			  this.rqReadInstalacion.urlparams.Token=detail.item.Token;
+			  window.liebre.remote.read(this.rqReadInstalacion);
+			  this.$.wl.display="block";
+		  },
+		  		  
+		  readInstalacionResponse:function(event){
+			  var data = event.detail.data;
+			  data.Diagnostico.Creado=window.liebre.tools.formatDate(data.Diagnostico.Creado);
+			  data.Plantilla.FechaFinal=window.liebre.tools.formatDate(data.Plantilla.FechaFinal);
+			  data.Plantilla.FechaInicial=window.liebre.tools.formatDate(data.Plantilla.FechaInicial);
+			  
+			  window.liebre.instalarDiagnostico(data, function(response){
+				  if(response.status==='ok'){
+					  this.$.qs.diagnosticos.unshift(response.data);
+				  }
+				  else{
+					  this.$.te.text= response.msg;
+					  this.$.te.show();
+				  }
+			  }.bind(this));
+		  },
+		  
+		  readError:function(event){
+			  console.log("error", event);
+			  this.$.te.text= "Error: "+ event.type+". "+ event.detail.xhr.response;
+			  this.$.te.show();
+			  
+		  },
+		  readComplete:function(event){
+			  console.log("complete", event);
+			  this.$.wl.display="none";
+			  if( event.detail.xhr.status!=0 
+				 && event.type.lastIndexOf('-error')<0 
+				 && event.type.lastIndexOf('read')<0 ) {
+				  this.$.tc.text="Operación realizada: "+ event.type;
+				  this.$.tc.show();
+			  }
+		  },
+		  readErrorConnection:function(event){
+			  console.log("error-connection", event);
+			  this.$.tec.text="Error de conexión: "+
+				  event.type+ ". Servidor:"+ liebre.tools.getBaseUrl();
+			  this.$.tec.show();
 		  }
-		  
 		  
 		  
 	  });

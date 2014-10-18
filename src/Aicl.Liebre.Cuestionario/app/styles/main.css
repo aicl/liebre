@@ -30,3 +30,39 @@ body /deep/ paper-toast.complete{
 body /deep/ paper-dialog {
 	top: 0px;
 }
+
+body /deep/ .titulo{
+	padding:0px 5px 0px 5px;
+}
+
+body /deep/	.text{
+	padding:5px 5px 0px 5px;
+	margin-bottom:  6px;
+	font-size: small;
+}
+
+body /deep/ .card {
+	display: block;
+	position: relative;
+	padding: 10px 5px 10px 5px ;    
+	margin: 10px 0px 10px 0px;
+	box-shadow: 0 1px 2px 0 ;
+	border-radius: 2px;
+	overflow: hidden;	
+	max-width: 512px;
+	background-color: rgb(212, 212, 212);
+	width: 100vw;  
+}
+
+body /deep/	paper-dialog > paper-icon-button {
+	border-radius: 10px;
+	background-color: rgb(8, 13, 49); 
+	color: white;
+}		
+body /deep/ span[raised]{
+	background-color: rgb(8, 13, 49); 
+	color: white;
+	font-size: small;
+	padding: 8px;
+	border-radius: 4px;
+}

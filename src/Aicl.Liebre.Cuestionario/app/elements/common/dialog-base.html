@@ -44,7 +44,7 @@
 			},
 			
 			toggle:function(){
-				this.$.d.toggle();
+				this.__dialog.toggle();
 			},
 			
 			_delegateOkTap:function(event, detail, sender){
@@ -70,6 +70,10 @@
 				}
 				console.log(inputs);
 			},
+			
+			getInput:function(name){
+				return this.__dialog.querySelector("[name='"+name+ "']");
+			}
 		})
 	</script>
 </polymer-element>

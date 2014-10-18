@@ -3049,8 +3049,8 @@ To change the radio unchecked color:
 			  <plantilla-capitulos id="pc" on-capitulos-back="{{ handlerBack}}" <="" plantilla-capitulos="">
 		  </plantilla-capitulos></div>
 		  <div hash="plantillas/guias" class="page" id="guias">
-			  <plantilla-guias id="pg" on-guias-back="{{ handlerBack}}" <="" plantilla-guias="">
-		  </plantilla-guias></div>
+			  <plantilla-guias id="pg" on-guias-back="{{ handlerBack}}"></plantilla-guias>
+		  </div>
 		  <div hash="plantillas/capitulos/preguntas" class="page" id="preguntas">
 			  <pl-cap-preguntas id="pcp" on-preguntas-back="{{ handlerBack }}"></pl-cap-preguntas>
 		  </div>
@@ -3196,7 +3196,7 @@ To change the radio unchecked color:
 	  <paper-dialog id="showpl" heading="Seleccione una plantilla:" backdrop="" style="top:0px;">
 		  <core-selector class="list" valueattr="index" id="sl" layout="" vertical="">
 			  <template repeat="{{item in plantillas}}">
-				  <span index="{{item.Id}}">{{item.Titulo+'-'+item.Version}}></span>
+				  <span index="{{item.Id}}">{{item.Titulo+'-'+item.Version}}</span>
 			  </template>
 		  </core-selector>
 		  <paper-icon-button icon="cancel" dismissive=""></paper-icon-button>
@@ -3233,8 +3233,8 @@ To change the radio unchecked color:
 			  </app-header-panel>
 		  </div>
 		  <div hash="empresas/diagnosticos" class="page" id="diagnosticos">
-			  <emp-diagnostico id="dg" on-diagnostico-back="{{handlerBack}}" emp-diagnostico="">
-		  </emp-diagnostico></div>
+			  <emp-diagnostico id="dg" on-diagnostico-back="{{handlerBack}}"></emp-diagnostico>
+		  </div>
 	  </core-pages>
 	  <paper-toast id="error" role="alert" text="Error"></paper-toast>
 	  <paper-toast id="error_connection" role="alert"></paper-toast>

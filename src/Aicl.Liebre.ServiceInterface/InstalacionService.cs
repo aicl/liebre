@@ -6,7 +6,7 @@ namespace Aicl.Liebre.ServiceInterface
 	{
 
 		public object Get(ReadInstalacion request){
-			return Store.GetInstalacionResponse (request);
+			return ServiceBase.CreateResponse( Store.GetInstalacionResponse (request));
 		}
 	}
 }

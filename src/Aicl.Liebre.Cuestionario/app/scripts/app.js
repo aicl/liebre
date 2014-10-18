@@ -1,5 +1,16 @@
 (function (document) {
 	'use strict';
+		
+	if (!navigator.getUserMedia) {
+		navigator.getUserMedia = navigator.webkitGetUserMedia || navigator.mozGetUserMedia || 
+			navigator.msGetUserMedia;
+	}
+	
+	if (!window.URL) {
+		window.URL =  window.webkitURL || window.msURL || window.oURL;
+	}
+	
+	
 	Date.prototype.toDateInputValue = function () {
 		var local = new Date(this);
 		local.setMinutes(this.getMinutes() - this.getTimezoneOffset());
@@ -54,118 +65,81 @@
 		}
 		return true;
 	};
-		
-	if (!navigator.getUserMedia) {
-		navigator.getUserMedia = navigator.webkitGetUserMedia || navigator.mozGetUserMedia || 
-			navigator.msGetUserMedia;
-	}
-	
-	if (!window.URL) {
-		window.URL =  window.webkitURL || window.msURL || window.oURL;
-	}
-	
-	window.app ={};
-	
-	window.app.__store= JSON.parse( localStorage.getItem('__liebrestore') || '[]'  );
-	window.app.__consecutivoRecord= JSON.parse( localStorage.getItem('__consecutivoRecord') || '0'  );
-	window.app.__consecutivoFoto= JSON.parse( localStorage.getItem('__consecutivoFoto') || '0'  );
-	
-	window.app.consecutivoRecordGen=function(){
-		localStorage.setItem('__consecutivoRecord', ++window.app.__consecutivoRecord);
-		return window.app.__consecutivoRecord;
-	};
-	
-	window.app.consecutivoFotoGen=function(){
-		localStorage.setItem('__consecutivoFoto', ++window.app.__consecutivoFoto);
-		return window.app.__consecutivoFoto;
-	};
- 	
-	window.app.saveRespuesta=function(record, success, fail){
-		try{
-			console.log('saving respuesta', record);
-		}
-		catch(e){
-			if(fail) {
-				fail(e);
-			}
-			return;
-		}
-				
-		if(success) {
-			success();
-		}
-	};
-	
-	window.app.saveRepuestaGuia=function(record, success, fail){
-		try{
-			console.log('saving respuesta guia', record);
-		}
-		catch(e){
-			if(fail) {
-				fail(e);
-			}
-			return;
-		}		
-		if(success) {
-			success();
-		}
-	};
-		
-	window.app.cargarCapitulos = function (success) {				
-		if (success) {
-			success();
-		}
-	};
-	
-	//window.app.__guias = window.getGuias();
-	
-	window.app.getGuia = function (id, success,  fail){
-		var guia= { Guia: {}, Respuesta: {} };
-		try{
-			for( var g in window.app.__guias){
-				if( window.app.__guias[g].Guia.Id===id){
-					guia=g;
-				}
-			}
-		}
-		catch(e){
-			if(fail){
-				fail();
-			}
-			return ;
-		}
-		if(success){
-			success(guia);
-		}
-	};
-	
-	
-	window.app.getGuias = function (ids, success,  fail){
-		var guias=[];
-		try{
-			for (var g in window.app.__guias){
-				for(var id in ids){
-					if( window.app.__guias[g].Guia.Id===ids[id]){
-						guias.push(window.app.__guias[g]);
-					}
-				}
-			}
-		}
-		catch(e){
-			console.log('e', e);
-			if(fail){
-				fail();
-			}
-			return;
-		}
-		if(success){
-			success(guias);
-		}
-	};
-	
+			
 	window.liebre={};
 	window.liebre.tools={};
 	window.liebre.remote={};
+	
+	window.liebre.IndexStorage = (function () {
+		function IndexStorage(name, schema, options) {
+			this.__name=name||"default-storage";
+			this.__schema=schema||{};
+			this.__options= options||{}
+			this.__db=null
+			this.__ready=false;
+		}
+		Object.defineProperty(IndexStorage.prototype, "name", {
+			get: function () {
+				return this.__name;
+			},
+			enumerable: true,
+			configurable: true
+		});
+		Object.defineProperty(IndexStorage.prototype, "opened", {
+			get: function () {
+				return this.__db!=null;
+			},
+			enumerable: true,
+			configurable: true
+		});
+		IndexStorage.prototype.open = function () {
+			var self=this;
+			if(self.__db==null){
+				self.__db = new ydn.db.Storage(self.__name, self.__schema, self.__options);
+				self.__db.onReady(function(e) {
+					if (e) {
+						self.__db=null;
+						self.__ready=false;
+						if (e.target.error) {
+							console.log('Error due to: ' + e.target.error.name + ' ' + e.target.error.message);
+						}
+						throw e;
+					}
+					self.__ready=true;
+				});        
+			}
+		};
+		IndexStorage.prototype.execute = function (fn) {
+			var self=this;
+			if(self.__ready){
+				fn(self.__db);
+				return;
+			}
+			(function(){
+				var times=10;
+				var tId = setInterval(function() {
+					if (self.__ready) {
+						onReady()
+					}
+					else{
+						times--;
+						if(times<=0) {
+							clearInterval(tId);
+						}
+					}
+				}, 11);
+				function onReady(){
+					clearInterval(tId);
+					fn(self.__db);
+				};
+			})()
+		};
+		IndexStorage.prototype.close = function () {
+			if(this.__db!=null) this.__db.close();
+		};
+		return IndexStorage;
+	})();
+		
 	
 	window.liebre.tools.getBaseUrl=function(){
 		return localStorage.getItem('liebre.baseUrl') ||
@@ -177,7 +151,7 @@
 							 ( (location.protocol + '//' + location.host+ '/lbr-api').replace('9000','8080')));
 	};
 		
-	window.liebre.tools.convertToText=function(obj){
+	window.liebre.tools.toFormData=function(obj){
 		if(!obj || obj===null || Object.getOwnPropertyNames(obj).length===0){
 			return '{}';
 		}
@@ -268,7 +242,7 @@
 		ajax.model=  config.model  || ajax.model;
         ajax.headers = config.headers ||  '{"Content-Type":"application/x-www-form-urlencoded"}';
 				
-		ajax.params= JSON.stringify({Data: window.liebre.tools.convertToText(data) } );
+		ajax.params= JSON.stringify({Data: window.liebre.tools.toFormData(data) } );
 						
 		ajax.errorConnectionHandler= config.errorConnection;
 		ajax.errorHandler= config.error;
@@ -291,7 +265,7 @@
 		ajax.model=  config.model  || ajax.model;
         ajax.headers = config.headers ||  '{"Content-Type":"application/x-www-form-urlencoded"}';
 				
-		ajax.params= JSON.stringify({Data: window.liebre.tools.convertToText(data) } );
+		ajax.params= JSON.stringify({Data: window.liebre.tools.toFormData(data) } );
 								
 		ajax.errorConnectionHandler= config.errorConnection;
 		ajax.errorHandler= config.error;
@@ -325,9 +299,156 @@
 		ajax.baseUrl= config.baseUrl || ajax.baseUrl || window.liebre.tools.getBaseUrl();	
 		ajax.go();
 	};
-		
+	
+	// ver 1
+	var schema = {
+		stores: [{
+			name: 'Guia',    // required. object store name or TABLE name
+			keyPath: ['Respuesta.IdDiagnostico','Respuesta.IdGuia'],    // tomar de Diagnostico 
+			autoIncrement: false, // if true, key will be automatically created
+		},{
+			name: 'Pregunta',    // required. object store name or TABLE name
+			keyPath: ['Respuesta.IdDiagnostico','Respuesta.IdPregunta'],    // tomar de Diagnostico 
+			autoIncrement: false, // if true, key will be automatically created
+		},{
+			name: 'Descarga',    // required. object store name or TABLE name
+			keyPath: 'Descarga.Token',    // keyPath.
 
-  document.addEventListener('polymer-ready', function() {
+			autoIncrement: false, // if true, key will be automatically created
+			indexes: [{
+				name: 'Diagnostico.Id', // optional
+				keyPath: 'Diagnostico.Id',
+				unique: true, // optional, default to false
+				multiEntry: false // optional, default to false
+			}]
+		}]
+	};
+	
+	window.liebre._storage= new window.liebre.IndexStorage('sgsst-test', schema);
+	window.liebre._storage.open();
+	
+	//window.liebre._storage.execute(function(db){db.values("Guia", [["543d71128bd8c014fc34cb54","543af0d68bd8c00ed554f7df"]]).fail(function(e){console.log("error",e)}).done(function(d){console.log("done", d)})});
+	
+	// complete : function({status: 'ok' ||'error',  error: null|| error, msg:'' })
+	window.liebre.getDiagnosticos=function(complete){
+		window.liebre._storage.execute(function(db){
+			var __ready=false;
+			var response= {
+				status:'ok',
+				error:null,
+				msg: 'Diagnosticos OK',
+				data:[]
+			};
+			db.values("Descarga")
+			.done(function(aData){
+				if(aData[0]){
+					response.data= aData;
+					__ready=true;
+				}
+			})
+			.fail(function(e){
+				console.log("error",e);
+				response.status='error';
+				response.error=e;
+				response.msg='Eror al leer Diagnosticos' ;
+				__ready=true;
+			});
+			
+			(function(){
+				var tId = setInterval(function() {
+					if ( __ready) {
+						onReady()
+					}
+				}, 11);
+				function onReady(){
+					clearInterval(tId);
+					if(complete){
+						complete(response);
+					}
+				};
+			})()
+		});
+	}
+	
+	window.liebre.instalarDiagnostico=function(data, complete){
+		window.liebre._storage.execute(function(db){
+			data.Estado="grey";
+			var __ready=false;
+			var response= {
+				status:'ok',
+				error:null,
+				msg: 'Instalación hecha!',
+				data:{}
+			};
+				
+			var kv= ydn.db.KeyRange.only(data.Diagnostico.Id);
+			db.values('Descarga',"Diagnostico.Id",  kv)
+			.done(function(aData){
+				var r =aData[0];
+				if(!r){
+					db.put('Descarga',data)
+					.done(function(key){
+						db.put("Guia", data.Guias)
+						.done(function(key){
+							data.Guias=[];
+							db.put("Descarga", data);
+							db.put("Pregunta", data.Preguntas)
+							.done(function(key){
+								data.Estado="red";
+								data.Preguntas=[];
+								db.put("Descarga", data)
+								.done(function(key){response.data=data;  __ready=true;})
+								.fail(function(e){ doError('Instalacion fallida! (Descarga Red)',e);})
+							})
+							.fail(function(e){
+								doError('Instalacion fallida! (Preguntas)',e);
+							})
+						})
+						.fail(function(e){
+							doError('Instalacion fallida! (Guias)',e);
+						})
+					})
+					.fail(function(e) {
+						doError('Instalacion fallida! (Descarga).',e);
+					});
+				}
+				else{
+					doError('Instalacion fallida! Borre la Descarga con id:'+ data.Descarga.Id);
+				}
+			})
+			.fail(function(e){
+				doError('Instalacion fallida. (Buscar Diagnostico:'+ data.Diagnostico.Id+')',e);
+			});
+			
+			var doError= function(m,e){
+				console.log("error",e);
+				response.status='error';
+				response.error=e;
+				response.msg=m || 'Instalacion fallida!' ;
+				if (e && e.target && e.target.error) {
+					response.msg= response.msg + e.target.error.name + ' ' + e.target.error.message;
+                }
+				__ready=true;
+			};
+			
+			(function(){
+				var tId = setInterval(function() {
+					if ( __ready){
+						onReady()
+					}
+				}, 11);
+				function onReady(){
+					clearInterval(tId);
+					if(complete){
+						complete(response);
+					}
+				};
+			})()
+		});
+	};
+	
+	
+	document.addEventListener('polymer-ready', function() {
 	  // Perform some behaviour
 	  console.log('Polymer is ready to rock!');
 	  setTimeout(function() { window.scrollTo(0, 1); }, 1);
@@ -425,14 +546,14 @@
 			  ajaxdelete.errorHandler(e);
 		  }
 	  });
-	  
-	   ajaxdelete.addEventListener('delete-complete', function(e){
+		
+		ajaxdelete.addEventListener('delete-complete', function(e){
 		  if(ajaxdelete.completeHandler){
 			  ajaxdelete.completeHandler(e);
 		  }
-	  });
-	  
-  });
+		});
+		
+	});
 
 // wrap document so it plays nice with other libraries
 // http://www.polymer-project.org/platform/shadow-dom.html#wrappers
