@@ -8,153 +8,61 @@
 <link rel="import" href="../../bower_components/core-overlay/core-overlay.html">
 <link rel="import" href="cuestionario-quiz-card.html">
 <link rel="import" href="cuestionario-guia-card.html">
-
-<polymer-element name="q-preguntas" attributes="capitulo">
-
+<polymer-element name="q-preguntas" attributes="capitulo, selected">
   <template>
     <style> 
-		
-      #header{
-        width: 100vw;
-        height: 100vh;
-        left: 0px;
-        top: 0px;
-        position: absolute;
-      }
-      #toolbar{
-        color: rgb(255, 255, 255);
-        background-color: rgb(79, 125, 201);
-      }
-      #section{
-        position: absolute;
-        top: 0px;
-        bottom: 0px;
-        left: 0px;
-        right: 0px;
-        overflow: auto;
-      }
-		
-		.container {
-			width: 80vw;
-			height: 55vh;
-			margin: 10px auto;
-		}
-		.container-pie {
-			width: 80vw;
-			margin: 10px auto;
-		}
-		
-		@media (min-width: 481px) {
-			.container, .container-pie {
-				width: 400px;
-			}
-			
-		}
-		.container-guia {
-			width: 80vw;
-			height: 40vh;
-			min-height: 300px;
-			max-width: 512px;
-			margin: 10px auto;
-		}
-		.container-guia-pie {
-			width: 80vw;
-			max-width: 512px;
-			margin: 10px auto;
-		}
-				
-		/*-----------
-		/*TABLE PORTRAIT */
-		@media only screen and (max-width : 640px) and (orientation:portrait)
-		{  .container-guia{min-height: 300px;} }
-		/* TABLET LANDSCAPE STYLES */
-		@media only screen and (min-width : 642px) and (orientation:landscape)
-		{  .container-guia{min-height: 200px;}}
-		/*-----------*/
-			
-		
-		#capitulo{
-			font-size: medium;
-		}
-		
-		#pie, #pieGuia{
+		.pie{
 			width: 100%;
-			background-color: white;
-			padding: 8px 20px;
-			width: 100%;
-			box-shadow: 0 2px 5px 0 ;
-			border-radius: 2px;
+			padding: 0px 0px 6px 0px;
+			box-shadow: 0px 2px;
+			margin-bottom: 5px;
 		}
-		
 		.navicon{
 			width: 56px;
 			height: 56px;
 			background-color: #f5f5f5;
 			fill: #000;
 		}
-		
+		paper-fab{
+			color:black;
+		}
     </style>
-
-   	    
-	  <core-header-panel mode="standard" id="header">
-		  <core-toolbar id="toolbar" class="narrow">
-			 <paper-icon-button icon="arrow-back" style="margin:0px;" 
-								on-tap="{{ fireBackTap }}"></paper-icon-button>
-			 <div flex id="capitulo">{{capitulo.Titulo}}</div>
-		  </core-toolbar>
-		  <section id="section">
-			  <div id="quiz">
-			  <div layout vertical center class="container">
-				  <cuestionario-quiz-card pregunta="{{ quiz }}" respuesta="{{ answer }}" 
-							 on-quiz-answered="{{quizAnswered}}">
-				  </cuestionario-quiz-card>  
+	  <app-header-panel id="hp" on-l-icon-tap="{{ fireBack }}"	licon="arrow-back" ricon="work"
+						titulo="{{capitulo.Titulo}}">
+		  <div class="card" layout vertical style="margin:0 auto;" hidden?="{{selected!='0'}}">	  
+			  <div class="pie" layout horizontal center >
+				  <paper-fab icon="chevron-left" on-tap="{{ prevTap }}" 
+							 class="navicon"
+							 style="visibility:{{capitulo.Current>0?'visible':'hidden'}};">
+				  </paper-fab>
+				  <div flex layout vertical center>{{capitulo.Current+1}} de {{capitulo.Preguntas.length}}</div>
+				  <paper-fab icon="check" on-tap="{{ nextTap }} " class="navicon"
+									 style="visibility:{{( answer.Valor == null) && ( quiz.NoAplicaDisponible?!answer.NoAplicaChecked:true )?'hidden':'visible' }};">
+				  </paper-fab>
 			  </div>
-			  <div  layout vertical center class="container-pie">
-				  <div id="pie" layout horizontal center >
-					  <paper-fab icon="chevron-left" on-tap="{{ prevTap }}" 
-								 class="navicon"
-								 style="visibility:{{capitulo.Current>0?'visible':'hidden'}};">
-					  </paper-fab>
-					  <div flex layout vertical center>{{capitulo.Current+1}} de {{capitulo.Preguntas.length}}</div>
-					  <paper-fab icon="check" on-tap="{{ nextTap }} " class="navicon"
-										 style="visibility:{{( answer.Valor == null) && ( quiz.NoAplicaDisponible?!answer.NoAplicaChecked:true )?'hidden':'visible' }};">
-					  </paper-fab>
-				  </div>
+			  <cuestionario-quiz-card pregunta="{{ quiz }}" respuesta="{{ answer }}" 
+						 on-quiz-answered="{{quizAnswered}}">
+			  </cuestionario-quiz-card>  
+		  </div>
+		  <div class="card" layout vertical center style="margin:0 auto;" hidden?="{{selected!='1'}}">
+			  <div class="pie" layout horizontal center >
+						  <paper-fab icon="chevron-left" on-tap="{{ prevGuiaTap }}" 
+									 class="navicon"
+									 style="visibility:{{currentGuiaIndex>0?'visible':'hidden'}};">
+						  </paper-fab>
+						  <div flex layout vertical center> Guia {{currentGuiaIndex+1}} de {{guias.length}}</div>
+						  <paper-fab icon="check" on-tap="{{ nextGuiaTap }} " class="navicon">
+						  </paper-fab>
 			  </div>
-			  </div>
-			  <core-overlay id="guia" backdrop autoCloseDisabled>
-				  <div stylexx="position: absolute;left: 0px;width: 100vw;top: 0px;height: auto;background-color:transparent;">
-					  <div layout vertical center class="container-guia">
-						  <cuestionario-guia-card pregunta="{{guia.Guia}}" respuesta="{{guia.Respuesta}}" >
-							  </cuestionario-guia-card>
-					  </div>
-					  					  
-					  <div  layout vertical center class="container-guia-pie">
-						  <div id="pieGuia" layout horizontal center >
-							  <paper-fab icon="chevron-left" on-tap="{{ prevGuiaTap }}" 
-										 class="navicon"
-										 style="visibility:{{currentGuiaIndex>0?'visible':'hidden'}};">
-							  </paper-fab>
-							  <div flex layout vertical center> Guia {{currentGuiaIndex+1}} de {{guias.length}}</div>
-							  <paper-fab icon="check" on-tap="{{ nextGuiaTap }} " class="navicon">
-							  </paper-fab>
-						  </div>
-					  </div>
-				
-				  </div>
-			  </core-overlay>
-					  			  
-			
-		  </section>
-		  
-	  </core-header-panel>
-
+			  <cuestionario-guia-card pregunta="{{guia.Guia}}" respuesta="{{guia.Respuesta}}" >
+			  </cuestionario-guia-card>
+		  </div>
+	  </app-header-panel>	  
 	</template>
-
-  <script>
+ 	<script>
 	  Polymer({
-		  // v 1.0
 		  index:0,
+		  selected:'-1',
 		  
 		  created:function(){
 			  this.quiz={};
@@ -199,7 +107,8 @@
 						  if(response.status==='ok'){
 							  self.guias=response.data;
 							  self.guia= Object.clone(self.guias[self.currentGuiaIndex]);
-							  self.$.guia.toggle();
+							  self.selected="1";
+							  //self.$.guia.toggle();
 						  }
 					  });
 				  }
@@ -267,7 +176,8 @@
 			  if(this.currentGuiaIndex+1== this.guias.length){
 				  this.currentGuiaIndex=0;
 				  this.guia= Object.clone(this.guias[this.currentGuiaIndex]);
-				  this.$.guia.toggle();
+				  this.selected="0";
+				  //this.$.guia.toggle();
 				  this.__next__();
 				  return;
 			  }
@@ -283,6 +193,5 @@
 			  }
 		  }
     });
-  </script>
-
+	</script>
 </polymer-element>

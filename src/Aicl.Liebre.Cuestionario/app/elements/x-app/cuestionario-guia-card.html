@@ -1,51 +1,32 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
 <link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../templates/topeka-quiz-multiline.html">
 
 <polymer-element name="cuestionario-guia-card" attributes="pregunta,respuesta">
   <template>
     <style>
-    :host {
-      display: block;
-      position: relative;
-      background-color: white;
-      padding: 20px;
-      width: 100%;
-      max-height: 560px;
-	  box-shadow: 0 2px 5px 0 ;
-	  border-radius: 2px;
-	  margin-bottom: 20px;
-    }
-		
-    .card-header {
-      margin-bottom: 10px;
-    }
-      	
+		:host {
+			display: block;
+			position: relative;
+			width: 100%;
+		}
+		.card-header {
+			margin: 2px 4px 0px 4px;
+			min-height: 50px;
+		}		
 		#titulo{
+			overflow: hidden;
 			font-size: small;
 			font-weight: bold;
 		}
-		
-		#detalle{
-			max-height: 500px;
-			overflow: hidden;
-			padding: 5px;
+		#detalle{	
+			overflow: auto;
 			font-size: small;
-		}
-		
-		
-		/*TABLE PORTRAIT */
-		@media only screen and (max-width : 640px) and (orientation:portrait)
-		{ :host{ height: 360px;} #detalle{height: 230px;} }
-		/* TABLET LANDSCAPE STYLES */
-		@media only screen and (min-width : 642px) and (orientation:landscape)
-		{ :host{ height: 260px;} #detalle{height: 150px;}}
-		
+		}		
     </style>
-
     <div class="card-header" layout horizontal>
-			  <div id="titulo">{{pregunta.Enunciado}}</div>
+			  <div id="titulo">{{pregunta.Enunciado}} Alguna preguntota?</div>
     </div>
-    
 	
     <div id="detalle" on-quiz-answered="{{ quizAnswered }}" >
 		<topeka-quiz-multiline id="quiz" name="multiline" quiz="{{ pregunta }}" 
@@ -56,11 +37,12 @@
 	
   </template>
   <script>
-	  Polymer({
-		  quizAnswered:function(){
-			  console.log("quizAnswered value, pregunta, respuesta",
-						  this.$.quiz.value, this.pregunta, this.respuesta);
-		  }
-	  });
+  Polymer('cuestionario-guia-card', {
+	  
+	  quizAnswered:function(){
+		  console.log("quizAnswered value, pregunta, respuesta", this.$.quiz.value, this.pregunta, this.respuesta);
+	  }
+	  
+  });
   </script>
 </polymer-element>

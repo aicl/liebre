@@ -116,7 +116,6 @@
 
 		  
 		  handlerCapituloSelect:function(event, detail, sender){
-			  console.log(detail);
 			  this.$.qp.diagnostico= detail.diagnostico;
 			  var cap = detail.item;
 			  this.$.wl.display="block";
@@ -189,6 +188,9 @@
 			  this.$.tec.text="Error de conexión: "+
 				  event.type+ ". Servidor:"+ liebre.tools.getBaseUrl();
 			  this.$.tec.show();
+		  },
+		  routeChanged:function(o, n){
+			  this.$.qp.selected= this.route==='preguntas'?'0':'-1';
 		  }
 		  
 		  
