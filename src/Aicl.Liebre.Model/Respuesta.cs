@@ -17,8 +17,7 @@ namespace Aicl.Liebre.Model
 		public string IdDiagnostico { get; set; }
 		public string IdPregunta { get; set; }
 		public bool? NoAplicaChecked { get; set; }
-		public bool? Valor { get; set; }
-
+		public short Valor { get; set; }
 	}
 
 	[Route("/read/respuesta","GET")]

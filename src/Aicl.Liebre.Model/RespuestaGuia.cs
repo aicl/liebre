@@ -16,11 +16,10 @@ namespace Aicl.Liebre.Model
 		}
 		[BsonRepresentation(BsonType.ObjectId)]
 		public string Id { get; set; }
-
 		public string IdDiagnostico { get; set; }
 		public string IdGuia { get; set; }
 		public bool? NoAplicaChecked { get; set; }
-		public bool? Valor { get; set; }
+		public string Valor { get; set; }
 
 	}
 

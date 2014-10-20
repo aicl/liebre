@@ -72,30 +72,30 @@
 	
 	window.liebre.IndexStorage = (function () {
 		function IndexStorage(name, schema, options) {
-			this.__name=name||"default-storage";
+			this.__name=name||'default-storage';
 			this.__schema=schema||{};
-			this.__options= options||{}
-			this.__db=null
+			this.__options= options||{};
+			this.__db=null;
 			this.__ready=false;
 		}
-		Object.defineProperty(IndexStorage.prototype, "name", {
+		Object.defineProperty(IndexStorage.prototype, 'name', {
 			get: function () {
 				return this.__name;
 			},
 			enumerable: true,
 			configurable: true
 		});
-		Object.defineProperty(IndexStorage.prototype, "opened", {
+		Object.defineProperty(IndexStorage.prototype, 'opened', {
 			get: function () {
-				return this.__db!=null;
+				return this.__db!==null;
 			},
 			enumerable: true,
 			configurable: true
 		});
 		IndexStorage.prototype.open = function () {
 			var self=this;
-			if(self.__db==null){
-				self.__db = new ydn.db.Storage(self.__name, self.__schema, self.__options);
+			if(self.__db===null){
+				self.__db = new window.ydn.db.Storage(self.__name, self.__schema, self.__options);
 				self.__db.onReady(function(e) {
 					if (e) {
 						self.__db=null;
@@ -119,7 +119,7 @@
 				var times=10;
 				var tId = setInterval(function() {
 					if (self.__ready) {
-						onReady()
+						onReady();
 					}
 					else{
 						times--;
@@ -131,11 +131,13 @@
 				function onReady(){
 					clearInterval(tId);
 					fn(self.__db);
-				};
-			})()
+				}
+			})();
 		};
 		IndexStorage.prototype.close = function () {
-			if(this.__db!=null) this.__db.close();
+			if(this.__db!==null){
+				this.__db.close();
+			}
 		};
 		return IndexStorage;
 	})();
@@ -157,11 +159,17 @@
 		}
 		var r='{';
 		for(var p in obj){
-			if(obj[p] instanceof Array){
-				r=r+p+':'+((obj[p] instanceof Array)?'['+obj[p]+']' : obj[p])+',';
+			if( typeof obj[p] === 'object'){
+				r=r+p+':'+window.liebre.tools.toFormData(obj[p])+',';
 			}
 			else{
-				r=r+p+':"'+obj[p]+'",';
+				
+				if(obj[p] instanceof Array){
+					r=r+p+':'+((obj[p] instanceof Array)?'['+obj[p]+']' : obj[p])+',';
+				}
+				else{
+					r=r+p+':"'+obj[p]+'",';
+				}
 			}
 		}
 		return r.replace(/,([^,]*)$/,'}'+'$1');
@@ -253,6 +261,12 @@
 		ajax.go();
 	};
 	
+	window.liebre.remote.saveRespuesta=function(data, config){
+		config = config || {};
+		config.action = config.action|| 'save';
+		config.model = config.model|| 'respuesta';
+		window.liebre.remote.update(data, config);
+	};
 	window.liebre.remote.update=function(data, config){
 		config = config || {};	
 		config.response= config.response|| function(e){console.log(e);};
@@ -311,7 +325,7 @@
 			keyPath: ['Respuesta.IdDiagnostico','Respuesta.IdPregunta'],    // tomar de Diagnostico 
 			autoIncrement: false, // if true, key will be automatically created
 			indexes:[{
-				name:"Pregunta.IdCapitulo",
+				name:'Pregunta.IdCapitulo',
 				keyPath:['Respuesta.IdDiagnostico','Pregunta.IdCapitulo']
 			}]
 		},{
@@ -339,8 +353,8 @@
 				msg: 'Preguntas OK',
 				data:[]
 			};
-			var kv= ydn.db.KeyRange.only([diagnostico.Diagnostico.Id, capitulo.Id]);
-			db.values("Pregunta", "Pregunta.IdCapitulo", kv)
+			var kv= window.ydn.db.KeyRange.only([diagnostico.Diagnostico.Id, capitulo.Id]);
+			db.values('Pregunta', 'Pregunta.IdCapitulo', kv)
 			.done(function(aData){
 				if(aData[0]){
 					response.data= aData;
@@ -348,7 +362,7 @@
 				}
 			})
 			.fail(function(e){
-				console.log("error",e);
+				console.log('error',e);
 				response.status='error';
 				response.error=e;
 				response.msg='Eror al leer Preguntas' ;
@@ -358,7 +372,7 @@
 			(function(){
 				var tId = setInterval(function() {
 					if ( __ready) {
-						onReady()
+						onReady();
 					}
 				}, 11);
 				function onReady(){
@@ -366,8 +380,8 @@
 					if(complete){
 						complete(response);
 					}
-				};
-			})()
+				}
+			})();
 		});
 	};
 	
@@ -382,18 +396,17 @@
 			};
 			var kv= [];//ydn.db.KeyRange.only([diagnostico.Diagnostico.Id, capitulo.Id]);
 			for( var id in ids){
-				kv.push([diagnostico.Diagnostico.Id, ids[id]])
-			};
-			db.values("Guia",  kv)
+				kv.push([diagnostico.Diagnostico.Id, ids[id]]);
+			}
+			db.values('Guia',  kv)
 			.done(function(aData){
 				if(aData[0]){
-					console.log("aqui vamos en getGuias 1");
 					response.data= aData;
 					__ready=true;
 				}
 			})
 			.fail(function(e){
-				console.log("error",e);
+				console.log('error',e);
 				response.status='error';
 				response.error=e;
 				response.msg='Eror al leer Guias' ;
@@ -403,7 +416,7 @@
 			(function(){
 				var tId = setInterval(function() {
 					if ( __ready) {
-						onReady()
+						onReady();
 					}
 				}, 11);
 				function onReady(){
@@ -411,8 +424,8 @@
 					if(complete){
 						complete(response);
 					}
-				};
-			})()
+				}
+			})();
 		});
 	};
 	
@@ -427,7 +440,7 @@
 				msg: 'Diagnosticos OK',
 				data:[]
 			};
-			db.values("Descarga")
+			db.values('Descarga')
 			.done(function(aData){
 				if(aData[0]){
 					response.data= aData;					
@@ -435,7 +448,7 @@
 				__ready=true;
 			})
 			.fail(function(e){
-				console.log("error",e);
+				console.log('error',e);
 				response.status='error';
 				response.error=e;
 				response.msg='Eror al leer Diagnosticos' ;
@@ -445,7 +458,7 @@
 			(function(){
 				var tId = setInterval(function() {
 					if ( __ready) {
-						onReady()
+						onReady();
 					}
 				}, 11);
 				function onReady(){
@@ -453,13 +466,13 @@
 					if(complete){
 						complete(response);
 					}
-				};
-			})()
+				}
+			})();
 		});
-	}
+	};
 	
 	window.liebre.putDiagnostico=function(diagnostico,complete){
-		complete = complete || function(r){};
+		complete = complete || function(){};
 		window.liebre._storage.execute(function(db){
 			var __ready=false;
 			var response= {
@@ -468,14 +481,14 @@
 				msg: 'Diagnosticos OK',
 				data:[]
 			};
-			db.put("Descarga", diagnostico)
+			db.put('Descarga', diagnostico)
 			.done(function(key){
 				response.data= key;
 				__ready=true;
 				
 			})
 			.fail(function(e){
-				console.log("error",e);
+				console.log('error',e);
 				response.status='error';
 				response.error=e;
 				response.msg='Eror al leer Diagnosticos' ;
@@ -484,7 +497,7 @@
 			(function(){
 				var tId = setInterval(function() {
 					if ( __ready) {
-						onReady()
+						onReady();
 					}
 				}, 11);
 				function onReady(){
@@ -492,14 +505,13 @@
 					if(complete){
 						complete(response);
 					}
-				};
-			})()
+				}
+			})();
 		});
-	}
-		
+	};
 	
 	window.liebre.putRespuesta=function(respuesta,complete){
-		complete = complete || function(r){};
+		complete = complete || function(){};
 		window.liebre._storage.execute(function(db){
 			var __ready=false;
 			var response= {
@@ -508,30 +520,29 @@
 				msg: 'Respuesta OK',
 				data:[]
 			};
-			db.values("Pregunta",  [[respuesta.IdDiagnostico, respuesta.IdPregunta]])
+			db.values('Pregunta',  [[respuesta.IdDiagnostico, respuesta.IdPregunta]])
 			.done(function(aData){
 				if(aData[0]){
 					aData[0].Respuesta= respuesta;
-					db.put("Pregunta", aData[0])
-					.done(function(key){
+					db.put('Pregunta', aData[0])
+					.done(function(){
 						response.data= aData;
 						__ready=true;
 					})
 					.fail(function(e){
 						doError('',e );
-					})
-										
+					});
 				}
 				else{
 					doError('Error al leer Respuestas. No existe registro');
 				}
 			})
 			.fail(function(e){
-				doError('Error al leer Respuestas',e)
+				doError('Error al leer Respuestas',e);
 			});
 			
 			var doError= function(m,e){
-				console.log("error",e);
+				console.log('error',e);
 				response.status='error';
 				response.error=e;
 				response.msg=m || 'Actualización de la Respuesta fallida!' ;
@@ -540,11 +551,10 @@
                 }
 				__ready=true;
 			};
-			
 			(function(){
 				var tId = setInterval(function() {
 					if ( __ready) {
-						onReady()
+						onReady();
 					}
 				}, 11);
 				function onReady(){
@@ -552,14 +562,13 @@
 					if(complete){
 						complete(response);
 					}
-				};
-			})()
+				}
+			})();
 		});
-	}
-//
+	};
 	
 	window.liebre.putRespuestaGuia=function(respuesta,complete){
-		complete = complete || function(r){};
+		complete = complete || function(){};
 		window.liebre._storage.execute(function(db){
 			var __ready=false;
 			var response= {
@@ -568,30 +577,29 @@
 				msg: 'Respuesta Guia OK',
 				data:[]
 			};
-			db.values("Guia",  [[respuesta.IdDiagnostico, respuesta.IdGuia]])
+			db.values('Guia',  [[respuesta.IdDiagnostico, respuesta.IdGuia]])
 			.done(function(aData){
 				if(aData[0]){
 					aData[0].Respuesta= respuesta;
-					db.put("Guia", aData[0])
-					.done(function(key){
+					db.put('Guia', aData[0])
+					.done(function(){
 						response.data= aData;
 						__ready=true;
 					})
 					.fail(function(e){
 						doError('',e );
-					})
-										
+					});				
 				}
 				else{
 					doError('Error al leer RespuestasGuias. No existe registro');
 				}
 			})
 			.fail(function(e){
-				doError('Error al leer RespuestasGuias',e)
+				doError('Error al leer RespuestasGuias',e);
 			});
 			
 			var doError= function(m,e){
-				console.log("error",e);
+				console.log('error',e);
 				response.status='error';
 				response.error=e;
 				response.msg=m || 'Actualización de la RespuestaGuia fallida!' ;
@@ -604,7 +612,7 @@
 			(function(){
 				var tId = setInterval(function() {
 					if ( __ready) {
-						onReady()
+						onReady();
 					}
 				}, 11);
 				function onReady(){
@@ -612,14 +620,14 @@
 					if(complete){
 						complete(response);
 					}
-				};
-			})()
+				}
+			})();
 		});
-	}
+	};
 		
 	window.liebre.instalarDiagnostico=function(data, complete){
 		window.liebre._storage.execute(function(db){
-			data.Estado="grey";
+			data.Estado='grey';
 			var __ready=false;
 			var response= {
 				status:'ok',
@@ -628,36 +636,41 @@
 				data:{}
 			};
 			
+			
+			data.Descarga.Fecha=window.liebre.tools.formatDate(data.Descarga.Fecha);
+			data.Plantilla.FechaInicial=window.liebre.tools.formatDate(data.Plantilla.FechaInicial);
+			data.Plantilla.FechaFinal=window.liebre.tools.formatDate(data.Plantilla.FechaFinal);
+			
 			for (var cap in data.Capitulos){
 				data.Capitulos[cap].Current=0;
 			}
 				
-			var kv= ydn.db.KeyRange.only(data.Diagnostico.Id);
-			db.values('Descarga',"Diagnostico.Id",  kv)
+			var kv= window.ydn.db.KeyRange.only(data.Diagnostico.Id);
+			db.values('Descarga','Diagnostico.Id',  kv)
 			.done(function(aData){
 				var r =aData[0];
 				if(!r){
 					db.put('Descarga',data)
-					.done(function(key){
-						db.put("Guia", data.Guias)
-						.done(function(key){
+					.done(function(){
+						db.put('Guia', data.Guias)
+						.done(function(){
 							data.Guias=[];
-							db.put("Descarga", data);
-							db.put("Pregunta", data.Preguntas)
-							.done(function(key){
-								data.Estado="red";
+							db.put('Descarga', data);
+							db.put('Pregunta', data.Preguntas)
+							.done(function(){
+								data.Estado='red';
 								data.Preguntas=[];
-								db.put("Descarga", data)
-								.done(function(key){response.data=data;  __ready=true;})
-								.fail(function(e){ doError('Instalacion fallida! (Descarga Red)',e);})
+								db.put('Descarga', data)
+								.done(function(){response.data=data;  __ready=true;})
+								.fail(function(e){ doError('Instalacion fallida! (Descarga Read)',e);});
 							})
 							.fail(function(e){
 								doError('Instalacion fallida! (Preguntas)',e);
-							})
+							});
 						})
 						.fail(function(e){
 							doError('Instalacion fallida! (Guias)',e);
-						})
+						});
 					})
 					.fail(function(e) {
 						doError('Instalacion fallida! (Descarga).',e);
@@ -672,7 +685,7 @@
 			});
 			
 			var doError= function(m,e){
-				console.log("error",e);
+				console.log('error',e);
 				response.status='error';
 				response.error=e;
 				response.msg=m || 'Instalacion fallida!' ;
@@ -685,7 +698,7 @@
 			(function(){
 				var tId = setInterval(function() {
 					if ( __ready){
-						onReady()
+						onReady();
 					}
 				}, 11);
 				function onReady(){
@@ -693,8 +706,8 @@
 					if(complete){
 						complete(response);
 					}
-				};
-			})()
+				}
+			})();
 		});
 	};
 	

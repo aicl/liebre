@@ -207,6 +207,17 @@ namespace Aicl.Liebre.Data
 		}
 
 
+		public Result<Respuesta> SaveRespuesta(SaveRespuesta request){
+			// primero que todo buscar la descarga !!! no confiar !
+			Console.WriteLine (request.Data.Descarga.);
+			return null;
+		}
+
+
+		public Result<RespuestaGuia> SaveRespuestaGuia(SaveRespuestaGuia request){
+			return null;
+		}
+
 		MongoCollection<T> GetCollection<T>(){
 			return Db.GetCollection<T> (typeof(T).GetCollectionName());
 		}
