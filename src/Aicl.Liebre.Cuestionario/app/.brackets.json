@@ -69,6 +69,11 @@
         "/home/angel/projects/liebre/src/Aicl.Liebre.Cuestionario/app/bower_components/web-animations-js/web-animations.js",
         "/home/angel/projects/liebre/src/Aicl.Liebre.Cuestionario/app/bower_components/core-ajax/tests/js/htmltests.js",
         "/home/angel/projects/liebre/src/Aicl.Liebre.Cuestionario/app/bower_components/polymer/polymer.js",
-        "/home/angel/projects/liebre/src/Aicl.Liebre.Cuestionario/app/flatiron-director/director.min.js"
+        "/home/angel/projects/liebre/src/Aicl.Liebre.Cuestionario/app/flatiron-director/director.min.js",
+        "/home/angel/projects/liebre/src/Aicl.Liebre.Cuestionario/app/bower_components/web-animations-js/test/testcases/auto-test-inline-style-fallback-checks.js",
+        "/home/angel/projects/liebre/src/Aicl.Liebre.Cuestionario/app/bower_components/web-animations-js/test/testcases/auto-test-composite-transforms-checks.js",
+        "/home/angel/projects/liebre/src/Aicl.Liebre.Cuestionario/app/bower_components/web-animations-js/test/testcases/auto-test-font-weight-checks.js",
+        "/home/angel/projects/liebre/src/Aicl.Liebre.Cuestionario/app/bower_components/web-animations-js/test/testcases/auto-test-compositor-checks.js",
+        "/home/angel/projects/liebre/src/Aicl.Liebre.Cuestionario/app/bower_components/web-animations-js/test/testcases/auto-test-length-units-checks.js"
     ]
 }

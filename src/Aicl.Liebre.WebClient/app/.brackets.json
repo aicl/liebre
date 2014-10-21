@@ -43,6 +43,8 @@
         "/home/angel/projects/liebre-original/Aicl.Liebre/src/Aicl.Liebre.WebClient/app/bower_components/web-animations-js/test/testcases/auto-test-composite-transforms-checks.js",
         "/home/angel/projects/liebre-original/Aicl.Liebre/src/Aicl.Liebre.WebClient/app/bower_components/web-animations-js/test/testcases/auto-test-inline-style-fallback-checks.js",
         "/home/angel/projects/liebre-original/Aicl.Liebre/src/Aicl.Liebre.WebClient/app/bower_components/web-animations-js/test/testcases/auto-test-compositor-checks.js",
-        "/home/angel/projects/liebre-original/Aicl.Liebre/src/Aicl.Liebre.WebClient/app/bower_components/web-animations-js/test/testcases/auto-test-transform-units-checks.js"
+        "/home/angel/projects/liebre-original/Aicl.Liebre/src/Aicl.Liebre.WebClient/app/bower_components/web-animations-js/test/testcases/auto-test-transform-units-checks.js",
+        "/home/angel/projects/liebre/src/Aicl.Liebre.WebClient/app/bower_components/web-animations-js/test/testcases/auto-test-inline-style-fallback-checks.js",
+        "/home/angel/projects/liebre/src/Aicl.Liebre.WebClient/app/bower_components/web-animations-js/test/testcases/auto-test-inline-style-checks.js"
     ]
 }

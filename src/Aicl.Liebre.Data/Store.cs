@@ -209,7 +209,7 @@ namespace Aicl.Liebre.Data
 
 		public Result<Respuesta> SaveRespuesta(SaveRespuesta request){
 			// primero que todo buscar la descarga !!! no confiar !
-			Console.WriteLine (request.Data.Descarga.);
+			Console.WriteLine (request.Data.Descarga);
 			return null;
 		}
 

@@ -11,6 +11,11 @@
 		return local.toTimeString().slice(0, 8);
 	};
 	
+	Date.prototype.toMsFormat = function () {
+		var local = new Date(this);
+		return '\/Date('+ local.getTime()+')\/';
+	};
+	
 	Date.prototype.toFilename = function () {
 		return this.toDateInputValue().replace(/-/g, '') +
 			'_' + this.toTimeInputValue().replace(/:/g, '');
@@ -18,7 +23,7 @@
 		
 	Object.clone = function (src) {
 		var newObj = (src instanceof Array) ? [] : {};
-		if ((src === null || !(src instanceof Array ||  typeof (src) === 'object'))) {
+		if ((src === null || src instanceof Date || !(src instanceof Array ||  typeof (src) === 'object'))) {
 			return src;
 		}
 		for (var i in src) {
@@ -34,9 +39,23 @@
 	};
 	
 	Object.compare = function (o1, o2) {
+		
+		if(!o1){
+			return !o2;
+		}
+		
 		if (o1===null) {
 			return o2===null?true:false;
 		} 
+		
+		if ( o1 instanceof Date ) {
+			return (o2 instanceof Date)? o1.toString()===o2.toString():false;
+		}
+		
+		if (!(o1 instanceof Array || typeof (o1) === 'object')) {
+			return  (!(o1 instanceof Array || typeof (o1) === 'object'))? o1===o2:false;
+		}
+			
 		if (Object.getOwnPropertyNames(o1).length!==Object.getOwnPropertyNames(o2||{}).length) {
 			return false;
 		}
@@ -63,106 +82,7 @@
 	if (!window.URL) {
 		window.URL =  window.webkitURL || window.msURL || window.oURL;
 	}
-	
-	window.app ={};
-	
-	window.app.__store= JSON.parse( localStorage.getItem('__liebrestore') || '[]'  );
-	window.app.__consecutivoRecord= JSON.parse( localStorage.getItem('__consecutivoRecord') || '0'  );
-	window.app.__consecutivoFoto= JSON.parse( localStorage.getItem('__consecutivoFoto') || '0'  );
-	
-	window.app.consecutivoRecordGen=function(){
-		localStorage.setItem('__consecutivoRecord', ++window.app.__consecutivoRecord);
-		return window.app.__consecutivoRecord;
-	};
-	
-	window.app.consecutivoFotoGen=function(){
-		localStorage.setItem('__consecutivoFoto', ++window.app.__consecutivoFoto);
-		return window.app.__consecutivoFoto;
-	};
- 	
-	window.app.saveRespuesta=function(record, success, fail){
-		try{
-			console.log('saving respuesta', record);
-		}
-		catch(e){
-			if(fail) {
-				fail(e);
-			}
-			return;
-		}
-				
-		if(success) {
-			success();
-		}
-	};
-	
-	window.app.saveRepuestaGuia=function(record, success, fail){
-		try{
-			console.log('saving respuesta guia', record);
-		}
-		catch(e){
-			if(fail) {
-				fail(e);
-			}
-			return;
-		}		
-		if(success) {
-			success();
-		}
-	};
 		
-	window.app.cargarCapitulos = function (success) {				
-		if (success) {
-			success();
-		}
-	};
-	
-	//window.app.__guias = window.getGuias();
-	
-	window.app.getGuia = function (id, success,  fail){
-		var guia= { Guia: {}, Respuesta: {} };
-		try{
-			for( var g in window.app.__guias){
-				if( window.app.__guias[g].Guia.Id===id){
-					guia=g;
-				}
-			}
-		}
-		catch(e){
-			if(fail){
-				fail();
-			}
-			return ;
-		}
-		if(success){
-			success(guia);
-		}
-	};
-	
-	
-	window.app.getGuias = function (ids, success,  fail){
-		var guias=[];
-		try{
-			for (var g in window.app.__guias){
-				for(var id in ids){
-					if( window.app.__guias[g].Guia.Id===ids[id]){
-						guias.push(window.app.__guias[g]);
-					}
-				}
-			}
-		}
-		catch(e){
-			console.log('e', e);
-			if(fail){
-				fail();
-			}
-			return;
-		}
-		if(success){
-			success(guias);
-		}
-	};
-	
 	window.liebre={};
 	window.liebre.tools={};
 	window.liebre.remote={};
@@ -177,20 +97,47 @@
 							 ( (location.protocol + '//' + location.host+ '/lbr-api').replace('9000','8080')));
 	};
 		
-	window.liebre.tools.convertToText=function(obj){
-		if(!obj || obj===null || Object.getOwnPropertyNames(obj).length===0){
+	window.liebre.tools.toFormData=function(obj){
+		if (!obj || obj === null ){
+			return  null;
+		}
+				
+		if ( obj instanceof Date ) {
+			return  '"'+ obj.toISOString()+'"';
+		}
+		
+		if (!(obj instanceof Array || typeof (obj) === 'object')) {
+			return  '"'+ obj+'"';
+		}
+		
+		if(Object.getOwnPropertyNames(obj).length===0){
 			return '{}';
 		}
-		var r='{';
-		for(var p in obj){
-			if(obj[p] instanceof Array){
-				r=r+p+':'+((obj[p] instanceof Array)?'['+obj[p]+']' : obj[p])+',';
+		var r= (obj instanceof Array)?'[':'{';
+		for(var p in obj){	
+			if(obj[p] instanceof Date){
+				r=r+(obj instanceof Array?'"':  p+':"')+obj[p].toISOString()+'",';
 			}
 			else{
-				r=r+p+':"'+obj[p]+'",';
+				if(obj[p] instanceof Array){
+					var ra ='[';
+					for (var a in obj[p]){
+						ra=ra+ window.liebre.tools.toFormData(obj[p][a])+',';
+					}
+					r= r+(obj instanceof Array?'':p+':')+
+						(obj[p].length>0? ra.replace(/,([^,]*)$/,']'+'$1')+',': '[],');
+				}
+				else{
+					if( typeof obj[p] === 'object'){
+						r=r+p+':'+window.liebre.tools.toFormData(obj[p])+',';
+					}
+					else{
+						r=r+(obj instanceof Array?'"':  p+':"')+obj[p]+'",';
+					}
+				}
 			}
 		}
-		return r.replace(/,([^,]*)$/,'}'+'$1');
+		return r.replace(/,([^,]*)$/, (obj instanceof Array?']':'}')+'$1');
 	};
 	
 	window.liebre.tools.convertToJsDate= function (v){
@@ -200,9 +147,7 @@
 		if (typeof v !== 'string'){
 			return v;
 		}
-		var d = new Date(parseFloat(/Date\(([^)]+)\)/.exec(v)[1])); // thanks demis bellot!
-		return new Date( d.getUTCFullYear(),d.getUTCMonth(), d.getUTCDate(),
-						d.getUTCHours(), d.getUTCMinutes(), d.getUTCSeconds());
+		return new Date(parseFloat(/Date\(([^)]+)\)/.exec(v)[1])); // thanks demis bellot!
 	};
 	
 	window.liebre.tools.formatDate= function(value) {
@@ -268,7 +213,7 @@
 		ajax.model=  config.model  || ajax.model;
         ajax.headers = config.headers ||  '{"Content-Type":"application/x-www-form-urlencoded"}';
 				
-		ajax.params= JSON.stringify({Data: window.liebre.tools.convertToText(data) } );
+		ajax.params= JSON.stringify({Data: window.liebre.tools.toFormData(data) } );
 						
 		ajax.errorConnectionHandler= config.errorConnection;
 		ajax.errorHandler= config.error;
@@ -291,7 +236,7 @@
 		ajax.model=  config.model  || ajax.model;
         ajax.headers = config.headers ||  '{"Content-Type":"application/x-www-form-urlencoded"}';
 				
-		ajax.params= JSON.stringify({Data: window.liebre.tools.convertToText(data) } );
+		ajax.params= JSON.stringify({Data: window.liebre.tools.toFormData(data) } );
 								
 		ajax.errorConnectionHandler= config.errorConnection;
 		ajax.errorHandler= config.error;
@@ -431,9 +376,7 @@
 			  ajaxdelete.completeHandler(e);
 		  }
 	  });
-	  
   });
-
 // wrap document so it plays nice with other libraries
 // http://www.polymer-project.org/platform/shadow-dom.html#wrappers
 })(wrap(document));

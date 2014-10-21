@@ -1,4 +1,5 @@
 ﻿using ServiceStack;
+using System.Collections.Generic;
 
 namespace Aicl.Liebre.Model
 {
@@ -8,7 +9,7 @@ namespace Aicl.Liebre.Model
 		{
 		}
 		public Descarga Descarga{ get; set;}
-		public RespuestaGuia Respuesta {get;set;}
+		public List<RespuestaGuia> Respuestas {get;set;}
 
 
 	}
