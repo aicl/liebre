@@ -13,13 +13,16 @@ namespace Aicl.Liebre.Model
 
 		public RespuestaGuia ()
 		{
+			//Valor = new Dictionary<string, object> ();
 		}
 		[BsonRepresentation(BsonType.ObjectId)]
 		public string Id { get; set; }
 		public string IdDiagnostico { get; set; }
 		public string IdGuia { get; set; }
 		public bool? NoAplicaChecked { get; set; }
+		//public Dictionary<string,object> Valor { get; set; } // este es el que debe quedar!
 		public string Valor { get; set; }
+		public string Tipo { get; set; } // tomar de la guia!!!
 
 	}
 

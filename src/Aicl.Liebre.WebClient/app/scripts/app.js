@@ -107,7 +107,7 @@
 		}
 		
 		if (!(obj instanceof Array || typeof (obj) === 'object')) {
-			return  '"'+ obj+'"';
+			return  (typeof obj === 'string')? '"'+obj+'"': obj;
 		}
 		
 		if(Object.getOwnPropertyNames(obj).length===0){
@@ -129,10 +129,11 @@
 				}
 				else{
 					if( typeof obj[p] === 'object'){
-						r=r+p+':'+window.liebre.tools.toFormData(obj[p])+',';
+						r=r+(obj instanceof Array?'': p+':')+window.liebre.tools.toFormData(obj[p])+',';
 					}
 					else{
-						r=r+(obj instanceof Array?'"':  p+':"')+obj[p]+'",';
+						var c = (typeof obj[p] === 'string')?'"':'';
+						r=r+(obj instanceof Array?c:  p+':'+c)+obj[p]+c+',';
 					}
 				}
 			}

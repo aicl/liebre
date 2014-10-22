@@ -18,12 +18,20 @@ namespace Aicl.Liebre.Model
 		public bool Ok { get; set; }
 	}
 
+	public class BulkWrite{
+		public BulkWrite(){}
+		public long DeleteCount { get; set;}
+		public long InsertedCount { get; set;}
+		public long MatchedCount { get; set;}
+		public long UpsertsCount { get; set;}
+
+	}
+
 	public class Result<T>:IHasResponseStatus, IHasDataProperty<T> where T:IDocument
 	{
 
 		public Result (){
 			ResponseStatus = new ResponseStatus ();
-	
 		}
 
 		public WriteResult WriteResult { get; set; }
@@ -33,10 +41,29 @@ namespace Aicl.Liebre.Model
 		#endregion
 
 		#region IHasResponseStatus implementation
-
 		public ResponseStatus ResponseStatus { get; set; }
-
 		#endregion
 	}
+
+	//
+
+	public class BulkResult<T>:IHasResponseStatus, IHasDataProperty<T> where T:IDocument
+	{
+
+		public BulkResult (){
+			ResponseStatus = new ResponseStatus ();
+		}
+
+		public BulkWrite BulkWrite { get; set; }
+
+		#region IHasDataProperty implementation
+		public T Data { get; set; }
+		#endregion
+
+		#region IHasResponseStatus implementation
+		public ResponseStatus ResponseStatus { get; set; }
+		#endregion
+	}
+
 }
 

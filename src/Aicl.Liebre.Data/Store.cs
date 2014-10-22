@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using ServiceStack;
+using ServiceStack.Text;
 using Aicl.Liebre.Model;
 using MongoDB.Driver;
 using MongoDB.Driver.Builders;
@@ -207,16 +208,61 @@ namespace Aicl.Liebre.Data
 		}
 
 
-		public Result<Respuesta> SaveRespuesta(SaveRespuesta request){
-			// primero que todo buscar la descarga !!! no confiar !
-			Console.WriteLine (request.Data.Descarga);
-			return null;
-		}
+		public BulkResult<Descarga> UpdateCuestionario(UpdateCuestionario request){
 
 
-		public Result<RespuestaGuia> SaveRespuestaGuia(SaveRespuestaGuia request){
-			return null;
+			var descarga = Single<Descarga> (q => q.Token == request.Data.Descarga.Token &&
+				q.IdDiagnostico== request.Data.Descarga.IdDiagnostico
+			);
+
+			if (descarga.Id.IsNullOrEmpty ()) {
+				throw new Exception("Token token:'{0}' No encontrado".Fmt(request.Data.Descarga.Token));
+			}
+
+			if (descarga.Estado == "green") {
+				throw new Exception("Cuestionario asociado al Token token:'{0}' ya esta actualizado"
+					.Fmt(request.Data.Descarga.Token));
+			}
+
+			if (descarga.Estado == "red") {
+				descarga.Estado = "yellow";
+				Put (descarga);
+			}
+
+			var bwr = new BulkWrite ();
+
+			if (request.Data.Respuestas.Count > 0) {
+
+				var cl = GetCollection<Respuesta> ();
+				BulkWriteOperation bw = cl.InitializeOrderedBulkOperation ();
+				request.Data.Respuestas.ForEach (r =>
+					bw.Find (Query<Respuesta>.Where (q => q.IdDiagnostico == descarga.IdDiagnostico && q.IdPregunta == r.IdPregunta))
+					.Upsert ().UpdateOne (Update<Respuesta>
+						.Set (f => f.Valor, r.Valor).Set (f => f.NoAplicaChecked, r.NoAplicaChecked)));
+				var wc = bw.Execute ();
+
+				bwr.PopulateWith (wc);
+			}
+
+			if (request.Data.RespuestasGuias.Count > 0) {
+
+				var cl2 = GetCollection<RespuestaGuia> ();
+				BulkWriteOperation bw2 = cl2.InitializeOrderedBulkOperation ();
+				request.Data.RespuestasGuias.ForEach (r => bw2.Find (Query<RespuestaGuia>
+					.Where (q => q.IdDiagnostico == descarga.IdDiagnostico && q.IdGuia == r.IdGuia))
+					.Upsert ().UpdateOne (Update<RespuestaGuia>
+						.Set (f => f.Valor, r.Valor).Set (f => f.NoAplicaChecked, r.NoAplicaChecked)));
+
+				var wc2 =bw2.Execute ();
+				bwr.DeleteCount += wc2.DeletedCount;
+				bwr.InsertedCount += wc2.InsertedCount;
+				bwr.MatchedCount += wc2.MatchedCount;
+				bwr.UpsertsCount += wc2.Upserts.Count;
+			}
+		
+			return CreateResult (descarga, bwr);
 		}
+
 
 		MongoCollection<T> GetCollection<T>(){
 			return Db.GetCollection<T> (typeof(T).GetCollectionName());
@@ -233,7 +279,6 @@ namespace Aicl.Liebre.Data
 			return docs.ToList ();
 		}
 
-
 		static Result<T> CreateResult<T>(T data, WriteConcernResult wcr) where T:IDocument
 		{
 			var wc = new WriteResult(); 
@@ -241,6 +286,13 @@ namespace Aicl.Liebre.Data
 			return new Result<T> {
 				Data = data,
 				WriteResult = wc
+			};
+		}
+		static BulkResult<T> CreateResult<T>(T data, BulkWrite wcr) where T:IDocument
+		{
+			return new BulkResult<T> {
+				Data = data,
+				BulkWrite= wcr
 			};
 		}
 

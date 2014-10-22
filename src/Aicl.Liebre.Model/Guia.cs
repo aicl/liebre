@@ -11,14 +11,19 @@ namespace Aicl.Liebre.Model
 	{
 		public Guia ()
 		{
-			Opciones = new List<string> ();
+			//Opciones = new List<string> ();
+			Tipo = "string";
 		}
 		[BsonRepresentation(BsonType.ObjectId)]
 		public string Id { get; set; }
 		public string IdPlantilla { get; set; }
 		public string Enunciado { get; set; }
-		public string Tipo { get; set; } // true-false| multiline| selection, etc..
-		public List<string> Opciones { get; set; }
+		public string Tipo { get; set; } // object, string, number, boolean,  list<object>, list<string>,
+		//public List<string> Opciones { get; set; }
+		// string, number, boolean = Valor.Data="asdf", "1", "0", "222",
+		// object = Valor= { }
+		// list<string> = Valor.Data=[]
+		// list<object> = Valor.Data=[{}]
 
 
 	}
@@ -75,4 +80,5 @@ namespace Aicl.Liebre.Model
 	}
 
 }
+
 

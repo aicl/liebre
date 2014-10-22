@@ -74,6 +74,14 @@
         "/home/angel/projects/liebre/src/Aicl.Liebre.Cuestionario/app/bower_components/web-animations-js/test/testcases/auto-test-composite-transforms-checks.js",
         "/home/angel/projects/liebre/src/Aicl.Liebre.Cuestionario/app/bower_components/web-animations-js/test/testcases/auto-test-font-weight-checks.js",
         "/home/angel/projects/liebre/src/Aicl.Liebre.Cuestionario/app/bower_components/web-animations-js/test/testcases/auto-test-compositor-checks.js",
-        "/home/angel/projects/liebre/src/Aicl.Liebre.Cuestionario/app/bower_components/web-animations-js/test/testcases/auto-test-length-units-checks.js"
+        "/home/angel/projects/liebre/src/Aicl.Liebre.Cuestionario/app/bower_components/web-animations-js/test/testcases/auto-test-length-units-checks.js",
+        "/home/angel/projects/liebre/src/Aicl.Liebre.Cuestionario/app/bower_components/web-animations-js/test/testcases/auto-test-iterations-alternate-holes-checks.js",
+        "/home/angel/projects/liebre/src/Aicl.Liebre.Cuestionario/app/bower_components/web-animations-js/test/testcases/auto-test-start-time-iterations-checks.js",
+        "/home/angel/projects/liebre/src/Aicl.Liebre.Cuestionario/app/bower_components/web-animations-js/test/testcases/auto-test-text-shadow-checks.js",
+        "/home/angel/projects/liebre/src/Aicl.Liebre.Cuestionario/app/bower_components/web-animations-js/test/testcases/auto-test-transform-primitives-checks.js",
+        "/home/angel/projects/liebre/src/Aicl.Liebre.Cuestionario/app/bower_components/web-animations-js/test/testcases/auto-test-to-animation-checks.js",
+        "/home/angel/projects/liebre/src/Aicl.Liebre.Cuestionario/app/bower_components/web-animations-js/test/testcases/auto-test-reparent-checks.js",
+        "/home/angel/projects/liebre/src/Aicl.Liebre.Cuestionario/app/bower_components/web-animations-js/test/testcases/auto-test-inline-style-methods-checks.js",
+        "/home/angel/projects/liebre/src/Aicl.Liebre.Cuestionario/app/bower_components/web-animations-js/test/testcases/auto-test-delay-checks.js"
     ]
 }

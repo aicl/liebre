@@ -44,8 +44,8 @@
     <Compile Include="IHasDataProperty.cs" />
     <Compile Include="Descarga.cs" />
     <Compile Include="Instalacion.cs" />
-    <Compile Include="RespuestaCuestionario.cs" />
     <Compile Include="RespuestaGuiaCuestionario.cs" />
+    <Compile Include="Cuestionario.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="ServiceStack.Common">

@@ -181,7 +181,7 @@
 		}
 		
 		if (!(obj instanceof Array || typeof (obj) === 'object')) {
-			return  '"'+ obj+'"';
+			return  (typeof obj === 'string')? '"'+obj+'"': obj;
 		}
 		
 		if(Object.getOwnPropertyNames(obj).length===0){
@@ -203,10 +203,11 @@
 				}
 				else{
 					if( typeof obj[p] === 'object'){
-						r=r+p+':'+window.liebre.tools.toFormData(obj[p])+',';
+						r=r+(obj instanceof Array?'': p+':')+window.liebre.tools.toFormData(obj[p])+',';
 					}
 					else{
-						r=r+(obj instanceof Array?'"':  p+':"')+obj[p]+'",';
+						var c = (typeof obj[p] === 'string')?'"':'';
+						r=r+(obj instanceof Array?c:  p+':'+c)+obj[p]+c+',';
 					}
 				}
 			}
@@ -299,12 +300,12 @@
 		ajax.go();
 	};
 	
-	window.liebre.remote.saveRespuesta=function(data, config){
+	window.liebre.remote.updateCuestionario=function(data, config){
 		config = config || {};
-		config.action = config.action|| 'save';
-		config.model = config.model|| 'respuesta';
+		config.model = config.model|| 'cuestionario';
 		window.liebre.remote.update(data, config);
 	};
+	
 	window.liebre.remote.update=function(data, config){
 		config = config || {};	
 		config.response= config.response|| function(e){console.log(e);};
@@ -381,6 +382,75 @@
 	
 	window.liebre._storage= new window.liebre.IndexStorage('sgsst-test', schema);
 	window.liebre._storage.open();
+	
+	window.liebre.getPreguntasGuias=function(descarga, complete){
+		complete=complete||function(){};
+		window.liebre._storage.execute(function(db){
+			var __ready=false;
+			var response= {
+				status:'ok',
+				error:null,
+				msg: 'Preguntas OK',
+				data: {
+					Respuestas:[],
+					RespuestasGuias:[],
+					Descarga:descarga.Descarga
+				}
+			};
+			var kv= window.ydn.db.KeyRange.starts([descarga.IdDiagnostico]);
+			db.values('Pregunta', 'Pregunta.IdCapitulo', kv)
+			.done(function(d){
+				if(d[0]){
+					for(var i in d){
+						response.data.Respuestas.push(d[i].Respuesta);
+					}
+				}
+				db.values('Guia',  kv)
+				.done(function(d){
+					if(d[0]){
+						for(var i in d){
+							response.data.RespuestasGuias.push(d[i].Respuesta);
+						}
+					}
+					__ready=true;
+				})
+				.fail(function(e){
+					doError('Error al leer Guias',e);
+				});
+			})
+			.fail(function(e){
+				doError('Error al leer Preguntas',e);
+			});
+			
+			var doError= function(m,e){
+				console.log('error',e);
+				response.status='error';
+				response.error=e;
+				response.msg=m || 'Error al leer Respuestas!' ;
+				if (e && e.target && e.target.error) {
+					response.msg= response.msg + e.target.error.name + ' ' +
+						e.target.error.message;
+                }
+				__ready=true;
+			};
+			(function(){
+				var tId = setInterval(function() {
+					if ( __ready) {
+						onReady();
+					}
+				}, 11);
+				function onReady(){
+					clearInterval(tId);
+					if(complete){
+						complete(response);
+					}
+				}
+			})();
+			
+			
+			
+		});
+	};
 		
 	window.liebre.getPreguntas=function(diagnostico, capitulo, complete){
 		window.liebre._storage.execute(function(db){
@@ -585,7 +655,8 @@
 				response.error=e;
 				response.msg=m || 'Actualización de la Respuesta fallida!' ;
 				if (e && e.target && e.target.error) {
-					response.msg= response.msg + e.target.error.name + ' ' + e.target.error.message;
+					response.msg= response.msg + e.target.error.name + ' ' +
+						e.target.error.message;
                 }
 				__ready=true;
 			};

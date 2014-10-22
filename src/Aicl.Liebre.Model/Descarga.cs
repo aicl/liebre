@@ -12,6 +12,7 @@ namespace Aicl.Liebre.Model
 	{
 		public Descarga ()
 		{
+			Estado = "red";
 		}
 
 		[BsonRepresentation(BsonType.ObjectId)]
@@ -19,6 +20,7 @@ namespace Aicl.Liebre.Model
 		public string IdDiagnostico { get; set; }
 		public DateTime Fecha { get; set; }
 		public string Token { get; set; }
+		public string Estado { get; set; }
 		//public string Responsable { get; set; }
 	}
 
