@@ -82,6 +82,7 @@
         "/home/angel/projects/liebre/src/Aicl.Liebre.Cuestionario/app/bower_components/web-animations-js/test/testcases/auto-test-to-animation-checks.js",
         "/home/angel/projects/liebre/src/Aicl.Liebre.Cuestionario/app/bower_components/web-animations-js/test/testcases/auto-test-reparent-checks.js",
         "/home/angel/projects/liebre/src/Aicl.Liebre.Cuestionario/app/bower_components/web-animations-js/test/testcases/auto-test-inline-style-methods-checks.js",
-        "/home/angel/projects/liebre/src/Aicl.Liebre.Cuestionario/app/bower_components/web-animations-js/test/testcases/auto-test-delay-checks.js"
+        "/home/angel/projects/liebre/src/Aicl.Liebre.Cuestionario/app/bower_components/web-animations-js/test/testcases/auto-test-delay-checks.js",
+        "/home/angel/projects/liebre/src/Aicl.Liebre.Cuestionario/app/bower_components/web-animations-js/test/testcases/auto-test-iterations-fill-checks.js"
     ]
 }

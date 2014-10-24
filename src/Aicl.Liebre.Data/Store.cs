@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using ServiceStack;
-using ServiceStack.Text;
 using Aicl.Liebre.Model;
 using MongoDB.Driver;
 using MongoDB.Driver.Builders;
@@ -9,6 +8,7 @@ using MongoDB.Driver.Linq;
 using System.Linq.Expressions;
 using ServiceStack.Model;
 using System.Linq;
+using ServiceStack.Text;
 
 namespace Aicl.Liebre.Data
 {
@@ -240,24 +240,42 @@ namespace Aicl.Liebre.Data
 					.Upsert ().UpdateOne (Update<Respuesta>
 						.Set (f => f.Valor, r.Valor).Set (f => f.NoAplicaChecked, r.NoAplicaChecked)));
 				var wc = bw.Execute ();
-
 				bwr.PopulateWith (wc);
+				bwr.UpsertsCount = wc.Upserts.Count;
 			}
 
 			if (request.Data.RespuestasGuias.Count > 0) {
 
+				var gIds = request.Data.RespuestasGuias.ConvertAll (e => e.IdGuia);
+
+				var guias = GetCollection<Guia>().Find( Query<Guia>.In ((q) => q.Id, gIds ));
+
 				var cl2 = GetCollection<RespuestaGuia> ();
 				BulkWriteOperation bw2 = cl2.InitializeOrderedBulkOperation ();
-				request.Data.RespuestasGuias.ForEach (r => bw2.Find (Query<RespuestaGuia>
-					.Where (q => q.IdDiagnostico == descarga.IdDiagnostico && q.IdGuia == r.IdGuia))
-					.Upsert ().UpdateOne (Update<RespuestaGuia>
-						.Set (f => f.Valor, r.Valor).Set (f => f.NoAplicaChecked, r.NoAplicaChecked)));
+				request.Data.RespuestasGuias.ForEach (r => {
+					var guia= guias.FirstOrDefault(g=>g.Id== r.IdGuia);
+					if (guia==default(Guia)){
+						guia=new Guia();
+					}
+					bw2.Find (Query<RespuestaGuia>
+						.Where (q => q.IdDiagnostico == descarga.IdDiagnostico && q.IdGuia == r.IdGuia))
+						.Upsert ().UpdateOne (Update<RespuestaGuia>
+							.Set (f => f.Valor, r.Valor)
+							.Set (f => f.NoAplicaChecked, r.NoAplicaChecked)
+							.Set( f => f.Tipo, (guia==default(Guia)? guia.Tipo:"string")));
+				});
 
 				var wc2 =bw2.Execute ();
 				bwr.DeleteCount += wc2.DeletedCount;
 				bwr.InsertedCount += wc2.InsertedCount;
 				bwr.MatchedCount += wc2.MatchedCount;
 				bwr.UpsertsCount += wc2.Upserts.Count;
+			}
+			if ((request.Data.Respuestas.Count + request.Data.RespuestasGuias.Count) > 0 &&
+			    ((bwr.UpsertsCount + bwr.MatchedCount) ==
+					(request.Data.Respuestas.Count + request.Data.RespuestasGuias.Count))) {
+				descarga.Estado = "green";
+				Put (descarga);
 			}
 		
 			return CreateResult (descarga, bwr);

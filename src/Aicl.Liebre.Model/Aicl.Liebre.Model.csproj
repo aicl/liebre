@@ -40,12 +40,14 @@
     <Compile Include="Respuesta.cs" />
     <Compile Include="RespuestaGuia.cs" />
     <Compile Include="IDocument.cs" />
-    <Compile Include="TypeExtensions.cs" />
     <Compile Include="IHasDataProperty.cs" />
     <Compile Include="Descarga.cs" />
     <Compile Include="Instalacion.cs" />
     <Compile Include="RespuestaGuiaCuestionario.cs" />
     <Compile Include="Cuestionario.cs" />
+    <Compile Include="Defs.cs" />
+    <Compile Include="CustomSerializer.cs" />
+    <Compile Include="Extensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="ServiceStack.Common">
