@@ -13,10 +13,10 @@
 	  </style>
 	  
 	  <app-header-panel id="hp" on-l-icon-tap="{{ fireBack }}"	licon="arrow-back" ricon="work"
-						titulo="{{diagnostico.Diagnostico.Descripcion}}">
+						titulo="{{cuestionario.Diagnostico.Descripcion}}">
 		  <div layout vertical center>
 				  <core-selector class="list"  layout vertical>
-					  <template repeat="{{item in diagnostico.Capitulos}}">
+					  <template repeat="{{item in cuestionario.Capitulos}}">
 						  <span  on-tap="{{delegateCapituloSelect}}">
 							  {{item.Titulo +'-'+ item.Estandar}}
 						  </span>
@@ -32,7 +32,7 @@
     Polymer({
 		
 		created:function(){
-			this.diagnostico={}
+			this.cuestionario={}
 		},
 		
 		fireBack:function(){
@@ -43,13 +43,13 @@
 			if(this.handlerCapituloSelect){
 				this.handlerCapituloSelect(event, {
 					item: sender.templateInstance.model.item,
-					diagnostico:this.diagnostico
+					cuestionario:this.cuestionario
 				}, sender);
 			}
 		},
 		
-		diagnosticoChanged:function(){
-			this.$.hp.ri.style.color= this.diagnostico.Estado;
+		cuestionarioChanged:function(){
+			this.$.hp.ri.style.color= this.cuestionario.Descarga.Estado;
 		}
 	});
   </script>

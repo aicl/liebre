@@ -18,7 +18,7 @@
 			  <app-header-panel id="menuPanel" on-l-icon-tap="{{ fireBack }}"
 								licon="menu" ricon="cloud-download"
 								on-r-icon-tap="{{handlerShowDownload}}"
-								titulo="Questionarios SGSST">
+								titulo="Cuestionarios SGSST">
 				  <q-select id="qs"></q-select>
 			  </app-header-panel>
 		  </div>
@@ -39,33 +39,87 @@
 	  Polymer({		  		   
 		  route:"",
 		  created:function(){
-			  this.rqReadInstalacion = {
-				  model:'instalacion',
-				  response:this.readInstalacionResponse.bind(this),
+			  this.readCuestionario = {
+				  model:'cuestionario',
+				  response:this.readCuestionarioResponse.bind(this),
 				  error:this.readError.bind(this),
 				  errorConnection: this.readErrorConnection.bind(this),
 				  complete:this.readComplete.bind(this),
 				  urlparams:{}
 			  };
+			  
+			  this.rqUpdateCuestionario={
+				  response:this.updateCuestionarioResponse.bind(this),
+				  error:this.readError.bind(this),
+				  errorConnection: this.readErrorConnection.bind(this),
+				  complete:this.readComplete.bind(this),
+			  }
 		  },
 		  ready:function(){
 			  this.$.qdi.handlerOkTap=this.handlerSaveDownload.bind(this);
 			  this.$.qs.handlerShowCapitulos= this.handlerShowCapitulos.bind(this);
+			  this.$.qs.handlerUpdateCuestionario=this.handlerUpdateCuestionario.bind(this);
+			  this.$.qs.handlerDeleteCuestionario=this.handlerDeleteCuestionario.bind(this);
 			  this.$.qc.handlerCapituloSelect= this.handlerCapituloSelect.bind(this);
 			  this.$.qp.saveRespuesta=  this.saveRespuesta.bind(this);
 			  this.$.qp.getGuias=  this.getGuias.bind(this);
 			  this.$.qp.saveRespuestaGuia=  this.saveRespuestaGuia.bind(this);
 			  
 			  this.$.wl.display="block";
-			  window.liebre.getDiagnosticos(function(response){
+			  window.liebre.getCuestionarios(function(response){
 				  this.$.wl.display="none";
 				  if(response.status==='ok'){
-					  this.$.qs.diagnosticos= response.data;
+					  this.$.qs.cuestionarios= response.data;
 				  }
 				  else{
 					  this.$.te.text= response.msg;
 					  this.$.te.show();
 				  }
+			  }.bind(this));
+		  },
+		  
+		  handlerUpdateCuestionario:function(event, detail, sender){
+			  var cuestionario = detail.item;
+			  this.$.wl.display="block";
+			  window.liebre.getPreguntasGuias(cuestionario, function(response){
+				  this.$.wl.display="none";
+				  if(response.status==='error'){
+					  this.$.te.text= response.msg;
+					  this.$.te.show();
+					  return;
+				  }	  
+				  window.liebre.remote.updateCuestionario({
+					  Descarga:cuestionario.Descarga,
+					  Respuestas: response.data.Respuestas,
+					  RespuestasGuias: response.data.RespuestasGuias
+				  }, this.rqUpdateCuestionario);
+				  
+			  }.bind(this));
+			  
+		  },
+		  
+		  handlerDeleteCuestionario:function(evetn, detail, sender){
+			  var cuestionario = detail.item;
+			  this.$.wl.display="block";
+			  window.liebre.deleteCuestionario(cuestionario, function(response){
+				  this.$.wl.display="none";
+				  if(response.status==='error'){
+					  this.$.te.text= response.msg;
+					  this.$.te.show();
+					  return;
+				  }	
+				  var q =this.$.qs.cuestionarios;
+				  var index=-1;
+				  for (var d in q){
+					  		if( q[d].Diagnostico.Id===cuestionario.Diagnostico.Id){
+								index= q.indexOf(q[d]);
+								break;
+							}
+				  }
+				  if(index>=0){
+					  this.$.qs.cuestionarios.splice(index,1);
+				  }
+				  				  
 			  }.bind(this));
 		  },
 		  
@@ -76,21 +130,22 @@
 				  if(response.status==='error'){
 					  this.$.te.text= response.msg;
 					  this.$.te.show();
+					  return ;
 				  }
 				  if(completeFn) {
 					  completeFn(response);
 				  }
-				  
 			  }.bind(this));
 		  },
 		  
-		  getGuias:function(diagnostico, respuesta, completeFn){
+		  getGuias:function(cuestionario, respuesta, completeFn){
 			  this.$.wl.display="block";
-			  liebre.getGuias(diagnostico, respuesta, function(response){
+			  liebre.getGuias(cuestionario, respuesta, function(response){
 				  this.$.wl.display="none";
 				  if(response.status==='error'){
 					  this.$.te.text= response.msg;
 					  this.$.te.show();
+					  return;
 				  }
 				  if(completeFn) {
 					  completeFn(response);
@@ -105,21 +160,19 @@
 				  if(response.status==='error'){
 					  this.$.te.text= response.msg;
 					  this.$.te.show();
+					  return;
 				  }
-				  
 				  if(completeFn) {
 					  completeFn(response);
 				  }
-				  
 			  }.bind(this));
 		  },
-
 		  
 		  handlerCapituloSelect:function(event, detail, sender){
-			  this.$.qp.diagnostico= detail.diagnostico;
+			  this.$.qp.cuestionario= detail.cuestionario;
 			  var cap = detail.item;
 			  this.$.wl.display="block";
-			  liebre.getPreguntas(detail.diagnostico, cap,  function(response){
+			  liebre.getPreguntas(detail.cuestionario, cap,  function(response){
 				  this.$.wl.display="none";
 				  if(response.status==='ok'){
 					  cap.Current=cap.Current||0;
@@ -136,7 +189,7 @@
 		  
 		  handlerShowCapitulos:function(event, detail, sender){
 			  console.log(detail);
-			  this.$.qc.diagnostico= detail.item;
+			  this.$.qc.cuestionario= detail.item;
 			  this.route="capitulos";
 		  },
 		  		  
@@ -145,20 +198,16 @@
 		  },
 		  
 		  handlerSaveDownload:function(event, detail){
-			  this.rqReadInstalacion.urlparams.Token=detail.item.Token;
-			  window.liebre.remote.read(this.rqReadInstalacion);
+			  this.readCuestionario.urlparams.Token=detail.item.Token;
+			  window.liebre.remote.read(this.readCuestionario);
 			  this.$.wl.display="block";
 		  },
 		  		  
-		  readInstalacionResponse:function(event){
+		  readCuestionarioResponse:function(event){
 			  var data = event.detail.data;
-			  data.Diagnostico.Creado=window.liebre.tools.formatDate(data.Diagnostico.Creado);
-			  data.Plantilla.FechaFinal=window.liebre.tools.formatDate(data.Plantilla.FechaFinal);
-			  data.Plantilla.FechaInicial=window.liebre.tools.formatDate(data.Plantilla.FechaInicial);
-			  
-			  window.liebre.instalarDiagnostico(data, function(response){
+			  window.liebre.instalarCuestionario(data, function(response){
 				  if(response.status==='ok'){
-					  this.$.qs.diagnosticos.unshift(response.data);
+					  this.$.qs.cuestionarios.unshift(response.data);
 				  }
 				  else{
 					  this.$.te.text= response.msg;
@@ -167,6 +216,28 @@
 			  }.bind(this));
 		  },
 		  
+		  updateCuestionarioResponse:function(event){
+			  var data = event.detail.data;
+			  data.Fecha= window.liebre.tools.formatDate(data.Fecha);		  		  
+			  this.$.wl.display="block";
+			  window.liebre.putCuestionario(cuestionario, function(){
+				  this.$.wl.display="none";
+				  if(response.status==='error'){
+					  this.$.te.text= response.msg;
+					  this.$.te.show();
+					  return;
+				  }
+				  var q =this.$.qs.cuestionarios;
+				  for (var d in q){
+					  if( q[d].Diagnostico.Id===data.IdDiagnostico){
+						  this.$.qs.cuestionarios[d].Descarga=data;
+						  break;
+					  }
+				  }
+				  
+			  }.bind(this));
+		  },
+		  	  
 		  readError:function(event){
 			  console.log("error", event);
 			  this.$.te.text= "Error: "+ event.type+". "+ event.detail.xhr.response;
@@ -191,9 +262,7 @@
 		  },
 		  routeChanged:function(o, n){
 			  this.$.qp.selected= this.route==='preguntas'?'0':'-1';
-		  }
-		  
-		  
+		  }		  
 	  });
   </script>
 </polymer-element>

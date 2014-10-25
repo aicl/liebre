@@ -16,6 +16,46 @@ namespace Aicl.Liebre.Model
 		public List<RespuestaGuia> RespuestasGuias {get;set;}
 	}
 
+
+	[Route("/read/cuestionario","GET")]
+	public class ReadCuestionario:IReturn<ReadCuestionarioResponse>
+	{
+		public string Token{ get; set; }
+	}
+
+	public class ReadCuestionarioResponse: IHasResponseStatus
+	{
+		public ReadCuestionarioResponse()
+		{
+			Guias = new List<ViewGuia> ();
+			Capitulos = new List<Capitulo> ();
+			Preguntas = new List<ViewPregunta> ();
+			ResponseStatus = new ResponseStatus ();
+		}
+
+		public Empresa Empresa { get; set; }
+		public Diagnostico Diagnostico { get; set; }
+		public Plantilla Plantilla { get; set; }
+		public List<Capitulo> Capitulos { get; set; }
+		public List<ViewGuia> Guias { get; set; }
+		public List<ViewPregunta> Preguntas { get; set; }
+		public ResponseStatus ResponseStatus { get; set; }
+		public Descarga Descarga { get; set; }
+	}
+
+	public class ViewPregunta
+	{
+		public Pregunta Pregunta { get; set; }
+		public Respuesta Respuesta { get; set; }
+	}
+
+	public class ViewGuia
+	{
+		public Guia Guia { get; set; }
+		public RespuestaGuia Respuesta { get; set; }
+	}
+
+
 	[Route("/update/cuestionario","POST,PUT")]
 	public class UpdateCuestionario:IReturn<UpdateCuestionarioResponse>
 	{
@@ -29,4 +69,3 @@ namespace Aicl.Liebre.Model
 		public WriteResult WriteResult{ get; set; }
 	}
 }
-

@@ -125,14 +125,22 @@ namespace Aicl.Liebre.Data
 		}
 
 
-		public  InstalacionResponse GetInstalacionResponse(ReadInstalacion request)
+		public  ReadCuestionarioResponse DownloadCuestionario(ReadCuestionario request)
 		{
-			var response = new InstalacionResponse ();
+			var response = new ReadCuestionarioResponse ();
 			response.Descarga = Single<Descarga> (q => q.Token == request.Token);
 
 			if (response.Descarga.Id.IsNullOrEmpty ()) {
 				throw new Exception("No existe informacion para el token:'{0}'".Fmt(request.Token));
 			}
+
+			if (response.Descarga.Estado == "red" || response.Descarga.Estado=="yellow") {
+				throw new Exception("No disponible Cuestionario con el token:'{0}'. Estado:'{1}'"
+					.Fmt(request.Token, response.Descarga.Estado));
+			}
+
+			response.Descarga.Estado = "red";
+			Put (response.Descarga);
 
 			response.Diagnostico = GetById<Diagnostico> (response.Descarga.IdDiagnostico);
 			response.Plantilla = GetById<Plantilla> (response.Diagnostico.IdPlantilla);
@@ -189,6 +197,14 @@ namespace Aicl.Liebre.Data
 		}
 
 		public Result<Descarga> PostDescarga(CreateDescarga request){
+
+			var d = GetByQuery<Descarga> (f => f.IdDiagnostico == request.Data.IdDiagnostico && f.Estado != "green");
+
+			if (d.Count > 0) {
+				throw new Exception ("Exiten descargas activas para el diagnostico seleccionado"
+					.Fmt (request.Data.IdDiagnostico));
+			}
+
 			request.Data.Fecha = DateTime.UtcNow;
 			request.Data.Token = Store.CreateRandomPassword ();
 			return Post<Descarga> (request.Data);

@@ -12,7 +12,7 @@ namespace Aicl.Liebre.Model
 	{
 		public Descarga ()
 		{
-			Estado = "red";
+			Estado = "grey";
 		}
 
 		[BsonRepresentation(BsonType.ObjectId)]
@@ -21,7 +21,7 @@ namespace Aicl.Liebre.Model
 		public DateTime Fecha { get; set; }
 		public string Token { get; set; }
 		public string Estado { get; set; }
-		//public string Responsable { get; set; }
+
 	}
 
 	[Route("/read/descarga","GET")]

@@ -300,12 +300,6 @@
 		ajax.go();
 	};
 	
-	window.liebre.remote.updateCuestionario=function(data, config){
-		config = config || {};
-		config.model = config.model|| 'cuestionario';
-		window.liebre.remote.update(data, config);
-	};
-	
 	window.liebre.remote.update=function(data, config){
 		config = config || {};	
 		config.response= config.response|| function(e){console.log(e);};
@@ -353,6 +347,12 @@
 		ajax.go();
 	};
 	
+	window.liebre.remote.updateCuestionario=function(data, config){
+		config = config || {};
+		config.model = config.model|| 'cuestionario';
+		window.liebre.remote.update(data, config);
+	};
+	
 	// ver 1
 	var schema = {
 		stores: [{
@@ -368,7 +368,7 @@
 				keyPath:['Respuesta.IdDiagnostico','Pregunta.IdCapitulo']
 			}]
 		},{
-			name: 'Descarga',    // required. object store name or TABLE name
+			name: 'Descarga',    // required. object store name or TABLE name // cambiar a 'Cuestionario'
 			keyPath: 'Descarga.Token',    // keyPath.
 			autoIncrement: false, // if true, key will be automatically created
 			indexes: [{
@@ -382,8 +382,69 @@
 	
 	window.liebre._storage= new window.liebre.IndexStorage('sgsst-test', schema);
 	window.liebre._storage.open();
+	//
+	window.liebre.deleteCuestionario=function(cuestionario, complete){
+		complete=complete||function(){};
+		window.liebre._storage.execute(function(db){
+			var __ready=false;
+			var response= {
+				status:'ok',
+				error:null,
+				msg: 'Cuestionario Eliminado OK',
+				data: {
+					Respuestas:[],
+					RespuestasGuias:[]
+				}
+			};
+			var kv= window.ydn.db.KeyRange.starts([cuestionario.Diagnostico.Id]);
+			db.remove('Pregunta', 'Pregunta.IdCapitulo', kv)
+			.done(function(){
+				db.remove('Guia',  kv)
+				.done(function(){
+					db.remove('Descarga', cuestionario.Descarga.Token)
+					.done(function(){
+						__ready=true;
+					})
+					.fail(function(e){
+						doError('Error al eliminar Cuestionario',e);						
+					});
+				})
+				.fail(function(e){
+					doError('Error al eliminar Guias',e);
+				});
+			})
+			.fail(function(e){
+				doError('Error al eliminar Preguntas',e);
+			});
+			
+			var doError= function(m,e){
+				console.log('error',e);
+				response.status='error';
+				response.error=e;
+				response.msg=m || 'Error al eliminar Cuestionario!' ;
+				if (e && e.target && e.target.error) {
+					response.msg= response.msg + e.target.error.name + ' ' +
+						e.target.error.message;
+                }
+				__ready=true;
+			};
+			(function(){
+				var tId = setInterval(function() {
+					if ( __ready) {
+						onReady();
+					}
+				}, 11);
+				function onReady(){
+					clearInterval(tId);
+					if(complete){
+						complete(response);
+					}
+				}
+			})();
+		});
+	};
 	
-	window.liebre.getPreguntasGuias=function(descarga, complete){
+	window.liebre.getPreguntasGuias=function(cuestionario, complete){
 		complete=complete||function(){};
 		window.liebre._storage.execute(function(db){
 			var __ready=false;
@@ -393,11 +454,10 @@
 				msg: 'Preguntas OK',
 				data: {
 					Respuestas:[],
-					RespuestasGuias:[],
-					Descarga:descarga.Descarga
+					RespuestasGuias:[]
 				}
 			};
-			var kv= window.ydn.db.KeyRange.starts([descarga.IdDiagnostico]);
+			var kv= window.ydn.db.KeyRange.starts([cuestionario.Diagnostico.Id]);
 			db.values('Pregunta', 'Pregunta.IdCapitulo', kv)
 			.done(function(d){
 				if(d[0]){
@@ -445,14 +505,11 @@
 						complete(response);
 					}
 				}
-			})();
-			
-			
-			
+			})();		
 		});
 	};
 		
-	window.liebre.getPreguntas=function(diagnostico, capitulo, complete){
+	window.liebre.getPreguntas=function(cuestionario, capitulo, complete){
 		window.liebre._storage.execute(function(db){
 			var __ready=false;
 			var response= {
@@ -461,7 +518,7 @@
 				msg: 'Preguntas OK',
 				data:[]
 			};
-			var kv= window.ydn.db.KeyRange.only([diagnostico.Diagnostico.Id, capitulo.Id]);
+			var kv= window.ydn.db.KeyRange.only([cuestionario.Diagnostico.Id, capitulo.Id]);
 			db.values('Pregunta', 'Pregunta.IdCapitulo', kv)
 			.done(function(aData){
 				if(aData[0]){
@@ -493,7 +550,7 @@
 		});
 	};
 	
-	window.liebre.getGuias=function(diagnostico, ids, complete){
+	window.liebre.getGuias=function(cuestionario, ids, complete){
 		window.liebre._storage.execute(function(db){
 			var __ready=false;
 			var response= {
@@ -504,7 +561,7 @@
 			};
 			var kv= [];//ydn.db.KeyRange.only([diagnostico.Diagnostico.Id, capitulo.Id]);
 			for( var id in ids){
-				kv.push([diagnostico.Diagnostico.Id, ids[id]]);
+				kv.push([cuestionario.Diagnostico.Id, ids[id]]);
 			}
 			db.values('Guia',  kv)
 			.done(function(aData){
@@ -536,16 +593,15 @@
 			})();
 		});
 	};
-	
-	
+		
 	// complete : function({status: 'ok' ||'error',  error: null|| error, msg:'' })
-	window.liebre.getDiagnosticos=function(complete){
+	window.liebre.getCuestionarios=function(complete){
 		window.liebre._storage.execute(function(db){
 			var __ready=false;
 			var response= {
 				status:'ok',
 				error:null,
-				msg: 'Diagnosticos OK',
+				msg: 'Cuestionarios OK',
 				data:[]
 			};
 			db.values('Descarga')
@@ -559,7 +615,7 @@
 				console.log('error',e);
 				response.status='error';
 				response.error=e;
-				response.msg='Eror al leer Diagnosticos' ;
+				response.msg='Eror al leer Cuestionarios' ;
 				__ready=true;
 			});
 			
@@ -579,17 +635,17 @@
 		});
 	};
 	
-	window.liebre.putDiagnostico=function(diagnostico,complete){
+	window.liebre.putCuestionario=function(cuestionario,complete){
 		complete = complete || function(){};
 		window.liebre._storage.execute(function(db){
 			var __ready=false;
 			var response= {
 				status:'ok',
 				error:null,
-				msg: 'Diagnosticos OK',
+				msg: 'Custionario Actualizado OK',
 				data:[]
 			};
-			db.put('Descarga', diagnostico)
+			db.put('Descarga', cuestionario)
 			.done(function(key){
 				response.data= key;
 				__ready=true;
@@ -599,7 +655,7 @@
 				console.log('error',e);
 				response.status='error';
 				response.error=e;
-				response.msg='Eror al leer Diagnosticos' ;
+				response.msg='Eror al actualizar Cuestionarios' ;
 				__ready=true;
 			});
 			(function(){
@@ -734,18 +790,17 @@
 		});
 	};
 		
-	window.liebre.instalarDiagnostico=function(data, complete){
+	window.liebre.postCuestionario=function(data, complete){
 		window.liebre._storage.execute(function(db){
-			data.Estado='grey';
+			data.Descarga.Estado='grey';
 			var __ready=false;
 			var response= {
 				status:'ok',
 				error:null,
-				msg: 'Instalación hecha!',
+				msg: 'Cuestionario Instalado!',
 				data:{}
 			};
-			
-			
+						
 			data.Descarga.Fecha=window.liebre.tools.formatDate(data.Descarga.Fecha);
 			data.Plantilla.FechaInicial=window.liebre.tools.formatDate(data.Plantilla.FechaInicial);
 			data.Plantilla.FechaFinal=window.liebre.tools.formatDate(data.Plantilla.FechaFinal);
@@ -767,7 +822,7 @@
 							db.put('Descarga', data);
 							db.put('Pregunta', data.Preguntas)
 							.done(function(){
-								data.Estado='red';
+								data.Descarga.Estado='red';
 								data.Preguntas=[];
 								db.put('Descarga', data)
 								.done(function(){response.data=data;  __ready=true;})

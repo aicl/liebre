@@ -1,0 +1,25 @@
+<link rel="import" href="../common/dialog-base.html">
+<polymer-element name="dialog-yes-no" attributes="heading">
+	<template>
+		<paper-dialog id="dlg" backdrop autoCloseDisabled heading=[[heading]]>
+			<content></content>
+			<paper-icon-button icon="cancel" dismissive></paper-icon-button>
+			<paper-icon-button icon="check" on-tap="{{_delegateOkTap}}" affirmative autofocus>
+			</paper-icon-button>
+		</paper-dialog>
+	</template>
+	<script>
+		Polymer({
+			_delegateOkTap:function(event, detail, sender){
+				if( this.handlerOkTap){
+					this.handlerOkTap(event,detail, sender)		
+				}
+			},
+			
+			toggle:function(){
+				this.$.dlg.toggle();
+			}
+			
+		})
+	</script>
+</polymer-element>

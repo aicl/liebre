@@ -103,7 +103,7 @@
 			  if( this.answer.Valor===0  && this.quiz.IdGuias.length>0){
 				  var self= this;
 				  if(this.getGuias){
-					  this.getGuias(self.diagnostico, self.quiz.IdGuias, function(response){
+					  this.getGuias(self.cuestionario, self.quiz.IdGuias, function(response){
 						  if(response.status==='ok'){
 							  self.guias=response.data;
 							  self.guia= Object.clone(self.guias[self.currentGuiaIndex]);

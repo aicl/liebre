@@ -1,13 +1,14 @@
+<link rel="import" href="../common/dialgo-yes-no.html">
 <polymer-element name="q-select">
 	<template>
 		<style>
 		</style>
 		<div layout vertical center>	  
-		  <template repeat="{{item in diagnosticos}}">
+		  <template repeat="{{item in cuestionarios}}">
 			  <div class="card">
 				  <div layout horizontal center>
 					  <div  flex class="text">{{item.Descarga.Id}}</div>
-					  <core-icon-button icon="work" style="color:{{item.Estado}}" ></core-icon-button>
+					  <core-icon-button icon="work" style="color:{{item.Descarga.Estado}}" ></core-icon-button>
 					  <core-icon-button icon="delete" on-tap="{{ handlerShowDelete }}"></core-icon-button>
 					  <core-icon-button  icon="create"  on-tap="{{ delegateShowCapitulos }}"></core-icon-button>
 					  <core-icon-button  icon="cloud-upload"  on-tap="{{ handlerShowUpload }}"></core-icon-button>
@@ -18,13 +19,39 @@
 				  <div class="text">{{item.Plantilla.Version}}</div>
 			  </div>
 		  </template>
+		  <dialog-yes-no id="dlg">Desea subir el cuestionario?</dialog-yes-no>
+		  <dialog-yes-no id="dlgb">Desea eliminar el cuestionario?</dialog-yes-no>
+		  
 	  </div>	  	
   </template>
 	<script>
 		Polymer({
+			
+			ready:function(){
+				this.$.dlg.handlerOkTap=this._delegateStartUpload.bind(this);
+				this.$.dlgb.handlerOkTap=this._delegateDelete.bind(this);
+			},
 			delegateShowCapitulos:function(event, detail, sender){
 				if(this.handlerShowCapitulos){
 					this.handlerShowCapitulos(event, {item:sender.templateInstance.model.item }, sender);
+				}
+			},
+			handlerShowDelete:function(event,detail, sender){
+				this._current= sender.templateInstance.model.item;
+				this.$.dlgb.toggle();
+			},
+			handlerShowUpload:function(event,detail, sender){
+				this._current= sender.templateInstance.model.item;
+				this.$.dlg.toggle();
+			},
+			_delegateStartUpload:function(event, detail, sender){
+				if(this.handlerUpdateCuestionario){
+					this.handlerUpdateCuestionario(event, {item:this._current }, sender);
+				}
+			},
+			_delegateDelete:function(event, detail, sender){
+				if(this.handlerDeleteCuestionario){
+					this.handlerDeleteCuestionario(event, {item:this._current }, sender);
 				}
 			}
 		});
