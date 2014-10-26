@@ -30,6 +30,17 @@
 		return this.toDateInputValue().replace(/-/g, '') +
 			'_' + this.toTimeInputValue().replace(/:/g, '');
 	};
+	
+	if (typeof String.prototype.startsWith !== 'function') {
+		String.prototype.startsWith = function (str){
+			return this.slice(0, str.length) === str;
+		};
+	}
+	if (typeof String.prototype.endsWith !== 'function') {
+		String.prototype.endsWith = function (str){
+			return this.slice(-str.length) === str;
+		};
+	}
 		
 	Object.clone = function (src) {
 		var newObj = (src instanceof Array) ? [] : {};

@@ -415,16 +415,14 @@
 		  
 		  readError:function(event){
 			  console.log("error", event);
-			  this.$.error.text= "Error: "+ event.type+". "+ event.detail.xhr.response;
+			  this.$.error.text= "Error: "+ event.type+". "+
+				  event.detail.xhr.statusText+". "+ event.detail.xhr.response;
 			  this.$.error.show();
-			  
 		  },
 		  readComplete:function(event){
 			  console.log("complete", event);
 			  this.$.wl.display="none";
-			  if( event.detail.xhr.status!=0 
-				 && event.type.lastIndexOf('-error')<0 
-				 && event.type.lastIndexOf('read')<0 ) {
+			  if(event.detail.xhr.status===200  && !event.type.startsWith('read')) {
 				  this.$.complete.text="Operación realizada: "+ event.type;
 				  this.$.complete.show();
 			  }
