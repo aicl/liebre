@@ -124,3 +124,24 @@ body /deep/	.guia-detalle, body /deep/ .quiz-detalle{
 	overflow: auto;
 	font-size: small;
 }	
+
+body /deep/ [no-visible]{
+	visibility: hidden;
+}
+
+
+body /deep/ core-icon-button[estado='red'], body /deep/ paper-icon-button[estado='red']{
+	color:red;
+}
+
+body /deep/ core-icon-button[estado='yellow'],body /deep/ paper-icon-button[estado='yellow']{
+	color:yellow;
+}
+body /deep/ core-icon-button[estado='green'],body /deep/ paper-icon-button[estado='green']{
+	color:green;
+}
+
+body /deep/ core-icon-button[estado='grey'], body /deep/ paper-icon-button[estado='grey']{
+	color:grey;
+}
+

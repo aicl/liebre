@@ -10,20 +10,19 @@
 <link rel="import" href="cuestionario-guia-card.html">
 <polymer-element name="q-preguntas" attributes="capitulo, selected">
   <template>
-    <style> 
-    </style>
-	  <app-header-panel on-l-icon-tap="{{ fireBack }}"	licon="arrow-back" ricon="work"
+    <style></style>
+	  <app-header-panel id="hp" on-l-icon-tap="{{ fireBack }}"	licon="arrow-back" ricon="work"
 						titulo="{{capitulo.Numeral+': ' +capitulo.Titulo +'-'+ capitulo.Estandar}}"
 						tclass="text">
 		  <div class="card" layout vertical  hidden?="{{selected!='0'}}">	  
 			  <div class="card-header" layout horizontal center>
 				  <paper-fab icon="chevron-left" on-tap="{{ prevTap }}" 
 							 class="navicon"
-							 style="visibility:{{capitulo.Current>0?'visible':'hidden'}};">
+							 no-visible?="{{capitulo.Current<=0}}">
 				  </paper-fab>
 				  <div flex layout vertical center>{{capitulo.Current+1}} de {{capitulo.Preguntas.length}}</div>
 				  <paper-fab icon="check" on-tap="{{ nextTap }} " class="navicon"
-									 style="visibility:{{( answer.Valor == null) && ( quiz.NoAplicaDisponible?!answer.NoAplicaChecked:true )?'hidden':'visible' }};">
+									 no-visible?="{{( answer.Valor == null) && ( quiz.NoAplicaDisponible?!answer.NoAplicaChecked:true )}}">
 				  </paper-fab>
 			  </div>
 			  <cuestionario-quiz-card pregunta="{{ quiz }}" respuesta="{{ answer }}" 
@@ -34,7 +33,7 @@
 			  <div class="card-header" layout horizontal center >
 				  <paper-fab icon="chevron-left" on-tap="{{ prevGuiaTap }}" 
 							 class="navicon"
-							 style="visibility:{{currentGuiaIndex>0?'visible':'hidden'}};">
+							 no-visible?="{{currentGuiaIndex<=0}}">
 				  </paper-fab>
 				  <div flex layout vertical center> Guia {{currentGuiaIndex+1}} de {{guias.length}}</div>
 				  <paper-fab icon="check" on-tap="{{ nextGuiaTap }} " class="navicon">
@@ -50,6 +49,10 @@
 		  index:0,
 		  selected:'-1',
 		  
+		  observe: {
+			  'cuestionario.Descarga.Estado': 'updateEstado'
+		  },
+
 		  created:function(){
 			  this.quiz={};
 			  this.answer={};
@@ -177,6 +180,10 @@
 			  this.quiz= this.capitulo.Preguntas[this.capitulo.Current].Pregunta;
 			  this.answer= Object.clone(this.capitulo.Preguntas[this.capitulo.Current].Respuesta);
 			  }
+		  },
+		  updateEstado:function(oldValue, newValue){
+			  console.log("updateEstado preguuntas", newValue)
+			  this.$.hp.ri.setAttribute("estado", newValue);
 		  }
     });
 	</script>

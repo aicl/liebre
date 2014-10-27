@@ -8,10 +8,7 @@
 <link rel="import" href="q-dialog-instalacion.html">
 <polymer-element name="x-app">
   <template>
-    <style>
-		
-    </style>
-	  
+    <style></style>
 	  <flatiron-director route="{{route}}" autoHash></flatiron-director>
 	  <core-pages selected="{{route}}" valueattr="hash">
 		  <div hash="" class="page">      
@@ -187,7 +184,6 @@
 		  },
 		  
 		  handlerShowCapitulos:function(event, detail, sender){
-			  console.log(detail);
 			  this.$.qc.cuestionario= detail.item;
 			  this.route="capitulos";
 		  },
@@ -217,7 +213,9 @@
 		  
 		  updateCuestionarioResponse:function(event){
 			  var data = event.detail.data;
-			  this.$.qs.current.Descarga=data;		  		  
+			  this.$.qs.current.Descarga=data;
+			  this.$.qp.cuestionario= this.$.qs.current;
+			  this.$.qc.cuestionario= this.$.qs.current;
 			  console.log("update cuestionario", this.$.qs.current, data);
 			  this.$.wl.display="block";
 			  window.liebre.putCuestionario(this.$.qs.current, function(response){

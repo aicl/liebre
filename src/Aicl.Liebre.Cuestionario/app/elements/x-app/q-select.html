@@ -8,7 +8,7 @@
 			  <div class="card">
 				  <div layout horizontal center>
 					  <div  flex class="text">{{item.Descarga.Id}}</div>
-					  <core-icon-button icon="work" style="color:{{item.Descarga.Estado}}" ></core-icon-button>
+					  <core-icon-button icon="work" estado="{{item.Descarga.Estado}}" ></core-icon-button>
 					  <core-icon-button icon="delete" on-tap="{{ handlerShowDelete }}"></core-icon-button>
 					  <core-icon-button  icon="create"  on-tap="{{ delegateShowCapitulos }}"></core-icon-button>
 					  <core-icon-button  icon="cloud-upload"  on-tap="{{ handlerShowUpload }}"></core-icon-button>

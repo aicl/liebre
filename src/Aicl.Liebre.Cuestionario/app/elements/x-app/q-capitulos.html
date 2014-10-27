@@ -4,14 +4,7 @@
 <link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
 <polymer-element name="q-capitulos">
   <template>
-    <style>    
-      :host {  		  
-		display: block;
-		position: relative;
-		padding: 0px;     
-      }
-	  </style>
-	  
+    <style></style>
 	  <app-header-panel id="hp" on-l-icon-tap="{{ fireBack }}"	licon="arrow-back" ricon="work"
 						titulo="{{cuestionario.Diagnostico.Descripcion}}">
 		  <div layout vertical center>
@@ -30,7 +23,10 @@
   <script>
 
     Polymer({
-		
+		observe: {
+			'cuestionario.Descarga.Estado': 'updateEstado'
+		},
+
 		created:function(){
 			this.cuestionario={}
 		},
@@ -47,9 +43,9 @@
 				}, sender);
 			}
 		},
-		
-		cuestionarioChanged:function(){
-			this.$.hp.ri.style.color= this.cuestionario.Descarga.Estado;
+		updateEstado:function(oldValue, newValue){
+			console.log("updateEstado", newValue)
+			this.$.hp.ri.setAttribute("estado", newValue);
 		}
 	});
   </script>
