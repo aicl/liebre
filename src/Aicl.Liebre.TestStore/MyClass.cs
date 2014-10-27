@@ -17,7 +17,7 @@ namespace Aicl.Liebre.TestStore
 		[BsonSerializer(typeof(CustomSerializer))]
 		public string String { get; set; }
 		[BsonSerializer(typeof(CustomSerializer))]
-		public Object DateTime { get; set; }
+		public string DateTime { get; set; }
 		[BsonSerializer(typeof(CustomSerializer))]
 		public string Bool { get; set; }
 		[BsonSerializer(typeof(CustomSerializer))]
@@ -78,9 +78,6 @@ namespace Aicl.Liebre.TestStore
 			store.Post(data);
 
 			var r = store.Single<Data>(f=>f.Id==data.Id);
-
-
-
 
 			Console.WriteLine("ArrayInt OK :{0})", r.ArrayInt==data.ArrayInt); 
 			Console.WriteLine("ArrayObject OK :{0})", r.ArrayObject==data.ArrayObject); 

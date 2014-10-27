@@ -18,7 +18,7 @@
 				  <core-selector class="list"  layout vertical>
 					  <template repeat="{{item in cuestionario.Capitulos}}">
 						  <span  on-tap="{{delegateCapituloSelect}}">
-							  {{item.Titulo +'-'+ item.Estandar}}
+							  {{item.Numeral+': ' +item.Titulo +'-'+ item.Estandar}}
 						  </span>
 					  </template>
 				  </core-selector>

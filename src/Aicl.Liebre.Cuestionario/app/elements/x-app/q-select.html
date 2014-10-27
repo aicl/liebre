@@ -26,14 +26,17 @@
   </template>
 	<script>
 		Polymer({
-			
+			get current(){
+				return this._current;
+			},
 			ready:function(){
 				this.$.dlg.handlerOkTap=this._delegateStartUpload.bind(this);
 				this.$.dlgb.handlerOkTap=this._delegateDelete.bind(this);
 			},
 			delegateShowCapitulos:function(event, detail, sender){
+				this._current=sender.templateInstance.model.item;
 				if(this.handlerShowCapitulos){
-					this.handlerShowCapitulos(event, {item:sender.templateInstance.model.item }, sender);
+					this.handlerShowCapitulos(event, {item:this._current}, sender);
 				}
 			},
 			handlerShowDelete:function(event,detail, sender){

@@ -11,26 +11,12 @@
 <polymer-element name="q-preguntas" attributes="capitulo, selected">
   <template>
     <style> 
-		.pie{
-			width: 100%;
-			padding: 0px 0px 6px 0px;
-			box-shadow: 0px 2px;
-			margin-bottom: 5px;
-		}
-		.navicon{
-			width: 56px;
-			height: 56px;
-			background-color: #f5f5f5;
-			fill: #000;
-		}
-		paper-fab{
-			color:black;
-		}
     </style>
-	  <app-header-panel id="hp" on-l-icon-tap="{{ fireBack }}"	licon="arrow-back" ricon="work"
-						titulo="{{capitulo.Titulo}}">
-		  <div class="card" layout vertical style="margin:0 auto;" hidden?="{{selected!='0'}}">	  
-			  <div class="pie" layout horizontal center >
+	  <app-header-panel on-l-icon-tap="{{ fireBack }}"	licon="arrow-back" ricon="work"
+						titulo="{{capitulo.Numeral+': ' +capitulo.Titulo +'-'+ capitulo.Estandar}}"
+						tclass="text">
+		  <div class="card" layout vertical  hidden?="{{selected!='0'}}">	  
+			  <div class="card-header" layout horizontal center>
 				  <paper-fab icon="chevron-left" on-tap="{{ prevTap }}" 
 							 class="navicon"
 							 style="visibility:{{capitulo.Current>0?'visible':'hidden'}};">
@@ -44,15 +30,15 @@
 						 on-quiz-answered="{{quizAnswered}}">
 			  </cuestionario-quiz-card>  
 		  </div>
-		  <div class="card" layout vertical center style="margin:0 auto;" hidden?="{{selected!='1'}}">
-			  <div class="pie" layout horizontal center >
-						  <paper-fab icon="chevron-left" on-tap="{{ prevGuiaTap }}" 
-									 class="navicon"
-									 style="visibility:{{currentGuiaIndex>0?'visible':'hidden'}};">
-						  </paper-fab>
-						  <div flex layout vertical center> Guia {{currentGuiaIndex+1}} de {{guias.length}}</div>
-						  <paper-fab icon="check" on-tap="{{ nextGuiaTap }} " class="navicon">
-						  </paper-fab>
+		  <div class="card" layout vertical hidden?="{{selected!='1'}}">
+			  <div class="card-header" layout horizontal center >
+				  <paper-fab icon="chevron-left" on-tap="{{ prevGuiaTap }}" 
+							 class="navicon"
+							 style="visibility:{{currentGuiaIndex>0?'visible':'hidden'}};">
+				  </paper-fab>
+				  <div flex layout vertical center> Guia {{currentGuiaIndex+1}} de {{guias.length}}</div>
+				  <paper-fab icon="check" on-tap="{{ nextGuiaTap }} " class="navicon">
+				  </paper-fab>
 			  </div>
 			  <cuestionario-guia-card pregunta="{{guia.Guia}}" respuesta="{{guia.Respuesta}}" >
 			  </cuestionario-guia-card>

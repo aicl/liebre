@@ -95,8 +95,11 @@ namespace Aicl.Liebre.Model
 			} else if (json.IsInt ()) {
 				document = BsonSerializer.Deserialize<BsonInt32> (json);
 				type = typeof(BsonInt32);
-			} else if (json.IsLong ()) {
+			}  else if (json.IsBsonNumberLong ()) {
 				document = BsonSerializer.Deserialize<BsonInt64> (json);
+				type = typeof(BsonInt64);
+			} else if (json.IsLong ()) {
+				document = BsonSerializer.Deserialize<BsonInt64> ("NumberLong(\""+json+"\")");
 				type = typeof(BsonInt64);
 			} else if (json.IsDouble ()) {
 				document = BsonSerializer.Deserialize<BsonDouble> (json);

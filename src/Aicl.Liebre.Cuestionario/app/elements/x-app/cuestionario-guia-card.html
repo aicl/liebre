@@ -4,31 +4,12 @@
 
 <polymer-element name="cuestionario-guia-card" attributes="pregunta,respuesta">
   <template>
-    <style>
-		:host {
-			display: block;
-			position: relative;
-			width: 100%;
-		}
-		.card-header {
-			margin: 2px 4px 0px 4px;
-			min-height: 50px;
-		}		
-		#titulo{
-			overflow: hidden;
-			font-size: small;
-			font-weight: bold;
-		}
-		#detalle{	
-			overflow: auto;
-			font-size: small;
-		}		
-    </style>
-    <div class="card-header" layout horizontal>
-			  <div id="titulo">{{pregunta.Enunciado}}</div>
+    <style></style>
+    <div class="guia-header" layout horizontal>
+			  <div class="guia-titulo">{{pregunta.Enunciado}}</div>
     </div>
 	
-    <div id="detalle" on-quiz-answered="{{ quizAnswered }}" >
+    <div class="guia-detalle" on-quiz-answered="{{ quizAnswered }}" >
 		<topeka-quiz-multiline id="quiz" name="multiline" quiz="{{ pregunta }}" 
 								value="{{ respuesta.Valor }}"
 								noAplicaChecked="{{ respuesta.NoAplicaChecked }}">

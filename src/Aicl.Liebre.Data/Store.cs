@@ -270,15 +270,12 @@ namespace Aicl.Liebre.Data
 				BulkWriteOperation bw2 = cl2.InitializeOrderedBulkOperation ();
 				request.Data.RespuestasGuias.ForEach (r => {
 					var guia= guias.FirstOrDefault(g=>g.Id== r.IdGuia);
-					if (guia==default(Guia)){
-						guia=new Guia();
-					}
 					bw2.Find (Query<RespuestaGuia>
 						.Where (q => q.IdDiagnostico == descarga.IdDiagnostico && q.IdGuia == r.IdGuia))
 						.Upsert ().UpdateOne (Update<RespuestaGuia>
 							.Set (f => f.Valor, r.Valor)
 							.Set (f => f.NoAplicaChecked, r.NoAplicaChecked)
-							.Set( f => f.Tipo, (guia==default(Guia)? guia.Tipo:"string")));
+							.Set( f => f.Tipo, guia.Tipo));
 				});
 
 				var wc2 =bw2.Execute ();

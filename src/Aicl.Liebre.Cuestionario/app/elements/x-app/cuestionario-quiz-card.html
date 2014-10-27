@@ -2,25 +2,11 @@
 <link rel="import" href="../templates/topeka-quiz-true-false.html">
 <polymer-element name="cuestionario-quiz-card" attributes="pregunta,respuesta">
   <template>
-    <style>
-		.card-header {
-			margin: 2px 4px 0px 4px;
-			min-height: 50px;
-		}		
-		#titulo{
-			overflow: hidden;
-			font-size: small;
-			font-weight: bold;
-		}
-		#detalle{	
-			overflow: auto;
-			font-size: small;
-		}		
-    </style>
-    <div class="card-header">
-		<div id="titulo">{{pregunta.Enunciado}}</div>
+    <style></style>
+    <div class="quiz-header">
+		<div class="quiz-titulo">{{pregunta.Enunciado}}</div>
     </div>
-    <div id="detalle" on-quiz-answered="{{ quizAnswered }}">
+    <div class="quiz-detalle" on-quiz-answered="{{ quizAnswered }}">
 		<topeka-quiz-true-false id="quiz" name="true-false" quiz="{{ pregunta }}" 
 								value="{{ respuesta.Valor }}"
 								noAplicaChecked="{{ respuesta.NoAplicaChecked }}">

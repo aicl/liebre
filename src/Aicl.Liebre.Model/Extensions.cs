@@ -28,7 +28,7 @@ namespace Aicl.Liebre.Model
 		}
 
 		public static bool IsBsonISODate(this string value){
-			return Regex.IsMatch (value, @"^ISODate\(""\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d+Z""\)$");
+			return Regex.IsMatch (value, @"^ISODate\(""\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.*\d*Z""\)$");
 		}
 
 		public static bool IsMsFormat(this string value){
@@ -43,6 +43,10 @@ namespace Aicl.Liebre.Model
 		public static bool IsLong(this string value){
 			long x;
 			return long.TryParse (value, out x);
+		}
+
+		public static bool IsBsonNumberLong(this string value){
+			return Regex.IsMatch (value, @"^NumberLong\(""\d{5,}""\)$");
 		}
 
 		public static bool IsDouble(this string value){

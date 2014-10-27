@@ -172,6 +172,15 @@
 	})();
 		
 	
+	window.liebre.tools.encodeQ=function(value){
+		return value;
+		/*if(typeof value === 'number') {
+			return value;
+		}
+		return encodeURI(JSON.stringify(value));
+		*/
+	};
+	
 	window.liebre.tools.getBaseUrl=function(){
 		return localStorage.getItem('liebre.baseUrl') ||
 			( (location.protocol + '//' + location.host+ '/lbr-api').replace('9000','8080'));
@@ -356,6 +365,12 @@
 		
 		ajax.baseUrl= config.baseUrl || ajax.baseUrl || window.liebre.tools.getBaseUrl();	
 		ajax.go();
+	};
+	
+	window.liebre.remote.readCuestionario=function(config){
+		config = config || {};
+		config.model = config.model|| 'cuestionario';
+		window.liebre.remote.read(config);
 	};
 	
 	window.liebre.remote.updateCuestionario=function(data, config){
@@ -648,6 +663,7 @@
 	
 	window.liebre.putCuestionario=function(cuestionario,complete){
 		complete = complete || function(){};
+		cuestionario.Descarga.Fecha= window.liebre.tools.formatDate(cuestionario.Descarga.Fecha);
 		window.liebre._storage.execute(function(db){
 			var __ready=false;
 			var response= {
@@ -756,7 +772,7 @@
 			db.values('Guia',  [[respuesta.IdDiagnostico, respuesta.IdGuia]])
 			.done(function(aData){
 				if(aData[0]){
-					aData[0].Respuesta= respuesta;
+					aData[0].Respuesta=respuesta;
 					db.put('Guia', aData[0])
 					.done(function(){
 						response.data= aData;
@@ -819,7 +835,13 @@
 			for (var cap in data.Capitulos){
 				data.Capitulos[cap].Current=0;
 			}
-				
+			
+			for (var g in data.Guias){
+				if(data.Guias[g].Respuesta.Valor){
+					data.Guias[g].Respuesta.Valor=JSON.parse(decodeURI(data.Guias[g].Respuesta.Valor));
+				}
+			}
+						
 			var kv= window.ydn.db.KeyRange.only(data.Diagnostico.Id);
 			db.values('Descarga','Diagnostico.Id',  kv)
 			.done(function(aData){

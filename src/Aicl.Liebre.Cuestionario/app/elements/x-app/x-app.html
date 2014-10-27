@@ -40,7 +40,6 @@
 		  route:"",
 		  created:function(){
 			  this.readCuestionario = {
-				  model:'cuestionario',
 				  response:this.readCuestionarioResponse.bind(this),
 				  error:this.readError.bind(this),
 				  errorConnection: this.readErrorConnection.bind(this),
@@ -199,13 +198,13 @@
 		  
 		  handlerSaveDownload:function(event, detail){
 			  this.readCuestionario.urlparams.Token=detail.item.Token;
-			  window.liebre.remote.read(this.readCuestionario);
+			  window.liebre.remote.readCuestionario(this.readCuestionario);
 			  this.$.wl.display="block";
 		  },
 		  		  
 		  readCuestionarioResponse:function(event){
 			  var data = event.detail.data;
-			  window.liebre.instalarCuestionario(data, function(response){
+			  window.liebre.postCuestionario(data, function(response){
 				  if(response.status==='ok'){
 					  this.$.qs.cuestionarios.unshift(response.data);
 				  }
@@ -218,29 +217,22 @@
 		  
 		  updateCuestionarioResponse:function(event){
 			  var data = event.detail.data;
-			  data.Fecha= window.liebre.tools.formatDate(data.Fecha);		  		  
+			  this.$.qs.current.Descarga=data;		  		  
+			  console.log("update cuestionario", this.$.qs.current, data);
 			  this.$.wl.display="block";
-			  window.liebre.putCuestionario(cuestionario, function(){
+			  window.liebre.putCuestionario(this.$.qs.current, function(response){
 				  this.$.wl.display="none";
 				  if(response.status==='error'){
 					  this.$.te.text= response.msg;
 					  this.$.te.show();
 					  return;
 				  }
-				  var q =this.$.qs.cuestionarios;
-				  for (var d in q){
-					  if( q[d].Diagnostico.Id===data.IdDiagnostico){
-						  this.$.qs.cuestionarios[d].Descarga=data;
-						  break;
-					  }
-				  }
-				  
 			  }.bind(this));
 		  },
 		  	  
 		  readError:function(event){
 			  console.log("error", event);
-			  this.$.error.text= "Error: "+ event.type+". "+
+			  this.$.te.text= "Error: "+ event.type+". "+
 				  event.detail.xhr.statusText+". "+ event.detail.xhr.response;
 			  this.$.te.show();
 			  
