@@ -565,8 +565,8 @@
 			.done(function(aData){
 				if(aData[0]){
 					response.data= aData;
-					__ready=true;
 				}
+				__ready=true;
 			})
 			.fail(function(e){
 				console.log('error',e);
@@ -609,8 +609,8 @@
 			.done(function(aData){
 				if(aData[0]){
 					response.data= aData;
-					__ready=true;
 				}
+				__ready=true;
 			})
 			.fail(function(e){
 				console.log('error',e);
