@@ -14,7 +14,7 @@
 	  <app-header-panel id="hp" on-l-icon-tap="{{ fireBack }}"	licon="menu" ricon="work"
 						titulo="{{capitulo.Numeral+': ' +capitulo.Titulo +'-'+ capitulo.Estandar}}"
 						tclass="text">
-		  <div class="card" layout vertical  hidden?="{{selected!='0'}}">	  
+		  <div class="card" layout vertical  hidden?="{{selected!='0' || !capitulo.Preguntas.length}}">	  
 			  <div class="card-header" layout horizontal center>
 				  <paper-fab icon="chevron-left" on-tap="{{ prevTap }}" 
 							 class="navicon"
@@ -50,7 +50,6 @@
 	  Polymer({
 		  index:0,
 		  selected:'-1',
-		  
 		  observe: {
 			  'cuestionario.Descarga.Estado': 'updateEstado',
 			  'capitulo.Current':'updateQuiz'
@@ -87,7 +86,6 @@
 			  else{
 				  this.__next();
 			  }
-			
 		  },
 		  
 		  __next:function(){
@@ -135,7 +133,8 @@
 				  if(this.saveRespuestaGuia){
 					  this.saveRespuestaGuia(self.guia.Respuesta, function(response){
 						  if(response.status==='ok'){
-							  self.guias[self.quiz.currentGuiaIndex].Respuesta = Object.clone(self.guia.Respuesta);
+							  self.guias[self.quiz.currentGuiaIndex].Respuesta =
+								  Object.clone(self.guia.Respuesta);
 						  }
 						  self.__nextGuiaTap(); 
 					  });
@@ -148,7 +147,6 @@
 				  this.__nextGuiaTap();
 			  }
 		  },
-		  
 		  
 		  prevGuiaTap:function(){
 			  if(this.quiz.currentGuiaIndex>0){
@@ -173,9 +171,13 @@
 		  },
 			  
 		  capituloChanged:function(prev, current){
-			  if (this.capitulo){
+			  if (this.capitulo && this.capitulo.Preguntas.length>0){
 				  this.quiz= this.capitulo.Preguntas[this.capitulo.Current].Pregunta;
 				  this.answer= Object.clone(this.capitulo.Preguntas[this.capitulo.Current].Respuesta);
+			  }
+			  else{
+				  this.quiz={};
+				  this.answer={};
 			  }
 		  },
 		  updateEstado:function(oldValue, newValue){
@@ -184,8 +186,14 @@
 		  },
 		  
 		  updateQuiz:function(oldValue, newValue){
-			  this.quiz= this.capitulo.Preguntas[this.capitulo.Current].Pregunta;
-			  this.answer= Object.clone(this.capitulo.Preguntas[this.capitulo.Current].Respuesta);
+			  if(this.capitulo.Preguntas.length>0){
+				  this.quiz= this.capitulo.Preguntas[this.capitulo.Current].Pregunta;
+				  this.answer= Object.clone(this.capitulo.Preguntas[this.capitulo.Current].Respuesta);
+			  }
+			  else{
+				  this.quiz={};
+				  this.answer={};
+			  }
 		  },
 		  
 		  quizChanged:function(){
@@ -193,6 +201,5 @@
 		  }
 		  		  
     });
-		/* v1.0*/
 	</script>
 </polymer-element>
