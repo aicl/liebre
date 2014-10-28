@@ -52,6 +52,7 @@
 			  }
 		  },
 		  ready:function(){
+			  this.$.hp.ri.disabled= !navigator.onLine;
 			  this.$.qdi.handlerOkTap=this.handlerSaveDownload.bind(this);
 			  this.$.qs.handlerShowCapitulos= this.handlerShowCapitulos.bind(this);
 			  this.$.qs.handlerUpdateCuestionario=this.handlerUpdateCuestionario.bind(this);

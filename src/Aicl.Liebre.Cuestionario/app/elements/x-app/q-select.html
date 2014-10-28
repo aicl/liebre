@@ -32,10 +32,11 @@
 				return this._current;
 			},
 			ready:function(){
+				this.off= !navigator.onLine;
 				this.$.dlg.handlerOkTap=this._delegateStartUpload.bind(this);
 				this.$.dlgb.handlerOkTap=this._delegateDelete.bind(this);
 				window.addEventListener('online',  this.updateOnlineStatus.bind(this));
-				window.addEventListener('offline', this.updateOnlineStatus.bind(this)); 
+				window.addEventListener('offline', this.updateOnlineStatus.bind(this));
 			},
 			updateOnlineStatus: function (event) {
 				this.off= !navigator.onLine;
