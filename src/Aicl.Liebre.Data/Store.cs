@@ -134,7 +134,7 @@ namespace Aicl.Liebre.Data
 				throw new Exception("No existe informacion para el token:'{0}'".Fmt(request.Token));
 			}
 
-			if (response.Descarga.Estado == "red" || response.Descarga.Estado=="yellow") {
+			if (response.Descarga.Estado != "grey") {
 				throw new Exception("No disponible Cuestionario con el token:'{0}'. Estado:'{1}'"
 					.Fmt(request.Token, response.Descarga.Estado));
 			}

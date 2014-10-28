@@ -26,7 +26,8 @@
 				  </paper-fab>
 			  </div>
 			  <cuestionario-quiz-card pregunta="{{ quiz }}" respuesta="{{ answer }}" 
-						 on-quiz-answered="{{quizAnswered}}">
+						 on-quiz-answered="{{quizAnswered}}"
+									  estado="{{estado}}">
 			  </cuestionario-quiz-card>  
 		  </div>
 		  <div class="card" layout vertical hidden?="{{selected!='1'}}">
@@ -39,7 +40,8 @@
 				  <paper-fab icon="check" on-tap="{{ nextGuiaTap }} " class="navicon">
 				  </paper-fab>
 			  </div>
-			  <cuestionario-guia-card pregunta="{{guia.Guia}}" respuesta="{{guia.Respuesta}}" >
+			  <cuestionario-guia-card pregunta="{{guia.Guia}}" respuesta="{{guia.Respuesta}}"
+									  estado="{{estado}}">
 			  </cuestionario-guia-card>
 		  </div>
 	  </app-header-panel>	  
@@ -184,6 +186,7 @@
 		  updateEstado:function(oldValue, newValue){
 			  console.log("updateEstado preguuntas", newValue)
 			  this.$.hp.ri.setAttribute("estado", newValue);
+			  this.estado=newValue;
 		  }
     });
 	</script>

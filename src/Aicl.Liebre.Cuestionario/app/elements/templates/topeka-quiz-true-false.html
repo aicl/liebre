@@ -11,7 +11,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../../bower_components/core-selector/core-selector.html">
 <link rel="import" href="../../bower_components/paper-button/paper-button.html">
 
-<polymer-element name="topeka-quiz-true-false" extends="topeka-quiz-base" noscript>
+<polymer-element name="topeka-quiz-true-false" extends="topeka-quiz-base"  noscript>
 <template>
 
   <style>
@@ -31,13 +31,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     paper-button[raised].core-selected.false {
       background: #ff5252;
       color: #f1f1f1;
+	  font-size: 16px;	
     }
     
-    paper-button[raised].core-selected.true {
+    paper-button[raised].core-selected.true{
       background: #00e676;
       color: #f1f1f1;
+	  font-size: 16px;
     }
-
+	
     paper-button[raised]::shadow #ripple {
       /*color: #03a9f4;*/
     }
@@ -82,8 +84,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
  <shadow></shadow>
   <div horizontal layout center center-justified layout>
     <core-selector selected="{{value}}" horizontal layout>
-      <paper-button raised isToggle class="false" disabled?="{{rb.checked}}">No</paper-button>
-      <paper-button raised isToggle class="true" disabled?="{{rb.checked}}">Si</paper-button>
+      <paper-button raised isToggle class="false" disabled?="{{rb.checked || estado!='red'}}">No</paper-button>
+      <paper-button raised isToggle class="true" disabled?="{{rb.checked || estado!='red'}}">Si</paper-button>
     </core-selector>
   </div>
   

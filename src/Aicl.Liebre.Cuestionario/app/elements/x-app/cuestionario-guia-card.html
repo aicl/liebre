@@ -2,7 +2,7 @@
 <link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../templates/topeka-quiz-multiline.html">
 
-<polymer-element name="cuestionario-guia-card" attributes="pregunta,respuesta">
+<polymer-element name="cuestionario-guia-card" attributes="pregunta,respuesta,estado">
   <template>
     <style></style>
     <div class="guia-header" layout horizontal>
@@ -12,6 +12,7 @@
     <div class="guia-detalle" on-quiz-answered="{{ quizAnswered }}" >
 		<topeka-quiz-multiline id="quiz" name="multiline" quiz="{{ pregunta }}" 
 								value="{{ respuesta.Valor }}"
+							    estado="{{estado}}"
 								noAplicaChecked="{{ respuesta.NoAplicaChecked }}">
 		</topeka-quiz-multiline>	
 	</div>
