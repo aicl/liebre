@@ -145,3 +145,8 @@ body /deep/ core-icon-button[estado='grey'], body /deep/ paper-icon-button[estad
 	color:grey;
 }
 
+body /deep/ paper-icon-button[disabled]{
+	pointer-events: none;
+	color: gray;
+	opacity: 0.6;
+}

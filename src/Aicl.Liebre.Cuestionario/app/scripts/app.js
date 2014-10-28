@@ -145,7 +145,7 @@
 				return;
 			}
 			(function(){
-				var times=10;
+				var times=500;
 				var tId = setInterval(function() {
 					if (self.__ready) {
 						onReady();
@@ -170,8 +170,7 @@
 		};
 		return IndexStorage;
 	})();
-		
-	
+			
 	window.liebre.tools.encodeQ=function(value){
 		return value;
 		/*if(typeof value === 'number') {
@@ -244,6 +243,23 @@
 		}
 		return new Date(parseFloat(/Date\(([^)]+)\)/.exec(v)[1])); // thanks demis bellot!
 		
+	};
+	
+	window.liebre.tools.isBsonNumberLong=function(v){
+		return /^NumberLong\("([^)]+)"\)/.test(v);
+	};
+	
+	window.liebre.tools.parseBsonNumberLong=function(v){
+		return JSON.parse(/^NumberLong\("([^)]+)"\)/.exec(v)[1]);
+	};
+	
+	window.liebre.tools.parseQ=function(v){
+		var _v = decodeURI(v);
+		var fn = JSON.parse;
+		if(window.liebre.tools.isBsonNumberLong(_v)){
+			fn= window.liebre.tools.parseBsonNumberLong;
+		}
+		return fn(_v);
 	};
 	
 	window.liebre.tools.formatDate= function(value) {
@@ -394,7 +410,7 @@
 				keyPath:['Respuesta.IdDiagnostico','Pregunta.IdCapitulo']
 			}]
 		},{
-			name: 'Descarga',    // required. object store name or TABLE name // cambiar a 'Cuestionario'
+			name: 'Cuestionario',    // required. object store name or TABLE name // cambiar a 'Cuestionario'
 			keyPath: 'Descarga.Token',    // keyPath.
 			autoIncrement: false, // if true, key will be automatically created
 			indexes: [{
@@ -406,9 +422,9 @@
 		}]
 	};
 	
-	window.liebre._storage= new window.liebre.IndexStorage('sgsst-test', schema);
+	window.liebre._storage= new window.liebre.IndexStorage('sgsst-q', schema);
 	window.liebre._storage.open();
-	//
+	
 	window.liebre.deleteCuestionario=function(cuestionario, complete){
 		complete=complete||function(){};
 		window.liebre._storage.execute(function(db){
@@ -427,7 +443,7 @@
 			.done(function(){
 				db.remove('Guia',  kv)
 				.done(function(){
-					db.remove('Descarga', cuestionario.Descarga.Token)
+					db.remove('Cuestionario', cuestionario.Descarga.Token)
 					.done(function(){
 						__ready=true;
 					})
@@ -630,7 +646,7 @@
 				msg: 'Cuestionarios OK',
 				data:[]
 			};
-			db.values('Descarga')
+			db.values('Cuestionario')
 			.done(function(aData){
 				if(aData[0]){
 					response.data= aData;					
@@ -672,7 +688,7 @@
 				msg: 'Custionario Actualizado OK',
 				data:[]
 			};
-			db.put('Descarga', cuestionario)
+			db.put('Cuestionario', cuestionario)
 			.done(function(key){
 				response.data= key;
 				__ready=true;
@@ -838,28 +854,29 @@
 			
 			for (var g in data.Guias){
 				if(data.Guias[g].Respuesta.Valor){
-					data.Guias[g].Respuesta.Valor=JSON.parse(decodeURI(data.Guias[g].Respuesta.Valor));
+					console.log('Respuesta.Valor', data.Guias[g].Respuesta.Valor); 
+					data.Guias[g].Respuesta.Valor= window.liebre.tools.parseQ(data.Guias[g].Respuesta.Valor);
 				}
 			}
 						
 			var kv= window.ydn.db.KeyRange.only(data.Diagnostico.Id);
-			db.values('Descarga','Diagnostico.Id',  kv)
+			db.values('Cuestionario','Diagnostico.Id',  kv)
 			.done(function(aData){
 				var r =aData[0];
 				if(!r){
-					db.put('Descarga',data)
+					db.put('Cuestionario',data)
 					.done(function(){
 						db.put('Guia', data.Guias)
 						.done(function(){
 							data.Guias=[];
-							db.put('Descarga', data);
+							db.put('Cuestionario', data);
 							db.put('Pregunta', data.Preguntas)
 							.done(function(){
 								data.Descarga.Estado='red';
 								data.Preguntas=[];
-								db.put('Descarga', data)
+								db.put('Cuestionario', data)
 								.done(function(){response.data=data;  __ready=true;})
-								.fail(function(e){ doError('Instalacion fallida! (Descarga Read)',e);});
+								.fail(function(e){ doError('Instalacion fallida! (Cuestionario put)',e);});
 							})
 							.fail(function(e){
 								doError('Instalacion fallida! (Preguntas)',e);
@@ -870,11 +887,11 @@
 						});
 					})
 					.fail(function(e) {
-						doError('Instalacion fallida! (Descarga).',e);
+						doError('Instalacion fallida! (Cuestionario).',e);
 					});
 				}
 				else{
-					doError('Instalacion fallida! Borre la Descarga con id:'+ data.Descarga.Id);
+					doError('Instalacion fallida! Borre el Cuestionario con id:'+ data.Descarga.Id);
 				}
 			})
 			.fail(function(e){

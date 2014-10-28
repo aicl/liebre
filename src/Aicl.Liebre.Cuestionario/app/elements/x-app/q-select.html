@@ -12,7 +12,7 @@
 					  <core-icon-button icon="delete" on-tap="{{ handlerShowDelete }}"></core-icon-button>
 					  <core-icon-button  icon="create"  on-tap="{{ delegateShowCapitulos }}"></core-icon-button>
 					  <core-icon-button  icon="cloud-upload"
-										disabled?="{{item.Descarga.Estado!='red'}}"
+										disabled?="{{item.Descarga.Estado!='red' || off}}"
 										on-tap="{{ handlerShowUpload }}"></core-icon-button>
 				  </div>
 				  <div class="titulo">{{item.Diagnostico.Descripcion}}</div>
@@ -34,6 +34,11 @@
 			ready:function(){
 				this.$.dlg.handlerOkTap=this._delegateStartUpload.bind(this);
 				this.$.dlgb.handlerOkTap=this._delegateDelete.bind(this);
+				window.addEventListener('online',  this.updateOnlineStatus.bind(this));
+				window.addEventListener('offline', this.updateOnlineStatus.bind(this)); 
+			},
+			updateOnlineStatus: function (event) {
+				this.off= !navigator.onLine;
 			},
 			delegateShowCapitulos:function(event, detail, sender){
 				this._current=sender.templateInstance.model.item;

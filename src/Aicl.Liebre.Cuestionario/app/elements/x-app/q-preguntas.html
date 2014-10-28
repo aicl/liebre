@@ -11,7 +11,7 @@
 <polymer-element name="q-preguntas" attributes="capitulo, selected">
   <template>
     <style></style>
-	  <app-header-panel id="hp" on-l-icon-tap="{{ fireBack }}"	licon="arrow-back" ricon="work"
+	  <app-header-panel id="hp" on-l-icon-tap="{{ fireBack }}"	licon="menu" ricon="work"
 						titulo="{{capitulo.Numeral+': ' +capitulo.Titulo +'-'+ capitulo.Estandar}}"
 						tclass="text">
 		  <div class="card" layout vertical  hidden?="{{selected!='0'}}">	  
@@ -34,9 +34,9 @@
 			  <div class="card-header" layout horizontal center >
 				  <paper-fab icon="chevron-left" on-tap="{{ prevGuiaTap }}" 
 							 class="navicon"
-							 no-visible?="{{currentGuiaIndex<=0}}">
+							 no-visible?="{{quiz.currentGuiaIndex<=0}}">
 				  </paper-fab>
-				  <div flex layout vertical center> Guia {{currentGuiaIndex+1}} de {{guias.length}}</div>
+				  <div flex layout vertical center> Guia {{quiz.currentGuiaIndex+1}} de {{guias.length}}</div>
 				  <paper-fab icon="check" on-tap="{{ nextGuiaTap }} " class="navicon">
 				  </paper-fab>
 			  </div>
@@ -52,14 +52,15 @@
 		  selected:'-1',
 		  
 		  observe: {
-			  'cuestionario.Descarga.Estado': 'updateEstado'
+			  'cuestionario.Descarga.Estado': 'updateEstado',
+			  'capitulo.Current':'updateQuiz'
 		  },
 
 		  created:function(){
 			  this.quiz={};
 			  this.answer={};
 			  this.guia={Guia:{}, Respuesta:{}};
-			  this.currentGuiaIndex=0;
+			  this.quiz.currentGuiaIndex=0;
 			  this.guias=[];
 		  },
 		  
@@ -97,7 +98,7 @@
 					  this.getGuias(self.cuestionario, self.quiz.IdGuias, function(response){
 						  if(response.status==='ok'){
 							  self.guias=response.data;
-							  self.guia= Object.clone(self.guias[self.currentGuiaIndex]);
+							  self.guia= Object.clone(self.guias[self.quiz.currentGuiaIndex]);
 							  self.selected="1";
 							  //self.$.guia.toggle();
 						  }
@@ -115,13 +116,9 @@
 		  __next__:function(){
 			  if( this.capitulo.Current < (this.capitulo.Preguntas.length-1)) {
 				  this.capitulo.Current= this.capitulo.Current+1;
-				  this.quiz= this.capitulo.Preguntas[this.capitulo.Current].Pregunta;
-				  this.answer= Object.clone(this.capitulo.Preguntas[this.capitulo.Current].Respuesta);
 			  }
 			  else{
 				  this.capitulo.Current=0;
-				  this.quiz= this.capitulo.Preguntas[this.capitulo.Current].Pregunta;
-				  this.answer= Object.clone(this.capitulo.Preguntas[this.capitulo.Current].Respuesta);
 			  	  this.fireBackTap();
 			  }
 		  },
@@ -129,18 +126,16 @@
 		  prevTap:function(event, detail, sender){
 			  if( this.capitulo.Current >0) {
 				  this.capitulo.Current= this.capitulo.Current-1;
-				  this.quiz= this.capitulo.Preguntas[this.capitulo.Current].Pregunta;
-				  this.answer= Object.clone(this.capitulo.Preguntas[this.capitulo.Current].Respuesta);
 			  }
 		  },
 		  
 		  nextGuiaTap:function(){
-			  if(!Object.compare(this.guias[this.currentGuiaIndex].Respuesta, this.guia.Respuesta)){
+			  if(!Object.compare(this.guias[this.quiz.currentGuiaIndex].Respuesta, this.guia.Respuesta)){
 				  var self=this;
 				  if(this.saveRespuestaGuia){
 					  this.saveRespuestaGuia(self.guia.Respuesta, function(response){
 						  if(response.status==='ok'){
-							  self.guias[self.currentGuiaIndex].Respuesta = Object.clone(self.guia.Respuesta);
+							  self.guias[self.quiz.currentGuiaIndex].Respuesta = Object.clone(self.guia.Respuesta);
 						  }
 						  self.__nextGuiaTap(); 
 					  });
@@ -156,38 +151,48 @@
 		  
 		  
 		  prevGuiaTap:function(){
-			  if(this.currentGuiaIndex>0){
-				  this.currentGuiaIndex-=1;
-				  this.guia= Object.clone(this.guias[this.currentGuiaIndex]);
+			  if(this.quiz.currentGuiaIndex>0){
+				  this.quiz.currentGuiaIndex-=1;
+				  this.guia= Object.clone(this.guias[this.quiz.currentGuiaIndex]);
 			  }
 			  
 		  },
 		  
 		  __nextGuiaTap:function(){
-			  if(this.currentGuiaIndex+1== this.guias.length){
-				  this.currentGuiaIndex=0;
-				  this.guia= Object.clone(this.guias[this.currentGuiaIndex]);
+			  if(this.quiz.currentGuiaIndex+1== this.guias.length){
+				  this.quiz.currentGuiaIndex=0;
+				  this.guia= Object.clone(this.guias[this.quiz.currentGuiaIndex]);
 				  this.selected="0";
 				  //this.$.guia.toggle();
 				  this.__next__();
 				  return;
 			  }
-			  this.currentGuiaIndex+=1;
-			  this.guia= Object.clone(this.guias[this.currentGuiaIndex]);
+			  this.quiz.currentGuiaIndex+=1;
+			  this.guia= Object.clone(this.guias[this.quiz.currentGuiaIndex]);
 			  
 		  },
 			  
 		  capituloChanged:function(prev, current){
 			  if (this.capitulo){
-			  this.quiz= this.capitulo.Preguntas[this.capitulo.Current].Pregunta;
-			  this.answer= Object.clone(this.capitulo.Preguntas[this.capitulo.Current].Respuesta);
+				  this.quiz= this.capitulo.Preguntas[this.capitulo.Current].Pregunta;
+				  this.answer= Object.clone(this.capitulo.Preguntas[this.capitulo.Current].Respuesta);
 			  }
 		  },
 		  updateEstado:function(oldValue, newValue){
-			  console.log("updateEstado preguuntas", newValue)
 			  this.$.hp.ri.setAttribute("estado", newValue);
 			  this.estado=newValue;
+		  },
+		  
+		  updateQuiz:function(oldValue, newValue){
+			  this.quiz= this.capitulo.Preguntas[this.capitulo.Current].Pregunta;
+			  this.answer= Object.clone(this.capitulo.Preguntas[this.capitulo.Current].Respuesta);
+		  },
+		  
+		  quizChanged:function(){
+			  this.quiz.currentGuiaIndex= this.quiz.currentGuiaIndex||0;
 		  }
+		  		  
     });
+		/* v1.0*/
 	</script>
 </polymer-element>

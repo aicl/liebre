@@ -5,7 +5,7 @@
 <polymer-element name="q-capitulos">
   <template>
     <style></style>
-	  <app-header-panel id="hp" on-l-icon-tap="{{ fireBack }}"	licon="arrow-back" ricon="work"
+	  <app-header-panel id="hp" on-l-icon-tap="{{ fireBack }}"	licon="menu" ricon="work"
 						titulo="{{cuestionario.Diagnostico.Descripcion}}">
 		  <div layout vertical center>
 				  <core-selector class="list"  layout vertical>
@@ -44,7 +44,6 @@
 			}
 		},
 		updateEstado:function(oldValue, newValue){
-			console.log("updateEstado", newValue)
 			this.$.hp.ri.setAttribute("estado", newValue);
 		}
 	});

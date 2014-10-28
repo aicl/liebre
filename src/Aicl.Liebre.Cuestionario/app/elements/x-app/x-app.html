@@ -12,7 +12,7 @@
 	  <flatiron-director route="{{route}}" autoHash></flatiron-director>
 	  <core-pages selected="{{route}}" valueattr="hash">
 		  <div hash="" class="page">      
-			  <app-header-panel id="menuPanel" on-l-icon-tap="{{ fireBack }}"
+			  <app-header-panel id="hp" on-l-icon-tap="{{ fireBack }}"
 								licon="menu" ricon="cloud-download"
 								on-r-icon-tap="{{handlerShowDownload}}"
 								titulo="Cuestionarios SGSST">
@@ -61,6 +61,9 @@
 			  this.$.qp.getGuias=  this.getGuias.bind(this);
 			  this.$.qp.saveRespuestaGuia=  this.saveRespuestaGuia.bind(this);
 			  
+			  window.addEventListener('online',  this.updateOnlineStatus.bind(this));
+			  window.addEventListener('offline', this.updateOnlineStatus.bind(this)); 
+			  			  
 			  this.$.wl.display="block";
 			  window.liebre.getCuestionarios(function(response){
 				  this.$.wl.display="none";
@@ -74,6 +77,10 @@
 			  }.bind(this));
 		  },
 		  
+		  updateOnlineStatus: function (event) {
+			 this.$.hp.ri.disabled= !navigator.onLine;
+		  },
+		  
 		  handlerUpdateCuestionario:function(event, detail, sender){
 			  var cuestionario = detail.item;
 			  this.$.wl.display="block";
@@ -83,15 +90,14 @@
 					  this.$.te.text= response.msg;
 					  this.$.te.show();
 					  return;
-				  }	  
+				  }
+				  this.$.wl.display="block";
 				  window.liebre.remote.updateCuestionario({
 					  Descarga:cuestionario.Descarga,
 					  Respuestas: response.data.Respuestas,
 					  RespuestasGuias: response.data.RespuestasGuias
-				  }, this.rqUpdateCuestionario);
-				  
+				  }, this.rqUpdateCuestionario); 
 			  }.bind(this));
-			  
 		  },
 		  
 		  handlerDeleteCuestionario:function(evetn, detail, sender){
