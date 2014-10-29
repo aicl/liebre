@@ -2,10 +2,9 @@
   "name": "liebre",
   "version": "0.0.0",
   "dependencies": {
-    "core-elements": "Polymer/core-elements#~0.4.1",
-    "paper-elements": "Polymer/paper-elements#~0.4.1",
-    "polymer": "Polymer/polymer#~0.4.1",
-    "flatiron-director": "Polymer/flatiron-director"
+    "core-elements": "Polymer/core-elements#~0.4.2",
+    "paper-elements": "Polymer/paper-elements#~0.4.2",
+    "polymer": "Polymer/polymer#~0.4.2"
   },
   "devDependencies": {}
 }
