@@ -1,30 +1,23 @@
-<link rel="import" href="../../bower_components/polymer/polymer.html">
-<link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
-<link rel="import" href="../templates/topeka-quiz-multiline.html">
-
+<link rel="import" href="../templates/q-texto-multilinea.html">
 <polymer-element name="cuestionario-guia-card" attributes="pregunta,respuesta,estado">
   <template>
     <style></style>
     <div class="guia-header" layout horizontal>
 			  <div class="guia-titulo">{{pregunta.Enunciado}}</div>
     </div>
-	
     <div class="guia-detalle" on-quiz-answered="{{ quizAnswered }}" >
-		<topeka-quiz-multiline id="quiz" name="multiline" quiz="{{ pregunta }}" 
+		<q-texto-multilinea id="quiz" name="multiline" quiz="{{ pregunta }}" 
 								value="{{ respuesta.Valor }}"
 							    estado="{{estado}}"
 								noAplicaChecked="{{ respuesta.NoAplicaChecked }}">
-		</topeka-quiz-multiline>	
+		</q-texto-multilinea>	
 	</div>
-	
   </template>
   <script>
-  Polymer('cuestionario-guia-card', {
-	  
+  Polymer({
 	  quizAnswered:function(){
 		  console.log("quizAnswered value, pregunta, respuesta", this.$.quiz.value, this.pregunta, this.respuesta);
 	  }
-	  
   });
   </script>
 </polymer-element>

@@ -1,0 +1,18 @@
+<link rel="import" href="../common/q-base.html">
+<link rel="import" href="../../bower_components/core-selector/core-selector.html">
+<polymer-element name="q-si-no" extends="q-base"  noscript>
+<template>
+ <style></style>
+ <shadow></shadow>
+  <div horizontal layout center center-justified layout>
+    <core-selector selected="{{value}}" horizontal layout>
+		<span raised class="false" horizontal layout center disabled?="{{rb.checked || estado!='red'}}">
+			<span>No</span>
+		</span>
+		<span raised class="true" horizontal layout center disabled?="{{rb.checked || estado!='red'}}">
+			<span>Si</span>
+		</span>
+    </core-selector>
+  </div>
+</template>
+</polymer-element>

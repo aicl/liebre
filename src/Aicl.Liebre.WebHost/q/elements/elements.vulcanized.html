@@ -2625,85 +2625,6 @@ you should ensure that the `aria-label` attribute is set.
 </polymer-element>
 
 
-
-<!--
-Copyright (c) 2014 The Polymer Project Authors. All rights reserved.
-This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
-The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
-The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
-Code distributed by Google as part of the polymer project is also
-subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
--->
-
-<!--
-Copyright (c) 2014 The Polymer Project Authors. All rights reserved.
-This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
-The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
-The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
-Code distributed by Google as part of the polymer project is also
-subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
--->
-
-<!--
-Copyright (c) 2014 The Polymer Project Authors. All rights reserved.
-This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
-The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
-The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
-Code distributed by Google as part of the polymer project is also
-subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
--->
-
-<!--
-`paper-toggle-button` provides a ON/OFF switch that user can toggle the state
-by tapping or by dragging the swtich.
-
-Example:
-
-    <paper-toggle-button></paper-toggle-button>
-
-Styling toggle button:
-
-To change the ink color for checked state:
-
-    paper-toggle-button::shadow paper-radio-button::shadow #ink[checked] {
-      color: #4285f4;
-    }
-    
-To change the radio checked color:
-    
-    paper-toggle-button::shadow paper-radio-button::shadow #onRadio {
-      background-color: #4285f4;
-    }
-    
-To change the bar color for checked state:
-
-    paper-toggle-button::shadow #toggleBar[checked] {
-      background-color: #4285f4;
-    }
-    
-To change the ink color for unchecked state:
-
-    paper-toggle-button::shadow paper-radio-button::shadow #ink {
-      color: #b5b5b5;
-    }
-    
-To change the radio unchecked color:
-    
-    paper-toggle-button::shadow paper-radio-button::shadow #offRadio {
-      border-color: #b5b5b5;
-    }
-
-To change the bar color for unchecked state:
-
-    paper-toggle-button::shadow #toggleBar {
-      background-color: red;
-    }
-
-@group Paper Elements
-@element paper-toggle-button
-@homepage github.io
--->
-
 <!--
 Copyright (c) 2014 The Polymer Project Authors. All rights reserved.
 This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
@@ -2864,139 +2785,31 @@ Keys Syntax Grammar:
 <script>Polymer("paper-radio-button",{publish:{checked:{value:false,reflect:true},label:"",toggles:false,disabled:{value:false,reflect:true}},eventDelegates:{tap:"tap"},tap:function(){var old=this.checked;this.toggle();if(this.checked!==old){this.fire("change")}},toggle:function(){this.checked=!this.toggles||!this.checked},checkedChanged:function(){this.$.onRadio.classList.toggle("fill",this.checked);this.setAttribute("aria-checked",this.checked?"true":"false");this.fire("core-change")},labelChanged:function(){this.setAttribute("aria-label",this.label)}});</script>
 </polymer-element>
 
-
-<polymer-element name="paper-toggle-button" attributes="checked" role="button" aria-pressed="false" tabindex="0" assetpath="../bower_components/paper-toggle-button/">
+<polymer-element name="q-base" attributes="quiz,value,noAplicaChecked,estado" block="" assetpath="common/">
 <template>
-
-  <style>:host{display:inline-block}:host(:focus){outline:0}#toggleContainer{position:relative;width:64px;height:16px}#toggleBar{position:absolute;top:8px;left:16px;height:1px;width:32px;background-color:#5a5a5a;pointer-events:none}#toggleBar[checked]{background-color:#0f9d58}#toggleContainer[checked] #checkedBar{width:100%}#toggleRadio{position:absolute;left:0;padding:8px 48px 8px 0;margin:-8px -48px -8px 0;transition:-webkit-transform linear .08s;transition:transform linear .08s}#toggleRadio[checked]{-webkit-transform:translate(48px,0);transform:translate(48px,0);padding:8px 0 8px 48px;margin:-8px 0 -8px -48px}#toggleRadio.dragging{-webkit-transition:none;transition:none}</style>
-
-  <div id="toggleContainer">
-  
-    <div id="toggleBar" checked?="{{checked}}"></div>
-  
-    <paper-radio-button id="toggleRadio" toggles="" checked="{{checked}}" on-change="{{changeAction}}" on-core-change="{{stopPropagation}}" on-trackstart="{{trackStart}}" on-trackx="{{trackx}}" on-trackend="{{trackEnd}}"></paper-radio-button>
-    
-  </div>
-
+  <style></style>
+	<div layout="" horizontal="" center="" no-visible?="{{ !quiz.NoAplicaDisponible }}">
+		<paper-radio-button id="rb" toggles="" class="blue" checked="{{noAplicaChecked}}"></paper-radio-button> 
+		<div id="na" flex="">No Aplica</div>
+	</div>
 </template>
-<script>Polymer("paper-toggle-button",{checked:false,trackStart:function(e){this._w=this.$.toggleBar.offsetLeft+this.$.toggleBar.offsetWidth;e.preventTap()},trackx:function(e){this._x=Math.min(this._w,Math.max(0,this.checked?this._w+e.dx:e.dx));this.$.toggleRadio.classList.add("dragging");var s=this.$.toggleRadio.style;s.webkitTransform=s.transform="translate3d("+this._x+"px,0,0)"},trackEnd:function(){var s=this.$.toggleRadio.style;s.transform=s.webkitTransform="";this.$.toggleRadio.classList.remove("dragging");var old=this.checked;this.checked=Math.abs(this._x)>this._w/2;if(this.checked!==old){this.fire("change")}},checkedChanged:function(){this.setAttribute("aria-pressed",Boolean(this.checked));this.fire("core-change")},changeAction:function(e){e.stopPropagation();this.fire("change")},stopPropagation:function(e){e.stopPropagation()}});</script>
+<script>(function(){Polymer("q-base",{eventDelegates:{tap:"answered",keypress:"keyPress"},answered:function(event,detail,source){if(this.$.rb.checked){this.value=null}this.fire("quiz-answered")},reset:function(){this.value=null},keyPress:function(e){if(e.keyCode===13){this.fire("quiz-next");e.preventDefault()}}})})();</script>
 </polymer-element>
 
-
-<polymer-element name="topeka-quiz-base" attributes="quiz,value,noAplicaChecked,estado" block="" assetpath="common/">
+<polymer-element name="q-si-no" extends="q-base" noscript="" assetpath="templates/">
 <template>
-
-  <style>:host{padding:10px 6px}:host-context(.wide){padding:10px 14px 18px}#na{padding-left:10px}</style>
-	
-		<div layout="" horizontal="" center="" style="visibility:{{ quiz.NoAplicaDisponible?&apos;visible&apos;:&apos;hidden&apos; }};padding-left: 10px;">
-			<paper-radio-button id="rb" toggles="" class="blue" checked="{{noAplicaChecked}}">
-			</paper-radio-button> 
-			<div id="na" flex="">No Aplica</div>
-		</div>
-	
-</template>
-<script>(function(){var DEFAULT_POINT=8;Polymer("topeka-quiz-base",{eventDelegates:{tap:"answered",keypress:"keyPress"},isCorrect:function(){return this.value==this.quiz.answer},getScore:function(){return this.isCorrect()?this.quiz.point||DEFAULT_POINT:0},answered:function(event,detail,source){console.log("noAplicaChecked",this.noAplicaChecked);if(this.$.rb.checked){this.value=null}this.fire("quiz-answered")},reset:function(){this.value=null},keyPress:function(e){if(e.keyCode===13){this.fire("quiz-next");e.preventDefault()}}})})();</script>
-</polymer-element>
-
-<!--
-Copyright (c) 2014 The Polymer Project Authors. All rights reserved.
-This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
-The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
-The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
-Code distributed by Google as part of the polymer project is also
-subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
--->
-
-<!--
-@group Paper Elements
-
-Material Design: <a href="http://www.google.com/design/spec/components/buttons.html">Buttons</a>
-
-`paper-button` is a button. When the user touches the button, a ripple effect emanates
-from the point of contact. It may be flat or raised. A raised button is styled with a
-shadow.
-
-Example:
-
-    <paper-button>flat button</paper-button>
-    <paper-button raised>raised button</paper-button>
-
-You may use custom DOM in the button body to create a variety of buttons. For example, to
-create a button with an icon and some text:
-
-    <paper-button>
-      <core-icon icon="favorite">
-      custom button content
-    </paper-button>
-
-Styling
--------
-
-Style the button with CSS as you would a normal DOM element.
-
-    /* make #my-button green with yellow text */
-    #my-button {
-        background: green;
-        color: yellow;
-    }
-
-By default, the ripple is the same color as the foreground at 25% opacity. You may
-customize the color using this selector:
-
-    /* make #my-button use a blue ripple instead of foreground color */
-    #my-button::shadow #ripple {
-      color: blue;
-    }
-
-The opacity of the ripple is not customizable via CSS.
-
-@element paper-button
-@extends paper-button-base
-@status unstable
--->
-
-
-
-
-
-
-
-
-<polymer-element name="paper-button" extends="paper-button-base" attributes="raised recenteringTouch fill" role="button" assetpath="../bower_components/paper-button/">
-
-  <template>
-
-    <style>:host{display:inline-block;position:relative;box-sizing:border-box;min-width:5.14em;padding:.7em .57em;margin:0 .29em;background:0 0;text-align:center;font:inherit;text-transform:uppercase;outline:0;border-radius:3px;-webkit-user-select:none;user-select:none;cursor:pointer;z-index:0}:host([disabled]){background:#eaeaea!important;color:#a8a8a8!important;cursor:auto;pointer-events:none}::content *{text-transform:inherit}#ripple{pointer-events:none;z-index:-1}</style>
-
-    <template if="{{raisedButton || raised}}">
-      <paper-shadow id="shadow" z="{{z}}" animated=""></paper-shadow>
-    </template>
-
-    <!-- this div is needed to position the ripple behind text content -->
-    <div relative="">
-      <content></content>
-      {{label}}
-    </div>
-
-  </template>
-
-  <script>Polymer("paper-button",{publish:{label:"",raised:false,raisedButton:false,recenteringTouch:false,fill:true},labelChanged:function(){if(this.label){console.warn('The "label" property is deprecated.')}},raisedButtonChanged:function(){if(this.raisedButton){console.warn('The "raisedButton" property is deprecated.')}}});</script>
-</polymer-element>
-
-
-<polymer-element name="topeka-quiz-true-false" extends="topeka-quiz-base" noscript="" assetpath="templates/">
-<template>
-
-  <style>paper-button[raised]{font-size:14px;font-weight:400;width:80px;height:40px;margin:25px 12px;fill:#616161;background:#f5f5f5;color:#616161;position:relative}paper-button[raised].core-selected.false{background:#ff5252;color:#f1f1f1;font-size:16px}paper-button[raised].core-selected.true{background:#00e676;color:#f1f1f1;font-size:16px}paper-button[raised]::shadow #clip{position:absolute;top:0;right:0;bottom:0;left:0;display:-ms-flexbox;display:-webkit-flex;display:flex;-ms-flex-align:center;-webkit-align-items:center;align-items:center;-ms-flex-pack:center;-webkit-justify-content:center;justify-content:center}paper-button::shadow #focusBg{-webkit-animation:none!important;animation:none!important}</style>
-  
+ <style></style>
  <shadow></shadow>
   <div horizontal="" layout="" center="" center-justified="">
     <core-selector selected="{{value}}" horizontal="" layout="">
-      <paper-button raised="" istoggle="" class="false" disabled?="{{rb.checked || estado!=&apos;red&apos;}}">No</paper-button>
-      <paper-button raised="" istoggle="" class="true" disabled?="{{rb.checked || estado!=&apos;red&apos;}}">Si</paper-button>
+		<span raised="" class="false" horizontal="" layout="" center="" disabled?="{{rb.checked || estado!=&apos;red&apos;}}">
+			<span>No</span>
+		</span>
+		<span raised="" class="true" horizontal="" layout="" center="" disabled?="{{rb.checked || estado!=&apos;red&apos;}}">
+			<span>Si</span>
+		</span>
     </core-selector>
   </div>
-  
 </template>
 </polymer-element>
 <polymer-element name="cuestionario-quiz-card" attributes="pregunta,respuesta,estado" assetpath="x-app/">
@@ -3006,40 +2819,32 @@ The opacity of the ripple is not customizable via CSS.
 		<div class="quiz-titulo">{{pregunta.Enunciado}}</div>
     </div>
     <div class="quiz-detalle" on-quiz-answered="{{ quizAnswered }}">
-		<topeka-quiz-true-false id="quiz" name="true-false" quiz="{{ pregunta }}" value="{{ respuesta.Valor }}" estado="{{estado}}" noaplicachecked="{{ respuesta.NoAplicaChecked }}">
-		</topeka-quiz-true-false>
+		<q-si-no id="quiz" name="true-false" quiz="{{ pregunta }}" value="{{ respuesta.Valor }}" estado="{{estado}}" noaplicachecked="{{ respuesta.NoAplicaChecked }}">
+		</q-si-no>
 	</div>
   </template>
   <script>Polymer("cuestionario-quiz-card",{quizAnswered:function(){console.log("quizAnswered value, pregunta, respuesta",this.$.quiz.value,this.pregunta,this.respuesta)}});</script>
 </polymer-element>
 
 
-
-
-
-<polymer-element name="topeka-quiz-multiline" extends="topeka-quiz-base" assetpath="templates/">
+<polymer-element name="q-texto-multilinea" extends="q-base" assetpath="templates/">
 <template>
-
-  <style>:host-context(.wide){width:304px;margin:0 auto}paper-input{width:100%}</style>
-    
-  <paper-input inputvalue="{{value}}" label="Diligenciar..." multiline="" rows="3" disabled="{{estado!=&apos;red&apos;}}"></paper-input>
-  
+	<style></style>
+	<paper-input w100="" inputvalue="{{value}}" label="Diligenciar..." multiline="" rows="3" disabled?="{{estado!=&apos;red&apos;}}">
+	</paper-input>
 </template>
-<script>Polymer("topeka-quiz-multiline",{eventDelegates:{input:"answered"},isCorrect:function(){return this.areEqual(this.value,this.quiz.answer)},areEqual:function(s1,s2){return s1&&s2&&s1.trim().toLowerCase()===s2.trim().toLowerCase()}});</script>
+<script>Polymer("q-texto-multilinea",{eventDelegates:{input:"answered"}});</script>
 </polymer-element>
-
 <polymer-element name="cuestionario-guia-card" attributes="pregunta,respuesta,estado" assetpath="x-app/">
   <template>
     <style></style>
     <div class="guia-header" layout="" horizontal="">
 			  <div class="guia-titulo">{{pregunta.Enunciado}}</div>
     </div>
-	
     <div class="guia-detalle" on-quiz-answered="{{ quizAnswered }}">
-		<topeka-quiz-multiline id="quiz" name="multiline" quiz="{{ pregunta }}" value="{{ respuesta.Valor }}" estado="{{estado}}" noaplicachecked="{{ respuesta.NoAplicaChecked }}">
-		</topeka-quiz-multiline>	
+		<q-texto-multilinea id="quiz" name="multiline" quiz="{{ pregunta }}" value="{{ respuesta.Valor }}" estado="{{estado}}" noaplicachecked="{{ respuesta.NoAplicaChecked }}">
+		</q-texto-multilinea>	
 	</div>
-	
   </template>
   <script>Polymer("cuestionario-guia-card",{quizAnswered:function(){console.log("quizAnswered value, pregunta, respuesta",this.$.quiz.value,this.pregunta,this.respuesta)}});</script>
 </polymer-element>

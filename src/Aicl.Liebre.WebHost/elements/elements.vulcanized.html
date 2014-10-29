@@ -1030,7 +1030,7 @@ Example:
     <paper-ripple></paper-ripple>
 
 `paper-ripple` listens to "down" and "up" events so it would display ripple
-effect when touches on it.  You can also defeat the default behavior and 
+effect when touches on it.  You can also defeat the default behavior and
 manually route the down and up actions to the ripple element.  Note that it is
 important if you call downAction() you will have to make sure to call upAction()
 so that `paper-ripple` would end the animation loop.
@@ -1075,14 +1075,14 @@ Apply `circle` class to make the rippling effect within a circle.
 <polymer-element name="paper-ripple" attributes="initialOpacity opacityDecayVelocity" assetpath="../bower_components/paper-ripple/">
 <template>
 
-  <style>:host{display:block;position:relative}:host-context([noink]){pointer-events:none}#bg,#waves,.wave-container,.wave{pointer-events:none;position:absolute;top:0;left:0;width:100%;height:100%}#bg,.wave{opacity:0}#waves,.wave{overflow:hidden}.wave-container,.wave{border-radius:50%}:host(.circle) #bg,:host(.circle) #waves{border-radius:50%}:host(.circle) .wave-container{overflow:hidden}</style>
+  <style>:host{display:block;position:relative;border-radius:inherit;overflow:hidden}:host-context([noink]){pointer-events:none}#bg,#waves,.wave-container,.wave{pointer-events:none;position:absolute;top:0;left:0;width:100%;height:100%}#bg,.wave{opacity:0}#waves,.wave{overflow:hidden}.wave-container,.wave{border-radius:50%}:host(.circle) #bg,:host(.circle) #waves{border-radius:50%}:host(.circle) .wave-container{overflow:hidden}</style>
 
   <div id="bg"></div>
   <div id="waves">
   </div>
 
 </template>
-<script>(function(){var waveMaxRadius=150;function waveRadiusFn(touchDownMs,touchUpMs,anim){var touchDown=touchDownMs/1e3;var touchUp=touchUpMs/1e3;var totalElapsed=touchDown+touchUp;var ww=anim.width,hh=anim.height;var waveRadius=Math.min(Math.sqrt(ww*ww+hh*hh),waveMaxRadius)*1.1+5;var duration=1.1-.2*(waveRadius/waveMaxRadius);var tt=totalElapsed/duration;var size=waveRadius*(1-Math.pow(80,-tt));return Math.abs(size)}function waveOpacityFn(td,tu,anim){var touchDown=td/1e3;var touchUp=tu/1e3;var totalElapsed=touchDown+touchUp;if(tu<=0){return anim.initialOpacity}return Math.max(0,anim.initialOpacity-touchUp*anim.opacityDecayVelocity)}function waveOuterOpacityFn(td,tu,anim){var touchDown=td/1e3;var touchUp=tu/1e3;var outerOpacity=touchDown*.3;var waveOpacity=waveOpacityFn(td,tu,anim);return Math.max(0,Math.min(outerOpacity,waveOpacity))}function waveDidFinish(wave,radius,anim){var waveOpacity=waveOpacityFn(wave.tDown,wave.tUp,anim);return waveOpacity<.01&&radius>=Math.min(wave.maxRadius,waveMaxRadius)}function waveAtMaximum(wave,radius,anim){var waveOpacity=waveOpacityFn(wave.tDown,wave.tUp,anim);return waveOpacity>=anim.initialOpacity&&radius>=Math.min(wave.maxRadius,waveMaxRadius)}function drawRipple(ctx,x,y,radius,innerAlpha,outerAlpha){if(outerAlpha!==undefined){ctx.bg.style.opacity=outerAlpha}ctx.wave.style.opacity=innerAlpha;var s=radius/(ctx.containerSize/2);var dx=x-ctx.containerWidth/2;var dy=y-ctx.containerHeight/2;ctx.wc.style.webkitTransform="translate3d("+dx+"px,"+dy+"px,0)";ctx.wc.style.transform="translate3d("+dx+"px,"+dy+"px,0)";ctx.wave.style.webkitTransform="scale("+s+","+s+")";ctx.wave.style.transform="scale3d("+s+","+s+",1)"}function createWave(elem){var elementStyle=window.getComputedStyle(elem);var fgColor=elementStyle.color;var inner=document.createElement("div");inner.style.backgroundColor=fgColor;inner.classList.add("wave");var outer=document.createElement("div");outer.classList.add("wave-container");outer.appendChild(inner);var container=elem.$.waves;container.appendChild(outer);elem.$.bg.style.backgroundColor=fgColor;var wave={bg:elem.$.bg,wc:outer,wave:inner,waveColor:fgColor,maxRadius:0,isMouseDown:false,mouseDownStart:0,mouseUpStart:0,tDown:0,tUp:0};return wave}function removeWaveFromScope(scope,wave){if(scope.waves){var pos=scope.waves.indexOf(wave);scope.waves.splice(pos,1);wave.wc.remove()}}var pow=Math.pow;var now=Date.now;if(window.performance&&performance.now){now=performance.now.bind(performance)}function cssColorWithAlpha(cssColor,alpha){var parts=cssColor.match(/^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/);if(typeof alpha=="undefined"){alpha=1}if(!parts){return"rgba(255, 255, 255, "+alpha+")"}return"rgba("+parts[1]+", "+parts[2]+", "+parts[3]+", "+alpha+")"}function dist(p1,p2){return Math.sqrt(pow(p1.x-p2.x,2)+pow(p1.y-p2.y,2))}function distanceFromPointToFurthestCorner(point,size){var tl_d=dist(point,{x:0,y:0});var tr_d=dist(point,{x:size.w,y:0});var bl_d=dist(point,{x:0,y:size.h});var br_d=dist(point,{x:size.w,y:size.h});return Math.max(tl_d,tr_d,bl_d,br_d)}Polymer("paper-ripple",{initialOpacity:.25,opacityDecayVelocity:.8,backgroundFill:true,pixelDensity:2,eventDelegates:{down:"downAction",up:"upAction"},ready:function(){this.waves=[]},downAction:function(e){var wave=createWave(this);this.cancelled=false;wave.isMouseDown=true;wave.tDown=0;wave.tUp=0;wave.mouseUpStart=0;wave.mouseDownStart=now();var rect=this.getBoundingClientRect();var width=rect.width;var height=rect.height;var touchX=e.x-rect.left;var touchY=e.y-rect.top;wave.startPosition={x:touchX,y:touchY};if(this.classList.contains("recenteringTouch")){wave.endPosition={x:width/2,y:height/2};wave.slideDistance=dist(wave.startPosition,wave.endPosition)}wave.containerSize=Math.max(width,height);wave.containerWidth=width;wave.containerHeight=height;wave.maxRadius=distanceFromPointToFurthestCorner(wave.startPosition,{w:width,h:height});wave.wc.style.top=(wave.containerHeight-wave.containerSize)/2+"px";wave.wc.style.left=(wave.containerWidth-wave.containerSize)/2+"px";wave.wc.style.width=wave.containerSize+"px";wave.wc.style.height=wave.containerSize+"px";this.waves.push(wave);if(!this._loop){this._loop=this.animate.bind(this,{width:width,height:height});requestAnimationFrame(this._loop)}},upAction:function(){for(var i=0;i<this.waves.length;i++){var wave=this.waves[i];if(wave.isMouseDown){wave.isMouseDown=false;wave.mouseUpStart=now();wave.mouseDownStart=0;wave.tUp=0;break}}this._loop&&requestAnimationFrame(this._loop)},cancel:function(){this.cancelled=true},animate:function(ctx){var shouldRenderNextFrame=false;var deleteTheseWaves=[];var longestTouchDownDuration=0;var longestTouchUpDuration=0;var lastWaveColor=null;var anim={initialOpacity:this.initialOpacity,opacityDecayVelocity:this.opacityDecayVelocity,height:ctx.height,width:ctx.width};for(var i=0;i<this.waves.length;i++){var wave=this.waves[i];if(wave.mouseDownStart>0){wave.tDown=now()-wave.mouseDownStart}if(wave.mouseUpStart>0){wave.tUp=now()-wave.mouseUpStart}var tUp=wave.tUp;var tDown=wave.tDown;longestTouchDownDuration=Math.max(longestTouchDownDuration,tDown);longestTouchUpDuration=Math.max(longestTouchUpDuration,tUp);var radius=waveRadiusFn(tDown,tUp,anim);var waveAlpha=waveOpacityFn(tDown,tUp,anim);var waveColor=cssColorWithAlpha(wave.waveColor,waveAlpha);lastWaveColor=wave.waveColor;var x=wave.startPosition.x;var y=wave.startPosition.y;if(wave.endPosition){var translateFraction=Math.min(1,radius/wave.containerSize*2/Math.sqrt(2));x+=translateFraction*(wave.endPosition.x-wave.startPosition.x);y+=translateFraction*(wave.endPosition.y-wave.startPosition.y)}var bgFillColor=null;if(this.backgroundFill){var bgFillAlpha=waveOuterOpacityFn(tDown,tUp,anim);bgFillColor=cssColorWithAlpha(wave.waveColor,bgFillAlpha)}drawRipple(wave,x,y,radius,waveAlpha,bgFillAlpha);var maximumWave=waveAtMaximum(wave,radius,anim);var waveDissipated=waveDidFinish(wave,radius,anim);var shouldKeepWave=!waveDissipated||maximumWave;var shouldRenderWaveAgain=!waveDissipated&&!maximumWave;shouldRenderNextFrame=shouldRenderNextFrame||shouldRenderWaveAgain;if(!shouldKeepWave||this.cancelled){deleteTheseWaves.push(wave)}}if(shouldRenderNextFrame){requestAnimationFrame(this._loop)}for(var i=0;i<deleteTheseWaves.length;++i){var wave=deleteTheseWaves[i];removeWaveFromScope(this,wave)}if(!this.waves.length&&this._loop){this.$.bg.style.backgroundColor=null;this._loop=null;this.fire("core-transitionend")}}})})();</script>
+<script>(function(){var waveMaxRadius=150;function waveRadiusFn(touchDownMs,touchUpMs,anim){var touchDown=touchDownMs/1e3;var touchUp=touchUpMs/1e3;var totalElapsed=touchDown+touchUp;var ww=anim.width,hh=anim.height;var waveRadius=Math.min(Math.sqrt(ww*ww+hh*hh),waveMaxRadius)*1.1+5;var duration=1.1-.2*(waveRadius/waveMaxRadius);var tt=totalElapsed/duration;var size=waveRadius*(1-Math.pow(80,-tt));return Math.abs(size)}function waveOpacityFn(td,tu,anim){var touchDown=td/1e3;var touchUp=tu/1e3;var totalElapsed=touchDown+touchUp;if(tu<=0){return anim.initialOpacity}return Math.max(0,anim.initialOpacity-touchUp*anim.opacityDecayVelocity)}function waveOuterOpacityFn(td,tu,anim){var touchDown=td/1e3;var touchUp=tu/1e3;var outerOpacity=touchDown*.3;var waveOpacity=waveOpacityFn(td,tu,anim);return Math.max(0,Math.min(outerOpacity,waveOpacity))}function waveDidFinish(wave,radius,anim){var waveOpacity=waveOpacityFn(wave.tDown,wave.tUp,anim);return waveOpacity<.01&&radius>=Math.min(wave.maxRadius,waveMaxRadius)}function waveAtMaximum(wave,radius,anim){var waveOpacity=waveOpacityFn(wave.tDown,wave.tUp,anim);return waveOpacity>=anim.initialOpacity&&radius>=Math.min(wave.maxRadius,waveMaxRadius)}function drawRipple(ctx,x,y,radius,innerAlpha,outerAlpha){if(outerAlpha!==undefined){ctx.bg.style.opacity=outerAlpha}ctx.wave.style.opacity=innerAlpha;var s=radius/(ctx.containerSize/2);var dx=x-ctx.containerWidth/2;var dy=y-ctx.containerHeight/2;ctx.wc.style.webkitTransform="translate3d("+dx+"px,"+dy+"px,0)";ctx.wc.style.transform="translate3d("+dx+"px,"+dy+"px,0)";ctx.wave.style.webkitTransform="scale("+s+","+s+")";ctx.wave.style.transform="scale3d("+s+","+s+",1)"}function createWave(elem){var elementStyle=window.getComputedStyle(elem);var fgColor=elementStyle.color;var inner=document.createElement("div");inner.style.backgroundColor=fgColor;inner.classList.add("wave");var outer=document.createElement("div");outer.classList.add("wave-container");outer.appendChild(inner);var container=elem.$.waves;container.appendChild(outer);elem.$.bg.style.backgroundColor=fgColor;var wave={bg:elem.$.bg,wc:outer,wave:inner,waveColor:fgColor,maxRadius:0,isMouseDown:false,mouseDownStart:0,mouseUpStart:0,tDown:0,tUp:0};return wave}function removeWaveFromScope(scope,wave){if(scope.waves){var pos=scope.waves.indexOf(wave);scope.waves.splice(pos,1);wave.wc.remove()}}var pow=Math.pow;var now=Date.now;if(window.performance&&performance.now){now=performance.now.bind(performance)}function cssColorWithAlpha(cssColor,alpha){var parts=cssColor.match(/^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/);if(typeof alpha=="undefined"){alpha=1}if(!parts){return"rgba(255, 255, 255, "+alpha+")"}return"rgba("+parts[1]+", "+parts[2]+", "+parts[3]+", "+alpha+")"}function dist(p1,p2){return Math.sqrt(pow(p1.x-p2.x,2)+pow(p1.y-p2.y,2))}function distanceFromPointToFurthestCorner(point,size){var tl_d=dist(point,{x:0,y:0});var tr_d=dist(point,{x:size.w,y:0});var bl_d=dist(point,{x:0,y:size.h});var br_d=dist(point,{x:size.w,y:size.h});return Math.max(tl_d,tr_d,bl_d,br_d)}Polymer("paper-ripple",{initialOpacity:.25,opacityDecayVelocity:.8,backgroundFill:true,pixelDensity:2,eventDelegates:{down:"downAction",up:"upAction"},ready:function(){this.waves=[]},downAction:function(e){var wave=createWave(this);this.cancelled=false;wave.isMouseDown=true;wave.tDown=0;wave.tUp=0;wave.mouseUpStart=0;wave.mouseDownStart=now();var rect=this.getBoundingClientRect();var width=rect.width;var height=rect.height;var touchX=e.x-rect.left;var touchY=e.y-rect.top;wave.startPosition={x:touchX,y:touchY};if(this.classList.contains("recenteringTouch")){wave.endPosition={x:width/2,y:height/2};wave.slideDistance=dist(wave.startPosition,wave.endPosition)}wave.containerSize=Math.max(width,height);wave.containerWidth=width;wave.containerHeight=height;wave.maxRadius=distanceFromPointToFurthestCorner(wave.startPosition,{w:width,h:height});wave.wc.style.top=(wave.containerHeight-wave.containerSize)/2+"px";wave.wc.style.left=(wave.containerWidth-wave.containerSize)/2+"px";wave.wc.style.width=wave.containerSize+"px";wave.wc.style.height=wave.containerSize+"px";this.waves.push(wave);if(!this._loop){this._loop=this.animate.bind(this,{width:width,height:height});requestAnimationFrame(this._loop)}},upAction:function(){for(var i=0;i<this.waves.length;i++){var wave=this.waves[i];if(wave.isMouseDown){wave.isMouseDown=false;wave.mouseUpStart=now();wave.mouseDownStart=0;wave.tUp=0;break}}this._loop&&requestAnimationFrame(this._loop)},cancel:function(){this.cancelled=true},animate:function(ctx){var shouldRenderNextFrame=false;var deleteTheseWaves=[];var longestTouchDownDuration=0;var longestTouchUpDuration=0;var lastWaveColor=null;var anim={initialOpacity:this.initialOpacity,opacityDecayVelocity:this.opacityDecayVelocity,height:ctx.height,width:ctx.width};for(var i=0;i<this.waves.length;i++){var wave=this.waves[i];if(wave.mouseDownStart>0){wave.tDown=now()-wave.mouseDownStart}if(wave.mouseUpStart>0){wave.tUp=now()-wave.mouseUpStart}var tUp=wave.tUp;var tDown=wave.tDown;longestTouchDownDuration=Math.max(longestTouchDownDuration,tDown);longestTouchUpDuration=Math.max(longestTouchUpDuration,tUp);var radius=waveRadiusFn(tDown,tUp,anim);var waveAlpha=waveOpacityFn(tDown,tUp,anim);var waveColor=cssColorWithAlpha(wave.waveColor,waveAlpha);lastWaveColor=wave.waveColor;var x=wave.startPosition.x;var y=wave.startPosition.y;if(wave.endPosition){var translateFraction=Math.min(1,radius/wave.containerSize*2/Math.sqrt(2));x+=translateFraction*(wave.endPosition.x-wave.startPosition.x);y+=translateFraction*(wave.endPosition.y-wave.startPosition.y)}var bgFillColor=null;if(this.backgroundFill){var bgFillAlpha=waveOuterOpacityFn(tDown,tUp,anim);bgFillColor=cssColorWithAlpha(wave.waveColor,bgFillAlpha)}drawRipple(wave,x,y,radius,waveAlpha,bgFillAlpha);var maximumWave=waveAtMaximum(wave,radius,anim);var waveDissipated=waveDidFinish(wave,radius,anim);var shouldKeepWave=!waveDissipated||maximumWave;var shouldRenderWaveAgain=wave.mouseUpStart?!waveDissipated:!maximumWave;shouldRenderNextFrame=shouldRenderNextFrame||shouldRenderWaveAgain;if(!shouldKeepWave||this.cancelled){deleteTheseWaves.push(wave)}}if(shouldRenderNextFrame){requestAnimationFrame(this._loop)}for(var i=0;i<deleteTheseWaves.length;++i){var wave=deleteTheseWaves[i];removeWaveFromScope(this,wave)}if(!this.waves.length&&this._loop){this.$.bg.style.backgroundColor=null;this._loop=null;this.fire("core-transitionend")}}})})();</script>
 </polymer-element>
 
 
@@ -1113,31 +1113,55 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 <!--
 @group Paper Elements
-`paper-icon-button` is a button with an image placed at the center.
 
-Example:
+Material Design: <a href="https://spec.googleplex.com/quantum/components/buttons.html">Buttons</a>
 
-    <paper-icon-button iconSrc="star.png"></paper-icon-button>
+`paper-icon-button` is a button with an image placed at the center. When the user touches
+the button, a ripple effect emanates from the center of the button.
 
-`paper-icon-button` includes a default icon set.  Use `icon` to specify 
-which icon from the icon set to use.
-
-Example:
-
-    <paper-icon-button icon="menu"></paper-icon-button>
-
-The icons provided by `core-icons` are SVG, and you can style them with CSS.
-
-Example:
-
-    <paper-icon-button icon="favorite" style="fill:red;"></paper-icon-button>
-
+You may import `core-icons` to use with this element, or provide an URL to a custom icon.
 See `core-iconset` for more information about how to use a custom icon set.
 
+Example:
+
+    <link href="path/to/core-icons/core-icons.html" rel="import">
+
+    <paper-icon-button icon="favorite"></paper-icon-button>
+    <paper-icon-button src="star.png"></paper-icon-button>
+
+Styling
+-------
+
+Style the button with CSS as you would a normal DOM element. If you are using the icons
+provided by `core-icons`, they will inherit the foreground color of the button.
+
+    /* make a red "favorite" button */
+    <paper-icon-button icon="favorite" style="color: red;"></paper-icon-button>
+
+By default, the ripple is the same color as the foreground at 25% opacity. You may
+customize the color using this selector:
+
+    /* make #my-button use a blue ripple instead of foreground color */
+    #my-button::shadow #ripple {
+      color: blue;
+    }
+
+The opacity of the ripple is not customizable via CSS.
+
+Accessibility
+-------------
+
+The button is accessible by default if you use the `icon` property. By default, the
+`aria-label` attribute will be set to the `icon` property. If you use a custom icon,
+you should ensure that the `aria-label` attribute is set.
+
+    <paper-icon-button src="star.png" aria-label="star"></paper-icon-button>
+
 @element paper-icon-button
-@extends paper-button
+@extends paper-button-base
 @homepage github.io
 -->
+
 
 
 <!--
@@ -1152,43 +1176,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <!--
 @group Paper Elements
 
-`paper-button` is a button containing text or an image. When the user touches
-the button, a ripple effect emanates from the point of contact.
+`paper-button-base` is the base class for button-like elements with ripple and optional shadow.
 
-A `paper-button` may be flat or raised. A raised button behaves like a piece
-of paper resting on another sheet, and lifts up upon press. Flat buttons do
-not raise up. Add the `raisedButton` attribute to make a raised button.
-
-Example:
-
-    <paper-button label="flat button"></paper-button>
-    <paper-button label="raised button" raisedButton></paper-button>
-
-A button should be styled with a background color, text color, ripple color
-and hover color.
-
-To style the background, text and hover color, apply the `background` and
-`color` CSS properties to the button. To style the ripple color, apply the
-`color` CSS property to the `#ripple` element in the button's shadow root:
-
-    /* Style #my-button blue with white text and darker blue ink. */
-    #my-button {
-        background: #4285f4;
-        color: #fff;
-    }
-
-    #my-button:hover {
-        background: #2a56c6;
-    }
-
-    #my-button::shadow #ripple {
-        color: #2a56c6;
-    }
-
-@element paper-button
+@element paper-button-base
 @extends paper-focusable
+@status unstable
 -->
-
 
 
 <!--
@@ -1221,120 +1214,30 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <content></content>
   </template>
 
-  <script>Polymer("paper-focusable",{publish:{active:{value:false,reflect:true},focused:{value:false,reflect:true},pressed:{value:false,reflect:true},disabled:{value:false,reflect:true},isToggle:{value:false,reflect:false}},disabledChanged:function(){if(this.disabled){this.removeAttribute("tabindex")}else{this.setAttribute("tabindex",0)}},downAction:function(){this.pressed=true;this.focused=false;if(this.isToggle){this.active=!this.active}else{this.active=true}},contextMenuAction:function(e){this.upAction(e);this.focusAction()},upAction:function(){this.pressed=false;if(!this.isToggle){this.active=false}},focusAction:function(){if(!this.pressed){this.focused=true}},blurAction:function(){this.focused=false}});</script>
+  <script>Polymer("paper-focusable",{publish:{active:{value:false,reflect:true},focused:{value:false,reflect:true},pressed:{value:false,reflect:true},disabled:{value:false,reflect:true},isToggle:{value:false,reflect:false}},disabledChanged:function(){if(this.disabled){this.removeAttribute("tabindex")}else{this.setAttribute("tabindex",0)}},downAction:function(){this.pressed=true;if(this.isToggle){this.active=!this.active}else{this.active=true}},contextMenuAction:function(e){this.upAction(e);this.focusAction()},upAction:function(){this.pressed=false;if(!this.isToggle){this.active=false}},focusAction:function(){if(!this.pressed){this.focused=true}},blurAction:function(){this.focused=false}});</script>
 </polymer-element>
 
 
-<!--
-Copyright (c) 2014 The Polymer Project Authors. All rights reserved.
-This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
-The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
-The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
-Code distributed by Google as part of the polymer project is also
-subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
--->
+<polymer-element name="paper-button-base" extends="paper-focusable" assetpath="../bower_components/paper-button/">
 
-<!--
-The `paper-shadow` element is a helper to add shadows to elements.
-Paper shadows are composed of two shadows on top of each other. We
-mimic this effect by using two elements on top of each other, each with a
-different drop shadow. You can apply the shadow to an element by assigning
-it as the target. If you do not specify a target, the shadow is applied to
-the `paper-shadow` element's parent element or shadow host element if its
-parent is a shadow root. Alternatively, you can use the CSS classes included
-by this element directly.
-
-Example:
-
-    <div id="myCard" class="card"></div>
-    <paper-shadow id="myShadow" z="1"></div>
-
-    // Assign a target explicitly
-    myShadow.target = document.getElementById('myCard');
-
-    // Auto-assign the target.
-    <div class="card">
-      <paper-shadow z="1"></paper-shadow>
-    </div>
-
-    // Use the classes directly
-    <div class="card paper-shadow-top paper-shadow-top-z-1">
-      <div class="card-inner paper-shadow-bottom paper-shadow-bottom-z-1"></div>
-    </div>
-
-If you assign a target to a `paper-shadow` element, it creates two nodes and inserts
-them as the first children of the target, or the first children of the target's shadow
-root if there is one. This implies:
-
-  1. If the primary node that drops the shadow has styling that affects its shape,
-     the same styling must be applied to elements with class `paper-shadow`.
-     `border-radius` is a very common property and is inherited automatically.
-
-  2. The target's overflow property will be set to `overflow: visible` because the
-     shadow is rendered beyond the bounds of its container. Position the shadow as a
-     separate layer and use a different child element for clipping if needed.
-
-@group Paper Elements
-@class paper-shadow
--->
-
-
-
-<polymer-element name="paper-shadow" assetpath="../bower_components/paper-shadow/">
-
-  <template>
-
-    <style no-shim="">.paper-shadow{position:absolute;top:0;left:0;bottom:0;right:0;border-radius:inherit;pointer-events:none}.paper-shadow-animated.paper-shadow{transition:box-shadow .28s cubic-bezier(0.4,0,.2,1)}.paper-shadow-top-z-1{box-shadow:0 2px 10px 0 rgba(0,0,0,.16)}.paper-shadow-bottom-z-1{box-shadow:0 2px 5px 0 rgba(0,0,0,.26)}.paper-shadow-top-z-2{box-shadow:0 6px 20px 0 rgba(0,0,0,.19)}.paper-shadow-bottom-z-2{box-shadow:0 8px 17px 0 rgba(0,0,0,.2)}.paper-shadow-top-z-3{box-shadow:0 17px 50px 0 rgba(0,0,0,.19)}.paper-shadow-bottom-z-3{box-shadow:0 12px 15px 0 rgba(0,0,0,.24)}.paper-shadow-top-z-4{box-shadow:0 25px 55px 0 rgba(0,0,0,.21)}.paper-shadow-bottom-z-4{box-shadow:0 16px 28px 0 rgba(0,0,0,.22)}.paper-shadow-top-z-5{box-shadow:0 40px 77px 0 rgba(0,0,0,.22)}.paper-shadow-bottom-z-5{box-shadow:0 27px 24px 0 rgba(0,0,0,.2)}.paper-shadow-animate-z-1-z-2.paper-shadow-top{-webkit-transition:none;-webkit-animation:animate-shadow-top-z-1-z-2 .7s infinite alternate}.paper-shadow-animate-z-1-z-2 .paper-shadow-bottom{-webkit-transition:none;-webkit-animation:animate-shadow-bottom-z-1-z-2 .7s infinite alternate}@-webkit-keyframes animate-shadow-top-z-1-z-2{0%{box-shadow:0 2px 10px 0 rgba(0,0,0,.16)}100%{box-shadow:0 6px 20px 0 rgba(0,0,0,.19)}}@-webkit-keyframes animate-shadow-bottom-z-1-z-2{0%{box-shadow:0 2px 5px 0 rgba(0,0,0,.26)}100%{box-shadow:0 8px 17px 0 rgba(0,0,0,.2)}}</style>
-
-  </template>
-
-  <script>Polymer("paper-shadow",{publish:{target:{value:null,reflect:true},z:{value:1,reflect:true},animated:{value:false,reflect:true},hasPosition:false},registerCallback:function(polymerElement){var template=polymerElement.querySelector("template");this._style=template.content.querySelector("style");this._style.removeAttribute("no-shim")},fetchTemplate:function(){return null},attached:function(){if(!this.target){if(!this.parentElement&&this.parentNode.host){this.target=this.parentNode.host}else if(this.parentElement&&(window.ShadowDOMPolyfill?this.parentElement!==wrap(document.body):this.parentElement!==document.body)){this.target=this.parentElement}}},targetChanged:function(old){if(old){this.removeShadow(old)}if(this.target){this.addShadow(this.target)}},zChanged:function(old){if(this.target&&this.target._paperShadow){var shadow=this.target._paperShadow;["top","bottom"].forEach(function(s){shadow[s].classList.remove("paper-shadow-"+s+"-z-"+old);shadow[s].classList.add("paper-shadow-"+s+"-z-"+this.z)}.bind(this))}},animatedChanged:function(){if(this.target&&this.target._paperShadow){var shadow=this.target._paperShadow;["top","bottom"].forEach(function(s){if(this.animated){shadow[s].classList.add("paper-shadow-animated")}else{shadow[s].classList.remove("paper-shadow-animated")}}.bind(this))}},addShadow:function(node){if(node._paperShadow){return}if(!node._hasShadowStyle){if(!node.shadowRoot){node.createShadowRoot().innerHTML="<content></content>"}this.installScopeStyle(this._style,"shadow",node.shadowRoot);node._hasShadowStyle=true}var computed=getComputedStyle(node);if(!this.hasPosition&&computed.position==="static"){node.style.position="relative"}node.style.overflow="visible";["top","bottom"].forEach(function(s){var inner=node._paperShadow&&node._paperShadow[s]||document.createElement("div");inner.classList.add("paper-shadow");inner.classList.add("paper-shadow-"+s+"-z-"+this.z);if(this.animated){inner.classList.add("paper-shadow-animated")}if(node.shadowRoot){node.shadowRoot.insertBefore(inner,node.shadowRoot.firstChild)}else{node.insertBefore(inner,node.firstChild)}node._paperShadow=node._paperShadow||{};node._paperShadow[s]=inner}.bind(this))},removeShadow:function(node){if(!node._paperShadow){return}["top","bottom"].forEach(function(s){node._paperShadow[s].remove()});node._paperShadow=null;node.style.position=null}});</script>
+  <script>Polymer("paper-button-base",{z:1,activeChanged:function(){this.super();if(this.active){if(!this.lastEvent){var rect=this.getBoundingClientRect();this.lastEvent={x:rect.left+rect.width/2,y:rect.top+rect.height/2}}this.$.ripple.downAction(this.lastEvent)}else{this.$.ripple.upAction()}this.adjustZ()},disabledChanged:function(){this.super();if(this.disabled){this.setAttribute("aria-disabled","")}else{this.removeAttribute("aria-disabled")}this.adjustZ()},recenteringTouchChanged:function(){if(this.$.ripple){this.$.ripple.classList.toggle("recenteringTouch",this.recenteringTouch)}},fillChanged:function(){if(this.$.ripple){this.$.ripple.classList.toggle("fill",this.fill)}},adjustZ:function(){if(this.active){this.z=2}else if(this.disabled){this.z=0}else{this.z=1}},downAction:function(e){this.super(e);this.lastEvent=e;if(!this.$.ripple){var ripple=document.createElement("paper-ripple");ripple.setAttribute("id","ripple");ripple.setAttribute("fit","");if(this.recenteringTouch){ripple.classList.add("recenteringTouch")}if(!this.fill){ripple.classList.add("circle")}this.$.ripple=ripple;this.shadowRoot.insertBefore(ripple,this.shadowRoot.firstChild)}}});</script>
 </polymer-element>
 
 
-<polymer-element name="paper-button" extends="paper-focusable" attributes="label raisedButton iconSrc icon" role="button" assetpath="../bower_components/paper-button/">
+
+<polymer-element name="paper-icon-button" extends="paper-button-base" attributes="src icon" role="button" assetpath="../bower_components/paper-icon-button/">
 
   <template>
 
-    <style>:host{display:inline-block;position:relative;border:0;background:0 0;text-align:center;font:inherit;text-transform:uppercase;outline:0;border-radius:3px;-webkit-user-select:none;user-select:none;cursor:pointer}:host(.hover:hover){background:#e4e4e4}:host([raisedButton]){background:#dfdfdf}:host([raisedButton].hover:hover){background:#d6d6d6}:host([disabled]){background:#eaeaea!important;color:#a8a8a8!important;cursor:auto}#shadow-container{border-radius:inherit}#clip{position:relative;border-radius:inherit;overflow:hidden}#ripple{position:absolute;top:0;left:0;bottom:0;right:0;color:#d1d1d1;pointer-events:none}:host([raisedButton]) #ripple{color:#cecece}#ripple::shadow canvas{top:0;left:0}#content{position:relative}#icon{margin:8px}#content>span{display:inline-block;margin:.5em}</style>
+    <style>:host{display:inline-block;position:relative;padding:8px;outline:0;-webkit-user-select:none;user-select:none;cursor:pointer;z-index:0}:host([disabled]){color:#c9c9c9;pointer-events:none;cursor:auto}#ripple{pointer-events:none;z-index:-1}</style>
 
-    <template if="{{raisedButton}}">
-      <div fit="" id="shadow-container">
-        <paper-shadow id="shadow" z="{{z}}" animated=""></paper-shadow>
-      </div>
-    </template>
-
-    <div id="clip">
-      <!-- <div id="focusBg"></div> -->
-      <paper-ripple id="ripple"></paper-ripple>
-      <div id="content">
-        <template if="{{iconSrc || icon}}">
-          <core-icon id="icon" src="{{iconSrc}}" icon="{{icon}}"></core-icon>
-        </template>
-        <template if="{{label}}">
-          <span>{{label}}</span>
-        </template>
-      </div>
-    </div>
+    <!-- to position to ripple behind the icon -->
+    <core-icon relative="" id="icon" src="{{src}}" icon="{{icon}}"></core-icon>
 
   </template>
 
-  <script>Polymer("paper-button",{publish:{label:"",raisedButton:{value:false,reflect:true},iconSrc:"",icon:""},z:1,attached:function(){if(this.textContent&&this.textContent.match(/\S+/)){console.warn('Using textContent to label the button is deprecated. Use the "label" property instead');this.label=this.textContent}},activeChanged:function(){this.super();if(this.active){if(!this.lastEvent){var rect=this.getBoundingClientRect();this.lastEvent={x:rect.left+rect.width/2,y:rect.top+rect.height/2}}this.$.ripple.downAction(this.lastEvent)}else{this.$.ripple.upAction()}this.adjustZ()},focusedChanged:function(){this.super();this.adjustZ()},disabledChanged:function(){this.super();this.adjustZ()},insideButton:function(x,y){var rect=this.getBoundingClientRect();return rect.left<=x&&x<=rect.right&&rect.top<=y&&y<=rect.bottom},adjustZ:function(){if(this.focused){this.classList.add("paper-shadow-animate-z-1-z-2")}else{this.classList.remove("paper-shadow-animate-z-1-z-2");if(this.active){this.z=2}else if(this.disabled){this.z=0}else{this.z=1}}},downAction:function(e){this.super(e);this.lastEvent=e},labelChanged:function(){this.setAttribute("aria-label",this.label)}});</script>
-</polymer-element>
+  <script>Polymer("paper-icon-button",{publish:{src:"",icon:"",recenteringTouch:true,fill:false},iconChanged:function(oldIcon){this.setAttribute("aria-label",this.icon)}});</script>
 
-
-<polymer-element name="paper-icon-button" extends="paper-button" attributes="fill" assetpath="../bower_components/paper-icon-button/">
-
-  <template>
-
-    <style>:host([disabled]){background:none!important}:host([disabled]) /deep/ #icon{fill:#c9c9c9}:host(:not([fill])) /deep/ #focusBg{border-radius:50%}</style>
-
-    <shadow></shadow>
-
-  </template>
-
-  <script>Polymer("paper-icon-button",{publish:{fill:{value:false,reflect:true}},ready:function(){this.$.ripple.classList.add("recenteringTouch");this.fillChanged()},fillChanged:function(){this.$.ripple.classList.toggle("circle",!this.fill)},iconChanged:function(oldIcon){if(!this.label){this.setAttribute("aria-label",this.icon)}}});</script>
-  
 </polymer-element>
 
 
@@ -2115,13 +2018,78 @@ Fired when the dialog's `opened` property changes.
 -->
 
 
+<!--
+Copyright (c) 2014 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<!--
+The `paper-shadow` element is a helper to add shadows to elements.
+Paper shadows are composed of two shadows on top of each other. We
+mimic this effect by using two elements on top of each other, each with a
+different drop shadow. You can apply the shadow to an element by assigning
+it as the target. If you do not specify a target, the shadow is applied to
+the `paper-shadow` element's parent element or shadow host element if its
+parent is a shadow root. Alternatively, you can use the CSS classes included
+by this element directly.
+
+Example:
+
+    <div id="myCard" class="card"></div>
+    <paper-shadow id="myShadow" z="1"></div>
+
+    // Assign a target explicitly
+    myShadow.target = document.getElementById('myCard');
+
+    // Auto-assign the target.
+    <div class="card">
+      <paper-shadow z="1"></paper-shadow>
+    </div>
+
+    // Use the classes directly
+    <div class="card paper-shadow-top paper-shadow-top-z-1">
+      <div class="card-inner paper-shadow-bottom paper-shadow-bottom-z-1"></div>
+    </div>
+
+If you assign a target to a `paper-shadow` element, it creates two nodes and inserts
+them as the first children of the target, or the first children of the target's shadow
+root if there is one. This implies:
+
+  1. If the primary node that drops the shadow has styling that affects its shape,
+     the same styling must be applied to elements with class `paper-shadow`.
+     `border-radius` is a very common property and is inherited automatically.
+
+  2. The target's overflow property will be set to `overflow: visible` because the
+     shadow is rendered beyond the bounds of its container. Position the shadow as a
+     separate layer and use a different child element for clipping if needed.
+
+@group Paper Elements
+@class paper-shadow
+-->
+
+
+
+<polymer-element name="paper-shadow" assetpath="../bower_components/paper-shadow/">
+
+  <template>
+
+    <style no-shim="">.paper-shadow{position:absolute;top:0;left:0;bottom:0;right:0;border-radius:inherit;pointer-events:none}.paper-shadow-animated.paper-shadow{transition:box-shadow .28s cubic-bezier(0.4,0,.2,1)}.paper-shadow-top-z-1{box-shadow:0 2px 10px 0 rgba(0,0,0,.16)}.paper-shadow-bottom-z-1{box-shadow:0 2px 5px 0 rgba(0,0,0,.26)}.paper-shadow-top-z-2{box-shadow:0 6px 20px 0 rgba(0,0,0,.19)}.paper-shadow-bottom-z-2{box-shadow:0 8px 17px 0 rgba(0,0,0,.2)}.paper-shadow-top-z-3{box-shadow:0 17px 50px 0 rgba(0,0,0,.19)}.paper-shadow-bottom-z-3{box-shadow:0 12px 15px 0 rgba(0,0,0,.24)}.paper-shadow-top-z-4{box-shadow:0 25px 55px 0 rgba(0,0,0,.21)}.paper-shadow-bottom-z-4{box-shadow:0 16px 28px 0 rgba(0,0,0,.22)}.paper-shadow-top-z-5{box-shadow:0 40px 77px 0 rgba(0,0,0,.22)}.paper-shadow-bottom-z-5{box-shadow:0 27px 24px 0 rgba(0,0,0,.2)}.paper-shadow-animate-z-1-z-2.paper-shadow-top{-webkit-transition:none;-webkit-animation:animate-shadow-top-z-1-z-2 .7s infinite alternate}.paper-shadow-animate-z-1-z-2 .paper-shadow-bottom{-webkit-transition:none;-webkit-animation:animate-shadow-bottom-z-1-z-2 .7s infinite alternate}@-webkit-keyframes animate-shadow-top-z-1-z-2{0%{box-shadow:0 2px 10px 0 rgba(0,0,0,.16)}100%{box-shadow:0 6px 20px 0 rgba(0,0,0,.19)}}@-webkit-keyframes animate-shadow-bottom-z-1-z-2{0%{box-shadow:0 2px 5px 0 rgba(0,0,0,.26)}100%{box-shadow:0 8px 17px 0 rgba(0,0,0,.2)}}</style>
+
+  </template>
+
+  <script>Polymer("paper-shadow",{publish:{target:{value:null,reflect:true},z:{value:1,reflect:true},animated:{value:false,reflect:true},hasPosition:false},registerCallback:function(polymerElement){var template=polymerElement.querySelector("template");this._style=template.content.querySelector("style");this._style.removeAttribute("no-shim")},fetchTemplate:function(){return null},attached:function(){if(!this.target){if(!this.parentElement&&this.parentNode.host){this.target=this.parentNode.host}else if(this.parentElement&&(window.ShadowDOMPolyfill?this.parentElement!==wrap(document.body):this.parentElement!==document.body)){this.target=this.parentElement}}},targetChanged:function(old){if(old){this.removeShadow(old)}if(this.target){this.addShadow(this.target)}},zChanged:function(old){if(this.target&&this.target._paperShadow){var shadow=this.target._paperShadow;["top","bottom"].forEach(function(s){shadow[s].classList.remove("paper-shadow-"+s+"-z-"+old);shadow[s].classList.add("paper-shadow-"+s+"-z-"+this.z)}.bind(this))}},animatedChanged:function(){if(this.target&&this.target._paperShadow){var shadow=this.target._paperShadow;["top","bottom"].forEach(function(s){if(this.animated){shadow[s].classList.add("paper-shadow-animated")}else{shadow[s].classList.remove("paper-shadow-animated")}}.bind(this))}},addShadow:function(node){if(node._paperShadow){return}if(!node._hasShadowStyle){if(!node.shadowRoot){node.createShadowRoot().innerHTML="<content></content>"}this.installScopeStyle(this._style,"shadow",node.shadowRoot);node._hasShadowStyle=true}var computed=getComputedStyle(node);if(!this.hasPosition&&computed.position==="static"){node.style.position="relative"}node.style.overflow="visible";["top","bottom"].forEach(function(s){var inner=node._paperShadow&&node._paperShadow[s]||document.createElement("div");inner.classList.add("paper-shadow");inner.classList.add("paper-shadow-"+s+"-z-"+this.z);if(this.animated){inner.classList.add("paper-shadow-animated")}if(node.shadowRoot){node.shadowRoot.insertBefore(inner,node.shadowRoot.firstChild)}else{node.insertBefore(inner,node.firstChild)}node._paperShadow=node._paperShadow||{};node._paperShadow[s]=inner}.bind(this))},removeShadow:function(node){if(!node._paperShadow){return}["top","bottom"].forEach(function(s){node._paperShadow[s].remove()});node._paperShadow=null;node.style.position=null}});</script>
+</polymer-element>
 
 
 <polymer-element name="paper-dialog" attributes="opened heading transition autoCloseDisabled backdrop layered closeSelector" role="dialog" assetpath="../bower_components/paper-dialog/">
 
   <template>
 
-    <style>:host{background:#fff;color:rgba(0,0,0,.87)}#shadow{position:absolute;top:0;left:0;bottom:0;right:0;z-index:-1}#container{overflow:hidden}#main{height:auto;-webkit-order:1;-ms-flex-order:1;order:1;padding:24px;overflow:auto}h1{margin:0}#actions{-webkit-order:2;-ms-flex-order:2;order:2;padding:4px 16px 20px}polymer-next-selector{content:':host > *'}::content>*{font:inherit}</style>
+    <style>:host{background:#fff;color:rgba(0,0,0,.87)}#shadow{position:absolute;top:0;left:0;bottom:0;right:0;z-index:-1}#container{overflow:hidden}#main{height:auto;-webkit-order:1;-ms-flex-order:1;order:1;padding:24px;overflow:auto}h1{margin:0}#actions{-webkit-order:2;-ms-flex-order:2;order:2;padding:4px 16px 20px}polyfill-next-selector{content:':host > *'}::content>*{font:inherit}</style>
 
     <div id="shadow">
       <paper-shadow z="3" hasposition=""></paper-shadow>
@@ -2173,6 +2141,32 @@ Theming
 
 Set `CoreStyle.g.paperInput.focusedColor` and `CoreStyle.g.paperInput.invalidColor` to theme
 the focused and invalid states.
+
+To add custom styling to only some elements, use these selectors:
+
+    html /deep/ paper-input[focused] .floated-label {
+        /* floating label color when the input has focus */
+        color: green;
+    }
+
+    html /deep/ paper-input .focused-underline,
+    html /deep/ paper-input .cursor {
+        /* line and cursor color when the input has focus */
+        background-color: green;
+    }
+
+    html /deep/ paper-input.invalid[focused] .floated-label,
+    html /deep/ paper-input[focused] .error-text,
+    html /deep/ paper-input[focused] .error-icon {
+        /* error text, icon, and floating label color when input is invalid */
+        color: salmon;
+    }
+
+    html /deep/ paper-input.invalid .focused-underline,
+    html /deep/ paper-input.invalid .cursor {
+        /* line and cursor color when the input is invalid */
+        background-color: salmon;
+    }
 
 @group Paper Elements
 @element paper-input
@@ -2880,11 +2874,97 @@ To change the radio unchecked color:
 -->
 
 
+<!--
+    @license
+    Copyright (c) 2014 The Polymer Project Authors. All rights reserved.
+    This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+    The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+    The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+    Code distributed by Google as part of the polymer project is also
+    subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<!--
+`core-a11y-keys` provides a normalized interface for processing keyboard commands that pertain to [WAI-ARIA best
+practices](http://www.w3.org/TR/wai-aria-practices/#kbd_general_binding). The element takes care of browser differences
+with respect to Keyboard events and uses an expressive syntax to filter key presses.
+
+Use the `keys` attribute to express what combination of keys will trigger the event to fire.
+
+Use the `target` attribute to set up event handlers on a specific node.
+The `keys-pressed` event will fire when one of the key combinations set with the `keys` attribute is pressed.
+
+Example:
+
+This element will call `arrowHandler` on all arrow keys:
+
+    <core-a11y-keys target="{{}}" keys="up down left right" on-keys-pressed="{{arrowHandler}}"></core-a11y-keys>
+
+Keys Syntax:
+
+The `keys` attribute can accepts a space seprated, `+` concatenated set of modifier keys and some common keyboard keys.
+
+The common keys are `a-z`, `0-9` (top row and number pad), `*` (shift 8 and number pad), `F1-F12`, `Page Up`, `Page
+Down`, `Left Arrow`, `Right Arrow`, `Down Arrow`, `Up Arrow`, `Home`, `End`, `Escape`, `Space`, `Tab`, and `Enter` keys.
+
+The modifier keys are `Shift`, `Control`, and `Alt`.
+
+All keys are expected to be lowercase and shortened:
+`Left Arrow` is `left`, `Page Down` is `pagedown`, `Control` is `ctrl`, `F1` is `f1`, `Escape` is `esc` etc.
+
+Keys Syntax Example:
+
+Given the `keys` attribute value "ctrl+shift+f7 up pagedown esc space alt+m", the `<core-a11y-keys>` element will send
+the `keys-pressed` event if any of the follow key combos are pressed: Control and Shift and F7 keys, Up Arrow key, Page
+Down key, Escape key, Space key, Alt and M key.
+
+Slider Example:
+
+The following is an example of the set of keys that fulfil the WAI-ARIA "slider" role [best
+practices](http://www.w3.org/TR/wai-aria-practices/#slider):
+
+    <core-a11y-keys target="{{}}" keys="left pagedown down" on-keys-pressed="{{decrement}}"></core-a11y-keys>
+    <core-a11y-keys target="{{}}" keys="right pageup up" on-keys-pressed="{{increment}}"></core-a11y-keys>
+    <core-a11y-keys target="{{}}" keys="home" on-keys-pressed="{{setMin}}"></core-a11y-keys>
+    <core-a11y-keys target="{{}}" keys="end" on-keys-pressed="{{setMax}}"></core-a11y-keys>
+
+The `increment` function will move the slider a set amount toward the maximum value.
+The `decrement` function will move the slider a set amount toward the minimum value.
+The `setMin` function will move the slider to the minimum value.
+The `setMax` function will move the slider to the maximum value.
+
+Keys Syntax Grammar:
+
+[EBNF](http://en.wikipedia.org/wiki/Extended_Backus%E2%80%93Naur_Form) Grammar of the `keys` attribute.
+
+    modifier = "shift" | "ctrl" | "alt";
+    ascii = ? /[a-z0-9]/ ? ;
+    fnkey = ? f1 through f12 ? ;
+    arrow = "up" | "down" | "left" | "right" ;
+    key = "tab" | "esc" | "space" | "*" | "pageup" | "pagedown" | "home" | "end" | arrow | ascii | fnkey ;
+    keycombo = { modifier, "+" }, key ;
+    keys = keycombo, { " ", keycombo } ;
+
+@group Core Elements
+@element core-a11y-keys
+@homepage github.io
+-->
+
+
+
+<style shim-shadowdom="">html /deep/ core-a11y-keys{display:none}</style>
+
+<polymer-element name="core-a11y-keys" assetpath="../bower_components/core-a11y-keys/">
+<script>(function(){var KEY_IDENTIFIER={"U+0009":"tab","U+001B":"esc","U+0020":"space","U+002A":"*","U+0030":"0","U+0031":"1","U+0032":"2","U+0033":"3","U+0034":"4","U+0035":"5","U+0036":"6","U+0037":"7","U+0038":"8","U+0039":"9","U+0041":"a","U+0042":"b","U+0043":"c","U+0044":"d","U+0045":"e","U+0046":"f","U+0047":"g","U+0048":"h","U+0049":"i","U+004A":"j","U+004B":"k","U+004C":"l","U+004D":"m","U+004E":"n","U+004F":"o","U+0050":"p","U+0051":"q","U+0052":"r","U+0053":"s","U+0054":"t","U+0055":"u","U+0056":"v","U+0057":"w","U+0058":"x","U+0059":"y","U+005A":"z","U+007F":"del"};var KEY_CODE={13:"enter",27:"esc",33:"pageup",34:"pagedown",35:"end",36:"home",32:"space",37:"left",38:"up",39:"right",40:"down",46:"del",106:"*"};var KEY_CHAR=/[a-z0-9*]/;function transformKey(key){var validKey="";if(key){var lKey=key.toLowerCase();if(lKey.length==1){if(KEY_CHAR.test(lKey)){validKey=lKey}}else if(lKey=="multiply"){validKey="*"}else{validKey=lKey}}return validKey}var IDENT_CHAR=/U\+/;function transformKeyIdentifier(keyIdent){var validKey="";if(keyIdent){if(IDENT_CHAR.test(keyIdent)){validKey=KEY_IDENTIFIER[keyIdent]}else{validKey=keyIdent.toLowerCase()}}return validKey}function transformKeyCode(keyCode){var validKey="";if(Number(keyCode)){if(keyCode>=65&&keyCode<=90){validKey=String.fromCharCode(32+keyCode)}else if(keyCode>=112&&keyCode<=123){validKey="f"+(keyCode-112)}else if(keyCode>=48&&keyCode<=57){validKey=String(48-keyCode)}else if(keyCode>=96&&keyCode<=105){validKey=String(96-keyCode)}else{validKey=KEY_CODE[keyCode]}}return validKey}function keyboardEventToKey(ev){var normalizedKey=transformKey(ev.key)||transformKeyIdentifier(ev.keyIdentifier)||transformKeyCode(ev.keyCode)||"";return{shift:ev.shiftKey,ctrl:ev.ctrlKey,meta:ev.metaKey,alt:ev.altKey,key:normalizedKey}}function stringToKey(keyCombo){var keys=keyCombo.split("+");var keyObj=Object.create(null);keys.forEach(function(key){if(key=="shift"){keyObj.shift=true}else if(key=="ctrl"){keyObj.ctrl=true}else if(key=="alt"){keyObj.alt=true}else{keyObj.key=key}});return keyObj}function keyMatches(a,b){return Boolean(a.alt)==Boolean(b.alt)&&Boolean(a.ctrl)==Boolean(b.ctrl)&&Boolean(a.shift)==Boolean(b.shift)&&a.key===b.key}function processKeys(ev){var current=keyboardEventToKey(ev);for(var i=0,dk;i<this._desiredKeys.length;i++){dk=this._desiredKeys[i];if(keyMatches(dk,current)){ev.preventDefault();ev.stopPropagation();this.fire("keys-pressed",current,this,false);break}}}function listen(node,handler){if(node&&node.addEventListener){node.addEventListener("keydown",handler)}}function unlisten(node,handler){if(node&&node.removeEventListener){node.removeEventListener("keydown",handler)}}Polymer("core-a11y-keys",{created:function(){this._keyHandler=processKeys.bind(this)},attached:function(){listen(this.target,this._keyHandler)},detached:function(){unlisten(this.target,this._keyHandler)},publish:{keys:"",target:null},keysChanged:function(){var normalized=this.keys.replace("*","* shift+*");this._desiredKeys=normalized.toLowerCase().split(" ").map(stringToKey)},targetChanged:function(oldTarget){unlisten(oldTarget,this._keyHandler);listen(this.target,this._keyHandler)}})})();</script>
+</polymer-element>
+
 
 <polymer-element name="paper-radio-button" role="radio" tabindex="0" aria-checked="false" assetpath="../bower_components/paper-radio-button/">
 <template>
 
   <style>:host{display:inline-block;white-space:nowrap}:host(:focus){outline:0}#radioContainer{position:relative;width:16px;height:16px;cursor:pointer}#radioContainer.labeled{display:inline-block;vertical-align:middle}#ink{position:absolute;top:-16px;left:-16px;width:48px;height:48px;color:#5a5a5a}#ink[checked]{color:#0f9d58}#offRadio{position:absolute;top:0;left:0;width:12px;height:12px;border-radius:50%;border:solid 2px;border-color:#5a5a5a}#onRadio{position:absolute;top:0;left:0;width:16px;height:16px;border-radius:50%;background-color:#0f9d58;-webkit-transform:scale(0);transform:scale(0);transition:-webkit-transform ease .28s;transition:transform ease .28s}#onRadio.fill{-webkit-transform:scale(1.1);transform:scale(1.1)}#radioLabel{position:relative;display:inline-block;vertical-align:middle;margin-left:10px;white-space:normal;pointer-events:none}#radioLabel[hidden]{display:none}:host([disabled]){pointer-events:none}:host([disabled]) #onRadio{display:none}:host([disabled]) #offRadio{opacity:.33;border-color:#5a5a5a}:host([disabled][checked]) #offRadio{opacity:.33;background-color:#5a5a5a}</style>
+
+  <core-a11y-keys target="{{}}" keys="space" on-keys-pressed="{{tap}}"></core-a11y-keys>
   
   <div id="radioContainer" class="{{ {labeled: label} | tokenList }}">
   
@@ -3306,34 +3386,79 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 -->
 
 <!--
-`<paper-fab>` is a floating action button with an icon. It comes in two sizes: regular
-size and a smaller size by applying the class `mini`.
+@group Paper Elements
+
+Material Design: <a href="https://spec.googleplex.com/quantum/components/buttons.html">Button</a>
+
+`paper-fab` is a floating action button. It contains an image placed in the center and
+comes in two sizes: regular size and a smaller size by applying the class `mini`. When
+the user touches the button, a ripple effect emanates from the center of the button.
+
+You may import `core-icons` to use with this element, or provide an URL to a custom icon.
+See `core-iconset` for more information about how to use a custom icon set.
 
 Example:
 
-    <paper-fab icon="favorite"></paper-fab>
-    <paper-fab class="mini"></paper-fab>
+    <link href="path/to/core-icons/core-icons.html" rel="import">
 
-@group Paper Elements
+    <paper-fab icon="add"></paper-fab>
+    <paper-fab mini icon="favorite"></paper-fab>
+    <paper-fab src="star.png"></paper-fab>
+
+Styling
+-------
+
+Style the button with CSS as you would a normal DOM element. If you are using the icons
+provided by `core-icons`, the icon will inherit the foreground color of the button.
+
+    /* make a blue "cloud" button */
+    <paper-fab icon="cloud" style="color: blue;"></paper-fab>
+
+By default, the ripple is the same color as the foreground at 25% opacity. You may
+customize the color using this selector:
+
+    /* make #my-button use a blue ripple instead of foreground color */
+    #my-button::shadow #ripple {
+      color: blue;
+    }
+
+The opacity of the ripple is not customizable via CSS.
+
+Accessibility
+-------------
+
+The button is accessible by default if you use the `icon` property. By default, the
+`aria-label` attribute will be set to the `icon` property. If you use a custom icon,
+you should ensure that the `aria-label` attribute is set.
+
+    <paper-fab src="star.png" aria-label="star"></paper-fab>
+
 @element paper-fab
-@homepage github.io
-@extends paper-icon-button
+@extends paper-button-base
+@status unstable
 -->
 
 
 
 
-<polymer-element name="paper-fab" extends="paper-icon-button" assetpath="../bower_components/paper-fab/">
+
+
+<polymer-element name="paper-fab" extends="paper-button-base" attributes="src icon mini" role="button" assetpath="../bower_components/paper-fab/">
 
   <template>
 
-    <style>:host{box-sizing:border-box;width:56px;height:56px;background:#d23f31;border-radius:50%;fill:#fff}:host(.mini){width:40px;height:40px}:host /deep/ #focusBg{display:none}:host /deep/ #icon{display:block;margin:16px}:host(.mini) /deep/ #icon{margin:8px}</style>
+    <style>:host{display:inline-block;position:relative;outline:0;-webkit-user-select:none;user-select:none;cursor:pointer;z-index:0;box-sizing:border-box;width:56px;height:56px;background:#d23f31;color:#fff;border-radius:50%;padding:16px}:host([mini]){width:40px;height:40px;padding:8px}:host([disabled]){color:#c9c9c9;pointer-events:none;cursor:auto}#ripple{pointer-events:none;z-index:-1}</style>
 
-    <shadow></shadow>
+    <template if="{{raised}}">
+      <paper-shadow id="shadow" z="{{z}}" animated=""></paper-shadow>
+    </template>
+
+    <!-- to position to ripple behind the icon -->
+    <core-icon relative="" id="icon" src="{{src}}" icon="{{icon}}"></core-icon>
 
   </template>
 
-  <script>Polymer("paper-fab",{publish:{raisedButton:{value:true,reflect:true}}});</script>
+  <script>Polymer("paper-fab",{publish:{src:"",icon:"",mini:false,raised:true,recenteringTouch:false,fill:true},iconChanged:function(oldIcon){this.setAttribute("aria-label",this.icon)}});</script>
 </polymer-element>
 
 
@@ -3451,6 +3576,90 @@ To change the bar color for unchecked state:
 <script>(function(){var DEFAULT_POINT=8;Polymer("topeka-quiz-base",{eventDelegates:{tap:"answered",keypress:"keyPress"},isCorrect:function(){return this.value==this.quiz.answer},getScore:function(){return this.isCorrect()?this.quiz.point||DEFAULT_POINT:0},answered:function(event,detail,source){console.log("noAplicaChecked",this.noAplicaChecked);if(this.$.rb.checked){this.value=null}this.fire("quiz-answered")},reset:function(){this.value=null},keyPress:function(e){if(e.keyCode===13){this.fire("quiz-next");e.preventDefault()}}})})();</script>
 </polymer-element>
 
+<!--
+Copyright (c) 2014 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<!--
+@group Paper Elements
+
+Material Design: <a href="http://www.google.com/design/spec/components/buttons.html">Buttons</a>
+
+`paper-button` is a button. When the user touches the button, a ripple effect emanates
+from the point of contact. It may be flat or raised. A raised button is styled with a
+shadow.
+
+Example:
+
+    <paper-button>flat button</paper-button>
+    <paper-button raised>raised button</paper-button>
+
+You may use custom DOM in the button body to create a variety of buttons. For example, to
+create a button with an icon and some text:
+
+    <paper-button>
+      <core-icon icon="favorite">
+      custom button content
+    </paper-button>
+
+Styling
+-------
+
+Style the button with CSS as you would a normal DOM element.
+
+    /* make #my-button green with yellow text */
+    #my-button {
+        background: green;
+        color: yellow;
+    }
+
+By default, the ripple is the same color as the foreground at 25% opacity. You may
+customize the color using this selector:
+
+    /* make #my-button use a blue ripple instead of foreground color */
+    #my-button::shadow #ripple {
+      color: blue;
+    }
+
+The opacity of the ripple is not customizable via CSS.
+
+@element paper-button
+@extends paper-button-base
+@status unstable
+-->
+
+
+
+
+
+
+
+
+<polymer-element name="paper-button" extends="paper-button-base" attributes="raised recenteringTouch fill" role="button" assetpath="../bower_components/paper-button/">
+
+  <template>
+
+    <style>:host{display:inline-block;position:relative;box-sizing:border-box;min-width:5.14em;padding:.7em .57em;margin:0 .29em;background:0 0;text-align:center;font:inherit;text-transform:uppercase;outline:0;border-radius:3px;-webkit-user-select:none;user-select:none;cursor:pointer;z-index:0}:host([disabled]){background:#eaeaea!important;color:#a8a8a8!important;cursor:auto;pointer-events:none}::content *{text-transform:inherit}#ripple{pointer-events:none;z-index:-1}</style>
+
+    <template if="{{raisedButton || raised}}">
+      <paper-shadow id="shadow" z="{{z}}" animated=""></paper-shadow>
+    </template>
+
+    <!-- this div is needed to position the ripple behind text content -->
+    <div relative="">
+      <content></content>
+      {{label}}
+    </div>
+
+  </template>
+
+  <script>Polymer("paper-button",{publish:{label:"",raised:false,raisedButton:false,recenteringTouch:false,fill:true},labelChanged:function(){if(this.label){console.warn('The "label" property is deprecated.')}},raisedButtonChanged:function(){if(this.raisedButton){console.warn('The "raisedButton" property is deprecated.')}}});</script>
+</polymer-element>
 
 
 <polymer-element name="topeka-quiz-true-false" extends="topeka-quiz-base" noscript="" assetpath="templates/">

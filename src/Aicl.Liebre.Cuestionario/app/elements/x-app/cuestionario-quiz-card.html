@@ -1,5 +1,4 @@
-<link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
-<link rel="import" href="../templates/topeka-quiz-true-false.html">
+<link rel="import" href="../templates/q-si-no.html">
 <polymer-element name="cuestionario-quiz-card" attributes="pregunta,respuesta,estado">
   <template>
     <style></style>
@@ -7,11 +6,11 @@
 		<div class="quiz-titulo">{{pregunta.Enunciado}}</div>
     </div>
     <div class="quiz-detalle" on-quiz-answered="{{ quizAnswered }}">
-		<topeka-quiz-true-false id="quiz" name="true-false" quiz="{{ pregunta }}" 
+		<q-si-no id="quiz" name="true-false" quiz="{{ pregunta }}" 
 								value="{{ respuesta.Valor }}"
 								estado="{{estado}}"
 								noAplicaChecked="{{ respuesta.NoAplicaChecked }}">
-		</topeka-quiz-true-false>
+		</q-si-no>
 	</div>
   </template>
   <script>
