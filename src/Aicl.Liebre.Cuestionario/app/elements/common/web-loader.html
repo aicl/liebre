@@ -1,11 +1,8 @@
 <polymer-element name="web-loader" attributes="type color display">
   <template>
-    <template id="clock" if="{{type == 'clock'}}">
-      <div class="clock" style="display: {{display}};"></div>
-      <style>
-        /* -------------- Clock -------------- */
-
-        .clock{
+	  <style>
+		  /* begin clock */
+		  .clock{
           border-radius: 60px;
           border: 3px solid {{color}};
           height: 80px;
@@ -30,16 +27,16 @@
           border-radius: 5px;
           -webkit-transform-origin: 50% 97%;
           transform-origin: 50% 97%;
-          -webkit-animation: grdAiguille 2s linear infinite;
-          animation: grdAiguille 2s linear infinite;
+          -webkit-animation: clock 2s linear infinite;
+          animation: clock 2s linear infinite;
         }
 
-        @-webkit-keyframes grdAiguille{
+        @-webkit-keyframes clock{
           0%{-webkit-transform:rotate(0deg);}
           100%{-webkit-transform:rotate(360deg);}
         }
 
-        @keyframes grdAiguille{
+        @keyframes clock{
           0%{transform:rotate(0deg);}
           100%{transform:rotate(360deg);}
         }
@@ -55,32 +52,27 @@
           border-radius: 5px;
           -webkit-transform-origin: 50% 94%;
           transform-origin: 50% 94%;
-          -webkit-animation: ptAiguille 12s linear infinite;
-          animation: ptAiguille 12s linear infinite;
+          -webkit-animation: clock 12s linear infinite;
+          animation: clock 12s linear infinite;
         }
 
-        @-webkit-keyframes ptAiguille{
+        @-webkit-keyframes clock{
           0%{-webkit-transform:rotate(0deg);}
           100%{-webkit-transform:rotate(360deg);}
         }
 
-        @keyframes ptAiguille{
+        @keyframes clock{
           0%{transform:rotate(0deg);}
           100%{transform:rotate(360deg);}
         }
-      </style>
-    </template>
-    <template id="dot" if="{{type == 'dot'}}">
-      <div class="loader6" style="display: {{display}};"></div>
-      <style>
-
-        /*
+		  
+		/*
         author: TaniaLD;
         url: http://codepen.io/TaniaLD/
         */
 
         /* -------------- dot -------------- */
-        .loader6{
+        .dot{
           position: relative;
           width: 12px;
           height: 12px;
@@ -96,11 +88,11 @@
           background-color: {{color}};
           -webkit-transform-origin:  50% 50%;
           transform-origin:  50% 50% ;
-          -webkit-animation: loader6 1s ease-in-out infinite;
-          animation: loader6 1s ease-in-out infinite;
+          -webkit-animation: dot 1s ease-in-out infinite;
+          animation: dot 1s ease-in-out infinite;
         }
 
-        .loader6:before{
+        .dot:before{
           content: "";
           position: absolute;
           background-color: {{color}};
@@ -112,7 +104,7 @@
           border-radius: 12px;
         }
 
-        .loader6:after{
+        .dot:after{
           content: "";
           position: absolute;
           background-color: {{color}};
@@ -124,24 +116,20 @@
           border-radius: 12px;
         }
 
-        @-webkit-keyframes loader6{
+        @-webkit-keyframes dot{
           0%{-webkit-transform:rotate(0deg);}
           50%{-webkit-transform:rotate(180deg);}
           100%{-webkit-transform:rotate(180deg);}
         }
 
-        @keyframes loader6{
+        @keyframes dot{
           0%{transform:rotate(0deg);}
           50%{transform:rotate(180deg);}
           100%{transform:rotate(180deg);}
         }
-      </style>
-    </template>
-    <template id="circle" if="{{type == 'circle'}}">
-      <div class="loader1" style="display: {{display}};"></div>
-      <style>
-        /* -------------- circle -------------- */
-        .loader1{
+		
+		  /* -------------- circle -------------- */
+        .circle{
           position: relative;
           height: 80px;
           width: 80px;
@@ -157,11 +145,11 @@
 
           -webkit-transform-origin: 50% 50%;
           transform-origin: 50% 50%;
-          -webkit-animation: loader1 3s linear infinite;
-          animation: loader1 3s linear infinite;
+          -webkit-animation: circle 3s linear infinite;
+          animation: circle 3s linear infinite;
         }
 
-        .loader1:after{
+        .circle:after{
           content: "";
           position: absolute;
           top: -5px;
@@ -172,23 +160,23 @@
           background-color: {{color}};
         }
 
-        @-webkit-keyframes loader1{
+        @-webkit-keyframes circle{
           0%{-webkit-transform:rotate(0deg);}
           100%{-webkit-transform:rotate(360deg);}
         }
 
-        @keyframes loader1{
+        @keyframes circle{
           0%{transform:rotate(0deg);}
           100%{transform:rotate(360deg);}
-        }
-      </style>
-    </template>
+        }		  
+	  </style>
+	  <div class="[[type]]" style="display: {{display}};"></div>
   </template>
   <script>
     Polymer({
       type: "circle",
       color: "#95a5a6",
-      display: "block"
+      display: "none"
     });
   </script>
 </polymer-element>
