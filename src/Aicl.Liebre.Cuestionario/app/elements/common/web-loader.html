@@ -1,6 +1,19 @@
 <polymer-element name="web-loader" attributes="type color display">
   <template>
 	  <style>
+		  .back{
+			  background: rgb(240, 240, 240);
+			  position: fixed;
+			  width: 100%;
+			  height: 100%;
+			  opacity: 0.6;
+			  top: 0px;
+			  left: 0px;
+		  }
+		  .content{
+			  padding: 10px;
+		  }
+		  		  
 		  /* begin clock */
 		  .clock{
           border-radius: 60px;
@@ -170,13 +183,25 @@
           100%{transform:rotate(360deg);}
         }		  
 	  </style>
-	  <div class="[[type]]" style="display: {{display}};"></div>
+	  <div class="back" id="back">
+		  <div layout vertical>
+			  <div layout vertical center class="content">
+				  <content></content>
+			  </div>
+			  <div class="[[type]]" hidden?="{{display==='none'}}"></div>
+		  </div>
+		  
+	  </div>
+	  
   </template>
   <script>
     Polymer({
       type: "circle",
       color: "#95a5a6",
-      display: "none"
+      display: "none",
+		displayChanged:function(){
+			this.$.back.hidden= this.display==="none"; 
+		}
     });
   </script>
 </polymer-element>
