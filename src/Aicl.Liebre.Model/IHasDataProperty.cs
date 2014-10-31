@@ -1,5 +1,6 @@
 ﻿
 using ServiceStack;
+using System.Collections.Generic;
 
 namespace Aicl.Liebre.Model
 {
@@ -63,6 +64,23 @@ namespace Aicl.Liebre.Model
 		#region IHasResponseStatus implementation
 		public ResponseStatus ResponseStatus { get; set; }
 		#endregion
+	}
+
+
+	public class ListResult<T>: IHasResponseStatus 
+	{
+		long? totalCount;
+
+		public ListResult(){
+			Data = new List<T> ();
+		}
+
+		public List<T> Data {get;set;}
+		public long? TotalCount {
+			get {return totalCount.HasValue? totalCount.Value: Data.Count;}
+			set { totalCount=value;}
+		}
+		public ResponseStatus ResponseStatus { get; set; }
 	}
 
 }

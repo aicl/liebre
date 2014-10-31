@@ -97,6 +97,8 @@
     <Content Include="q\appcache.manifest" />
     <Content Include="q\favicon.ico" />
     <Content Include="q\robots.txt" />
+    <Content Include="json\CIIU.json" />
+    <Content Include="json\ciudades.json" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Global.asax.cs">
@@ -149,6 +151,7 @@
     <Folder Include="scripts\" />
     <Folder Include="styles\" />
     <Folder Include="q\" />
+    <Folder Include="json\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Aicl.Liebre.Model\Aicl.Liebre.Model.csproj">

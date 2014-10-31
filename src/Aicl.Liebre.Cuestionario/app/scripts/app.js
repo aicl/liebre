@@ -419,6 +419,17 @@
 				unique: true, // optional, default to false
 				multiEntry: false // optional, default to false
 			}]
+		},{
+			name:'CIUU',
+			keyPath:'Codigo',
+			autoIncrement:false,
+			indexex:[{
+				name:'Descripcion',
+				keyPath:'Descripcion'
+			},{
+				name:'Seccion',
+				keyPath:'Seccion'
+			}]
 		}]
 	};
 	

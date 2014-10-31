@@ -9,6 +9,7 @@ using System.Linq.Expressions;
 using ServiceStack.Model;
 using System.Linq;
 using ServiceStack.Text;
+using System.IO;
 
 namespace Aicl.Liebre.Data
 {
@@ -294,6 +295,15 @@ namespace Aicl.Liebre.Data
 			return CreateResult (descarga, bwr);
 		}
 
+
+		public ListResult<CIIU> ReadCIIU(ReadCIIU request, string file){
+
+			using(var fileStream = new FileStream(file, FileMode.Open )){
+				var ciius= JsonSerializer.DeserializeFromStream<List<CIIU>> (fileStream);
+				return new ListResult<CIIU> { Data = ciius };
+			}
+
+		}
 
 		MongoCollection<T> GetCollection<T>(){
 			return Db.GetCollection<T> (typeof(T).GetCollectionName());
