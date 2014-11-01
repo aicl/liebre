@@ -49,6 +49,10 @@
     <Compile Include="CustomSerializer.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="CIIU.cs" />
+    <Compile Include="Departamento.cs" />
+    <Compile Include="Ciudad.cs" />
+    <Compile Include="ActividadAltoRiesgo.cs" />
+    <Compile Include="Riesgo.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="ServiceStack.Common">

@@ -395,6 +395,36 @@
 		window.liebre.remote.update(data, config);
 	};
 	
+	window.liebre.remote.readCIIU= function(config){
+		config = config || {};
+		config.model = config.model|| 'ciiu';
+		window.liebre.remote.read(config);
+	};
+	
+	window.liebre.remote.readCiudad= function(config){
+		config = config || {};
+		config.model = config.model|| 'ciudad';
+		window.liebre.remote.read(config);
+	};
+	
+	window.liebre.remote.readDepartamento= function(config){
+		config = config || {};
+		config.model = config.model|| 'departamento';
+		window.liebre.remote.read(config);
+	};
+	window.liebre.remote.readRiesgo= function(config){
+		config = config || {};
+		config.model = config.model|| 'riesgo';
+		window.liebre.remote.read(config);
+	};
+	
+	window.liebre.remote.readActividadAltoRiesgo= function(config){
+		config = config || {};
+		config.model = config.model|| 'ActividadAltoRiesgo';
+		window.liebre.remote.read(config);
+	};
+	
+		
 	// ver 1
 	var schema = {
 		stores: [{
@@ -423,13 +453,36 @@
 			name:'CIUU',
 			keyPath:'Codigo',
 			autoIncrement:false,
-			indexex:[{
+			indexes:[{
 				name:'Descripcion',
 				keyPath:'Descripcion'
 			},{
 				name:'Seccion',
 				keyPath:'Seccion'
 			}]
+		},{
+			name:'Ciudad',
+			keyPath:'Codigo',
+			autoIncrement:false,
+			indexes:[{
+				name:'Nombre',
+				keyPath:'Nombre'
+			},{
+				name:'Departamento.Codigo',
+				keyPath:'Departamento.Codigo'
+			}]
+		},{
+			name:'Departamento',
+			keyPath:'Codigo',
+			autoIncrement:false
+		},{
+			name:'ActividadAltoRiesgo',
+			keyPath:'Codigo',
+			autoIncrement:false
+		},{
+			name:'Riesgo',
+			keyPath:'Codigo',
+			autoIncrement:false
 		}]
 	};
 	
@@ -915,7 +968,7 @@
 				response.error=e;
 				response.msg=m || 'Instalacion fallida!' ;
 				if (e && e.target && e.target.error) {
-					response.msg= response.msg + e.target.error.name + ' ' + e.target.error.message;
+					response.msg= response.msg + ' '+ e.target.error.name + ' ' + e.target.error.message;
                 }
 				__ready=true;
 			};
@@ -936,6 +989,73 @@
 		});
 	};
 	
+	
+	//
+	window.liebre.putData=function(store_name,value,complete){
+		complete = complete || function(){};
+		
+		window.liebre._storage.execute(function(db){
+			var __ready=false;
+			var response= {
+				status:'ok',
+				error:null,
+				msg: 'Datos actualizaods OK:'+store_name+'.',
+				data:[]
+			};
+			db.put(store_name, value)
+			.done(function(key){
+				response.data= key;
+				__ready=true;
+				
+			})
+			.fail(function(e){
+				console.log('error',e);
+				response.status='error';
+				response.error=e;
+				response.msg='Eror al actualizar datos:' +store_name+'.' ;
+				if (e && e.target && e.target.error) {
+					response.msg= response.msg+' ' + e.target.error.name + ' ' + e.target.error.message;
+                }
+				__ready=true;
+			});
+			(function(){
+				var tId = setInterval(function() {
+					if ( __ready) {
+						onReady();
+					}
+				}, 11);
+				function onReady(){
+					clearInterval(tId);
+					if(complete){
+						complete(response);
+					}
+				}
+			})();
+		});
+	};
+	
+	window.liebre.putCIIU=function(data, complete){
+		window.liebre.putData('CIIU', data, complete);
+	};
+	
+	window.liebre.putCiudad=function(data, complete){
+		window.liebre.putData('Ciudad', data, complete);
+	};
+	
+	window.liebre.putDepartamento=function(data, complete){
+		window.liebre.putData('Departamento', data, complete);
+	};
+	
+	window.liebre.putRiesgo=function(data, complete){
+		window.liebre.putData('Riesgo', data, complete);
+	};
+	
+	window.liebre.putActividaAltoRiesgo=function(data, complete){
+		window.liebre.putData('ActividaAltoRiesgo', data, complete);
+	};
+	
+	
+	//
 	
 	document.addEventListener('polymer-ready', function() {
 	  // Perform some behaviour

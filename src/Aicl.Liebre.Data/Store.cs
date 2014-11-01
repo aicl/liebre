@@ -296,13 +296,32 @@ namespace Aicl.Liebre.Data
 		}
 
 
-		public ListResult<CIIU> ReadCIIU(ReadCIIU request, string file){
+		public ListResult<CIIU> ReadCIIU(ReadCIIU request){
+			return ReadFromFile<CIIU> ("CIIU.json");
+		}
 
+		public ListResult<Ciudad> ReadCiudad(ReadCiudad request){
+			return ReadFromFile<Ciudad> ("ciudades.json");
+		}
+
+		public ListResult<Departamento> ReadDepartamento(ReadDepartamento request){
+			return ReadFromFile<Departamento> ("departamentos.json");
+		}
+
+		public ListResult<Riesgo> ReadRiesgo(ReadRiesgo request){
+			return ReadFromFile<Riesgo> ("riesgos.json");
+		}
+
+		public ListResult<ActividadAltoRiesgo> ReadActividaAltoRiesgo(ReadActividadAltoRiesgo request){
+			return ReadFromFile<ActividadAltoRiesgo> ("actividadesaltoriesgo.json");
+		}
+
+		ListResult<T> ReadFromFile<T>(string fileName){
+			var file = PathUtils.CombinePaths("~","json",fileName).MapHostAbsolutePath ();
 			using(var fileStream = new FileStream(file, FileMode.Open )){
-				var ciius= JsonSerializer.DeserializeFromStream<List<CIIU>> (fileStream);
-				return new ListResult<CIIU> { Data = ciius };
+				var c= JsonSerializer.DeserializeFromStream<List<T>> (fileStream);
+				return new ListResult<T> { Data = c };
 			}
-
 		}
 
 		MongoCollection<T> GetCollection<T>(){

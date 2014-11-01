@@ -1,0 +1,7 @@
+﻿[
+	{ "Codigo":"riesgo1", "Clase":"Clase I", "Minimo":0.348, "Maximo":0.696, "Tarifa":0.522, "Tipo":"Mínimo", "Ejemplo":"​Actividades comerciales, financieras, trabajos de oficina, administrativos, centros educativos, restaurantes."},
+	{ "Codigo":"riesgo2", "Clase":"Clase II","Minimo":0.435, "Maximo":1.653,  "Tarifa":1.044, "Tipo":"Bajo", "Ejemplo":"Algunos procesos manufactureros como fabricación de tapetes, tejidos, confecciones y flores artificiales, almacén por departamentos, algunas labores agricolas."},
+	{ "Codigo":"riesgo3", "Clase":"Clase III","Minimo":0.783, "Maximo":4.089, "Tarifa":2.436, "Tipo":"Medio", "Ejemplo":"Algunos procesos manufactureros como la fabricación de agujas, alcoholes y artículos de cuero."},
+	{ "Codigo":"riesgo4", "Clase":"Clase IV", "Minimo":1.740, "Maximo":6.960, "Tarifa":4.350, "Tipo":"Alto", "Ejemplo":"Procesos manufactureros como fabricación de aceites, cervezas, vidrios, procesos de galvanización, transportes y servicios de vigilancia privada."},
+	{ "Codigo":"riesgo5", "Clase":"Clase V", "Minimo":3.219, "Maximo":8.7, "Tarifa":6.960, "Tipo":"Máximo", "Ejemplo":"Areneras, manejo de asbesto, bomberos, manejo de explosivos, construcción y explotación petrolera."}
+]

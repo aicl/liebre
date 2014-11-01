@@ -1,0 +1,9 @@
+﻿[
+	{"Codigo":"AAR1", "Descripcion":"Trabajos en minería que impliquen prestar el servicio en socavones o en subterráneos."},
+	{"Codigo":"AAR2", "Descripcion":"Trabajos que impliquen la exposición a altas temperaturas, por encima de los valores límites permisibles, determinados por las normas técnicas de salud de salud ocupacional."},
+	{"Codigo":"AAR3", "Descripcion":"Trabajos con exposición a radiaciones ionizantes."},
+	{"Codigo":"AAR4", "Descripcion":"Trabajos con exposición a sustancias comprobadamente cancerígenas."},
+	{"Codigo":"AAR5", "Descripcion":"En la Unidad Administrativa Especial de Aeronáutica Civil o la entidad que haga sus veces, la actividad de los técnicos aeronáuticos con funciones de controladores de tránsito aéreo, con licencia expedida o reconocida por la Oficina de Registro de la Unidad Administrativa Especial de Aeronáutica Civil, de conformidad con las normas vigentes."},
+	{"Codigo":"AAR6", "Descripcion":"En los Cuerpos de Bomberos, la actividad relacionada con la función específica de actuar en operaciones de extinción de incendios."},
+	{"Codigo":"AAR7", "Descripcion":"En el Instituto Nacional Penitenciario y Carcelario, Inpec, la actividad del personal dedicado a la custodia y vigilancia de los internos en los centros de reclusión carcelaria, durante el tiempo en el que ejecuten dicha labor. Así mismo, el personal que labore en las actividades antes señaladas en otros establecimientos carcelarios, con excepción de aquellos administrados por la fuerza pública."}
+]

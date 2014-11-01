@@ -1,16 +1,11 @@
-﻿using System;
-using Aicl.Liebre.Model;
-using ServiceStack.Web;
-using System.IO;
-using ServiceStack;
+﻿using Aicl.Liebre.Model;
 
 namespace Aicl.Liebre.ServiceInterface
 {
 	public class CIIUService:ServiceBase
 	{
 		public object Get(ReadCIIU request){
-			var f = PathUtils.CombinePaths("~","json","CIIU.json").MapHostAbsolutePath ();
-			return 	Store.ReadCIIU (request, f);
+			return 	Store.ReadCIIU (request);
 		}
 	}
 }

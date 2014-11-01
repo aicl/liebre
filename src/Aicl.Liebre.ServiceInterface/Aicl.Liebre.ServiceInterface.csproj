@@ -43,6 +43,10 @@
     <Compile Include="DescargaService.cs" />
     <Compile Include="CuestionarioService.cs" />
     <Compile Include="CIIUService.cs" />
+    <Compile Include="CiudadService.cs" />
+    <Compile Include="DepartamentoService.cs" />
+    <Compile Include="RiesgoService.cs" />
+    <Compile Include="ActividadAltoRiesgoService.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="ServiceStack">
