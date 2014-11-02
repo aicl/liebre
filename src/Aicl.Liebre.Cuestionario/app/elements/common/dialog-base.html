@@ -46,6 +46,7 @@
 			},
 			
 			_delegateOkTap:function(event, detail, sender){
+				this.async(function(){
 				var v=true;
 				if(this._validateFn){
 					v= this._validateFn(this._oldValue, this._newValue)
@@ -58,6 +59,7 @@
 									   sender)
 					
 				}
+				});
 			},
 			editableChanged:function(old, current){
 				console.log("editable changed", old, current);

@@ -991,7 +991,7 @@
 	
 	
 	//
-	window.liebre.putData=function(store_name,value,complete){
+	window.liebre.putData=function(storeName,value,complete){
 		complete = complete || function(){};
 		
 		window.liebre._storage.execute(function(db){
@@ -999,10 +999,10 @@
 			var response= {
 				status:'ok',
 				error:null,
-				msg: 'Datos actualizaods OK:'+store_name+'.',
+				msg: 'Datos actualizaods OK:'+storeName+'.',
 				data:[]
 			};
-			db.put(store_name, value)
+			db.put(storeName, value)
 			.done(function(key){
 				response.data= key;
 				__ready=true;
@@ -1012,7 +1012,7 @@
 				console.log('error',e);
 				response.status='error';
 				response.error=e;
-				response.msg='Eror al actualizar datos:' +store_name+'.' ;
+				response.msg='Eror al actualizar datos:' +storeName+'.' ;
 				if (e && e.target && e.target.error) {
 					response.msg= response.msg+' ' + e.target.error.name + ' ' + e.target.error.message;
                 }
