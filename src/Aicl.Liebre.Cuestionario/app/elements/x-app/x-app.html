@@ -196,7 +196,7 @@
 		  },
 		  		  
 		  handlerShowDownload:function(){
-			  this.$.qdi.showNew();
+			  this.$.qdi.toggle();
 		  },
 		  
 		  handlerSaveDownload:function(event, detail){
@@ -223,7 +223,6 @@
 			  this.$.qs.current.Descarga=data;
 			  this.$.qp.cuestionario= this.$.qs.current;
 			  this.$.qc.cuestionario= this.$.qs.current;
-			  console.log("update cuestionario", this.$.qs.current, data);
 			  this.$.wl.display="block";
 			  window.liebre.putCuestionario(this.$.qs.current, function(response){
 				  this.$.wl.display="none";

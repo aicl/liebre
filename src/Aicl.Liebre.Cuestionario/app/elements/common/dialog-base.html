@@ -62,13 +62,11 @@
 				});
 			},
 			editableChanged:function(old, current){
-				console.log("editable changed", old, current);
 				if(!this.__dialog) return;
 				var inputs= this.__dialog.querySelectorAll("[name]");
 				for(var i in inputs){
 					inputs[i].disabled=!this.editable;
 				}
-				console.log(inputs);
 			},
 			
 			getInput:function(name){

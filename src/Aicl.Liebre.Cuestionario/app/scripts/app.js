@@ -145,7 +145,7 @@
 				return;
 			}
 			(function(){
-				var times=500;
+				var times=1000000;
 				var tId = setInterval(function() {
 					if (self.__ready) {
 						onReady();
@@ -483,6 +483,22 @@
 			name:'Riesgo',
 			keyPath:'Codigo',
 			autoIncrement:false
+		},{
+			name:'tabla',
+			keyPath:'id',
+			autoIncrement:true,
+			indexes:[{
+				name:'tipo',
+				keyPath:'tipo'
+			}]
+		},{
+			name:'data',
+			keyPath:'id',
+			autoIncrement:true,
+			indexes:[{
+				name:'tipo',
+				keyPath:'tipo'
+			}]
 		}]
 	};
 	
