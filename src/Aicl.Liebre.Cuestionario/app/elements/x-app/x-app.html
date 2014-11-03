@@ -6,6 +6,7 @@
 <link rel="import" href="q-capitulos.html">
 <link rel="import" href="q-preguntas.html">
 <link rel="import" href="q-dialog-instalacion.html">
+<!-- <link rel="import" href="update-tables.html"> !-->
 <polymer-element name="x-app">
   <template>
     <style></style>
@@ -31,6 +32,7 @@
 	  <paper-toast id="tec"  class="error_connection" role="alert"></paper-toast>
 	  <paper-toast id="tc" class="complete" text="Operación realizada!"></paper-toast>
 	  <q-dialog-instalacion id="qdi"></q-dialog-instalacion>
+	  <!-- <update-tables id="ut"></update-tables> !-->
   </template>
   <script>
 	  Polymer({		  		   
@@ -64,6 +66,9 @@
 			  
 			  window.addEventListener('online',  this.updateOnlineStatus.bind(this));
 			  window.addEventListener('offline', this.updateOnlineStatus.bind(this)); 
+			  
+			  //this.actualizarTablas()
+			  
 			  			  
 			  this.$.wl.display="block";
 			  window.liebre.getCuestionarios(function(response){
@@ -76,8 +81,12 @@
 					  this.$.te.show();
 				  }
 			  }.bind(this));
+			  
 		  },
 		  
+		  //actualizarTablas:function(complete){
+			//  this.$.ut.go();
+		  //},
 		  updateOnlineStatus: function (event) {
 			 this.$.hp.ri.disabled= !navigator.onLine;
 		  },

@@ -450,7 +450,7 @@
 				multiEntry: false // optional, default to false
 			}]
 		},{
-			name:'CIUU',
+			name:'CIIU',
 			keyPath:'Codigo',
 			autoIncrement:false,
 			indexes:[{
@@ -939,11 +939,11 @@
 				}
 			}
 						
-			var kv= window.ydn.db.KeyRange.only(data.Diagnostico.Id);
-			db.values('Cuestionario','Diagnostico.Id',  kv)
-			.done(function(aData){
-				var r =aData[0];
-				if(!r){
+			//var kv= window.ydn.db.KeyRange.only(data.Diagnostico.Id);
+			//db.values('Cuestionario','Diagnostico.Id',  kv)
+			//.done(function(aData){
+				//var r =aData[0];
+				//if(!r){
 					db.put('Cuestionario',data)
 					.done(function(){
 						db.put('Guia', data.Guias)
@@ -969,14 +969,14 @@
 					.fail(function(e) {
 						doError('Instalacion fallida! (Cuestionario).',e);
 					});
-				}
-				else{
-					doError('Instalacion fallida! Borre el Cuestionario con id:'+ data.Descarga.Id);
-				}
-			})
-			.fail(function(e){
-				doError('Instalacion fallida. (Buscar Diagnostico:'+ data.Diagnostico.Id+')',e);
-			});
+				//}
+				//else{
+				//	doError('Instalacion fallida! Borre el Cuestionario con id:'+ data.Descarga.Id);
+				//}
+			//})
+			//.fail(function(e){
+			//	doError('Instalacion fallida. (Buscar Diagnostico:'+ data.Diagnostico.Id+')',e);
+			//});
 			
 			var doError= function(m,e){
 				console.log('error',e);
@@ -1070,6 +1070,34 @@
 		window.liebre.putData('ActividaAltoRiesgo', data, complete);
 	};
 	
+	window.liebre.countData=function(storeName, complete){
+		complete = complete || function(){};
+		window.liebre._storage.execute(function(db){
+			var __ready=false;
+			var response= {
+				status:'ok',
+				number: null
+			};
+			db.count(storeName)
+			.done(function(number){
+				response.number= number;
+				__ready=true;
+			});
+			(function(){
+				var tId = setInterval(function() {
+					if ( __ready) {
+						onReady();
+					}
+				}, 11);
+				function onReady(){
+					clearInterval(tId);
+					if(complete){
+						complete(response);
+					}
+				}
+			})();
+		});
+	};
 	
 	//
 	
