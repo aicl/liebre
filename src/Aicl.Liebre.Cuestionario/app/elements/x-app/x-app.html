@@ -6,7 +6,7 @@
 <link rel="import" href="q-capitulos.html">
 <link rel="import" href="q-preguntas.html">
 <link rel="import" href="q-dialog-instalacion.html">
-<!-- <link rel="import" href="update-tables.html"> !-->
+<link rel="import" href="update-tables.html">
 <polymer-element name="x-app">
   <template>
     <style></style>
@@ -18,6 +18,7 @@
 								on-r-icon-tap="{{handlerShowDownload}}"
 								titulo="Cuestionarios SGSST">
 				  <q-select id="qs"></q-select>
+				  <update-tables id="ut"></update-tables> 
 			  </app-header-panel>
 		  </div>
 		  <div hash="capitulos" class="page">
@@ -32,7 +33,7 @@
 	  <paper-toast id="tec"  class="error_connection" role="alert"></paper-toast>
 	  <paper-toast id="tc" class="complete" text="Operación realizada!"></paper-toast>
 	  <q-dialog-instalacion id="qdi"></q-dialog-instalacion>
-	  <!-- <update-tables id="ut"></update-tables> !-->
+	  
   </template>
   <script>
 	  Polymer({		  		   
@@ -67,9 +68,16 @@
 			  window.addEventListener('online',  this.updateOnlineStatus.bind(this));
 			  window.addEventListener('offline', this.updateOnlineStatus.bind(this)); 
 			  
-			  //this.actualizarTablas()
+			  this.actualizarTablas()
 			  
-			  			  
+		  },
+		  
+		  actualizarTablas:function(complete){
+			  this.$.ut.go(this.mostrarCuestionarios.bind(this));
+		  },
+		  
+		  mostrarCuestionarios:function(){
+			  console.log("arracamos mostrarCuestionario...");
 			  this.$.wl.display="block";
 			  window.liebre.getCuestionarios(function(response){
 				  this.$.wl.display="none";
@@ -81,12 +89,8 @@
 					  this.$.te.show();
 				  }
 			  }.bind(this));
-			  
 		  },
 		  
-		  //actualizarTablas:function(complete){
-			//  this.$.ut.go();
-		  //},
 		  updateOnlineStatus: function (event) {
 			 this.$.hp.ri.disabled= !navigator.onLine;
 		  },

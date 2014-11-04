@@ -420,7 +420,7 @@
 	
 	window.liebre.remote.readActividadAltoRiesgo= function(config){
 		config = config || {};
-		config.model = config.model|| 'ActividadAltoRiesgo';
+		config.model = config.model|| 'actividadaltoriesgo';
 		window.liebre.remote.read(config);
 	};
 	
@@ -1032,6 +1032,9 @@
 				if (e && e.target && e.target.error) {
 					response.msg= response.msg+' ' + e.target.error.name + ' ' + e.target.error.message;
                 }
+				else if(e){
+					response.msg= response.msg+' ' + e.name + ' ' + e.message;
+				}
 				__ready=true;
 			});
 			(function(){
@@ -1078,11 +1081,26 @@
 				status:'ok',
 				number: null
 			};
-			db.count(storeName)
-			.done(function(number){
-				response.number= number;
+			try{
+				db.count(storeName)
+				.done(function(number){
+					response.number= number;
+					__ready=true;
+				});
+			}
+			catch(e){
+				
+				response.status='error';
+				response.error=e;
+				response.msg='Error countData.';
+				if (e && e.target && e.target.error) {
+					response.msg= response.msg+' ' + e.target.error.name + ' ' + e.target.error.message;
+                }
+				else if(e){
+					response.msg= response.msg+' ' + e.name + '. ' + e.message;
+				}
 				__ready=true;
-			});
+			}
 			(function(){
 				var tId = setInterval(function() {
 					if ( __ready) {
