@@ -1,22 +1,36 @@
-<link rel="import" href="../templates/q-texto-multilinea.html">
 <polymer-element name="cuestionario-guia-card" attributes="pregunta,respuesta,estado">
   <template>
-    <style></style>
-    <div class="guia-header" layout horizontal>
-			  <div class="guia-titulo">{{pregunta.Enunciado}}</div>
+    <div class="guia-header">
+		<div class="guia-titulo">{{pregunta.Enunciado}}</div>
     </div>
-    <div class="guia-detalle" on-quiz-answered="{{ quizAnswered }}" >
-		<q-texto-multilinea id="quiz" name="multiline" quiz="{{ pregunta }}" 
-								value="{{ respuesta.Valor }}"
-							    estado="{{estado}}"
-								noAplicaChecked="{{ respuesta.NoAplicaChecked }}">
-		</q-texto-multilinea>	
+    <div id="container" class="guia-detalle" on-quiz-answered="{{ quizAnswered }}" >
+		<div hidden></div>
 	</div>
   </template>
   <script>
   Polymer({
 	  quizAnswered:function(){
-		  console.log("quizAnswered value, pregunta, respuesta", this.$.quiz.value, this.pregunta, this.respuesta);
+		  console.log("quizAnswered value, pregunta, respuesta", this.respuesta.Valor,
+					  this.pregunta, this.respuesta);
+	  },	  
+	  preguntaChanged:function(){
+		  console.log("preguntaChanged vamos a crer al tipo :'%s'",'q-'+this.pregunta.Tipo);
+		  var t = document.createElement('q-'+this.pregunta.Tipo);
+		  t.id="quiz";
+		  var fc = this.$.container;
+		  fc.removeChild(fc.firstElementChild);
+		  fc.appendChild(t);
+		  
+		  t.quiz=this.pregunta;
+		  t.respuesta= this.respuesta;
+		  t.value=this.respuesta.Valor;
+		  t.estado= this.estado;
+		  t.noAplicaChecked=this.respuesta.NoAplicaChecked;
+		  
+		  t.addEventListener('element-ready', function(e){
+			  t.go();
+		  });
+		  
 	  }
   });
   </script>

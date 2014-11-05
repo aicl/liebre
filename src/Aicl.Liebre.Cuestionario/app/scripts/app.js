@@ -715,6 +715,72 @@
 			})();
 		});
 	};
+	
+	window.liebre.getData=function(storeName, complete){
+		complete=complete||function(){};
+		window.liebre._storage.execute(function(db){
+			var __ready=false;
+			var response= {
+				status:'ok',
+				error:null,
+				msg: storeName+':OK',
+				data:[]
+			};
+			db.values(storeName, null, 10000)
+			.done(function(aData){
+				if(aData[0]){
+					response.data= aData;					
+				}
+				__ready=true;
+			})
+			.fail(function(e){
+				console.log('error',e);
+				response.status='error';
+				response.error=e;
+				response.msg='Eror al leer:'+ storeName ;
+				if (e && e.target && e.target.error) {
+					response.msg= response.msg+' ' + e.target.error.name + ' ' + e.target.error.message;
+                }
+				else if(e){
+					response.msg= response.msg+'. ' + e.name + ' ' + e.message;
+				}
+				__ready=true;
+			});
+			
+			(function(){
+				var tId = setInterval(function() {
+					if ( __ready) {
+						onReady();
+					}
+				}, 11);
+				function onReady(){
+					clearInterval(tId);
+					if(complete){
+						complete(response);
+					}
+				}
+			})();
+		});
+	};
+	window.liebre.getCIIUs=function(complete){
+		window.liebre.getData('CIIU', complete);
+	};
+	
+	window.liebre.getCiudades=function(complete){
+		window.liebre.getData('Ciudad', complete);
+	};
+	
+	window.liebre.getDepartamentos=function(complete){
+		window.liebre.getData('Departamento', complete);
+	};
+	
+	window.liebre.getRiesgos=function(complete){
+		window.liebre.getData('Riesgo', complete);
+	};
+	
+	window.liebre.getActividadesAltoRiesgo=function(complete){
+		window.liebre.getData('ActividadAltoRiesgo', complete);
+	};
 		
 	// complete : function({status: 'ok' ||'error',  error: null|| error, msg:'' })
 	window.liebre.getCuestionarios=function(complete){

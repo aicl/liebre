@@ -16,10 +16,12 @@
       },
                         
       answered: function(event, detail, source) {
-		  if(this.$.rb.checked){
-			  this.value=null;
-		  }
-		  this.fire('quiz-answered');
+		  this.async(function(){
+			  if(this.$.rb.checked){
+				  this.value=null;
+			  }
+			  this.fire('quiz-answered');
+		  });
       },
       
       reset: function() {
@@ -27,10 +29,12 @@
 	  },
       
       keyPress: function(e) {
+		  
 		  if (e.keyCode === 13) {
 			  this.fire('quiz-next');
 			  e.preventDefault();
 		  }
+
 	  }		     
 	});
   })();

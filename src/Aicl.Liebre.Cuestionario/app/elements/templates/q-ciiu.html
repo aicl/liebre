@@ -1,0 +1,101 @@
+<link rel="import" href="../common/q-base.html">
+<link rel="import" href="../../bower_components/core-selection/core-selection.html">
+<link rel="import" href="../../bower_components/core-selector/core-selector.html">
+<link rel="import" href="../../bower_components/core-list/core-list.html">
+<link rel="import" href="../../bower_components/paper-tabs/paper-tabs.html">
+<link rel="import" href="../../bower_components/paper-tabs/paper-tab.html">
+<link rel="import" href="../../bower_components/paper-input/paper-input.html">
+<polymer-element name="q-ciiu" extends="q-base">
+<template>
+	<style>
+		:host{
+			height: 500px;
+			overflow: hidden;
+		}
+		.seleccionados, .disponibles{
+			height: 450px;
+		}
+		core-list{
+			height: 390px;
+		}
+		.item {
+		  box-sizing: border-box;
+		  height: 40px;
+		  border-bottom: 1px solid #ddd;
+		  padding: 4px;
+		  cursor: default;
+		  background-color: white;
+		  overflow: hidden;
+		}
+		.selected {
+		  background: silver;
+		}         
+	</style>
+ <shadow></shadow>
+	
+	<paper-tabs id="sl" selected="{{selected}}">
+		<paper-tab>Seleccionados</paper-tab>
+		<paper-tab>Disponibles</paper-tab>
+	</paper-tabs>
+
+	<div hidden?="{{selected!==0}}" class="seleccionados">
+		
+	<template repeat="{{item in respuesta.Valor}}">
+		<div layout horizontal center>
+			<core-icon-button icon="delete"  on-tap="{{ handlerDeleteItem }}"></core-icon-button>
+			<div class="text">{{item.Codigo +'-'+ item.Descripcion}}</div>
+		</div>
+	</template>
+	</div>
+	
+	<div hidden?="{{selected!==1}}" class="disponibles">
+	<paper-input w100 type="search" placeholder="codigo/descripcion"></paper-input>
+	<core-list data="{{data}}" height="40" flex>
+		<template>
+			<div class="item {{ {selected: selected} | tokenList }}">{{model.Codigo+'-'+model.Descripcion}}</div>
+		</template>
+	</core-list>
+	</div>
+	
+	
+	
+	
+<!--
+    <core-selector selected="{{value}}" horizontal layout>
+		<span raised class="false" horizontal layout center disabled?="{{rb.checked || estado!='red'}}">
+			<span>No</span>
+		</span>
+		<span raised class="true" horizontal layout center disabled?="{{rb.checked || estado!='red'}}">
+			<span>Si</span>
+		</span>
+    </core-selector>
+    !-->
+  
+</template>
+	<script>
+		Polymer({
+			
+			ready:function(){
+				this.selected=0;
+				var self=this;			
+				liebre.getCIIUs(function(r){	
+					self.data=r.data
+				})
+			},
+			created:function(){
+				
+			},
+			domReady:function(){
+				this.fire("element-ready");
+			},
+			go:function(){
+				console.log("q-ciiu go...");	
+				
+			},
+			valueChanged:function(){
+				console.log("q-ciiu valueChanged");
+				if( this.respuesta) this.respuesta.Valor=this.value;
+			}
+		})
+	</script>
+</polymer-element>

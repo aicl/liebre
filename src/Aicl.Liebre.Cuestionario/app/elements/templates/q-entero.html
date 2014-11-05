@@ -1,10 +1,9 @@
 <link rel="import" href="../common/q-base.html">
 <link rel="import" href="../../bower_components/paper-input/paper-input.html">
-<polymer-element name="q-texto-multilinea" extends="q-base">
+<polymer-element name="q-entero" extends="q-base">
 <template>
 	<style></style>
-	<paper-input w100 inputValue="{{value}}" label="Diligenciar..." multiline rows="3"
-				 disabled?="{{estado!='red'}}">
+	<paper-input w100 type="number" inputValue="{{value}}" label="Diligenciar..." disabled?="{{estado!='red'}}">
 	</paper-input>
 </template>
 <script>
@@ -16,10 +15,10 @@
 		  this.fire("element-ready");
 	  },
 	  go:function(){
-		  console.log("q-si-no go...");
+		  console.log("q-entero go...");
 	  },
 	  valueChanged:function(){
-		  console.log("q-texto-multilinea valueChanged");
+		  console.log("q-entero valueChanged");
 		  if( this.respuesta) this.respuesta.Valor=this.value;
 	  }
   });

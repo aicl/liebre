@@ -1,6 +1,6 @@
 <link rel="import" href="../common/q-base.html">
 <link rel="import" href="../../bower_components/core-selector/core-selector.html">
-<polymer-element name="q-si-no" extends="q-base"  noscript>
+<polymer-element name="q-si-no" extends="q-base">
 <template>
  <style></style>
  <shadow></shadow>
@@ -15,4 +15,18 @@
     </core-selector>
   </div>
 </template>
+	<script>
+		Polymer({
+			domReady:function(){
+				this.fire("element-ready");
+			},
+			go:function(){
+				console.log("q-si-no go...");
+			},
+			valueChanged:function(){
+				console.log("q-si-no valueChanged");
+				if( this.respuesta) this.respuesta.Valor=this.value;
+			}
+		})
+	</script>
 </polymer-element>
