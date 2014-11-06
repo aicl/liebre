@@ -89,7 +89,6 @@
 		  },
 		  
 		  __next:function(){
-			  
 			  if( this.answer.Valor===0  && this.quiz.IdGuias.length>0){
 				  var self= this;
 				  if(this.getGuias){
@@ -159,7 +158,7 @@
 		  __nextGuiaTap:function(){
 			  if(this.quiz.currentGuiaIndex+1== this.guias.length){
 				  this.quiz.currentGuiaIndex=0;
-				  this.guia= Object.clone(this.guias[this.quiz.currentGuiaIndex]);
+				  //this.guia= Object.clone(this.guias[this.quiz.currentGuiaIndex]);
 				  this.selected="0";
 				  //this.$.guia.toggle();
 				  this.__next__();
@@ -167,7 +166,6 @@
 			  }
 			  this.quiz.currentGuiaIndex+=1;
 			  this.guia= Object.clone(this.guias[this.quiz.currentGuiaIndex]);
-			  
 		  },
 			  
 		  capituloChanged:function(prev, current){

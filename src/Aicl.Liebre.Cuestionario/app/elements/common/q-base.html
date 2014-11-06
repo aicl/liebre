@@ -10,6 +10,12 @@
 <script>
   (function() {
     Polymer({
+		noAplicaCheckedChanged:function(){
+			if(this.$.rb.checked){
+				this.value=null;
+			}
+		}
+		/*
       eventDelegates: {
         tap: 'answered',
         keypress: 'keyPress'
@@ -35,7 +41,8 @@
 			  e.preventDefault();
 		  }
 
-	  }		     
+	  }
+	  */
 	});
   })();
 </script>

@@ -32,15 +32,20 @@
 	};
 	
 	if (typeof String.prototype.startsWith !== 'function') {
-		String.prototype.startsWith = function (str){
-			return this.slice(0, str.length) === str;
+		String.prototype.startsWith = function (str, nocase){
+			return (!nocase? this.slice(0, str.length) === str:
+					this.slice(0, str.length).toLowerCase() === str.toLowerCase());
 		};
 	}
 	if (typeof String.prototype.endsWith !== 'function') {
-		String.prototype.endsWith = function (str){
-			return this.slice(-str.length) === str;
+		String.prototype.endsWith = function (str, nocase){
+			return (!nocase? this.slice(-str.length) === str:
+					this.slice(-str.length).toLowerCase()=== str.toLowerCase() );
 		};
 	}
+	String.prototype.contains = function(text, nocase) {
+		return ( !nocase? this.indexOf(text) !== -1 : this.toLowerCase().indexOf(text.toLowerCase()) !== -1 );
+	};
 		
 	Object.clone = function (src) {
 		var newObj = (src instanceof Array) ? [] : {};
@@ -716,8 +721,9 @@
 		});
 	};
 	
-	window.liebre.getData=function(storeName, complete){
-		complete=complete||function(){};
+	window.liebre.getData=function(storeName, config){
+		config=config||{};
+		config.complete=config.complete||function(){};
 		window.liebre._storage.execute(function(db){
 			var __ready=false;
 			var response= {
@@ -728,9 +734,8 @@
 			};
 			db.values(storeName, null, 10000)
 			.done(function(aData){
-				if(aData[0]){
-					response.data= aData;					
-				}
+				response.data= config.filterFn?
+					window._.filter(aData[0]?aData:[],config.filterFn):aData[0]?aData:[];
 				__ready=true;
 			})
 			.fail(function(e){
@@ -755,31 +760,31 @@
 				}, 11);
 				function onReady(){
 					clearInterval(tId);
-					if(complete){
-						complete(response);
+					if(config.complete){
+						config.complete(response);
 					}
 				}
 			})();
 		});
 	};
-	window.liebre.getCIIUs=function(complete){
-		window.liebre.getData('CIIU', complete);
+	window.liebre.getCIIUs=function(config){
+		window.liebre.getData('CIIU', config);
 	};
 	
-	window.liebre.getCiudades=function(complete){
-		window.liebre.getData('Ciudad', complete);
+	window.liebre.getCiudades=function(config){
+		window.liebre.getData('Ciudad', config);
 	};
 	
-	window.liebre.getDepartamentos=function(complete){
-		window.liebre.getData('Departamento', complete);
+	window.liebre.getDepartamentos=function(config){
+		window.liebre.getData('Departamento', config);
 	};
 	
-	window.liebre.getRiesgos=function(complete){
-		window.liebre.getData('Riesgo', complete);
+	window.liebre.getRiesgos=function(config){
+		window.liebre.getData('Riesgo', config);
 	};
 	
-	window.liebre.getActividadesAltoRiesgo=function(complete){
-		window.liebre.getData('ActividadAltoRiesgo', complete);
+	window.liebre.getActividadesAltoRiesgo=function(config){
+		window.liebre.getData('ActividadAltoRiesgo', config);
 	};
 		
 	// complete : function({status: 'ok' ||'error',  error: null|| error, msg:'' })
@@ -1000,7 +1005,6 @@
 			
 			for (var g in data.Guias){
 				if(data.Guias[g].Respuesta.Valor){
-					console.log('Respuesta.Valor', data.Guias[g].Respuesta.Valor); 
 					data.Guias[g].Respuesta.Valor= window.liebre.tools.parseQ(data.Guias[g].Respuesta.Valor);
 				}
 			}

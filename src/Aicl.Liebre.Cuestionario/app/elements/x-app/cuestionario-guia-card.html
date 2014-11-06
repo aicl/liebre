@@ -14,23 +14,23 @@
 					  this.pregunta, this.respuesta);
 	  },	  
 	  preguntaChanged:function(){
-		  console.log("preguntaChanged vamos a crer al tipo :'%s'",'q-'+this.pregunta.Tipo);
-		  var t = document.createElement('q-'+this.pregunta.Tipo);
-		  t.id="quiz";
-		  var fc = this.$.container;
-		  fc.removeChild(fc.firstElementChild);
-		  fc.appendChild(t);
-		  
-		  t.quiz=this.pregunta;
-		  t.respuesta= this.respuesta;
-		  t.value=this.respuesta.Valor;
-		  t.estado= this.estado;
-		  t.noAplicaChecked=this.respuesta.NoAplicaChecked;
-		  
-		  t.addEventListener('element-ready', function(e){
-			  t.go();
-		  });
-		  
+		  if(this.pregunta && this.pregunta.Tipo){
+			  console.log("preguntaChanged guia-card crear:", 'q-'+this.pregunta.Tipo);
+			  var t = document.createElement('q-'+this.pregunta.Tipo);
+			  var fc = this.$.container;
+			  fc.removeChild(fc.firstElementChild);
+			  fc.appendChild(t);
+
+			  t.quiz=this.pregunta;
+			  t.respuesta= this.respuesta;
+			  t.value=this.respuesta.Valor;
+			  t.estado= this.estado;
+			  t.noAplicaChecked=this.respuesta.NoAplicaChecked;
+
+			  t.addEventListener('element-ready', function(e){
+				  t.go();
+			  });
+		  }
 	  }
   });
   </script>

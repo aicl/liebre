@@ -1,0 +1,117 @@
+<!doctype html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Q-SGSST</title>
+  <meta name="description" content="Diagnostico SGSST, Decreto 1443 de 2014">
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0"/>	  	
+  <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+
+  <!-- build:css styles/main.css -->
+  
+  <!-- endbuild-->
+
+  <script src="../bower_components/platform/platform.js"></script>
+  
+  <!--  
+  <script src="bower_components/polymer/polymer.js"></script>
+  <link rel="import" href="bower_components/polymer/layout.html">
+  !-->
+  
+	
+  <!-- build:vulcanized elements/elements.vulcanized.html -->
+  <link rel="import" href="../bower_components/polymer/polymer.html">	
+  <script src="../flatiron-director/director.min.js"></script>
+  <link rel="import" href="../flatiron-director/flatiron-director.html">	
+  <link rel="import" href="../elements/elements.html">
+  <!-- endbuild-->
+	<style>	 
+    
+    list-test {
+      display: block;
+      height: 100%; 
+      margin: 0 auto;
+    }
+    
+	</style>
+</head>
+<body fullbleed unresolved>
+	<read-ajax id="read"></read-ajax>
+	<create-ajax id="create"></create-ajax>
+	<update-ajax id="update"></update-ajax>
+	<delete-ajax id="delete"></delete-ajax>
+
+	<!-- <cuestionario-guia-card class="card" id="element">
+	</cuestionario-guia-card> !-->
+	<!--<q-ciiu></q-ciiu> !-->
+		
+		
+	<script src="../scripts/vendor/ydn.db-is-core-qry.js"></script>
+	<!-- <script src="scripts/vendor/capitulos.js"></script> !-->
+  
+	<!-- build:js scripts/app.js -->
+	<script src="../scripts/app.js"></script>
+			
+	<list-test></list-test>
+
+<polymer-element name="list-test" layout vertical>
+<template>
+  <style>
+    .item {
+      box-sizing: border-box;
+      height: 60px;
+      border-bottom: 1px solid #ddd;
+      padding: 4px;
+      cursor: default;
+      background-color: white;
+      overflow: hidden;
+    }
+
+    .selected {
+      background: silver;
+    }         
+    
+    .body {
+      font-size: 12px;
+    }
+    
+
+  </style>
+
+  
+  <core-list id="list" data="{{data}}" height="60" flex>
+    <template>
+      <div class="item {{ {selected: selected} | tokenList }}">
+          <div class="subject">Row: {{index}}, Record ID: {{model.Codigo}}</div>        
+          <span class="body">{{model.Descripcion}}</span>
+      </div>
+    </template>
+  </core-list>
+
+</template>
+<script>
+(function() {
+  
+  Polymer('list-test', {
+    
+    ready: function() {
+      this.initArrayFull();
+    },
+    initArrayFull: function() {
+		var self= this;
+		liebre.getCIIUs(function(r){
+			self.data=r.data
+			console.log("cuantos:", r.data.length, self.data.length);
+		})
+    }
+  });
+})();  
+</script>
+</polymer-element>
+
+	
+	
+	
+</body>
+</html>

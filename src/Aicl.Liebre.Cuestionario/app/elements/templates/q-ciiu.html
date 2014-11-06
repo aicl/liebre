@@ -5,6 +5,7 @@
 <link rel="import" href="../../bower_components/paper-tabs/paper-tabs.html">
 <link rel="import" href="../../bower_components/paper-tabs/paper-tab.html">
 <link rel="import" href="../../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../common/dialog-yes-no.html">
 <polymer-element name="q-ciiu" extends="q-base">
 <template>
 	<style>
@@ -14,9 +15,10 @@
 		}
 		.seleccionados, .disponibles{
 			height: 450px;
+			padding: 10px;
 		}
 		core-list{
-			height: 390px;
+			height: 370px;
 		}
 		.item {
 		  box-sizing: border-box;
@@ -27,9 +29,22 @@
 		  background-color: white;
 		  overflow: hidden;
 		}
+		
 		.selected {
 		  background: silver;
-		}         
+		}
+		
+		.search-box{
+			background: white;
+			margin-bottom: 10px;
+			box-shadow: 0 1px 2px 0;
+			border-radius: 2px;
+			padding: 0 20px 0 20px;
+		}
+		
+		core-list{
+			
+		}
 	</style>
  <shadow></shadow>
 	
@@ -38,63 +53,93 @@
 		<paper-tab>Disponibles</paper-tab>
 	</paper-tabs>
 
-	<div hidden?="{{selected!==0}}" class="seleccionados">
+	<div hidden?="{{selected!==0}}" class="seleccionados" disabled?="{{rb.checked || estado!='red'}}">
 		
 	<template repeat="{{item in respuesta.Valor}}">
 		<div layout horizontal center>
-			<core-icon-button icon="delete"  on-tap="{{ handlerDeleteItem }}"></core-icon-button>
+			<core-icon-button icon="delete"  on-tap="{{ handlerShowDeleteItem }}"></core-icon-button>
 			<div class="text">{{item.Codigo +'-'+ item.Descripcion}}</div>
 		</div>
 	</template>
 	</div>
 	
-	<div hidden?="{{selected!==1}}" class="disponibles">
-	<paper-input w100 type="search" placeholder="codigo/descripcion"></paper-input>
-	<core-list data="{{data}}" height="40" flex>
-		<template>
-			<div class="item {{ {selected: selected} | tokenList }}">{{model.Codigo+'-'+model.Descripcion}}</div>
-		</template>
-	</core-list>
+	<div hidden?="{{selected!==1}}" class="disponibles" disabled?="{{rb.checked || estado!='red'}}">
+		<div class="search-box">
+			<paper-input w100 type="search" placeholder="codigo/descripcion" inputValue="{{stext}}"></paper-input>
+		</div>
+		<core-list data="{{data}}" height="40" flex on-core-activate="{{handlerActivate}}">
+			<template>
+				<div class="item {{ {selected: selected} | tokenList }}">{{model.Codigo+'-'+model.Descripcion}}</div>
+			</template>
+		</core-list>
 	</div>
-	
-	
-	
-	
-<!--
-    <core-selector selected="{{value}}" horizontal layout>
-		<span raised class="false" horizontal layout center disabled?="{{rb.checked || estado!='red'}}">
-			<span>No</span>
-		</span>
-		<span raised class="true" horizontal layout center disabled?="{{rb.checked || estado!='red'}}">
-			<span>Si</span>
-		</span>
-    </core-selector>
-    !-->
-  
+	<dialog-yes-no id="dlg">Desea excluir el item?</dialog-yes-no>  
 </template>
 	<script>
 		Polymer({
-			
-			ready:function(){
-				this.selected=0;
-				var self=this;			
-				liebre.getCIIUs(function(r){	
-					self.data=r.data
-				})
+			handlerShowDeleteItem:function(event, detail, sender){
+				this._current= sender.templateInstance.model.item;
+				this.$.dlg.toggle();
 			},
-			created:function(){
+			
+			_delegateDeleteItem:function(event, detail, sender){
+				this.value= _.without(this.value, this._current);
+			},
+			
+			handlerActivate:function(event, detail, sender){				
+				if(!this.value){
+					this.value=[];
+				}
+				if (! _.some(this.value, function(c){ return c.Codigo===detail.data.Codigo})){
+					this.value.push(detail.data);
+				}
+			},
+			ready:function(){
+				var self=this;			
+				this.selected=0;
+				this.$.dlg.handlerOkTap=this._delegateDeleteItem.bind(this);
+				liebre.getCIIUs({
+					complete:function(r){
+						self.fuente=r.data
+						self.data=r.data;
+					},
+					filterFn:function(ciiu){ return ciiu.Codigo.length===5 }
+				})
 				
 			},
+			
 			domReady:function(){
 				this.fire("element-ready");
 			},
 			go:function(){
-				console.log("q-ciiu go...");	
-				
 			},
 			valueChanged:function(){
 				console.log("q-ciiu valueChanged");
 				if( this.respuesta) this.respuesta.Valor=this.value;
+			},
+			stextChanged:function(){
+				var self=this;
+				if(this.stext){
+					if(/^[a-zA-Z]$/.test(self.stext) || /^[a-zA-Z]\d+$/.test(self.stext)){
+						this.async(function(){
+							this.data=_.filter(this.fuente, function(ciiu){
+								return ciiu.Codigo.startsWith(self.stext.toUpperCase());
+							});
+						});
+					}
+					else if(this.stext.length>3){
+						this.async(function(){
+							this.data= _.filter(this.fuente,function(ciiu){
+								return ciiu.Descripcion.contains(self.stext, true);
+							});
+						});
+					}
+				}
+				else{
+					this.async(function(){
+						this.data= _.filter(this.fuente, function(ciiu){return ciiu});
+					});
+				}
 			}
 		})
 	</script>
