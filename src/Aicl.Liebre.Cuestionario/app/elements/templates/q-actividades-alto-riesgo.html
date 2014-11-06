@@ -1,0 +1,97 @@
+<link rel="import" href="../common/q-base.html">
+<link rel="import" href="../../bower_components/paper-toggle-button/paper-toggle-button.html">
+<polymer-element name="q-actividades-alto-riesgo" extends="q-base">
+<template>
+	<style>
+		.item{
+			padding: 5px 20px 5px 10px;
+			background: white;
+			border-radius: 4px;
+			margin: 0px 10px 10px 10px ;
+		}
+		paper-toggle-button{
+			background: rgb(212,212,212);
+			padding: 10px;
+			border-radius: 4px;
+		}
+	</style>
+ <shadow></shadow>
+	<div  disabled?="{{rb.checked || estado!='red'}}">
+	<template repeat="{{item in opciones}}">
+		<div layout horizontal center class="item">
+			<div class="text" flex>{{item.Descripcion}}</div>
+			<paper-toggle-button checked="{{item.Checked}}" on-change="{{handlerCheck}}"></paper-toggle-button>
+		</div>
+	</template>
+	</div>
+</template>
+	<script>
+		Polymer({
+			__ready:false,
+			
+			ready:function(){
+				var self=this;				
+				liebre.getActividadesAltoRiesgo({
+					complete:function(r){
+						self.opciones=r.data
+						self.__ready=true;
+					}
+				})
+			},
+			
+			domReady:function(){
+				this.fire("element-ready");
+			},
+			go:function(){
+			},
+			valueChanged:function(){
+				console.log("q-actividades Alto riegso valueChanged", this.value);
+				if( this.respuesta) this.respuesta.Valor=this.value;
+			},
+			handlerCheck:function(event, detail, sender){
+				var item =sender.templateInstance.model.item;
+				if(!this.value){
+					this.value=[];
+				}
+				
+				if(item.Checked){
+					this.value.push(item);
+				}
+				else{
+					this.value= _.without(this.value,
+										  _.find(this.value, function(v){return v.Codigo===item.Codigo}));
+				}
+			},
+			
+			respuestaChanged:function(){	
+				console.log("respuestaChanged:", this.respuesta);
+				
+				if( this.__ready) {
+					this.__updateOpciones();
+					return;
+				}
+				var self=this;
+				(function(){
+					var tId = setInterval(function() {
+						if ( self.__ready) {
+							clearInterval(tId);
+							self.__updateOpciones();
+						}
+					}, 100);
+				})();
+			},
+			
+			__updateOpciones:function(){
+				if(this.respuesta && this.respuesta.Valor){
+					var self=this;
+					_.each(this.respuesta.Valor, function(i){
+						var c = _.find(self.opciones, function(o){ return o.Codigo===i.Codigo});
+						if(c){
+							c.Checked=true;
+						}
+					});
+				}
+			}			
+		})
+	</script>
+</polymer-element>
