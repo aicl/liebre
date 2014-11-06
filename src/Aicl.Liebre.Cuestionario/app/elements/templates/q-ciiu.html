@@ -54,7 +54,6 @@
 	</paper-tabs>
 
 	<div hidden?="{{selected!==0}}" class="seleccionados" disabled?="{{rb.checked || estado!='red'}}">
-		
 	<template repeat="{{item in respuesta.Valor}}">
 		<div layout horizontal center>
 			<core-icon-button icon="delete"  on-tap="{{ handlerShowDeleteItem }}"></core-icon-button>
@@ -107,7 +106,6 @@
 				})
 				
 			},
-			
 			domReady:function(){
 				this.fire("element-ready");
 			},
