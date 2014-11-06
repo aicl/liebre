@@ -15,10 +15,19 @@
 		}
 		.seleccionados, .disponibles{
 			height: 450px;
-			padding: 10px;
+			padding: 5px 10px 5px 10px;
+			background: white;
+			border-radius: 4px;
 		}
 		core-list{
 			height: 370px;
+		}
+		
+		.item-s{
+			background: rgb(212,212,212);
+			border-radius: 4px;
+			padding: 10px;
+			margin-bottom: 10px;
 		}
 		.item {
 		  box-sizing: border-box;
@@ -42,9 +51,7 @@
 			padding: 0 20px 0 20px;
 		}
 		
-		core-list{
-			
-		}
+		
 	</style>
  <shadow></shadow>
 	
@@ -55,7 +62,7 @@
 
 	<div hidden?="{{selected!==0}}" class="seleccionados" disabled?="{{rb.checked || estado!='red'}}">
 	<template repeat="{{item in respuesta.Valor}}">
-		<div layout horizontal center>
+		<div layout horizontal center class="item-s">
 			<core-icon-button icon="delete"  on-tap="{{ handlerShowDeleteItem }}"></core-icon-button>
 			<div class="text">{{item.Codigo +'-'+ item.Descripcion}}</div>
 		</div>

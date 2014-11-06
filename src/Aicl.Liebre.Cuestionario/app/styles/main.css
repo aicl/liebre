@@ -41,19 +41,23 @@ body /deep/	.text{
 	font-size: small;
 }
 
-body /deep/ .card {
+body /deep/ .card, body /deep/ .card-white {
 	display: block;
 	position: relative;
-	padding: 10px 5px 10px 5px ;    
-	/*margin: 10px 0px 10px 0px;*/
+	padding: 5px 10px 5px 10px;    
 	box-shadow: 0 1px 2px 0 ;
 	border-radius: 2px;
 	overflow: hidden;	
 	max-width: 512px;
-	background-color: rgb(212, 212, 212);
+	background: rgb(212, 212, 212);
 	width: 100vw;  
 	margin: 0 auto;
 }
+
+body /deep/ .card-white {
+	background: white;
+}
+
 
 body /deep/	paper-dialog > paper-icon-button {
 	border-radius: 10px;
