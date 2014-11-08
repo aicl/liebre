@@ -102,6 +102,7 @@
     <Content Include="json\departamentos.json" />
     <Content Include="json\riesgos.json" />
     <Content Include="json\actividadesaltoriesgo.json" />
+    <Content Include="json\rangos.json" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Global.asax.cs">
@@ -146,7 +147,6 @@
     <None Include="q\flatiron-director\LICENSE.TXT" />
     <None Include="q\flatiron-director\PATENTS" />
     <None Include="q\scripts\vendor\ydn.db-is-core-qry.js.map" />
-    <None Include="json\rangos.json" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="bower_components\" />
