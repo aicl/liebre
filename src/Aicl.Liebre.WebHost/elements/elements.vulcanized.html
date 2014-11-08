@@ -2743,7 +2743,7 @@ Example:
 	  <paper-dialog id="dialog" backdrop="" style="top:0px;">
 		  <paper-input label="Enunciado" required floatinglabel="" id="Enunciado" value="{{_onedit.Enunciado}}" multiline="" rows="4">
 		  </paper-input>
-		  <paper-input disabled label="Tipo" floatinglabel="" id="Tipo" value="{{_onedit.Tipo}}"></paper-input>			
+		  <paper-input label="Tipo" floatinglabel="" id="Tipo" value="{{_onedit.Tipo}}"></paper-input>			
 		  <paper-icon-button icon="cancel" dismissive=""></paper-icon-button>
 		  <paper-icon-button icon="check" on-tap="{{ delegateSaveGuia }}" affirmative="" autofocus>
 		  </paper-icon-button>
@@ -2762,6 +2762,7 @@ Example:
   <script>Polymer("plantilla-guias",{created:function(){this.plantilla={};this.guias=[];this._current={};this._onedit={}},fireGuiasBack:function(){this.fire("guias-back")},handlerShowEditGuia:function(e,detail,sender){this._current=sender.templateInstance.model.item;this._onedit=Object.clone(this._current);this.$.dialog.toggle()},handlerShowNuevaGuia:function(){this._current={Enunciado:"",Tipo:"multiline",IdPlantilla:""};this._onedit=Object.clone(this._current);this.$.dialog.toggle()},handlerShowDeleteGuia:function(e,detail,sender){this._onedit=sender.templateInstance.model.item;this.$.borrar.toggle()},delegateDeleteGuia:function(e,detail,sender){if(this.handlerDeleteGuia){this.handlerDeleteGuia(e,{item:this._onedit},sender)}},delegateSaveGuia:function(e,detail,sender){if(this.$.Enunciado.invalid||Object.compare(this._current,this._onedit))return;if(this.handlerSaveGuia){this._onedit.IdPlantilla=this.plantilla.Id;this.handlerSaveGuia(e,{item:this._onedit},sender)}}});</script>
 
 </polymer-element>
+
 
 
 
