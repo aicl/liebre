@@ -297,6 +297,9 @@ module.exports = function (grunt) {
 			replacements: [{
 				from: '<link rel="import" href="../bower_components/polymer/polymer.html">',
 				to: ''
+			},{
+				from: '<link href="../bower_components/polymer/polymer.html" rel="import">',
+				to: ''
 			}]
 	  },
 	  manifest:{
@@ -305,10 +308,16 @@ module.exports = function (grunt) {
 		  replacements: [{
 			  from: 'timestamp',
 			  to:  "<%= grunt.template.date(new Date(), 'yyyy-mm-dd HH:MM:ss') %>"
-		  }]
-		  
+		  }]  
+	  },
+	  index: {
+			src: ['dist/index.html'],
+			overwrite: true,                 // overwrite matched source files
+			replacements: [{
+				from: '<link rel="stylesheet" href="styles/main.css">',
+				to:   '<link rel="stylesheet" href="styles/main.css" shim-shadowdom>'
+			}]
 	  }
-		
 	}
   });
 
@@ -351,7 +360,8 @@ module.exports = function (grunt) {
     'usemin',
     'minifyHtml',
 	'replace:dist',
-	'replace:manifest'
+	'replace:manifest',
+	'replace:index'
   ]);
 
   grunt.registerTask('default', [
@@ -374,6 +384,7 @@ module.exports = function (grunt) {
     'minifyHtml',
 	'replace:dist',
 	'replace:manifest',  
+	'replace:index',
 	'copy:site'
   ]);
 };

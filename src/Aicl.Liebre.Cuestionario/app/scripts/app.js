@@ -108,7 +108,7 @@
 		function IndexStorage(name, schema, options) {
 			this.__name=name||'default-storage';
 			this.__schema=schema||{};
-			this.__options= options||{};
+			this.__options= options||{mechanisms: ['websql', 'indexeddb']};
 			this.__db=null;
 			this.__ready=false;
 		}
@@ -1174,7 +1174,6 @@
 				});
 			}
 			catch(e){
-				
 				response.status='error';
 				response.error=e;
 				response.msg='Error countData.';

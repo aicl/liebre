@@ -1,0 +1,137 @@
+<link rel="import" href="../common/q-base.html">
+<link rel="import" href="../common/q-ciudades.html">
+<link rel="import" href="../../bower_components/core-selection/core-selection.html">
+<link rel="import" href="../../bower_components/core-selector/core-selector.html">
+<link rel="import" href="../../bower_components/core-list/core-list.html">
+<link rel="import" href="../../bower_components/paper-tabs/paper-tabs.html">
+<link rel="import" href="../../bower_components/paper-tabs/paper-tab.html">
+<link rel="import" href="../../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../common/dialog-yes-no.html">
+<polymer-element name="q-centros" extends="q-base">
+<template>
+	<style>
+		:host{
+			height: 500px;
+			overflow: hidden;
+		}
+		.seleccionados, .disponibles{
+			height: 430px;
+			padding: 5px 10px 5px 10px;
+			background: white;
+			border-radius: 4px;
+			overflow: auto;
+		}
+		core-list{
+			height: 370px;
+		}
+		
+		.item-s{
+			background: rgb(212,212,212);
+			border-radius: 4px;
+			padding: 10px;
+			margin-bottom: 10px;
+		}
+		.item {
+		  box-sizing: border-box;
+		  height: 40px;
+		  border-bottom: 1px solid #ddd;
+		  padding: 4px;
+		  cursor: default;
+		  background-color: white;
+		  overflow: hidden;
+		}
+		
+		.selected {
+		  background: silver;
+		}
+		
+		.search-box{
+			background: white;
+			margin-bottom: 10px;
+			box-shadow: 0 1px 2px 0;
+			border-radius: 2px;
+			padding: 0 20px 0 20px;
+		}
+		
+		
+	</style>
+ <shadow></shadow>
+	
+	
+
+	<div hidden?="{{selected!==0}}" class="seleccionados" disabled?="{{rb.checked || estado!='red'}}">
+		<q-ciudades></q-ciudades>
+	
+	</div>
+	
+	<div hidden?="{{selected!==1}}" class="disponibles" disabled?="{{rb.checked || estado!='red'}}">
+		<div class="search-box">
+			<paper-input w100 type="search" placeholder="codigo/descripcion" inputValue="{{stext}}"></paper-input>
+		</div>
+		<core-list data="{{data}}" height="40" flex on-core-activate="{{handlerActivate}}">
+			<template>
+				<div class="item {{ {selected: selected} | tokenList }}">{{model.Codigo+'-'+model.Descripcion}}</div>
+			</template>
+		</core-list>
+	</div>
+	<dialog-yes-no id="dlg">Desea excluir el item?</dialog-yes-no>  
+</template>
+	<script>
+		Polymer({
+			handlerShowDeleteItem:function(event, detail, sender){
+				this._current= sender.templateInstance.model.item;
+				this.$.dlg.toggle();
+			},
+			
+			_delegateDeleteItem:function(event, detail, sender){
+				this.value= _.without(this.value, this._current);
+			},
+			
+			handlerActivate:function(event, detail, sender){				
+				if(!this.value){
+					this.value=[];
+				}
+				if (! _.some(this.value, function(c){ return c.Codigo===detail.data.Codigo})){
+					this.value.push(detail.data);
+				}
+			},
+			ready:function(){
+				
+				
+			},
+			domReady:function(){
+				this.fire("element-ready");
+			},
+			go:function(){
+			},
+			valueChanged:function(){
+				console.log("q-ciiu valueChanged");
+				if( this.respuesta) this.respuesta.Valor=this.value;
+			},
+			stextChanged:function(){
+				var self=this;
+				if(this.stext){
+					if(/^[a-zA-Z]$/.test(self.stext) || /^[a-zA-Z]\d+$/.test(self.stext)){
+						this.async(function(){
+							this.data=_.filter(this.fuente, function(ciiu){
+								return ciiu.Codigo.startsWith(self.stext.toUpperCase());
+							});
+						});
+					}
+					else if(this.stext.length>3){
+						this.async(function(){
+							this.data= _.filter(this.fuente,function(ciiu){
+								return ciiu.Descripcion.contains(self.stext, true);
+							});
+						});
+					}
+				}
+				else{
+					this.async(function(){
+						this.data= _.filter(this.fuente, function(ciiu){return ciiu});
+					});
+				}
+			}
+		})
+	</script>
+</polymer-element>

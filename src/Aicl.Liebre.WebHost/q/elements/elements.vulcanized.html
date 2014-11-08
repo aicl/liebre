@@ -68,7 +68,7 @@ Example:
 @element core-dropdown
 @homepage github.io
 -->
-<link href="../bower_components/polymer/polymer.html" rel="import">
+
 
 <!--
 Copyright (c) 2014 The Polymer Project Authors. All rights reserved.
@@ -2504,7 +2504,42 @@ To change the bar color for unchecked state:
 	</div>
 </template>
 	<script>Polymer("q-actividades-alto-riesgo",{__ready:false,ready:function(){var self=this;liebre.getActividadesAltoRiesgo({complete:function(r){self.opciones=r.data;self.__ready=true}})},domReady:function(){this.fire("element-ready")},go:function(){},valueChanged:function(){console.log("q-actividades Alto riegso valueChanged",this.value);if(this.respuesta)this.respuesta.Valor=this.value},handlerCheck:function(event,detail,sender){var item=sender.templateInstance.model.item;if(!this.value){this.value=[]}if(item.Checked){this.value.push(item)}else{this.value=_.without(this.value,_.find(this.value,function(v){return v.Codigo===item.Codigo}))}},respuestaChanged:function(){console.log("respuestaChanged:",this.respuesta);if(this.__ready){this.__updateOpciones();return}var self=this;(function(){var tId=setInterval(function(){if(self.__ready){clearInterval(tId);self.__updateOpciones()}},100)})()},__updateOpciones:function(){if(this.respuesta&&this.respuesta.Valor){var self=this;_.each(this.respuesta.Valor,function(i){var c=_.find(self.opciones,function(o){return o.Codigo===i.Codigo});if(c){c.Checked=true}})}}});</script>
-</polymer-element></div><div hidden><!--
+</polymer-element></div><div hidden>
+
+
+
+
+
+
+
+
+<polymer-element name="q-centros" extends="q-base" assetpath="templates/">
+<template>
+	<style>:host{height:500px;overflow:hidden}.seleccionados,.disponibles{height:430px;padding:5px 10px;background:#fff;border-radius:4px;overflow:auto}core-list{height:370px}.item-s{background:#d4d4d4;border-radius:4px;padding:10px;margin-bottom:10px}.item{box-sizing:border-box;height:40px;border-bottom:1px solid #ddd;padding:4px;cursor:default;background-color:#fff;overflow:hidden}.selected{background:silver}.search-box{background:#fff;margin-bottom:10px;box-shadow:0 1px 2px 0;border-radius:2px;padding:0 20px}</style>
+ <shadow></shadow>
+	
+	
+
+	<div hidden?="{{selected!==0}}" class="seleccionados" disabled?="{{rb.checked || estado!=&apos;red&apos;}}">
+		<q-ciudades></q-ciudades>
+	
+	</div>
+	
+	<div hidden?="{{selected!==1}}" class="disponibles" disabled?="{{rb.checked || estado!=&apos;red&apos;}}">
+		<div class="search-box">
+			<paper-input w100="" type="search" placeholder="codigo/descripcion" inputvalue="{{stext}}"></paper-input>
+		</div>
+		<core-list data="{{data}}" height="40" flex="" on-core-activate="{{handlerActivate}}">
+			<template>
+				<div class="item {{ {selected: selected} | tokenList }}">{{model.Codigo+'-'+model.Descripcion}}</div>
+			</template>
+		</core-list>
+	</div>
+	<dialog-yes-no id="dlg">Desea excluir el item?</dialog-yes-no>  
+</template>
+	<script>Polymer("q-centros",{handlerShowDeleteItem:function(event,detail,sender){this._current=sender.templateInstance.model.item;this.$.dlg.toggle()},_delegateDeleteItem:function(event,detail,sender){this.value=_.without(this.value,this._current)},handlerActivate:function(event,detail,sender){if(!this.value){this.value=[]}if(!_.some(this.value,function(c){return c.Codigo===detail.data.Codigo})){this.value.push(detail.data)}},ready:function(){},domReady:function(){this.fire("element-ready")},go:function(){},valueChanged:function(){console.log("q-ciiu valueChanged");if(this.respuesta)this.respuesta.Valor=this.value},stextChanged:function(){var self=this;if(this.stext){if(/^[a-zA-Z]$/.test(self.stext)||/^[a-zA-Z]\d+$/.test(self.stext)){this.async(function(){this.data=_.filter(this.fuente,function(ciiu){return ciiu.Codigo.startsWith(self.stext.toUpperCase())})})}else if(this.stext.length>3){this.async(function(){this.data=_.filter(this.fuente,function(ciiu){return ciiu.Descripcion.contains(self.stext,true)})})}}else{this.async(function(){this.data=_.filter(this.fuente,function(ciiu){return ciiu})})}}});</script>
+</polymer-element>
+</div><div hidden><!--
 Copyright (c) 2014 The Polymer Project Authors. All rights reserved.
 This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
 The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
