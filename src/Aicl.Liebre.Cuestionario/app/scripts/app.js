@@ -422,13 +422,16 @@
 		config.model = config.model|| 'riesgo';
 		window.liebre.remote.read(config);
 	};
-	
 	window.liebre.remote.readActividadAltoRiesgo= function(config){
 		config = config || {};
 		config.model = config.model|| 'actividadaltoriesgo';
 		window.liebre.remote.read(config);
 	};
-	
+	window.liebre.remote.readRango= function(config){
+		config = config || {};
+		config.model = config.model|| 'rango';
+		window.liebre.remote.read(config);
+	};
 		
 	// ver 1
 	var schema = {
@@ -486,6 +489,10 @@
 			autoIncrement:false
 		},{
 			name:'Riesgo',
+			keyPath:'Codigo',
+			autoIncrement:false
+		},{
+			name:'Rango',
 			keyPath:'Codigo',
 			autoIncrement:false
 		},{
@@ -785,6 +792,10 @@
 	
 	window.liebre.getActividadesAltoRiesgo=function(config){
 		window.liebre.getData('ActividadAltoRiesgo', config);
+	};
+	
+	window.liebre.getRangos=function(config){
+		window.liebre.getData('Rango', config);
 	};
 		
 	// complete : function({status: 'ok' ||'error',  error: null|| error, msg:'' })
@@ -1141,6 +1152,10 @@
 	
 	window.liebre.putActividaAltoRiesgo=function(data, complete){
 		window.liebre.putData('ActividaAltoRiesgo', data, complete);
+	};
+	
+	window.liebre.putRango=function(data, complete){
+		window.liebre.putData('Rango', data, complete);
 	};
 	
 	window.liebre.countData=function(storeName, complete){

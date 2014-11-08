@@ -1,0 +1,143 @@
+<link rel="import" href="../../bower_components/core-dropdown/core-dropdown.html">
+<link rel="import" href="../../bower_components/core-selection/core-selection.html">
+<link rel="import" href="../../bower_components/core-list/core-list.html">
+<link rel="import" href="../../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../../bower_components/core-menu/core-menu.html">
+<link rel="import" href="../../bower_components/core-item/core-item.html">
+<polymer-element name="q-ciudades" >
+<template>
+	<style>
+		:host{
+			/*height: 450px;*/
+			overflow: hidden;
+		}
+		core-list{
+			height: 320px;
+		}
+				
+		.item {
+		  box-sizing: border-box;
+		  height: 40px;
+		  border-bottom: 1px solid #ddd;
+		  padding: 4px;
+		  cursor: default;
+		  background-color: white;
+		  overflow: hidden;
+		}
+		
+		.selected {
+		  background: silver;
+		}
+		
+		.box{
+			padding: 4px 10px;
+		}
+		core-dropdown {
+			/*position: absolute;
+			top: -4px;
+			right: -10px;
+			width: 100%;*/
+			
+		}
+		
+		.si{
+			width: 38px;
+			height: 38px;
+		}
+		.core-transition{
+			overflow: hidden;
+		}
+	</style>
+ 
+  <div layout horizontal class="box">
+	  <div relative>
+		  <core-icon-button id="trigger" icon="arrow-drop-down" on-tap="{{toggle}}" hidden?="{{opened}}"
+							></core-icon-button>
+		  <core-dropdown relatedTarget="{{$.trigger}}" opened="{{opened}}" halign="left" valign="top">
+			  <div layout horizontal>
+				  <core-icon-button class="si" icon="arrow-drop-up" on-tap="{{toggle}}"></core-icon-button>
+				  <paper-input id="fake"  placeholder="municipio" inputValue="{{stext}}">
+				  </paper-input>
+			  </div>
+			  <core-list data="{{data}}" height="40" flex on-core-activate="{{handlerActivate}}">
+				  <template>
+					  <div class="item {{ {selected: selected} | tokenList }}">{{model.Nombre+'-'+model.Departamento.Nombre}}</div>
+				  </template>
+			  </core-list>
+		  </core-dropdown>
+	  </div>
+	  <paper-input  readonly hidden?="{{opened}}" label="Municipio" floatinglabel
+				   value="{{selected?(selected.Nombre+'-'+selected.Departamento.Nombre):''}}"
+				   on-tap="{{handlerTap}}">
+	  </paper-input>
+	</div>	
+
+</template>
+		<script>
+		Polymer({
+			opened:false,
+			go:function(){
+			},
+			created:function(){
+				this.selected=null;
+				this.data=[];
+				this.fuente=[];
+			},
+			toggle:function(){
+				if(!this.opened) {
+					this.$.fake.focus();
+					this.$.fake.value=this.selected?this.selected.Nombre:'';
+				}
+				this.opened=!this.opened;
+			},
+			ready:function(){
+				var self=this;			
+				liebre.getCiudades({
+					complete:function(r){
+						var d = _.sortBy(r.data, function(c){return c.Nombre;});
+						self.data=d;
+						self.fuente=d;
+					}
+				})
+			},
+			stextChanged:function(){
+				var self=this;
+				if(this.stext && this.stext.length>0){
+					this.data= _.filter(this.getData(), function(c){
+						return c.Nombre.startsWith(self.stext, true);
+					});
+				}
+				else{
+					this.data=this.getData();
+				}
+			},
+			
+			handlerActivate:function(event, detail, sender){
+				this.selected= detail.data;
+				this.opened=false;
+			},
+			handlerTap:function(){
+				this.toggle();
+				/*this.async(function(){
+				this.opened=!this.opened;
+				this.$.fake.focus();
+				this.$.fake.value=this.$.fake.value;
+				});*/
+			},
+			
+			getData:function(){
+				return this.fuente;
+			}
+		})
+	</script>
+</polymer-element>
+
+<!--
+
+selected: valor seleccionado.
+filtar al abrir : buscar el valor qu esta en el input ( si este es diferente al original?)
+cuando cambia el input: el selected=null, filtrar si esta abierto. si esta cerrado : nada
+
+al cerrar: dejar en el input el valor que tiene en selected.
+
+!-->

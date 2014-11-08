@@ -312,6 +312,10 @@ namespace Aicl.Liebre.Data
 			return ReadFromFile<Riesgo> ("riesgos.json");
 		}
 
+		public ListResult<Rango> ReadRango(ReadRango request){
+			return ReadFromFile<Rango> ("rangos.json");
+		}
+
 		public ListResult<ActividadAltoRiesgo> ReadActividaAltoRiesgo(ReadActividadAltoRiesgo request){
 			return ReadFromFile<ActividadAltoRiesgo> ("actividadesaltoriesgo.json");
 		}

@@ -1,0 +1,7 @@
+﻿[{"Codigo":"RANGO01", "Descripcion":"De 1 a 20", "MinValue":1, "MaxValue":20},
+{"Codigo":"RANGO02", "Descripcion":"De 21 a 50", "MinValue":21, "MaxValue":50},
+{"Codigo":"RANGO03", "Descripcion":"De 51 a 100", "MinValue":51, "MaxValue":100},
+{"Codigo":"RANGO04", "Descripcion":"De 101 a 200", "MinValue":101, "MaxValue":200},
+{"Codigo":"RANGO05", "Descripcion":"De 201 a 500", "MinValue":201, "MaxValue":500},
+{"Codigo":"RANGO06", "Descripcion":"De 501 a 1000", "MinValue":501, "MaxValue":1000},
+{"Codigo":"RANGO07", "Descripcion":"Más de 1000", "MinValue":1001, "MaxValue":999999}]

@@ -53,6 +53,7 @@
     <Compile Include="Ciudad.cs" />
     <Compile Include="ActividadAltoRiesgo.cs" />
     <Compile Include="Riesgo.cs" />
+    <Compile Include="Rango.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="ServiceStack.Common">
