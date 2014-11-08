@@ -53,6 +53,7 @@
     <Compile Include="ActividadAltoRiesgo.cs" />
     <Compile Include="Riesgo.cs" />
     <Compile Include="Rango.cs" />
+    <Compile Include="Respuesta.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="ServiceStack.Common">
@@ -71,8 +72,5 @@
     <Reference Include="glib-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f">
       <Package>glib-sharp-2.0</Package>
     </Reference>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Respuesta.cs" />
   </ItemGroup>
 </Project>

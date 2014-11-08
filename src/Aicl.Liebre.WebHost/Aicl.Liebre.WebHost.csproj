@@ -97,11 +97,15 @@
     <Content Include="q\appcache.manifest" />
     <Content Include="q\favicon.ico" />
     <Content Include="q\robots.txt" />
-    <Content Include="json\CIIU.json" />
+    <Content Include="json\CIIU.json">
+      <DeployService-Deploy>True</DeployService-Deploy>
+    </Content>
     <Content Include="json\ciudades.json" />
     <Content Include="json\departamentos.json" />
     <Content Include="json\riesgos.json" />
-    <Content Include="json\actividadesaltoriesgo.json" />
+    <Content Include="json\actividadesaltoriesgo.json">
+      <DeployService-Deploy>True</DeployService-Deploy>
+    </Content>
     <Content Include="json\rangos.json" />
   </ItemGroup>
   <ItemGroup>
