@@ -322,7 +322,7 @@ namespace Aicl.Liebre.Data
 
 		ListResult<T> ReadFromFile<T>(string fileName){
 			var file = PathUtils.CombinePaths("~","json",fileName).MapHostAbsolutePath ();
-			using(var fileStream = new FileStream(file, FileMode.Open )){
+			using(var fileStream = new FileStream(file, FileMode.Open, FileAccess.Read )){
 				var c= JsonSerializer.DeserializeFromStream<List<T>> (fileStream);
 				return new ListResult<T> { Data = c };
 			}
