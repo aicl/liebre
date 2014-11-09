@@ -187,12 +187,16 @@
 	
 	window.liebre.tools.getBaseUrl=function(){
 		return localStorage.getItem('liebre.baseUrl') ||
-			( (location.protocol + '//' + location.host+ '/lbr-api').replace('9000','8080'));
+			location.protocol.startsWith('http')?
+			((location.protocol + '//' + location.host+ '/lbr-api').replace('9000','8080'))
+		:'http://liebredemo.apphb.com/lbr-api';
 	};
 	
 	window.liebre.tools.setBaseUrl=function(url){
 		localStorage.setItem('liebre.baseUrl', url ||
-							 ( (location.protocol + '//' + location.host+ '/lbr-api').replace('9000','8080')));
+							 location.protocol.startsWith('http')?
+							 ((location.protocol + '//' + location.host+ '/lbr-api').replace('9000','8080'))
+							 :'http://liebredemo.apphb.com/lbr-api');
 	};
 		
 	window.liebre.tools.toFormData=function(obj){
