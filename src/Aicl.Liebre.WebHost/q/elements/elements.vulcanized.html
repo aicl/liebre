@@ -2322,7 +2322,7 @@ root if there is one. This implies:
 
 <polymer-element name="dialog-yes-no" attributes="heading" extends="dialog-base" assetpath="common/">
 	<template>
-		<paper-dialog id="dlg" backdrop="" autoclosedisabled="" heading="[[heading]]">
+		<paper-dialog id="dlg" backdrop="" autoclosedisabled="" heading="[[heading]]" style="z-index:24;">
 			<content></content>
 			<paper-icon-button icon="cancel" dismissive=""></paper-icon-button>
 			<paper-icon-button icon="check" affirmative="" autofocus>
@@ -3179,10 +3179,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 				  <div class="text">{{item.Plantilla.Version}}</div>
 			  </div>
 		  </template>
-		  <dialog-yes-no id="dlg">Desea subir el cuestionario?</dialog-yes-no>
-		  <dialog-yes-no id="dlgb">Desea eliminar el cuestionario?</dialog-yes-no>
-		  
-	  </div>	  	
+		</div>
+		<dialog-yes-no id="dlg">Desea subir el cuestionario?</dialog-yes-no>
+		<dialog-yes-no id="dlgb">Desea eliminar el cuestionario?</dialog-yes-no>
   </template>
 	<script>Polymer("q-select",{get current(){return this._current},ready:function(){this.off=!navigator.onLine;this.$.dlg.handlerOkTap=this._delegateStartUpload.bind(this);this.$.dlgb.handlerOkTap=this._delegateDelete.bind(this);window.addEventListener("online",this.updateOnlineStatus.bind(this));window.addEventListener("offline",this.updateOnlineStatus.bind(this))},updateOnlineStatus:function(event){this.off=!navigator.onLine},delegateShowCapitulos:function(event,detail,sender){this._current=sender.templateInstance.model.item;if(this.handlerShowCapitulos){this.handlerShowCapitulos(event,{item:this._current},sender)}},handlerShowDelete:function(event,detail,sender){this._current=sender.templateInstance.model.item;this.$.dlgb.toggle()},handlerShowUpload:function(event,detail,sender){this._current=sender.templateInstance.model.item;this.$.dlg.toggle()},_delegateStartUpload:function(event,detail,sender){if(this.handlerUpdateCuestionario){this.handlerUpdateCuestionario(event,{item:this._current},sender)}},_delegateDelete:function(event,detail,sender){if(this.handlerDeleteCuestionario){this.handlerDeleteCuestionario(event,{item:this._current},sender)}}});</script>
 </polymer-element>

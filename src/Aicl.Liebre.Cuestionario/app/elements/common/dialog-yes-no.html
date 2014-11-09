@@ -1,7 +1,7 @@
 <link rel="import" href="../common/dialog-base.html">
 <polymer-element name="dialog-yes-no" attributes="heading" extends="dialog-base">
 	<template>
-		<paper-dialog id="dlg" backdrop autoCloseDisabled heading=[[heading]]>
+		<paper-dialog id="dlg" backdrop autoCloseDisabled heading=[[heading]] style="z-index:24;">
 			<content></content>
 			<paper-icon-button icon="cancel" dismissive></paper-icon-button>
 			<paper-icon-button icon="check"  affirmative autofocus>

@@ -1,8 +1,7 @@
 <link rel="import" href="../common/dialog-yes-no.html">
 <polymer-element name="q-select">
 	<template>
-		<style>
-		</style>
+		<style></style>
 		<div layout vertical center>	  
 		  <template repeat="{{item in cuestionarios}}">
 			  <div class="card">
@@ -21,10 +20,9 @@
 				  <div class="text">{{item.Plantilla.Version}}</div>
 			  </div>
 		  </template>
-		  <dialog-yes-no id="dlg">Desea subir el cuestionario?</dialog-yes-no>
-		  <dialog-yes-no id="dlgb" >Desea eliminar el cuestionario?</dialog-yes-no>
-		  
-	  </div>	  	
+		</div>
+		<dialog-yes-no id="dlg">Desea subir el cuestionario?</dialog-yes-no>
+		<dialog-yes-no id="dlgb">Desea eliminar el cuestionario?</dialog-yes-no>
   </template>
 	<script>
 		Polymer({
