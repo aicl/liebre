@@ -1544,7 +1544,7 @@ Example:
 
 <polymer-element name="q-ciudades" assetpath="common/">
 <template>
-	<style>:host{overflow:hidden}core-list{height:320px}.item{box-sizing:border-box;height:40px;border-bottom:1px solid #ddd;padding:4px;cursor:default;background-color:#fff;overflow:hidden}.selected{background:silver}.box{padding:4px 10px}.si{width:38px;height:38px}.core-transition{overflow:hidden}</style>
+	<style>:host{overflow:hidden}core-list{height:270px}.item{box-sizing:border-box;height:40px;border-bottom:1px solid #ddd;padding:4px;cursor:default;background-color:#fff;overflow:hidden}.selected{background:silver}.box{padding:4px 10px}.si{width:38px;height:38px}.core-transition{overflow:hidden}</style>
  
   <div layout="" horizontal="" class="box">
 	  <div relative="">
@@ -2334,7 +2334,7 @@ root if there is one. This implies:
 
 <polymer-element name="q-ciiu" extends="q-base" assetpath="templates/">
 <template>
-	<style>:host{height:500px;overflow:hidden}.seleccionados,.disponibles{height:430px;padding:5px 10px;background:#fff;border-radius:4px;overflow:auto}core-list{height:370px}.item-s{background:#d4d4d4;border-radius:4px;padding:10px;margin-bottom:10px}.item{box-sizing:border-box;height:40px;border-bottom:1px solid #ddd;padding:4px;cursor:default;background-color:#fff;overflow:hidden}.selected{background:silver}.search-box{background:#fff;margin-bottom:10px;box-shadow:0 1px 2px 0;border-radius:2px;padding:0 20px}</style>
+	<style>:host{height:500px;overflow:hidden}.seleccionados,.disponibles{height:430px;padding:5px 10px;background:#fff;border-radius:4px;overflow:auto}core-list{height:370px}@media only screen and (-webkit-min-device-pixel-ratio:2){:host core-list{height:160px}}.item-s{background:#d4d4d4;border-radius:4px;padding:10px;margin-bottom:10px}.item{box-sizing:border-box;height:40px;border-bottom:1px solid #ddd;padding:4px;cursor:default;background-color:#fff;overflow:hidden}.selected{background:silver}.search-box{background:#fff;margin-bottom:10px;box-shadow:0 1px 2px 0;border-radius:2px;padding:0 20px}</style>
  <shadow></shadow>
 	
 	<paper-tabs id="sl" selected="{{selected}}">
@@ -2515,12 +2515,11 @@ To change the bar color for unchecked state:
 
 <polymer-element name="q-centros" extends="q-base" assetpath="templates/">
 <template>
-	<style>:host{height:500px;overflow:hidden}.seleccionados,.disponibles{height:430px;padding:5px 10px;background:#fff;border-radius:4px;overflow:auto}core-list{height:370px}.item-s{background:#d4d4d4;border-radius:4px;padding:10px;margin-bottom:10px}.item{box-sizing:border-box;height:40px;border-bottom:1px solid #ddd;padding:4px;cursor:default;background-color:#fff;overflow:hidden}.selected{background:silver}.search-box{background:#fff;margin-bottom:10px;box-shadow:0 1px 2px 0;border-radius:2px;padding:0 20px}</style>
+	<style>.seleccionados,.disponibles{height:100vh;padding:5px 10px;background:#fff;border-radius:4px;overflow:auto}core-list{height:370px}.item-s{background:#d4d4d4;border-radius:4px;padding:10px;margin-bottom:10px}.item{box-sizing:border-box;height:40px;border-bottom:1px solid #ddd;padding:4px;cursor:default;background-color:#fff;overflow:hidden}.selected{background:silver}.search-box{background:#fff;margin-bottom:10px;box-shadow:0 1px 2px 0;border-radius:2px;padding:0 20px}</style>
  <shadow></shadow>
 	
 	
-
-	<div hidden?="{{selected!==0}}" class="seleccionados" disabled?="{{rb.checked || estado!=&apos;red&apos;}}">
+	<div class="seleccionados" disabled?="{{rb.checked || estado!=&apos;red&apos;}}">
 		<q-ciudades></q-ciudades>
 	
 	</div>
@@ -3460,12 +3459,12 @@ you should ensure that the `aria-label` attribute is set.
   </template>
   <script>Polymer("cuestionario-quiz-card",{quizAnswered:function(){console.log("quizAnswered value, pregunta, respuesta",this.$.quiz.value,this.pregunta,this.respuesta)}});</script>
 </polymer-element>
-<polymer-element name="cuestionario-guia-card" attributes="pregunta,respuesta,estado,height" assetpath="x-app/">
+<polymer-element name="cuestionario-guia-card" attributes="pregunta,respuesta,estado" assetpath="x-app/">
   <template>
     <div class="guia-header">
 		<div class="guia-titulo">{{pregunta.Enunciado}}</div>
     </div>
-    <div id="container" class="guia-detalle" on-quiz-answered="{{ quizAnswered }}" style="height:{{height}};">
+    <div id="container" class="guia-detalle" on-quiz-answered="{{ quizAnswered }}">
 		<div hidden></div>
 	</div>
   </template>
