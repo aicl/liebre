@@ -1,9 +1,9 @@
-<polymer-element name="cuestionario-guia-card" attributes="pregunta,respuesta,estado,height">
+<polymer-element name="cuestionario-guia-card" attributes="pregunta,respuesta,estado">
   <template>
     <div class="guia-header">
 		<div class="guia-titulo">{{pregunta.Enunciado}}</div>
     </div>
-    <div id="container" class="guia-detalle" on-quiz-answered="{{ quizAnswered }}" style="height:{{height}};">
+    <div id="container" class="guia-detalle" on-quiz-answered="{{ quizAnswered }}" >
 		<div hidden></div>
 	</div>
   </template>

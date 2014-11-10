@@ -10,12 +10,9 @@
 <polymer-element name="q-centros" extends="q-base">
 <template>
 	<style>
-		:host{
-			height: 500px;
-			overflow: hidden;
-		}
+		
 		.seleccionados, .disponibles{
-			height: 430px;
+			height: 100vh;
 			padding: 5px 10px 5px 10px;
 			background: white;
 			border-radius: 4px;
@@ -58,8 +55,7 @@
  <shadow></shadow>
 	
 	
-
-	<div hidden?="{{selected!==0}}" class="seleccionados" disabled?="{{rb.checked || estado!='red'}}">
+	<div  class="seleccionados" disabled?="{{rb.checked || estado!='red'}}">
 		<q-ciudades></q-ciudades>
 	
 	</div>
