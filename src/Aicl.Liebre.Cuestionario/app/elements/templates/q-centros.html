@@ -5,54 +5,65 @@
 <polymer-element name="q-centros" extends="q-base">
 <template>
 	<style>
-		
 		.seleccionados{
 			background: rgb(212,212,212);
 			border-radius: 4px;
-			/*overflow: auto;*/
 		}
 		.item-s{
 			background: white;
 			border-radius: 4px;
 			margin-bottom: 10px;
 			padding: 10px;
-			/*overflow: auto;*/
-			
-		}
-		paper-input{
-			padding-left:42px;
-		}
-		.line{
-			box-shadow:  0px 0px 0px 1px;
-			margin: 10px 0px 20px 0px;
 		}
 		
+		.riesgo{
+			box-shadow: 0px 0px 0px 0.1px;
+			height: 120px;
+			margin-bottom: 15px;
+		}
+		paper-input{
+			padding-left: 42px;
+		}
 	</style>
  <shadow></shadow>
 	
-	<core-icon-button icon="add-circle"  on-tap="{{ handlerAddItem }}"></core-icon-button>	
-	<div   disabled?="{{rb.checked || estado!='red'}}" >	
+	<div layout horizontal center>
+		<core-icon-button icon="add-circle" on-tap="{{ handlerAddItem }}"></core-icon-button>
+		<div>Nuevo Centro</div>
+	</div>
+	<div  disabled?="{{rb.checked || estado!='red'}}" >	
 		<template repeat="{{item, index in value}}">
-			<div  class="item-s">
-				<paper-input  placeholder="Nombre" value="{{item.Nombre}}"></paper-input>
-				<q-ciudades selected="{{item.Ciudad}}"></q-ciudades>
+			<div class="item-s">
+				<div layout horizontal>
+					<paper-input  placeholder="Nombre" value="{{item.Nombre}}" 
+								 on-change="{{valueChanged}}"></paper-input>
+					<div flex></div>
+					<core-icon-button icon="delete"  no-visible?="{{value.length===1}}"
+									  on-tap="{{ handlerDeleteItem }}"></core-icon-button>
+				</div>		
+				<q-ciudades selected="{{item.Ciudad}}" on-ciudad-select="{{valueChanged}}"></q-ciudades>
 				<div layout horizontal center>
 					<core-icon-button icon="add-circle" on-tap="{{handlerAddRiesgo}}"></core-icon-button>
 					<div>Riesgos</div>
 				</div>
 				<template repeat="{{riesgo, ri in item.Riesgos}}">
-					<q-riesgos selected="{{riesgo.Riesgo}" 
+					<div layout horizontal center class="riesgo">
+						<core-icon-button icon="remove-circle" 
+										  no-visible?="{{item.Riesgos.length===1}}"
+										  on-tap="{{ handlerDeleteRiesgo }}">
+						</core-icon-button>
+						<div layout vertical>
+							<q-riesgos selected="{{riesgo.Riesgo}" 
 							   on-riesgo-select="{{handlerRiesgoSelect}}"></q-riesgos>
-					<q-rangos selected="{{riesgo.Rango}}" 
-							   on-rango-select="{{handlerRiesgoSelect}}"></q-rangos>
-					<div class="line"></div>
+							<q-rangos selected="{{riesgo.Rango}}" 
+									  on-rango-select="{{handlerRiesgoSelect}}"></q-rangos>
+						</div>
+					</div>
 				</template>
 			</div>
 		</template>
 		<div style="height:500px"></div>
 	</div>
-	
-	
 </template>
 	<script>
 		Polymer({
@@ -60,22 +71,26 @@
 				this.value.unshift({Nombre:null,Ciudad:null,Riesgos:[{Riesgo:null, Rango:null}]});
 			},
 			handlerRiesgoSelect:function(event,detail, sender){
-				
+				var model= sender.templateInstance.model;
 				if(event.type==='riesgo-select'){
-					this._current.Riesgos[sender.templateInstance.model.ri].Riesgo=
-						detail.item
+					this.value[model.index].Riesgos[model.ri].Riesgo=detail.item;
 				}
 				else if(event.type==='rango-select'){
-					this._current.Riesgos[sender.templateInstance.model.ri].Rango=
-						detail.item
+					this.value[model.index].Riesgos[model.ri].Rango=detail.item;
 				}
-				
 				this.valueChanged();
 			},
-						
 			handlerAddRiesgo:function(event, detail, sender){				
-				this._current= sender.templateInstance.model.item;
-				this._current.Riesgos.unshift({Riesgo:null, Rango:null});
+				var model= sender.templateInstance.model;
+				this.value[model.index].Riesgos.unshift({Riesgo:null, Rango:null});
+				this.valueChanged();
+			},
+			handlerDeleteItem:function(event, detail, sender){
+				this.value.splice(sender.templateInstance.model.index,1);
+			},
+			handlerDeleteRiesgo:function(event, detail, sender){
+				var model=sender.templateInstance.model;
+				this.value[model.index].Riesgos.splice(model.ri,1);
 				this.valueChanged();
 			},
 			ready:function(){		
@@ -85,8 +100,7 @@
 			},
 			go:function(){
 				if(!this.value){
-					this._current={Nombre:null,Ciudad:null,Riesgos:[{Riesgo:null, Rango:null}]};
-					this.value=[this._current];
+					this.value=[{Nombre:null,Ciudad:null,Riesgos:[{Riesgo:null, Rango:null}]}];
 				}
 			},
 			valueChanged:function(){

@@ -4,12 +4,10 @@
 <link rel="import" href="../../bower_components/paper-input/paper-input.html">
 <polymer-element name="q-ciudades" attributes="selected">
 <template>
-	<style>
-		
+	<style>		
 		core-list{
 			height: 180px;
-		}
-				
+		}	
 		.item {
 		  box-sizing: border-box;
 		  height: 30px;
@@ -19,11 +17,9 @@
 		  background-color: white;
 		  overflow: hidden;
 		}
-		
 		.selected {
 		  background: silver;
-		}
-				
+		}		
 		.si{
 			width: 38px;
 			height: 38px;
@@ -56,7 +52,6 @@
 				   on-tap="{{handlerTap}}">
 	  </paper-input>
 	</div>	
-
 </template>
 		<script>
 		Polymer({
@@ -100,14 +95,12 @@
 			handlerActivate:function(event, detail, sender){
 				this.selected= detail.data;
 				this.opened=false;
+				this.asyncFire('ciudad-select',{item:this.selected});
+				
 			},
 			handlerTap:function(){
 				this.toggle();
-				/*this.async(function(){
-				this.opened=!this.opened;
-				this.$.fake.focus();
-				this.$.fake.value=this.$.fake.value;
-				});*/
+				
 			},
 			
 			getData:function(){

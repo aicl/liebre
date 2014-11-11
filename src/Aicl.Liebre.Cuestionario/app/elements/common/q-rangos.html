@@ -7,8 +7,7 @@
 	<style>
 		core-list{
 			height: 180px;
-		}
-				
+		}		
 		.item {
 		  box-sizing: border-box;
 		  height: 25px;
@@ -18,16 +17,13 @@
 		  background-color: white;
 		  overflow: hidden;
 		}
-		
 		.selected {
 		  background: silver;
 		}
-		
 		.si{
 			width: 38px;
 			height: 38px;
-		}
-				
+		}		
 		.core-transition{
 			overflow: hidden;
 		}
@@ -57,8 +53,6 @@
 				   on-tap="{{toggle}}">
 		</paper-input>
 	</div>
-	
- 
 </template>
 		<script>
 		Polymer({
@@ -79,8 +73,7 @@
 				this.selected= detail.data;
 				this.opened=false;
 				this.asyncFire('rango-select',{item:this.selected});
-			}
-			
+			}	
 		})
 	</script>
 </polymer-element>
