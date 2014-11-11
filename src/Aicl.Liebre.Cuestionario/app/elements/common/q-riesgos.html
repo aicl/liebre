@@ -2,12 +2,15 @@
 <link rel="import" href="../../bower_components/core-selection/core-selection.html">
 <link rel="import" href="../../bower_components/core-list/core-list.html">
 <link rel="import" href="../../bower_components/paper-input/paper-input.html">
-<polymer-element name="q-riesgos" attributes="selected">
+<polymer-element name="q-riesgos" attributes="selected,valign">
 <template>
 	<style>
 		core-list{
 			height: 180px;
-		}		
+		}
+		core-dropdown{
+			box-shadow: 1px 1px 1px 1px;
+		}
 		.item {
 		  box-sizing: border-box;
 		  height: 30px;
@@ -32,7 +35,7 @@
 		<div relative>
 		  <core-icon-button id="trigger" icon="{{opened?'arrow-drop-up':'arrow-drop-down'}}"
 							on-tap="{{toggle}}"></core-icon-button>
-		  <core-dropdown relatedTarget="{{$.trigger}}" opened="{{opened}}" halign="left" valign="top">
+		  <core-dropdown relatedTarget="{{$.trigger}}" opened="{{opened}}" halign="left" valign="{{valign}}">
 			  <div layout horizontal on-tap="{{toggle}}">
 				  <core-icon-button class="si" icon="arrow-drop-up" ></core-icon-button>
 				  <paper-input id="fake"  readonly placeholder="Clase de Riesgo" 
@@ -57,7 +60,7 @@
 </template>
 		<script>
 		Polymer({
-						
+			valign:"bottom",		
 			ready:function(){
 				var self=this;			
 				liebre.getRiesgos({

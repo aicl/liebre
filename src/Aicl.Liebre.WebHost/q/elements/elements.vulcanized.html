@@ -1353,221 +1353,90 @@ Putting this together:
 
 </polymer-element>
 
-<!--
-Copyright (c) 2014 The Polymer Project Authors. All rights reserved.
-This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
-The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
-The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
-Code distributed by Google as part of the polymer project is also
-subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
--->
-
-<!--
-`core-menu` is a selector which styles to looks like a menu.
-
-    <core-menu selected="0">
-      <core-item icon="settings" label="Settings"></core-item>
-      <core-item icon="dialog" label="Dialog"></core-item>
-      <core-item icon="search" label="Search"></core-item>
-    </core-menu>
-    
-When an item is selected the `core-selected` class is added to it.  The user can
-use the class to add more stylings to the selected item.
-
-    core-item.core-selected {
-      color: red;
-    }
-
-The `selectedItem` property references the selected item.
-
-    <core-menu selected="0" selectedItem="{{item}}">
-      <core-item icon="settings" label="Settings"></core-item>
-      <core-item icon="dialog" label="Dialog"></core-item>
-      <core-item icon="search" label="Search"></core-item>
-    </core-menu>
-
-    <div>selected label: {{item.label}}</div>
-
-The `core-select` event signals selection change.
-
-    <core-menu selected="0" on-core-select="{{selectAction}}">
-      <core-item icon="settings" label="Settings"></core-item>
-      <core-item icon="dialog" label="Dialog"></core-item>
-      <core-item icon="search" label="Search"></core-item>
-    </core-menu>
-
-    ...
-
-    selectAction: function(e, detail) {
-      if (detail.isSelected) {
-        var selectedItem = detail.item;
-        ...
-      }
-    }
-
-@group Polymer Core Elements
-@element core-menu
-@extends core-selector
--->
-
-<!--
-Copyright (c) 2014 The Polymer Project Authors. All rights reserved.
-This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
-The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
-The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
-Code distributed by Google as part of the polymer project is also
-subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
--->
-
-<!--
-@group Polymer Core Elements
-
-`<core-selector>` is used to manage a list of elements that can be selected.
-
-The attribute `selected` indicates which item element is being selected.
-The attribute `multi` indicates if multiple items can be selected at once.
-Tapping on the item element would fire `core-activate` event. Use
-`core-select` event to listen for selection changes.
-
-Example:
-
-    <core-selector selected="0">
-      <div>Item 1</div>
-      <div>Item 2</div>
-      <div>Item 3</div>
-    </core-selector>
-
-`<core-selector>` is not styled. Use the `core-selected` CSS class to style the selected element.
-
-    <style>
-      .item.core-selected {
-        background: #eee;
-      }
-    </style>
-    ...
-    <core-selector>
-      <div class="item">Item 1</div>
-      <div class="item">Item 2</div>
-      <div class="item">Item 3</div>
-    </core-selector>
-
-@element core-selector
-@status stable
-@homepage github.io
--->
-
-<!--
-Fired when an item's selection state is changed. This event is fired both
-when an item is selected or deselected. The `isSelected` detail property
-contains the selection state.
-
-@event core-select
-@param {Object} detail
-  @param {boolean} detail.isSelected true for selection and false for deselection
-  @param {Object} detail.item the item element
--->
-<!--
-Fired when an item element is tapped.
-
-@event core-activate
-@param {Object} detail
-  @param {Object} detail.item the item element
--->
-
-
-
-
-<polymer-element name="core-selector" attributes="selected multi valueattr selectedClass selectedProperty selectedAttribute selectedItem selectedModel selectedIndex notap excludedLocalNames target itemsSelector activateEvent" assetpath="../bower_components/core-selector/">
-
-  <template>
-    <core-selection id="selection" multi="{{multi}}" on-core-select="{{selectionSelect}}"></core-selection>
-    <content id="items" select="*"></content>
-  </template>
-
-  <script>Polymer("core-selector",{selected:null,multi:false,valueattr:"name",selectedClass:"core-selected",selectedProperty:"",selectedAttribute:"active",selectedItem:null,selectedModel:null,selectedIndex:-1,excludedLocalNames:"",target:null,itemsSelector:"",activateEvent:"tap",notap:false,defaultExcludedLocalNames:"template",ready:function(){this.activateListener=this.activateHandler.bind(this);this.itemFilter=this.filterItem.bind(this);this.excludedLocalNamesChanged();this.observer=new MutationObserver(this.updateSelected.bind(this));if(!this.target){this.target=this}},get items(){if(!this.target){return[]}var nodes=this.target!==this?this.itemsSelector?this.target.querySelectorAll(this.itemsSelector):this.target.children:this.$.items.getDistributedNodes();return Array.prototype.filter.call(nodes,this.itemFilter)},filterItem:function(node){return!this._excludedNames[node.localName]},excludedLocalNamesChanged:function(){this._excludedNames={};var s=this.defaultExcludedLocalNames;if(this.excludedLocalNames){s+=" "+this.excludedLocalNames}s.split(/\s+/g).forEach(function(n){this._excludedNames[n]=1},this)},targetChanged:function(old){if(old){this.removeListener(old);this.observer.disconnect();this.clearSelection()}if(this.target){this.addListener(this.target);this.observer.observe(this.target,{childList:true});this.updateSelected()}},addListener:function(node){Polymer.addEventListener(node,this.activateEvent,this.activateListener)},removeListener:function(node){Polymer.removeEventListener(node,this.activateEvent,this.activateListener)},get selection(){return this.$.selection.getSelection()},selectedChanged:function(){this.updateSelected()},updateSelected:function(){this.validateSelected();if(this.multi){this.clearSelection();this.selected&&this.selected.forEach(function(s){this.valueToSelection(s)},this)}else{this.valueToSelection(this.selected)}},validateSelected:function(){if(this.multi&&!Array.isArray(this.selected)&&this.selected!==null&&this.selected!==undefined){this.selected=[this.selected]}},clearSelection:function(){if(this.multi){this.selection.slice().forEach(function(s){this.$.selection.setItemSelected(s,false)},this)}else{this.$.selection.setItemSelected(this.selection,false)}this.selectedItem=null;this.$.selection.clear()},valueToSelection:function(value){var item=value===null||value===undefined?null:this.items[this.valueToIndex(value)];this.$.selection.select(item)},updateSelectedItem:function(){this.selectedItem=this.selection},selectedItemChanged:function(){if(this.selectedItem){var t=this.selectedItem.templateInstance;this.selectedModel=t?t.model:undefined}else{this.selectedModel=null}this.selectedIndex=this.selectedItem?parseInt(this.valueToIndex(this.selected)):-1},valueToIndex:function(value){for(var i=0,items=this.items,c;c=items[i];i++){if(this.valueForNode(c)==value){return i}}return value},valueForNode:function(node){return node[this.valueattr]||node.getAttribute(this.valueattr)},selectionSelect:function(e,detail){this.updateSelectedItem();if(detail.item){this.applySelection(detail.item,detail.isSelected)}},applySelection:function(item,isSelected){if(this.selectedClass){item.classList.toggle(this.selectedClass,isSelected)}if(this.selectedProperty){item[this.selectedProperty]=isSelected}if(this.selectedAttribute&&item.setAttribute){if(isSelected){item.setAttribute(this.selectedAttribute,"")}else{item.removeAttribute(this.selectedAttribute)}}},activateHandler:function(e){if(!this.notap){var i=this.findDistributedTarget(e.target,this.items);if(i>=0){var item=this.items[i];var s=this.valueForNode(item)||i;if(this.multi){if(this.selected){this.addRemoveSelected(s)}else{this.selected=[s]}}else{this.selected=s}this.asyncFire("core-activate",{item:item})}}},addRemoveSelected:function(value){var i=this.selected.indexOf(value);if(i>=0){this.selected.splice(i,1)}else{this.selected.push(value)}this.valueToSelection(value)},findDistributedTarget:function(target,nodes){while(target&&target!=this){var i=Array.prototype.indexOf.call(nodes,target);if(i>=0){return i}target=target.parentNode}},selectIndex:function(index){var item=this.items[index];if(item){this.selected=this.valueForNode(item)||index;return item}},selectPrevious:function(wrap){var i=wrap&&!this.selectedIndex?this.items.length-1:this.selectedIndex-1;return this.selectIndex(i)},selectNext:function(wrap){var i=wrap&&this.selectedIndex>=this.items.length-1?0:this.selectedIndex+1;return this.selectIndex(i)}});</script>
-</polymer-element>
-
-
-<polymer-element name="core-menu" extends="core-selector" noscript="" assetpath="../bower_components/core-menu/">
+<polymer-element name="q-rangos" attributes="selected,valign" assetpath="common/">
 <template>
-
-  <style>:host{display:block;margin:12px}polyfill-next-selector{content:':host > core-item'}::content>core-item{cursor:default}</style>
-  
-  <shadow></shadow>
-  
+	<style>core-list{height:180px}core-dropdown{box-shadow:1px 1px 1px 1px}.item{box-sizing:border-box;height:25px;border-bottom:1px solid #ddd;padding:4px;cursor:default;background-color:#fff;overflow:hidden}.selected{background:silver}.si{width:38px;height:38px}.core-transition{overflow:hidden}</style>
+	
+	<div layout="" horizontal="">	
+		<div relative="">
+		  <core-icon-button id="trigger" icon="{{opened?&apos;arrow-drop-up&apos;:&apos;arrow-drop-down&apos;}}" on-tap="{{toggle}}"></core-icon-button>
+		  <core-dropdown relatedtarget="{{$.trigger}}" opened="{{opened}}" halign="left" valign="{{valign}}">
+			  <div layout="" horizontal="" on-tap="{{toggle}}">
+				  <core-icon-button class="si" icon="arrow-drop-up"></core-icon-button>
+				  <paper-input id="fake" readonly placeholder="N&#xFA;mero de Empleados" value="{{selected?(selected.Descripcion):&apos;&apos;}}">
+				  </paper-input>
+			  </div>
+			  <core-list data="{{data}}" height="25" flex="" on-core-activate="{{handlerActivate}}">
+				  <template>
+					  <div class="item {{ {selected: selected} | tokenList }}">{{model.Descripcion}}</div>
+				  </template>
+			  </core-list>
+		  </core-dropdown>
+		</div>
+		<paper-input readonly hidden?="{{opened}}" label="N&#xFA;mero de Empleados" floatinglabel="" value="{{selected?(selected.Descripcion):&apos;&apos;}}" on-tap="{{toggle}}">
+		</paper-input>
+	</div>
 </template>
-</polymer-element>
-
-<!--
-Copyright (c) 2014 The Polymer Project Authors. All rights reserved.
-This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
-The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
-The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
-Code distributed by Google as part of the polymer project is also
-subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
--->
-
-<!--
-`core-item` is a simple line-item object: a label and/or an icon that can also 
-act as a link.
-
-Example:
-
-    <core-item icon="settings" label="Settings"></core-item>
-    
-To use as a link, put &lt;a&gt; element in the item.
-
-Example:
-
-    <core-item icon="settings" label="Settings">
-      <a href="#settings" target="_self"></a>
-    </core-item>
-
-@group Polymer Core Elements
-@element core-item
-@homepage github.io
--->
+		<script>Polymer("q-rangos",{valign:"bottom",ready:function(){var self=this;liebre.getRangos({complete:function(r){var d=_.sortBy(r.data,function(c){return c.Codigo});self.data=d}})},toggle:function(){this.opened=!this.opened},handlerActivate:function(event,detail,sender){this.selected=detail.data;this.opened=false;this.asyncFire("rango-select",{item:this.selected})}});</script>
+</polymer-element></div><div hidden>
 
 
 
-<polymer-element name="core-item" attributes="label icon src" horizontal="" center="" layout="" assetpath="../bower_components/core-item/">
+<polymer-element name="q-riesgos" attributes="selected,valign" assetpath="common/">
 <template>
-  <style>:host{display:block;position:relative;min-height:40px;white-space:nowrap}:host(.font-scalable){min-height:2.5em}:host(.core-selected){font-weight:700}#icon{margin:0 16px 0 4px}:host(.font-scalable) #icon{margin:0 1em 0 .25em;height:1.5em;width:1.5em}polyfill-next-selector{content:':host > a'}::content>a{position:absolute;top:0;right:0;bottom:0;left:0;background-color:rgba(0,0,0,.000001)}</style>
-  <template if="{{icon || src}}">
-    <core-icon src="{{src}}" id="icon" icon="{{icon}}" hidden?="{{!src &amp;&amp; !icon}}"></core-icon>
-  </template>
-  <div id="label">{{label}}</div>
-  <content></content>
-</template>
-<script>Polymer("core-item",{});</script>
-</polymer-element>
-
-<polymer-element name="q-ciudades" assetpath="common/">
-<template>
-	<style>:host{overflow:hidden}core-list{height:270px}.item{box-sizing:border-box;height:40px;border-bottom:1px solid #ddd;padding:4px;cursor:default;background-color:#fff;overflow:hidden}.selected{background:silver}.box{padding:4px 10px}.si{width:38px;height:38px}.core-transition{overflow:hidden}</style>
+	<style>core-list{height:180px}core-dropdown{box-shadow:1px 1px 1px 1px}.item{box-sizing:border-box;height:30px;border-bottom:1px solid #ddd;padding:4px;cursor:default;background-color:#fff;overflow:hidden}.selected{background:silver}.si{width:38px;height:38px}.core-transition{overflow:hidden}</style>
+	<div layout="" horizontal="">	
+		<div relative="">
+		  <core-icon-button id="trigger" icon="{{opened?&apos;arrow-drop-up&apos;:&apos;arrow-drop-down&apos;}}" on-tap="{{toggle}}"></core-icon-button>
+		  <core-dropdown relatedtarget="{{$.trigger}}" opened="{{opened}}" halign="left" valign="{{valign}}">
+			  <div layout="" horizontal="" on-tap="{{toggle}}">
+				  <core-icon-button class="si" icon="arrow-drop-up"></core-icon-button>
+				  <paper-input id="fake" readonly placeholder="Clase de Riesgo" value="{{selected?(selected.Clase):&apos;&apos;}}">
+				  </paper-input>
+			  </div>
+			  <core-list data="{{data}}" height="30" flex="" on-core-activate="{{handlerActivate}}">
+				  <template>
+					  <div class="item {{ {selected: selected} | tokenList }}">{{model.Clase}}</div>
+				  </template>
+			  </core-list>
+		  </core-dropdown>
+		</div>
+		<paper-input readonly hidden?="{{opened}}" label="Clase de Riesgo" floatinglabel="" value="{{selected?(selected.Clase):&apos;&apos;}}" on-tap="{{toggle}}">
+		</paper-input>
+	</div>
+	
  
-  <div layout="" horizontal="" class="box">
+</template>
+		<script>Polymer("q-riesgos",{valign:"bottom",ready:function(){var self=this;liebre.getRiesgos({complete:function(r){var d=_.sortBy(r.data,function(c){return c.Clase});self.data=d}})},toggle:function(){this.opened=!this.opened},handlerActivate:function(event,detail,sender){this.selected=detail.data;this.opened=false;this.asyncFire("riesgo-select",{item:this.selected})}});</script>
+</polymer-element></div><div hidden>
+
+
+
+<polymer-element name="q-ciudades" attributes="selected,valign" assetpath="common/">
+<template>
+	<style>core-list{height:180px}core-dropdown{box-shadow:1px 1px 1px 1px}.item{box-sizing:border-box;height:30px;border-bottom:1px solid #ddd;padding:4px;cursor:default;background-color:#fff;overflow:hidden}.selected{background:silver}.si{width:38px;height:38px}.core-transition{overflow:hidden}</style>
+ 
+  <div layout="" horizontal="">
 	  <div relative="">
 		  <core-icon-button id="trigger" icon="arrow-drop-down" on-tap="{{toggle}}" hidden?="{{opened}}"></core-icon-button>
-		  <core-dropdown relatedtarget="{{$.trigger}}" opened="{{opened}}" halign="left" valign="top">
+		  <core-dropdown relatedtarget="{{$.trigger}}" opened="{{opened}}" halign="left" valign="{{valign}}">
 			  <div layout="" horizontal="">
 				  <core-icon-button class="si" icon="arrow-drop-up" on-tap="{{toggle}}"></core-icon-button>
 				  <paper-input id="fake" placeholder="municipio" inputvalue="{{stext}}">
 				  </paper-input>
 			  </div>
-			  <core-list data="{{data}}" height="40" flex="" on-core-activate="{{handlerActivate}}">
+			  <core-list data="{{data}}" height="30" flex="" on-core-activate="{{handlerActivate}}">
 				  <template>
 					  <div class="item {{ {selected: selected} | tokenList }}">{{model.Nombre+'-'+model.Departamento.Nombre}}</div>
 				  </template>
 			  </core-list>
 		  </core-dropdown>
 	  </div>
-	  <paper-input readonly hidden?="{{opened}}" label="Municipio" floatinglabel="" value="{{selected?(selected.Nombre+&apos;-&apos;+selected.Departamento.Nombre):&apos;&apos;}}" on-tap="{{handlerTap}}">
+	  <paper-input readonly label="Municipio" floatinglabel="" value="{{selected?(selected.Nombre+&apos;-&apos;+selected.Departamento.Nombre):&apos;&apos;}}" on-tap="{{handlerTap}}">
 	  </paper-input>
 	</div>	
-
 </template>
-		<script>Polymer("q-ciudades",{opened:false,go:function(){},created:function(){this.selected=null;this.data=[];this.fuente=[]},toggle:function(){if(!this.opened){this.$.fake.focus();this.$.fake.value=this.selected?this.selected.Nombre:""}this.opened=!this.opened},ready:function(){var self=this;liebre.getCiudades({complete:function(r){var d=_.sortBy(r.data,function(c){return c.Nombre});self.data=d;self.fuente=d}})},stextChanged:function(){var self=this;if(this.stext&&this.stext.length>0){this.data=_.filter(this.getData(),function(c){return c.Nombre.startsWith(self.stext,true)})}else{this.data=this.getData()}},handlerActivate:function(event,detail,sender){this.selected=detail.data;this.opened=false},handlerTap:function(){this.toggle()},getData:function(){return this.fuente}});</script>
+		<script>Polymer("q-ciudades",{opened:false,valign:"top",go:function(){},created:function(){this.data=[];this.fuente=[]},toggle:function(){if(!this.opened){this.$.fake.focus();this.$.fake.value=this.selected?this.selected.Nombre:""}this.opened=!this.opened},ready:function(){var self=this;liebre.getCiudades({complete:function(r){var d=_.sortBy(r.data,function(c){return c.Nombre});self.data=d;self.fuente=d}})},stextChanged:function(){var self=this;if(this.stext&&this.stext.length>0){this.data=_.filter(this.getData(),function(c){return c.Nombre.startsWith(self.stext,true)})}else{this.data=this.getData()}},handlerActivate:function(event,detail,sender){this.selected=detail.data;this.opened=false;this.asyncFire("ciudad-select",{item:this.selected})},handlerTap:function(){this.toggle()},getData:function(){return this.fuente}});</script>
 </polymer-element>
 
 <!--
@@ -1900,6 +1769,82 @@ Keys Syntax Grammar:
 <script>(function(){Polymer("q-base",{noAplicaCheckedChanged:function(){if(this.$.rb.checked){this.value=null}}})})();</script>
 </polymer-element>
 
+<!--
+Copyright (c) 2014 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<!--
+@group Polymer Core Elements
+
+`<core-selector>` is used to manage a list of elements that can be selected.
+
+The attribute `selected` indicates which item element is being selected.
+The attribute `multi` indicates if multiple items can be selected at once.
+Tapping on the item element would fire `core-activate` event. Use
+`core-select` event to listen for selection changes.
+
+Example:
+
+    <core-selector selected="0">
+      <div>Item 1</div>
+      <div>Item 2</div>
+      <div>Item 3</div>
+    </core-selector>
+
+`<core-selector>` is not styled. Use the `core-selected` CSS class to style the selected element.
+
+    <style>
+      .item.core-selected {
+        background: #eee;
+      }
+    </style>
+    ...
+    <core-selector>
+      <div class="item">Item 1</div>
+      <div class="item">Item 2</div>
+      <div class="item">Item 3</div>
+    </core-selector>
+
+@element core-selector
+@status stable
+@homepage github.io
+-->
+
+<!--
+Fired when an item's selection state is changed. This event is fired both
+when an item is selected or deselected. The `isSelected` detail property
+contains the selection state.
+
+@event core-select
+@param {Object} detail
+  @param {boolean} detail.isSelected true for selection and false for deselection
+  @param {Object} detail.item the item element
+-->
+<!--
+Fired when an item element is tapped.
+
+@event core-activate
+@param {Object} detail
+  @param {Object} detail.item the item element
+-->
+
+
+
+
+<polymer-element name="core-selector" attributes="selected multi valueattr selectedClass selectedProperty selectedAttribute selectedItem selectedModel selectedIndex notap excludedLocalNames target itemsSelector activateEvent" assetpath="../bower_components/core-selector/">
+
+  <template>
+    <core-selection id="selection" multi="{{multi}}" on-core-select="{{selectionSelect}}"></core-selection>
+    <content id="items" select="*"></content>
+  </template>
+
+  <script>Polymer("core-selector",{selected:null,multi:false,valueattr:"name",selectedClass:"core-selected",selectedProperty:"",selectedAttribute:"active",selectedItem:null,selectedModel:null,selectedIndex:-1,excludedLocalNames:"",target:null,itemsSelector:"",activateEvent:"tap",notap:false,defaultExcludedLocalNames:"template",ready:function(){this.activateListener=this.activateHandler.bind(this);this.itemFilter=this.filterItem.bind(this);this.excludedLocalNamesChanged();this.observer=new MutationObserver(this.updateSelected.bind(this));if(!this.target){this.target=this}},get items(){if(!this.target){return[]}var nodes=this.target!==this?this.itemsSelector?this.target.querySelectorAll(this.itemsSelector):this.target.children:this.$.items.getDistributedNodes();return Array.prototype.filter.call(nodes,this.itemFilter)},filterItem:function(node){return!this._excludedNames[node.localName]},excludedLocalNamesChanged:function(){this._excludedNames={};var s=this.defaultExcludedLocalNames;if(this.excludedLocalNames){s+=" "+this.excludedLocalNames}s.split(/\s+/g).forEach(function(n){this._excludedNames[n]=1},this)},targetChanged:function(old){if(old){this.removeListener(old);this.observer.disconnect();this.clearSelection()}if(this.target){this.addListener(this.target);this.observer.observe(this.target,{childList:true});this.updateSelected()}},addListener:function(node){Polymer.addEventListener(node,this.activateEvent,this.activateListener)},removeListener:function(node){Polymer.removeEventListener(node,this.activateEvent,this.activateListener)},get selection(){return this.$.selection.getSelection()},selectedChanged:function(){this.updateSelected()},updateSelected:function(){this.validateSelected();if(this.multi){this.clearSelection();this.selected&&this.selected.forEach(function(s){this.valueToSelection(s)},this)}else{this.valueToSelection(this.selected)}},validateSelected:function(){if(this.multi&&!Array.isArray(this.selected)&&this.selected!==null&&this.selected!==undefined){this.selected=[this.selected]}},clearSelection:function(){if(this.multi){this.selection.slice().forEach(function(s){this.$.selection.setItemSelected(s,false)},this)}else{this.$.selection.setItemSelected(this.selection,false)}this.selectedItem=null;this.$.selection.clear()},valueToSelection:function(value){var item=value===null||value===undefined?null:this.items[this.valueToIndex(value)];this.$.selection.select(item)},updateSelectedItem:function(){this.selectedItem=this.selection},selectedItemChanged:function(){if(this.selectedItem){var t=this.selectedItem.templateInstance;this.selectedModel=t?t.model:undefined}else{this.selectedModel=null}this.selectedIndex=this.selectedItem?parseInt(this.valueToIndex(this.selected)):-1},valueToIndex:function(value){for(var i=0,items=this.items,c;c=items[i];i++){if(this.valueForNode(c)==value){return i}}return value},valueForNode:function(node){return node[this.valueattr]||node.getAttribute(this.valueattr)},selectionSelect:function(e,detail){this.updateSelectedItem();if(detail.item){this.applySelection(detail.item,detail.isSelected)}},applySelection:function(item,isSelected){if(this.selectedClass){item.classList.toggle(this.selectedClass,isSelected)}if(this.selectedProperty){item[this.selectedProperty]=isSelected}if(this.selectedAttribute&&item.setAttribute){if(isSelected){item.setAttribute(this.selectedAttribute,"")}else{item.removeAttribute(this.selectedAttribute)}}},activateHandler:function(e){if(!this.notap){var i=this.findDistributedTarget(e.target,this.items);if(i>=0){var item=this.items[i];var s=this.valueForNode(item)||i;if(this.multi){if(this.selected){this.addRemoveSelected(s)}else{this.selected=[s]}}else{this.selected=s}this.asyncFire("core-activate",{item:item})}}},addRemoveSelected:function(value){var i=this.selected.indexOf(value);if(i>=0){this.selected.splice(i,1)}else{this.selected.push(value)}this.valueToSelection(value)},findDistributedTarget:function(target,nodes){while(target&&target!=this){var i=Array.prototype.indexOf.call(nodes,target);if(i>=0){return i}target=target.parentNode}},selectIndex:function(index){var item=this.items[index];if(item){this.selected=this.valueForNode(item)||index;return item}},selectPrevious:function(wrap){var i=wrap&&!this.selectedIndex?this.items.length-1:this.selectedIndex-1;return this.selectIndex(i)},selectNext:function(wrap){var i=wrap&&this.selectedIndex>=this.items.length-1?0:this.selectedIndex+1;return this.selectIndex(i)}});</script>
+</polymer-element>
 
 
 <!--
@@ -2353,7 +2298,7 @@ root if there is one. This implies:
 	
 	<div hidden?="{{selected!==1}}" class="disponibles" disabled?="{{rb.checked || estado!=&apos;red&apos;}}">
 		<div class="search-box">
-			<paper-input w100="" type="search" placeholder="codigo/descripcion" inputvalue="{{stext}}"></paper-input>
+			<paper-input w100="" placeholder="codigo/descripcion" inputvalue="{{stext}}"></paper-input>
 		</div>
 		<core-list data="{{data}}" height="40" flex="" on-core-activate="{{handlerActivate}}">
 			<template>
@@ -2508,35 +2453,44 @@ To change the bar color for unchecked state:
 
 
 
-
-
-
-
-
 <polymer-element name="q-centros" extends="q-base" assetpath="templates/">
 <template>
-	<style>.seleccionados,.disponibles{height:100vh;padding:5px 10px;background:#fff;border-radius:4px;overflow:auto}core-list{height:370px}.item-s{background:#d4d4d4;border-radius:4px;padding:10px;margin-bottom:10px}.item{box-sizing:border-box;height:40px;border-bottom:1px solid #ddd;padding:4px;cursor:default;background-color:#fff;overflow:hidden}.selected{background:silver}.search-box{background:#fff;margin-bottom:10px;box-shadow:0 1px 2px 0;border-radius:2px;padding:0 20px}</style>
+	<style>.seleccionados{background:#d4d4d4;border-radius:4px}.item-s{background:#fff;border-radius:4px;margin-bottom:10px;padding:10px}.riesgo{box-shadow:0 0 0 .1px;height:120px;margin-bottom:15px}paper-input{padding-left:42px}</style>
  <shadow></shadow>
 	
-	
-	<div class="seleccionados" disabled?="{{rb.checked || estado!=&apos;red&apos;}}">
-		<q-ciudades></q-ciudades>
-	
+	<div layout="" horizontal="" center="">
+		<core-icon-button icon="add-circle" on-tap="{{ handlerAddItem }}"></core-icon-button>
+		<div>Nuevo Centro</div>
 	</div>
-	
-	<div hidden?="{{selected!==1}}" class="disponibles" disabled?="{{rb.checked || estado!=&apos;red&apos;}}">
-		<div class="search-box">
-			<paper-input w100="" type="search" placeholder="codigo/descripcion" inputvalue="{{stext}}"></paper-input>
-		</div>
-		<core-list data="{{data}}" height="40" flex="" on-core-activate="{{handlerActivate}}">
-			<template>
-				<div class="item {{ {selected: selected} | tokenList }}">{{model.Codigo+'-'+model.Descripcion}}</div>
-			</template>
-		</core-list>
+	<div disabled?="{{rb.checked || estado!=&apos;red&apos;}}">	
+		<template repeat="{{item, index in value}}">
+			<div class="item-s">
+				<div layout="" horizontal="">
+					<paper-input placeholder="Nombre" value="{{item.Nombre}}" on-change="{{valueChanged}}"></paper-input>
+					<div flex=""></div>
+					<core-icon-button icon="delete" no-visible?="{{value.length===1}}" on-tap="{{ handlerDeleteItem }}"></core-icon-button>
+				</div>		
+				<q-ciudades selected="{{item.Ciudad}}" on-ciudad-select="{{valueChanged}}"></q-ciudades>
+				<div layout="" horizontal="" center="">
+					<core-icon-button icon="add-circle" on-tap="{{handlerAddRiesgo}}"></core-icon-button>
+					<div>Riesgos</div>
+				</div>
+				<template repeat="{{riesgo, ri in item.Riesgos}}">
+					<div layout="" horizontal="" center="" class="riesgo">
+						<core-icon-button icon="remove-circle" no-visible?="{{item.Riesgos.length===1}}" on-tap="{{ handlerDeleteRiesgo }}">
+						</core-icon-button>
+						<div layout="" vertical="">
+							<q-riesgos selected="{{riesgo.Riesgo}" valign="bottom" on-riesgo-select="{{handlerRiesgoSelect}}"></q-riesgos>
+							<q-rangos selected="{{riesgo.Rango}}" valign="bottom" on-rango-select="{{handlerRiesgoSelect}}"></q-rangos>
+						</div>
+					</div>
+				</template>
+			</div>
+		</template>
+		
 	</div>
-	<dialog-yes-no id="dlg">Desea excluir el item?</dialog-yes-no>  
 </template>
-	<script>Polymer("q-centros",{handlerShowDeleteItem:function(event,detail,sender){this._current=sender.templateInstance.model.item;this.$.dlg.toggle()},_delegateDeleteItem:function(event,detail,sender){this.value=_.without(this.value,this._current)},handlerActivate:function(event,detail,sender){if(!this.value){this.value=[]}if(!_.some(this.value,function(c){return c.Codigo===detail.data.Codigo})){this.value.push(detail.data)}},ready:function(){},domReady:function(){this.fire("element-ready")},go:function(){},valueChanged:function(){console.log("q-ciiu valueChanged");if(this.respuesta)this.respuesta.Valor=this.value},stextChanged:function(){var self=this;if(this.stext){if(/^[a-zA-Z]$/.test(self.stext)||/^[a-zA-Z]\d+$/.test(self.stext)){this.async(function(){this.data=_.filter(this.fuente,function(ciiu){return ciiu.Codigo.startsWith(self.stext.toUpperCase())})})}else if(this.stext.length>3){this.async(function(){this.data=_.filter(this.fuente,function(ciiu){return ciiu.Descripcion.contains(self.stext,true)})})}}else{this.async(function(){this.data=_.filter(this.fuente,function(ciiu){return ciiu})})}}});</script>
+	<script>Polymer("q-centros",{handlerAddItem:function(){this.value.unshift({Nombre:null,Ciudad:null,Riesgos:[{Riesgo:null,Rango:null}]})},handlerRiesgoSelect:function(event,detail,sender){var model=sender.templateInstance.model;if(event.type==="riesgo-select"){this.value[model.index].Riesgos[model.ri].Riesgo=detail.item}else if(event.type==="rango-select"){this.value[model.index].Riesgos[model.ri].Rango=detail.item}this.valueChanged()},handlerAddRiesgo:function(event,detail,sender){var model=sender.templateInstance.model;this.value[model.index].Riesgos.unshift({Riesgo:null,Rango:null});this.valueChanged()},handlerDeleteItem:function(event,detail,sender){this.value.splice(sender.templateInstance.model.index,1)},handlerDeleteRiesgo:function(event,detail,sender){var model=sender.templateInstance.model;this.value[model.index].Riesgos.splice(model.ri,1);this.valueChanged()},ready:function(){},domReady:function(){this.fire("element-ready")},go:function(){if(!this.value){this.value=[{Nombre:null,Ciudad:null,Riesgos:[{Riesgo:null,Rango:null}]}]}},valueChanged:function(){console.log("q-centros valueChanged",this.value);if(this.respuesta)this.respuesta.Valor=this.value}});</script>
 </polymer-element>
 </div><div hidden><!--
 Copyright (c) 2014 The Polymer Project Authors. All rights reserved.
