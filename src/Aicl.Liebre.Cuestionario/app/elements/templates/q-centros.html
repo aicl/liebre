@@ -5,33 +5,33 @@
 <polymer-element name="q-centros" extends="q-base">
 <template>
 	<style>
-		:host{
-			/*height: 100vh;*/
-		}
 		
 		.seleccionados{
-			/*height: 100vh;*/
 			background: rgb(212,212,212);
 			border-radius: 4px;
-			overflow: auto;
+			/*overflow: auto;*/
 		}
 		.item-s{
 			background: white;
 			border-radius: 4px;
 			margin-bottom: 10px;
 			padding: 10px;
-			overflow: auto;
+			/*overflow: auto;*/
+			
 		}
 		paper-input{
 			padding-left:42px;
 		}
-		
+		.line{
+			box-shadow:  0px 0px 0px 1px;
+			margin: 10px 0px 20px 0px;
+		}
 		
 	</style>
  <shadow></shadow>
 	
 	<core-icon-button icon="add-circle"  on-tap="{{ handlerAddItem }}"></core-icon-button>	
-	<div  class="seleccionados" disabled?="{{rb.checked || estado!='red'}}" >	
+	<div   disabled?="{{rb.checked || estado!='red'}}" >	
 		<template repeat="{{item, index in value}}">
 			<div  class="item-s">
 				<paper-input  placeholder="Nombre" value="{{item.Nombre}}"></paper-input>
@@ -41,11 +41,15 @@
 					<div>Riesgos</div>
 				</div>
 				<template repeat="{{riesgo, ri in item.Riesgos}}">
-					<q-riesgos selected="{{riesgo}}" 
+					<q-riesgos selected="{{riesgo.Riesgo}" 
 							   on-riesgo-select="{{handlerRiesgoSelect}}"></q-riesgos>
+					<q-rangos selected="{{riesgo.Rango}}" 
+							   on-rango-select="{{handlerRiesgoSelect}}"></q-rangos>
+					<div class="line"></div>
 				</template>
 			</div>
 		</template>
+		<div style="height:500px"></div>
 	</div>
 	
 	
@@ -53,16 +57,25 @@
 	<script>
 		Polymer({
 			handlerAddItem:function(){
-				
+				this.value.unshift({Nombre:null,Ciudad:null,Riesgos:[{Riesgo:null, Rango:null}]});
 			},
 			handlerRiesgoSelect:function(event,detail, sender){
-				this._current.Riesgos[sender.templateInstance.model.ri]=sender.templateInstance.model.riesgo;
+				
+				if(event.type==='riesgo-select'){
+					this._current.Riesgos[sender.templateInstance.model.ri].Riesgo=
+						detail.item
+				}
+				else if(event.type==='rango-select'){
+					this._current.Riesgos[sender.templateInstance.model.ri].Rango=
+						detail.item
+				}
+				
 				this.valueChanged();
 			},
 						
 			handlerAddRiesgo:function(event, detail, sender){				
 				this._current= sender.templateInstance.model.item;
-				this._current.Riesgos.unshift({});
+				this._current.Riesgos.unshift({Riesgo:null, Rango:null});
 				this.valueChanged();
 			},
 			ready:function(){		
@@ -72,8 +85,8 @@
 			},
 			go:function(){
 				if(!this.value){
-					this.value=[];
-					this.value.unshift({Nombre:null,Ciudad:null,Riesgos:[{}]});
+					this._current={Nombre:null,Ciudad:null,Riesgos:[{Riesgo:null, Rango:null}]};
+					this.value=[this._current];
 				}
 			},
 			valueChanged:function(){

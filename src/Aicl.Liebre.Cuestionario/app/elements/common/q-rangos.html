@@ -2,7 +2,7 @@
 <link rel="import" href="../../bower_components/core-selection/core-selection.html">
 <link rel="import" href="../../bower_components/core-list/core-list.html">
 <link rel="import" href="../../bower_components/paper-input/paper-input.html">
-<polymer-element name="q-riesgos" attributes="selected">
+<polymer-element name="q-rangos" attributes="selected">
 <template>
 	<style>
 		core-list{
@@ -11,14 +11,12 @@
 				
 		.item {
 		  box-sizing: border-box;
-		  height: 30px;
+		  height: 25px;
 		  border-bottom: 1px solid #ddd;
 		  padding: 4px;
 		  cursor: default;
 		  background-color: white;
 		  overflow: hidden;
-		  
-			
 		}
 		
 		.selected {
@@ -41,21 +39,21 @@
 							on-tap="{{toggle}}"></core-icon-button>
 		  <core-dropdown relatedTarget="{{$.trigger}}" opened="{{opened}}" halign="left" valign="top">
 			  <div layout horizontal on-tap="{{toggle}}">
-				  <core-icon-button class="si" icon="arrow-drop-up" ></core-icon-button>
-				  <paper-input id="fake"  readonly placeholder="Clase de Riesgo" 
-							   value="{{selected?(selected.Clase):''}}">
+				  <core-icon-button class="si" icon="arrow-drop-up"></core-icon-button>
+				  <paper-input id="fake"  readonly placeholder="Número de Empleados" 
+							   value="{{selected?(selected.Descripcion):''}}">
 				  </paper-input>
 			  </div>
-			  <core-list data="{{data}}" height="30" flex on-core-activate="{{handlerActivate}}">
+			  <core-list data="{{data}}" height="25" flex on-core-activate="{{handlerActivate}}">
 				  <template>
 					  <div class="item {{ {selected: selected} | tokenList }}"
-						   >{{model.Clase}}</div>
+						   >{{model.Descripcion}}</div>
 				  </template>
 			  </core-list>
 		  </core-dropdown>
 		</div>
-		<paper-input  readonly hidden?="{{opened}}" label="Clase de Riesgo" floatinglabel
-				   value="{{selected?(selected.Clase):''}}"
+		<paper-input  readonly hidden?="{{opened}}" label="Número de Empleados" floatinglabel
+				   value="{{selected?(selected.Descripcion):''}}"
 				   on-tap="{{toggle}}">
 		</paper-input>
 	</div>
@@ -67,9 +65,9 @@
 						
 			ready:function(){
 				var self=this;			
-				liebre.getRiesgos({
+				liebre.getRangos({
 					complete:function(r){
-						var d = _.sortBy(r.data, function(c){return c.Clase;});
+						var d = _.sortBy(r.data, function(c){return c.Codigo;});
 						self.data=d;
 					}
 				})
@@ -80,8 +78,9 @@
 			handlerActivate:function(event, detail, sender){
 				this.selected= detail.data;
 				this.opened=false;
-				this.asyncFire('riesgo-select',{item:this.selected});
+				this.asyncFire('rango-select',{item:this.selected});
 			}
+			
 		})
 	</script>
 </polymer-element>
