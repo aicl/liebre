@@ -1,0 +1,75 @@
+<link rel="import" href="../../bower_components/core-dropdown/core-dropdown.html">
+<link rel="import" href="../../bower_components/core-selection/core-selection.html">
+<link rel="import" href="../../bower_components/core-list/core-list.html">
+<link rel="import" href="../../bower_components/paper-input/paper-input.html">
+<polymer-element name="q-riesgos" attributes="selected">
+<template>
+	<style>
+		core-list{
+			height: 200px;
+		}
+				
+		.item {
+		  box-sizing: border-box;
+		  height: 40px;
+		  border-bottom: 1px solid #ddd;
+		  padding: 4px;
+		  cursor: default;
+		  background-color: white;
+		  overflow: hidden;
+		}
+		
+		.selected {
+		  background: silver;
+		}
+				
+		.core-transition{
+			overflow: hidden;
+		}
+	</style>
+	
+	<div layout horizontal>	
+		<div relative>
+		  <core-icon-button id="trigger" icon="{{opened?'arrow-drop-up':'arrow-drop-down'}}"
+							on-tap="{{toggle}}"></core-icon-button>
+		  <core-dropdown relatedTarget="{{$.trigger}}" opened="{{opened}}" halign="left" valign="top">
+			  <core-list data="{{data}}" height="40" flex on-core-activate="{{handlerActivate}}">
+				  <template>
+					  <div class="item {{ {selected: selected} | tokenList }}"
+						   >{{model.Clase+'-'+model.Ejemplo}}</div>
+				  </template>
+			  </core-list>
+		  </core-dropdown>
+		</div>
+		<paper-input  readonly hidden?="{{opened}}" label="Clase de Riesgo" floatinglabel
+				   value="{{selected?(selected.Clase):''}}"
+				   on-tap="{{toggle}}">
+		</paper-input>
+	</div>
+	
+ 
+</template>
+		<script>
+		Polymer({
+						
+			ready:function(){
+				var self=this;			
+				liebre.getRiesgos({
+					complete:function(r){
+						var d = _.sortBy(r.data, function(c){return c.Clase;});
+						self.data=d;
+					}
+				})
+			},
+			toggle:function(){
+				this.opened=!this.opened;
+			},
+			handlerActivate:function(event, detail, sender){
+				this.selected= detail.data;
+				this.opened=false;
+				this.asyncFire('riesgo-select',{item:this.selected});
+			}
+			
+		})
+	</script>
+</polymer-element>

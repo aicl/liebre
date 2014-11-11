@@ -37,9 +37,8 @@
 	<update-ajax id="update"></update-ajax>
 	<delete-ajax id="delete"></delete-ajax>
 
-	<cuestionario-guia-card class="card" id="element" style="height:500px;" height="100vh">
-	</cuestionario-guia-card>
-		
+	
+	<q-ciudades></q-ciudades>	
 		
 	<script src="../scripts/vendor/ydn.db-is-core-qry.js"></script>
 	<script src="../scripts/vendor/underscore-min.js"></script>
@@ -48,20 +47,6 @@
 	<script src="../scripts/app.js"></script>
 	<script>
 		document.addEventListener('polymer-ready', function() {
-			var elemento= document.querySelector("#element");
-			elemento.estado="red";
-			elemento.pregunta={
-				Enunciado: "Actividades de su empresa",
-				Id: "545907a08bd8c0169f1164d4",
-				IdPlantilla: "542c61db8bd8c10d1c809830",
-				Tipo: "ciudades"
-			};
-			
-			elemento.respuesta={
-				IdDiagnostico: "545914758bd8c0169f1164de",
-				IdGuia: "545907a08bd8c0169f1164d4"
-			};
-		
 		});
 	</script>		
 		

@@ -2,21 +2,17 @@
 <link rel="import" href="../../bower_components/core-selection/core-selection.html">
 <link rel="import" href="../../bower_components/core-list/core-list.html">
 <link rel="import" href="../../bower_components/paper-input/paper-input.html">
-<link rel="import" href="../../bower_components/core-menu/core-menu.html">
-<link rel="import" href="../../bower_components/core-item/core-item.html">
-<polymer-element name="q-ciudades" >
+<polymer-element name="q-ciudades" attributes="selected">
 <template>
 	<style>
-		:host{
-			overflow: hidden;
-		}
+		
 		core-list{
-			height: 270px;
+			height: 180px;
 		}
 				
 		.item {
 		  box-sizing: border-box;
-		  height: 40px;
+		  height: 30px;
 		  border-bottom: 1px solid #ddd;
 		  padding: 4px;
 		  cursor: default;
@@ -27,13 +23,7 @@
 		.selected {
 		  background: silver;
 		}
-		
-		.box{
-			padding: 4px 10px;
-		}
-		core-dropdown {
-		}
-		
+				
 		.si{
 			width: 38px;
 			height: 38px;
@@ -43,7 +33,7 @@
 		}
 	</style>
  
-  <div layout horizontal class="box">
+  <div layout horizontal>
 	  <div relative>
 		  <core-icon-button id="trigger" icon="arrow-drop-down" on-tap="{{toggle}}" hidden?="{{opened}}"
 							></core-icon-button>
@@ -53,14 +43,15 @@
 				  <paper-input id="fake"  placeholder="municipio" inputValue="{{stext}}">
 				  </paper-input>
 			  </div>
-			  <core-list data="{{data}}" height="40" flex on-core-activate="{{handlerActivate}}">
+			  <core-list data="{{data}}" height="30" flex on-core-activate="{{handlerActivate}}">
 				  <template>
-					  <div class="item {{ {selected: selected} | tokenList }}">{{model.Nombre+'-'+model.Departamento.Nombre}}</div>
+					  <div class="item {{ {selected: selected} | tokenList }}"
+						   >{{model.Nombre+'-'+model.Departamento.Nombre}}</div>
 				  </template>
 			  </core-list>
 		  </core-dropdown>
 	  </div>
-	  <paper-input  readonly hidden?="{{opened}}" label="Municipio" floatinglabel
+	  <paper-input  readonly  label="Municipio" floatinglabel
 				   value="{{selected?(selected.Nombre+'-'+selected.Departamento.Nombre):''}}"
 				   on-tap="{{handlerTap}}">
 	  </paper-input>
@@ -73,7 +64,7 @@
 			go:function(){
 			},
 			created:function(){
-				this.selected=null;
+				//this.selected=null;
 				this.data=[];
 				this.fuente=[];
 			},

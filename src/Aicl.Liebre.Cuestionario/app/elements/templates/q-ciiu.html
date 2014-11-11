@@ -79,7 +79,7 @@
 	
 	<div hidden?="{{selected!==1}}" class="disponibles" disabled?="{{rb.checked || estado!='red'}}">
 		<div class="search-box">
-			<paper-input w100 type="search" placeholder="codigo/descripcion" inputValue="{{stext}}"></paper-input>
+			<paper-input w100  placeholder="codigo/descripcion" inputValue="{{stext}}"></paper-input>
 		</div>
 		<core-list data="{{data}}" height="40" flex on-core-activate="{{handlerActivate}}">
 			<template>
