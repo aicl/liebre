@@ -2455,7 +2455,7 @@ To change the bar color for unchecked state:
 
 <polymer-element name="q-centros" extends="q-base" assetpath="templates/">
 <template>
-	<style>.seleccionados{background:#d4d4d4;border-radius:4px}.item-s{background:#fff;border-radius:4px;margin-bottom:10px;padding:10px}.riesgo{box-shadow:0 0 0 .1px;height:120px;margin-bottom:15px}paper-input{padding-left:42px}</style>
+	<style>.seleccionados{background:#d4d4d4;border-radius:4px}.item-s{background:#fff;border-radius:4px;margin-bottom:10px;padding:10px}.riesgo{box-shadow:0 0 0 .1px;height:120px;margin-bottom:10px}paper-input{padding-left:42px}</style>
  <shadow></shadow>
 	
 	<div layout="" horizontal="" center="">
@@ -2487,7 +2487,6 @@ To change the bar color for unchecked state:
 				</template>
 			</div>
 		</template>
-		
 	</div>
 </template>
 	<script>Polymer("q-centros",{handlerAddItem:function(){this.value.unshift({Nombre:null,Ciudad:null,Riesgos:[{Riesgo:null,Rango:null}]})},handlerRiesgoSelect:function(event,detail,sender){var model=sender.templateInstance.model;if(event.type==="riesgo-select"){this.value[model.index].Riesgos[model.ri].Riesgo=detail.item}else if(event.type==="rango-select"){this.value[model.index].Riesgos[model.ri].Rango=detail.item}this.valueChanged()},handlerAddRiesgo:function(event,detail,sender){var model=sender.templateInstance.model;this.value[model.index].Riesgos.unshift({Riesgo:null,Rango:null});this.valueChanged()},handlerDeleteItem:function(event,detail,sender){this.value.splice(sender.templateInstance.model.index,1)},handlerDeleteRiesgo:function(event,detail,sender){var model=sender.templateInstance.model;this.value[model.index].Riesgos.splice(model.ri,1);this.valueChanged()},ready:function(){},domReady:function(){this.fire("element-ready")},go:function(){if(!this.value){this.value=[{Nombre:null,Ciudad:null,Riesgos:[{Riesgo:null,Rango:null}]}]}},valueChanged:function(){console.log("q-centros valueChanged",this.value);if(this.respuesta)this.respuesta.Valor=this.value}});</script>
