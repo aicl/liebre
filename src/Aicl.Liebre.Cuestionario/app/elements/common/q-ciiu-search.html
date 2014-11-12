@@ -1,0 +1,93 @@
+<link rel="import" href="../../bower_components/core-dropdown/core-dropdown.html">
+<link rel="import" href="../../bower_components/core-selection/core-selection.html">
+<link rel="import" href="../../bower_components/core-list/core-list.html">
+<link rel="import" href="../../bower_components/paper-input/paper-input.html">
+<polymer-element name="q-ciiu-search" attributes="selected,valign">
+<template>
+	<style>		
+		core-list{
+			height: 100vh;
+		}
+		core-list{
+			box-shadow: 1px 1px 1px 1px;
+		}
+		.item {
+		  box-sizing: border-box;
+		  height: 80px;
+		  border-bottom: 1px solid #ddd;
+		  padding: 4px;
+		  cursor: default;
+		  background-color: white;
+		  overflow: hidden;
+		}
+		.selected {
+		  background: silver;
+		}		
+		.core-transition{
+			overflow: hidden;
+		}
+		.search-box{
+			background: white;
+			margin-bottom: 10px;
+			box-shadow: 0 1px 2px 0;
+			border-radius: 2px;
+			padding: 0 20px 0 20px;
+		}
+	</style>
+	<div class="search-box">
+	  <paper-input placeholder="codigo/descripcion" inputValue="{{stext}}"></paper-input>
+	</div>
+	<core-list data="{{data}}" height="80" flex on-core-activate="{{handlerActivate}}">
+	  <template>
+		  <div class="item {{ {selected: selected} | tokenList }}"
+			   >{{model.Codigo+'-'+model.Descripcion}}</div>
+	  </template>
+	</core-list>
+</template>
+		<script>
+		Polymer({	
+			created:function(){
+				this.data=[];
+				this.fuente=[];
+			},
+			ready:function(){
+				var self=this;			
+				liebre.getCIIUs({
+					complete:function(r){
+						self.fuente=r.data
+						self.data=r.data;
+					},
+					filterFn:function(ciiu){ return ciiu.Codigo.length===5 }
+				})
+			},
+			stextChanged:function(){
+				var self=this;
+				if(this.stext){
+					if(/^[a-zA-Z]$/.test(self.stext) || /^[a-zA-Z]\d+$/.test(self.stext)){
+						this.async(function(){
+							this.data=_.filter(this.fuente, function(ciiu){
+								return ciiu.Codigo.startsWith(self.stext.toUpperCase());
+							});
+						});
+					}
+					else if(this.stext.length>3){
+						this.async(function(){
+							this.data= _.filter(this.fuente,function(ciiu){
+								return ciiu.Descripcion.contains(self.stext, true);
+							});
+						});
+					}
+				}
+				else{
+					this.async(function(){
+						this.data= _.filter(this.fuente, function(ciiu){return ciiu});
+					});
+				}
+			},
+			handlerActivate:function(event, detail, sender){
+				this.selected= detail.data;
+				this.asyncFire('ciiu-activate',{item:this.selected});	
+			}
+		})
+	</script>
+</polymer-element>

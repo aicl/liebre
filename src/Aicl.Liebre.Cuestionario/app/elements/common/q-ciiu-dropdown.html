@@ -1,0 +1,113 @@
+<link rel="import" href="../../bower_components/core-dropdown/core-dropdown.html">
+<link rel="import" href="../../bower_components/core-selection/core-selection.html">
+<link rel="import" href="../../bower_components/core-list/core-list.html">
+<link rel="import" href="../../bower_components/paper-input/paper-input.html">
+<polymer-element name="q-ciiu-dropdown" attributes="selected,valign">
+<template>
+	<style>		
+		core-list{
+			height: 360px;
+		}
+		core-dropdown{
+			box-shadow: 1px 1px 1px 1px;
+		}
+		.item {
+		  box-sizing: border-box;
+		  height: 80px;
+		  border-bottom: 1px solid #ddd;
+		  padding: 4px;
+		  cursor: default;
+		  background-color: white;
+		  overflow: hidden;
+		}
+		.selected {
+		  background: silver;
+		}		
+		.si{
+			width: 38px;
+			height: 38px;
+		}
+		.core-transition{
+			overflow: hidden;
+		}
+	</style>
+	<div layout horizontal>
+	  <div relative>
+		  <core-icon-button id="trigger" icon="arrow-drop-down" on-tap="{{toggle}}" hidden?="{{opened}}"
+							></core-icon-button>
+		  <core-dropdown relatedTarget="{{$.trigger}}" opened="{{opened}}" halign="left" valign="{{valign}}">
+			  <div layout horizontal>
+				  <core-icon-button class="si" icon="arrow-drop-up" on-tap="{{toggle}}"></core-icon-button>
+				  <paper-input id="fake"  placeholder="codigo/descripcion" inputValue="{{stext}}">
+				  </paper-input>
+			  </div>
+			  <core-list data="{{data}}" height="80" flex on-core-activate="{{handlerActivate}}">
+				  <template>
+					  <div class="item {{ {selected: selected} | tokenList }}"
+						   >{{model.Codigo+'-'+model.Descripcion}}</div>
+				  </template>
+			  </core-list>
+		  </core-dropdown>
+	  </div>
+	  <paper-input  readonly  label="codigo/descripcion" floatinglabel
+				   value="{{selected?selected.Codigo:''}}"></paper-input>
+	</div>	
+</template>
+		<script>
+		Polymer({
+			opened:true,
+			valign:'top',
+			go:function(){
+			},
+			created:function(){
+				this.data=[];
+				this.fuente=[];
+			},
+			toggle:function(){
+				this.opened=!this.opened;
+			},
+			ready:function(){
+				var self=this;			
+				liebre.getCIIUs({
+					complete:function(r){
+						self.fuente=r.data
+						self.data=r.data;
+					},
+					filterFn:function(ciiu){ return ciiu.Codigo.length===5 }
+				})
+			},
+			stextChanged:function(){
+				var self=this;
+				if(this.stext){
+					if(/^[a-zA-Z]$/.test(self.stext) || /^[a-zA-Z]\d+$/.test(self.stext)){
+						this.async(function(){
+							this.data=_.filter(this.fuente, function(ciiu){
+								return ciiu.Codigo.startsWith(self.stext.toUpperCase());
+							});
+						});
+					}
+					else if(this.stext.length>3){
+						this.async(function(){
+							this.data= _.filter(this.fuente,function(ciiu){
+								return ciiu.Descripcion.contains(self.stext, true);
+							});
+						});
+					}
+				}
+				else{
+					this.async(function(){
+						this.data= _.filter(this.fuente, function(ciiu){return ciiu});
+					});
+				}
+			},
+			
+			handlerActivate:function(event, detail, sender){
+				this.selected= detail.data;
+				this.asyncFire('ciiu-select',{item:this.selected});	
+			},
+			handlerTap:function(){
+				this.toggle();				
+			}
+		})
+	</script>
+</polymer-element>

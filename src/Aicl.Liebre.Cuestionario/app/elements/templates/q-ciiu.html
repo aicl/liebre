@@ -9,60 +9,21 @@
 <polymer-element name="q-ciiu" extends="q-base">
 <template>
 	<style>
-		:host{
-			height: 500px;
-			overflow: hidden;
-		}
 		.seleccionados, .disponibles{
-			height: 430px;
 			padding: 5px 10px 5px 10px;
 			background: white;
 			border-radius: 4px;
-			overflow: auto;
-		}
-		core-list{
-			height: 370px;
-		}
-				
-		/* iPhone 4g styles go here */
-		@media only screen and (-webkit-min-device-pixel-ratio: 2) {    
-			:host core-list{
-				height: 160px;
-			}
-		}
-		
+			height: 100%;
+			margin:0 auto;
+		}		
 		.item-s{
 			background: rgb(212,212,212);
 			border-radius: 4px;
 			padding: 10px;
 			margin-bottom: 10px;
 		}
-		.item {
-		  box-sizing: border-box;
-		  height: 40px;
-		  border-bottom: 1px solid #ddd;
-		  padding: 4px;
-		  cursor: default;
-		  background-color: white;
-		  overflow: hidden;
-		}
-		
-		.selected {
-		  background: silver;
-		}
-		
-		.search-box{
-			background: white;
-			margin-bottom: 10px;
-			box-shadow: 0 1px 2px 0;
-			border-radius: 2px;
-			padding: 0 20px 0 20px;
-		}
-		
-		
 	</style>
  <shadow></shadow>
-	
 	<paper-tabs id="sl" selected="{{selected}}">
 		<paper-tab>Seleccionados</paper-tab>
 		<paper-tab>Disponibles</paper-tab>
@@ -78,14 +39,7 @@
 	</div>
 	
 	<div hidden?="{{selected!==1}}" class="disponibles" disabled?="{{rb.checked || estado!='red'}}">
-		<div class="search-box">
-			<paper-input w100  placeholder="codigo/descripcion" inputValue="{{stext}}"></paper-input>
-		</div>
-		<core-list data="{{data}}" height="40" flex on-core-activate="{{handlerActivate}}">
-			<template>
-				<div class="item {{ {selected: selected} | tokenList }}">{{model.Codigo+'-'+model.Descripcion}}</div>
-			</template>
-		</core-list>
+		<q-ciiu-search on-ciiu-activate="{{handlerActivate}}"></q-ciiu-search>
 	</div>
 	<dialog-yes-no id="dlg">Desea excluir el item?</dialog-yes-no>  
 </template>
@@ -104,22 +58,14 @@
 				if(!this.value){
 					this.value=[];
 				}
-				if (! _.some(this.value, function(c){ return c.Codigo===detail.data.Codigo})){
-					this.value.push(detail.data);
+				if (! _.some(this.value, function(c){ return c.Codigo===detail.item.Codigo})){
+					this.value.push(detail.item);
 				}
 			},
 			ready:function(){
 				var self=this;			
 				this.selected=0;
 				this.$.dlg.handlerOkTap=this._delegateDeleteItem.bind(this);
-				liebre.getCIIUs({
-					complete:function(r){
-						self.fuente=r.data
-						self.data=r.data;
-					},
-					filterFn:function(ciiu){ return ciiu.Codigo.length===5 }
-				})
-				
 			},
 			domReady:function(){
 				this.fire("element-ready");
@@ -129,30 +75,6 @@
 			valueChanged:function(){
 				console.log("q-ciiu valueChanged");
 				if( this.respuesta) this.respuesta.Valor=this.value;
-			},
-			stextChanged:function(){
-				var self=this;
-				if(this.stext){
-					if(/^[a-zA-Z]$/.test(self.stext) || /^[a-zA-Z]\d+$/.test(self.stext)){
-						this.async(function(){
-							this.data=_.filter(this.fuente, function(ciiu){
-								return ciiu.Codigo.startsWith(self.stext.toUpperCase());
-							});
-						});
-					}
-					else if(this.stext.length>3){
-						this.async(function(){
-							this.data= _.filter(this.fuente,function(ciiu){
-								return ciiu.Descripcion.contains(self.stext, true);
-							});
-						});
-					}
-				}
-				else{
-					this.async(function(){
-						this.data= _.filter(this.fuente, function(ciiu){return ciiu});
-					});
-				}
 			}
 		})
 	</script>
