@@ -50,15 +50,15 @@
 		  </core-dropdown>
 	  </div>
 	  <paper-input  readonly  label="codigo/descripcion" floatinglabel
-				   value="{{selected?selected.Codigo:''}}"></paper-input>
+				   value="{{selected?selected.Codigo:''}}"
+				   on-tap="{{handlerTap}}">
+	  </paper-input>
 	</div>	
 </template>
 		<script>
 		Polymer({
-			opened:true,
+			opened:false,
 			valign:'top',
-			go:function(){
-			},
 			created:function(){
 				this.data=[];
 				this.fuente=[];
@@ -96,17 +96,21 @@
 				}
 				else{
 					this.async(function(){
-						this.data= _.filter(this.fuente, function(ciiu){return ciiu});
+						this.data= this.getData();
 					});
 				}
 			},
 			
 			handlerActivate:function(event, detail, sender){
 				this.selected= detail.data;
+				this.opened=false;
 				this.asyncFire('ciiu-select',{item:this.selected});	
 			},
 			handlerTap:function(){
 				this.toggle();				
+			},
+			getData:function(){
+				return this.fuente;
 			}
 		})
 	</script>

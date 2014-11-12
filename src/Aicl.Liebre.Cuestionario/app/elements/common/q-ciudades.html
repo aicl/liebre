@@ -60,18 +60,11 @@
 		Polymer({
 			opened:false,
 			valign:'top',
-			go:function(){
-			},
 			created:function(){
-				//this.selected=null;
 				this.data=[];
 				this.fuente=[];
 			},
 			toggle:function(){
-				if(!this.opened) {
-					this.$.fake.focus();
-					this.$.fake.value=this.selected?this.selected.Nombre:'';
-				}
 				this.opened=!this.opened;
 			},
 			ready:function(){
