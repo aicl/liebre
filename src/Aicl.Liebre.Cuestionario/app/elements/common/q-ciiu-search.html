@@ -6,14 +6,14 @@
 <template>
 	<style>		
 		core-list{
-			height: 100vh;
+			height: 360px;
 		}
 		core-list{
 			box-shadow: 1px 1px 1px 1px;
 		}
 		.item {
 		  box-sizing: border-box;
-		  height: 80px;
+		  height: 40px;
 		  border-bottom: 1px solid #ddd;
 		  padding: 4px;
 		  cursor: default;
@@ -37,7 +37,7 @@
 	<div class="search-box">
 	  <paper-input placeholder="codigo/descripcion" inputValue="{{stext}}"></paper-input>
 	</div>
-	<core-list data="{{data}}" height="80" flex on-core-activate="{{handlerActivate}}">
+	<core-list data="{{data}}" height="40" flex on-core-activate="{{handlerActivate}}">
 	  <template>
 		  <div class="item {{ {selected: selected} | tokenList }}"
 			   >{{model.Codigo+'-'+model.Descripcion}}</div>
