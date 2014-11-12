@@ -1353,6 +1353,50 @@ Putting this together:
 
 </polymer-element>
 
+<polymer-element name="q-ciiu-search" attributes="selected,valign" assetpath="common/">
+<template>
+	<style>core-list{height:360px}core-list{box-shadow:1px 1px 1px 1px}.item{box-sizing:border-box;height:40px;border-bottom:1px solid #ddd;padding:4px;cursor:default;background-color:#fff;overflow:hidden}.selected{background:silver}.core-transition{overflow:hidden}.search-box{background:#fff;margin-bottom:10px;box-shadow:0 1px 2px 0;border-radius:2px;padding:0 20px}</style>
+	<div class="search-box">
+	  <paper-input placeholder="codigo/descripcion" inputvalue="{{stext}}"></paper-input>
+	</div>
+	<core-list data="{{data}}" height="40" flex="" on-core-activate="{{handlerActivate}}">
+	  <template>
+		  <div class="item {{ {selected: selected} | tokenList }}">{{model.Codigo+'-'+model.Descripcion}}</div>
+	  </template>
+	</core-list>
+</template>
+		<script>Polymer("q-ciiu-search",{created:function(){this.data=[];this.fuente=[]},ready:function(){var self=this;liebre.getCIIUs({complete:function(r){self.fuente=r.data;self.data=r.data},filterFn:function(ciiu){return ciiu.Codigo.length===5}})},stextChanged:function(){var self=this;if(this.stext){if(/^[a-zA-Z]$/.test(self.stext)||/^[a-zA-Z]\d+$/.test(self.stext)){this.async(function(){this.data=_.filter(this.fuente,function(ciiu){return ciiu.Codigo.startsWith(self.stext.toUpperCase())})})}else if(this.stext.length>3){this.async(function(){this.data=_.filter(this.fuente,function(ciiu){return ciiu.Descripcion.contains(self.stext,true)})})}}else{this.async(function(){this.data=_.filter(this.fuente,function(ciiu){return ciiu})})}},handlerActivate:function(event,detail,sender){this.selected=detail.data;this.asyncFire("ciiu-activate",{item:this.selected})}});</script>
+</polymer-element></div><div hidden>
+
+
+
+<polymer-element name="q-ciiu-dropdown" attributes="selected,valign" assetpath="common/">
+<template>
+	<style>core-list{height:360px}core-dropdown{box-shadow:1px 1px 1px 1px}.item{box-sizing:border-box;height:40px;border-bottom:1px solid #ddd;padding:4px;cursor:default;background-color:#fff;overflow:hidden}.selected{background:silver}.si{width:38px;height:38px}.core-transition{overflow:hidden}</style>
+	<div layout="" horizontal="">
+	  <div relative="">
+		  <core-icon-button id="trigger" icon="arrow-drop-down" on-tap="{{toggle}}" hidden?="{{opened}}"></core-icon-button>
+		  <core-dropdown relatedtarget="{{$.trigger}}" opened="{{opened}}" halign="left" valign="{{valign}}">
+			  <div layout="" horizontal="">
+				  <core-icon-button class="si" icon="arrow-drop-up" on-tap="{{toggle}}"></core-icon-button>
+				  <paper-input id="fake" placeholder="codigo/descripcion" inputvalue="{{stext}}">
+				  </paper-input>
+			  </div>
+			  <core-list data="{{data}}" height="40" flex="" on-core-activate="{{handlerActivate}}">
+				  <template>
+					  <div class="item {{ {selected: selected} | tokenList }}">{{model.Codigo+'-'+model.Descripcion}}</div>
+				  </template>
+			  </core-list>
+		  </core-dropdown>
+	  </div>
+	  <paper-input readonly label="codigo/descripcion" floatinglabel="" value="{{selected?selected.Codigo:&apos;&apos;}}"></paper-input>
+	</div>	
+</template>
+		<script>Polymer("q-ciiu-dropdown",{opened:true,valign:"top",go:function(){},created:function(){this.data=[];this.fuente=[]},toggle:function(){this.opened=!this.opened},ready:function(){var self=this;liebre.getCIIUs({complete:function(r){self.fuente=r.data;self.data=r.data},filterFn:function(ciiu){return ciiu.Codigo.length===5}})},stextChanged:function(){var self=this;if(this.stext){if(/^[a-zA-Z]$/.test(self.stext)||/^[a-zA-Z]\d+$/.test(self.stext)){this.async(function(){this.data=_.filter(this.fuente,function(ciiu){return ciiu.Codigo.startsWith(self.stext.toUpperCase())})})}else if(this.stext.length>3){this.async(function(){this.data=_.filter(this.fuente,function(ciiu){return ciiu.Descripcion.contains(self.stext,true)})})}}else{this.async(function(){this.data=_.filter(this.fuente,function(ciiu){return ciiu})})}},handlerActivate:function(event,detail,sender){this.selected=detail.data;this.asyncFire("ciiu-select",{item:this.selected})},handlerTap:function(){this.toggle()}});</script>
+</polymer-element></div><div hidden>
+
+
+
 <polymer-element name="q-rangos" attributes="selected,valign" assetpath="common/">
 <template>
 	<style>core-list{height:180px}core-dropdown{box-shadow:1px 1px 1px 1px}.item{box-sizing:border-box;height:25px;border-bottom:1px solid #ddd;padding:4px;cursor:default;background-color:#fff;overflow:hidden}.selected{background:silver}.si{width:38px;height:38px}.core-transition{overflow:hidden}</style>
@@ -1391,7 +1435,7 @@ Putting this together:
 		  <core-dropdown relatedtarget="{{$.trigger}}" opened="{{opened}}" halign="left" valign="{{valign}}">
 			  <div layout="" horizontal="" on-tap="{{toggle}}">
 				  <core-icon-button class="si" icon="arrow-drop-up"></core-icon-button>
-				  <paper-input id="fake" readonly placeholder="Clase de Riesgo" value="{{selected?(selected.Clase):&apos;&apos;}}">
+				  <paper-input id="fake" readonly placeholder="Clase de Riesgo" value="{{selected?selected.Clase:&apos;&apos;}}">
 				  </paper-input>
 			  </div>
 			  <core-list data="{{data}}" height="30" flex="" on-core-activate="{{handlerActivate}}">
@@ -1401,7 +1445,7 @@ Putting this together:
 			  </core-list>
 		  </core-dropdown>
 		</div>
-		<paper-input readonly hidden?="{{opened}}" label="Clase de Riesgo" floatinglabel="" value="{{selected?(selected.Clase):&apos;&apos;}}" on-tap="{{toggle}}">
+		<paper-input readonly hidden?="{{opened}}" label="Clase de Riesgo" floatinglabel="" value="{{selected?selected.Clase:&apos;&apos;}}" on-tap="{{toggle}}">
 		</paper-input>
 	</div>
 	
@@ -2279,9 +2323,8 @@ root if there is one. This implies:
 
 <polymer-element name="q-ciiu" extends="q-base" assetpath="templates/">
 <template>
-	<style>:host{height:500px;overflow:hidden}.seleccionados,.disponibles{height:430px;padding:5px 10px;background:#fff;border-radius:4px;overflow:auto}core-list{height:370px}@media only screen and (-webkit-min-device-pixel-ratio:2){:host core-list{height:160px}}.item-s{background:#d4d4d4;border-radius:4px;padding:10px;margin-bottom:10px}.item{box-sizing:border-box;height:40px;border-bottom:1px solid #ddd;padding:4px;cursor:default;background-color:#fff;overflow:hidden}.selected{background:silver}.search-box{background:#fff;margin-bottom:10px;box-shadow:0 1px 2px 0;border-radius:2px;padding:0 20px}</style>
+	<style>.seleccionados,.disponibles{padding:5px 10px;background:#fff;border-radius:4px;height:100%;margin:0 auto}.item-s{background:#d4d4d4;border-radius:4px;padding:10px;margin-bottom:10px}</style>
  <shadow></shadow>
-	
 	<paper-tabs id="sl" selected="{{selected}}">
 		<paper-tab>Seleccionados</paper-tab>
 		<paper-tab>Disponibles</paper-tab>
@@ -2297,18 +2340,11 @@ root if there is one. This implies:
 	</div>
 	
 	<div hidden?="{{selected!==1}}" class="disponibles" disabled?="{{rb.checked || estado!=&apos;red&apos;}}">
-		<div class="search-box">
-			<paper-input w100="" placeholder="codigo/descripcion" inputvalue="{{stext}}"></paper-input>
-		</div>
-		<core-list data="{{data}}" height="40" flex="" on-core-activate="{{handlerActivate}}">
-			<template>
-				<div class="item {{ {selected: selected} | tokenList }}">{{model.Codigo+'-'+model.Descripcion}}</div>
-			</template>
-		</core-list>
+		<q-ciiu-search on-ciiu-activate="{{handlerActivate}}"></q-ciiu-search>
 	</div>
 	<dialog-yes-no id="dlg">Desea excluir el item?</dialog-yes-no>  
 </template>
-	<script>Polymer("q-ciiu",{handlerShowDeleteItem:function(event,detail,sender){this._current=sender.templateInstance.model.item;this.$.dlg.toggle()},_delegateDeleteItem:function(event,detail,sender){this.value=_.without(this.value,this._current)},handlerActivate:function(event,detail,sender){if(!this.value){this.value=[]}if(!_.some(this.value,function(c){return c.Codigo===detail.data.Codigo})){this.value.push(detail.data)}},ready:function(){var self=this;this.selected=0;this.$.dlg.handlerOkTap=this._delegateDeleteItem.bind(this);liebre.getCIIUs({complete:function(r){self.fuente=r.data;self.data=r.data},filterFn:function(ciiu){return ciiu.Codigo.length===5}})},domReady:function(){this.fire("element-ready")},go:function(){},valueChanged:function(){console.log("q-ciiu valueChanged");if(this.respuesta)this.respuesta.Valor=this.value},stextChanged:function(){var self=this;if(this.stext){if(/^[a-zA-Z]$/.test(self.stext)||/^[a-zA-Z]\d+$/.test(self.stext)){this.async(function(){this.data=_.filter(this.fuente,function(ciiu){return ciiu.Codigo.startsWith(self.stext.toUpperCase())})})}else if(this.stext.length>3){this.async(function(){this.data=_.filter(this.fuente,function(ciiu){return ciiu.Descripcion.contains(self.stext,true)})})}}else{this.async(function(){this.data=_.filter(this.fuente,function(ciiu){return ciiu})})}}});</script>
+	<script>Polymer("q-ciiu",{handlerShowDeleteItem:function(event,detail,sender){this._current=sender.templateInstance.model.item;this.$.dlg.toggle()},_delegateDeleteItem:function(event,detail,sender){this.value=_.without(this.value,this._current)},handlerActivate:function(event,detail,sender){if(!this.value){this.value=[]}if(!_.some(this.value,function(c){return c.Codigo===detail.item.Codigo})){this.value.push(detail.item)}},ready:function(){var self=this;this.selected=0;this.$.dlg.handlerOkTap=this._delegateDeleteItem.bind(this)},domReady:function(){this.fire("element-ready")},go:function(){},valueChanged:function(){console.log("q-ciiu valueChanged");if(this.respuesta)this.respuesta.Valor=this.value}});</script>
 </polymer-element>
 </div><div hidden>
 
@@ -2455,7 +2491,7 @@ To change the bar color for unchecked state:
 
 <polymer-element name="q-centros" extends="q-base" assetpath="templates/">
 <template>
-	<style>.seleccionados{background:#d4d4d4;border-radius:4px}.item-s{background:#fff;border-radius:4px;margin-bottom:10px;padding:10px}.riesgo{box-shadow:0 0 0 .1px;height:120px;margin-bottom:10px}paper-input{padding-left:42px}</style>
+	<style>.seleccionados{background:#d4d4d4;border-radius:4px}.item-s{background:#fff;border-radius:4px;margin-bottom:2px;padding:10px}.riesgo{box-shadow:0 0 0 .1px;height:120px;margin-bottom:5px}paper-input{padding-left:42px}</style>
  <shadow></shadow>
 	
 	<div layout="" horizontal="" center="">
@@ -2480,7 +2516,7 @@ To change the bar color for unchecked state:
 						<core-icon-button icon="remove-circle" no-visible?="{{item.Riesgos.length===1}}" on-tap="{{ handlerDeleteRiesgo }}">
 						</core-icon-button>
 						<div layout="" vertical="">
-							<q-riesgos selected="{{riesgo.Riesgo}" valign="bottom" on-riesgo-select="{{handlerRiesgoSelect}}"></q-riesgos>
+							<q-riesgos selected="{{riesgo.Riesgo}}" valign="bottom" on-riesgo-select="{{handlerRiesgoSelect}}"></q-riesgos>
 							<q-rangos selected="{{riesgo.Rango}}" valign="bottom" on-rango-select="{{handlerRiesgoSelect}}"></q-rangos>
 						</div>
 					</div>

@@ -39,7 +39,7 @@
 			  <div layout horizontal on-tap="{{toggle}}">
 				  <core-icon-button class="si" icon="arrow-drop-up" ></core-icon-button>
 				  <paper-input id="fake"  readonly placeholder="Clase de Riesgo" 
-							   value="{{selected?(selected.Clase):''}}">
+							   value="{{selected?selected.Clase:''}}">
 				  </paper-input>
 			  </div>
 			  <core-list data="{{data}}" height="30" flex on-core-activate="{{handlerActivate}}">
@@ -51,7 +51,7 @@
 		  </core-dropdown>
 		</div>
 		<paper-input  readonly hidden?="{{opened}}" label="Clase de Riesgo" floatinglabel
-				   value="{{selected?(selected.Clase):''}}"
+				   value="{{selected?selected.Clase:''}}"
 				   on-tap="{{toggle}}">
 		</paper-input>
 	</div>
