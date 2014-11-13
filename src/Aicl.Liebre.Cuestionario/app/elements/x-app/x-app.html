@@ -33,7 +33,6 @@
 	  <paper-toast id="tec"  class="error_connection" role="alert"></paper-toast>
 	  <paper-toast id="tc" class="complete" text="Operación realizada!"></paper-toast>
 	  <q-dialog-instalacion id="qdi"></q-dialog-instalacion>
-	  
   </template>
   <script>
 	  Polymer({		  		   
@@ -243,6 +242,7 @@
 					  this.$.te.show();
 					  return;
 				  }
+				  this.mostrarCuestionarios();
 			  }.bind(this));
 		  },
 		  	  

@@ -1,8 +1,8 @@
 <link rel="import" href="../common/dialog-base.html">
 <polymer-element name="q-dialog-instalacion" extends="dialog-base">
 	<template>
-		<paper-dialog id="dlg" backdrop autoCloseDisabled heading=[[heading]]>
-			<paper-input required label="Token" floatinglabel name="Token" value="{{_newValue.Token}}">
+		<paper-dialog id="dlg" backdrop layered autoCloseDisabled heading=[[heading]]>
+			<paper-input required label="Token" floatinglabel name="Token" inputValue="{{_newValue.Token}}">
 			</paper-input>
 			<paper-icon-button icon="cancel" dismissive></paper-icon-button>
 			<paper-icon-button icon="check"  affirmative autofocus>
@@ -14,19 +14,15 @@
 			ready:function(){
 				this._dialog= this.$.dlg;
 				this.validateFn= function(old, current){
-					return !( this.getInput("Token").invalid || Object.compare(old, current) );
+					return !( this.getInput("Token").invalid || Object.compare(this._oldValue, this._newValue) );
 				}.bind(this);
 			},
-			
 			toggle:function(){
 				this.data={Token:""};
 				this.super();
-			},
-			
+			}
 		})
 	</script>
 </polymer-element>
-
-
 
 	
