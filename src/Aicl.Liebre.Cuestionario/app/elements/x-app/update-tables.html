@@ -79,6 +79,7 @@
 					var ajax= self.shadowRoot.querySelector("read-ajax[store='"+ self.stores[index] +"']");
 					ajax.model= ajax.getAttribute("model");
 					ajax.baseUrl=liebre.tools.getBaseUrl();
+					ajax.urlparams={format: 'json'};
 					ajax.go();													
 				};
 				
