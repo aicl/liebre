@@ -1353,6 +1353,35 @@ Putting this together:
 
 </polymer-element>
 
+<polymer-element name="q-externos-dropdown" attributes="selected,valign" assetpath="common/">
+<template>
+	<style>core-list{height:160px}core-dropdown{box-shadow:1px 1px 1px 1px}.item{box-sizing:border-box;height:35px;border-bottom:1px solid #ddd;padding:4px;cursor:default;background-color:#fff;overflow:hidden}.selected{background:silver}.si{width:38px;height:38px}.core-transition{overflow:hidden}</style>
+	
+	<div layout="" horizontal="">	
+		<div relative="">
+		  <core-icon-button id="trigger" icon="{{opened?&apos;arrow-drop-up&apos;:&apos;arrow-drop-down&apos;}}" on-tap="{{toggle}}"></core-icon-button>
+		  <core-dropdown relatedtarget="{{$.trigger}}" opened="{{opened}}" halign="left" valign="{{valign}}">
+			  <div layout="" horizontal="" on-tap="{{toggle}}">
+				  <core-icon-button class="si" icon="arrow-drop-up"></core-icon-button>
+				  <paper-input id="fake" readonly placeholder="Tipo de Vinculaci&#xF3;n" value="{{selected?(selected.Descripcion):&apos;&apos;}}">
+				  </paper-input>
+			  </div>
+			  <core-list data="{{data}}" height="35" flex="" on-core-activate="{{handlerActivate}}">
+				  <template>
+					  <div class="item {{ {selected: selected} | tokenList }}">{{model.Descripcion}}</div>
+				  </template>
+			  </core-list>
+		  </core-dropdown>
+		</div>
+		<paper-input readonly hidden?="{{opened}}" label="Tipo de Vinculaci&#xF3;n" floatinglabel="" value="{{selected?(selected.Descripcion):&apos;&apos;}}" on-tap="{{toggle}}">
+		</paper-input>
+	</div>
+</template>
+		<script>Polymer("q-externos-dropdown",{valign:"top",ready:function(){var self=this;liebre.getExternos({complete:function(r){self.data=r.data}})},toggle:function(){this.opened=!this.opened},handlerActivate:function(event,detail,sender){this.selected=detail.data;this.opened=false;this.asyncFire("externo-select",{item:this.selected})}});</script>
+</polymer-element></div><div hidden>
+
+
+
 <polymer-element name="q-ciiu-search" attributes="selected,valign" assetpath="common/">
 <template>
 	<style>core-list{height:360px}core-list{box-shadow:1px 1px 1px 1px}.item{box-sizing:border-box;height:40px;border-bottom:1px solid #ddd;padding:4px;cursor:default;background-color:#fff;overflow:hidden}.selected{background:silver}.core-transition{overflow:hidden}.search-box{background:#fff;margin-bottom:10px;box-shadow:0 1px 2px 0;border-radius:2px;padding:0 20px}</style>
@@ -1389,10 +1418,11 @@ Putting this together:
 			  </core-list>
 		  </core-dropdown>
 	  </div>
-	  <paper-input readonly label="codigo/descripcion" floatinglabel="" value="{{selected?selected.Codigo:&apos;&apos;}}"></paper-input>
+	  <paper-input readonly label="Actividad - CIIU" floatinglabel="" value="{{selected?(selected.Codigo+&apos;-&apos;+selected.Descripcion):&apos;&apos;}}" on-tap="{{handlerTap}}">
+	  </paper-input>
 	</div>	
 </template>
-		<script>Polymer("q-ciiu-dropdown",{opened:true,valign:"top",go:function(){},created:function(){this.data=[];this.fuente=[]},toggle:function(){this.opened=!this.opened},ready:function(){var self=this;liebre.getCIIUs({complete:function(r){self.fuente=r.data;self.data=r.data},filterFn:function(ciiu){return ciiu.Codigo.length===5}})},stextChanged:function(){var self=this;if(this.stext){if(/^[a-zA-Z]$/.test(self.stext)||/^[a-zA-Z]\d+$/.test(self.stext)){this.async(function(){this.data=_.filter(this.fuente,function(ciiu){return ciiu.Codigo.startsWith(self.stext.toUpperCase())})})}else if(this.stext.length>3){this.async(function(){this.data=_.filter(this.fuente,function(ciiu){return ciiu.Descripcion.contains(self.stext,true)})})}}else{this.async(function(){this.data=_.filter(this.fuente,function(ciiu){return ciiu})})}},handlerActivate:function(event,detail,sender){this.selected=detail.data;this.asyncFire("ciiu-select",{item:this.selected})},handlerTap:function(){this.toggle()}});</script>
+		<script>Polymer("q-ciiu-dropdown",{opened:false,valign:"top",created:function(){this.data=[];this.fuente=[]},toggle:function(){this.opened=!this.opened},ready:function(){var self=this;liebre.getCIIUs({complete:function(r){self.fuente=r.data;self.data=r.data},filterFn:function(ciiu){return ciiu.Codigo.length===5}})},stextChanged:function(){var self=this;if(this.stext){if(/^[a-zA-Z]$/.test(self.stext)||/^[a-zA-Z]\d+$/.test(self.stext)){this.async(function(){this.data=_.filter(this.fuente,function(ciiu){return ciiu.Codigo.startsWith(self.stext.toUpperCase())})})}else if(this.stext.length>3){this.async(function(){this.data=_.filter(this.fuente,function(ciiu){return ciiu.Descripcion.contains(self.stext,true)})})}}else{this.async(function(){this.data=this.getData()})}},handlerActivate:function(event,detail,sender){this.selected=detail.data;this.opened=false;this.asyncFire("ciiu-select",{item:this.selected})},handlerTap:function(){this.toggle()},getData:function(){return this.fuente}});</script>
 </polymer-element></div><div hidden>
 
 
@@ -1421,7 +1451,7 @@ Putting this together:
 		</paper-input>
 	</div>
 </template>
-		<script>Polymer("q-rangos",{valign:"bottom",ready:function(){var self=this;liebre.getRangos({complete:function(r){var d=_.sortBy(r.data,function(c){return c.Codigo});self.data=d}})},toggle:function(){this.opened=!this.opened},handlerActivate:function(event,detail,sender){this.selected=detail.data;this.opened=false;this.asyncFire("rango-select",{item:this.selected})}});</script>
+		<script>Polymer("q-rangos",{valign:"top",ready:function(){var self=this;liebre.getRangos({complete:function(r){var d=_.sortBy(r.data,function(c){return c.Codigo});self.data=d}})},toggle:function(){this.opened=!this.opened},handlerActivate:function(event,detail,sender){this.selected=detail.data;this.opened=false;this.asyncFire("rango-select",{item:this.selected})}});</script>
 </polymer-element></div><div hidden>
 
 
@@ -1480,7 +1510,7 @@ Putting this together:
 	  </paper-input>
 	</div>	
 </template>
-		<script>Polymer("q-ciudades",{opened:false,valign:"top",go:function(){},created:function(){this.data=[];this.fuente=[]},toggle:function(){if(!this.opened){this.$.fake.focus();this.$.fake.value=this.selected?this.selected.Nombre:""}this.opened=!this.opened},ready:function(){var self=this;liebre.getCiudades({complete:function(r){var d=_.sortBy(r.data,function(c){return c.Nombre});self.data=d;self.fuente=d}})},stextChanged:function(){var self=this;if(this.stext&&this.stext.length>0){this.data=_.filter(this.getData(),function(c){return c.Nombre.startsWith(self.stext,true)})}else{this.data=this.getData()}},handlerActivate:function(event,detail,sender){this.selected=detail.data;this.opened=false;this.asyncFire("ciudad-select",{item:this.selected})},handlerTap:function(){this.toggle()},getData:function(){return this.fuente}});</script>
+		<script>Polymer("q-ciudades",{opened:false,valign:"top",created:function(){this.data=[];this.fuente=[]},toggle:function(){this.opened=!this.opened},ready:function(){var self=this;liebre.getCiudades({complete:function(r){var d=_.sortBy(r.data,function(c){return c.Nombre});self.data=d;self.fuente=d}})},stextChanged:function(){var self=this;if(this.stext&&this.stext.length>0){this.data=_.filter(this.getData(),function(c){return c.Nombre.startsWith(self.stext,true)})}else{this.data=this.getData()}},handlerActivate:function(event,detail,sender){this.selected=detail.data;this.opened=false;this.asyncFire("ciudad-select",{item:this.selected})},handlerTap:function(){this.toggle()},getData:function(){return this.fuente}});</script>
 </polymer-element>
 
 <!--
@@ -2323,7 +2353,7 @@ root if there is one. This implies:
 
 <polymer-element name="q-ciiu" extends="q-base" assetpath="templates/">
 <template>
-	<style>.seleccionados,.disponibles{padding:5px 10px;background:#fff;border-radius:4px;height:100%;margin:0 auto}.item-s{background:#d4d4d4;border-radius:4px;padding:10px;margin-bottom:10px}</style>
+	<style>.seleccionados,.disponibles{padding:5px;background:#fff;border-radius:4px;height:100%;margin:0 auto}.item-s{background:#d4d4d4;border-radius:4px;padding:10px;margin-bottom:10px}</style>
  <shadow></shadow>
 	<paper-tabs id="sl" selected="{{selected}}">
 		<paper-tab>Seleccionados</paper-tab>
@@ -2491,10 +2521,9 @@ To change the bar color for unchecked state:
 
 <polymer-element name="q-centros" extends="q-base" assetpath="templates/">
 <template>
-	<style>.seleccionados{background:#d4d4d4;border-radius:4px}.item-s{background:#fff;border-radius:4px;margin-bottom:2px;padding:10px}.riesgo{box-shadow:0 0 0 .1px;height:120px;margin-bottom:5px}paper-input{padding-left:42px}</style>
+	<style>.seleccionados{background:#d4d4d4;border-radius:4px}.item-s{background:#fff;border-radius:4px;margin-bottom:2px;padding:10px 5px}.riesgo{box-shadow:0 0 0 .1px;height:120px;margin-bottom:5px}paper-input{padding-left:42px}</style>
  <shadow></shadow>
-	
-	<div layout="" horizontal="" center="">
+	<div layout="" horizontal="" center="" disabled?="{{rb.checked || estado!=&apos;red&apos;}}">
 		<core-icon-button icon="add-circle" on-tap="{{ handlerAddItem }}"></core-icon-button>
 		<div>Nuevo Centro</div>
 	</div>
@@ -2526,6 +2555,33 @@ To change the bar color for unchecked state:
 	</div>
 </template>
 	<script>Polymer("q-centros",{handlerAddItem:function(){this.value.unshift({Nombre:null,Ciudad:null,Riesgos:[{Riesgo:null,Rango:null}]})},handlerRiesgoSelect:function(event,detail,sender){var model=sender.templateInstance.model;if(event.type==="riesgo-select"){this.value[model.index].Riesgos[model.ri].Riesgo=detail.item}else if(event.type==="rango-select"){this.value[model.index].Riesgos[model.ri].Rango=detail.item}this.valueChanged()},handlerAddRiesgo:function(event,detail,sender){var model=sender.templateInstance.model;this.value[model.index].Riesgos.unshift({Riesgo:null,Rango:null});this.valueChanged()},handlerDeleteItem:function(event,detail,sender){this.value.splice(sender.templateInstance.model.index,1)},handlerDeleteRiesgo:function(event,detail,sender){var model=sender.templateInstance.model;this.value[model.index].Riesgos.splice(model.ri,1);this.valueChanged()},ready:function(){},domReady:function(){this.fire("element-ready")},go:function(){if(!this.value){this.value=[{Nombre:null,Ciudad:null,Riesgos:[{Riesgo:null,Rango:null}]}]}},valueChanged:function(){console.log("q-centros valueChanged",this.value);if(this.respuesta)this.respuesta.Valor=this.value}});</script>
+</polymer-element>
+</div><div hidden>
+
+<polymer-element name="q-tercerizados" extends="q-base" assetpath="templates/">
+<template>
+	<style>.seleccionados{background:#d4d4d4;border-radius:4px}.item-s{background:#fff;border-radius:4px;margin-bottom:2px;padding:50px 5px 10px;overflow:hidden;min-height:380px}paper-input{padding-left:42px}</style>
+ <shadow></shadow>
+	<div layout="" horizontal="" center="" disabled?="{{rb.checked || estado!=&apos;red&apos;}}">
+		<core-icon-button icon="add-circle" on-tap="{{ handlerAddItem }}"></core-icon-button>
+		<div>Nuevo Registro</div>
+	</div>
+	<div disabled?="{{rb.checked || estado!=&apos;red&apos;}}">	
+		<template repeat="{{item, index in value}}">
+			<div class="item-s">
+				<div layout="" horizontal="">
+					<q-ciiu-dropdown selected="{{item.CIIU}}" on-ciiu-select="{{valueChanged}}"></q-ciiu-dropdown>
+					<div flex=""></div>
+					<core-icon-button icon="delete" on-tap="{{ handlerDeleteItem }}"></core-icon-button>
+				</div>
+				<paper-input placeholder="Nombre del Tecero" value="{{item.Nombre}}" on-change="{{valueChanged}}"></paper-input>
+				<q-externos-dropdown selected="{{item.Externo}}" on-externo-select="{{valueChanged}}"></q-externos-dropdown>
+				<q-rangos selected="{{item.Rango}}" valign="bottom" on-rango-select="{{valueChanged}}"></q-rangos>				
+			</div>
+		</template>
+	</div>
+</template>
+	<script>Polymer("q-tercerizados",{handlerAddItem:function(){if(!this.value){this.value=[]}this.value.unshift({Nombre:null,CIIU:null,Externo:null,Rango:null})},handlerDeleteItem:function(event,detail,sender){this.value.splice(sender.templateInstance.model.index,1)},ready:function(){},domReady:function(){this.fire("element-ready")},go:function(){},valueChanged:function(){console.log("q-tercerizados valueChanged",this.value);if(this.respuesta)this.respuesta.Valor=this.value}});</script>
 </polymer-element>
 </div><div hidden><!--
 Copyright (c) 2014 The Polymer Project Authors. All rights reserved.
@@ -3601,6 +3657,7 @@ The opacity of the ripple is not customizable via CSS.
 		<read-ajax store="ActividadAltoRiesgo" model="actividadaltoriesgo" id="ActividadAltoRiesgo"></read-ajax>
 		<read-ajax store="Riesgo" model="riesgo" id="Riesgo"></read-ajax>
 		<read-ajax store="Rango" model="rango" id="Rango"></read-ajax>
+		<read-ajax store="Externo" model="externo" id="Externo"></read-ajax>
 		<span class="title">Actualizando Tablas...</span>
 		<core-selector id="sl" class="list" layout="" vertical="" multi="" notap="">
 			<template repeat="{{item in items}}">
@@ -3610,7 +3667,7 @@ The opacity of the ripple is not customizable via CSS.
 		<div id="errores" class="errores" layout="" vertical=""></div>
 		<paper-button continuar="" raised="" id="bt" hidden on-tap="{{handlerTap}}">Continuar</paper-button>
 	</template>
-	<script>Polymer("update-tables",{ready:function(){var self=this;var stores=this.getStores();var ajax=[];for(var s in stores){ajax.push(this.$[stores[s]])}for(var aj in ajax){ajax[aj].addEventListener("read-response",function(event){var data=event.detail.data;var store=event.target.getAttribute("store");window.liebre.putData(store,data,function(r){if(r.status==="error"){self.$.errores.innerHTML+="<span>"+response.msg+"</span>"}else{self.$.sl.selected.push(self.stores.indexOf(store))}})})}for(var e in ajax){ajax[e].addEventListener("read-error-connection",function(event){self.$.errores.innerHTML+="<span>"+"Error de conexión: "+event.type+". Servidor:"+liebre.tools.getBaseUrl()+"</span>"})}for(var e in ajax){ajax[e].addEventListener("read-error",function(event){self.$.errores.innerHTML+="<span>"+"Error: "+event.type+". "+event.detail.xhr.statusText+". "+event.detail.xhr.response+"</span>"})}for(var e in ajax){ajax[e].addEventListener("read-complete",function(event){self.hechos=self.hechos+1})}},go:function(complete){var self=this;this.complete=complete||function(){};this.hidden=false;this.items=this.getItems();this.stores=this.getStores();this.$.sl.selected=[];this.hechos=0;function goAjax(index){var ajax=self.shadowRoot.querySelector("read-ajax[store='"+self.stores[index]+"']");ajax.model=ajax.getAttribute("model");ajax.baseUrl=liebre.tools.getBaseUrl();ajax.go()}window.liebre.countData(this.stores,function(response){if(response.status==="error"){self.$.errores.innerHTML+="<span>"+response.msg+"</span>";self.$.bt.hidden=false;return}for(var n in response.number){if(response.number[n]>0){self.hechos=self.hechos+1;self.$.sl.selected.push(n);continue}goAjax(n)}})},hechosChanged:function(){if(this.hechos===0){return}if(this.hechos===this.stores.length){if(this.$.errores.innerHTML===""){this.__reset();this.complete()}else{this.$.bt.hidden=false}}},handlerTap:function(){this.async(function(){this.__reset();this.complete()})},__reset:function(){this.hidden=true;this.items=[];this.stores=[];this.$.sl.selected=[];this.hechos=0},getStores:function(){return["CIIU","Ciudad","ActividadAltoRiesgo","Riesgo","Departamento","Rango"]},getItems:function(){return["CIIU","Ciudades","Activiades Alto Riesgo","Clases de Riesgos","Departamentos","Rangos"]}});</script>
+	<script>Polymer("update-tables",{ready:function(){var self=this;var stores=this.getStores();var ajax=[];for(var s in stores){ajax.push(this.$[stores[s]])}for(var aj in ajax){ajax[aj].addEventListener("read-response",function(event){var data=event.detail.data;var store=event.target.getAttribute("store");window.liebre.putData(store,data,function(r){if(r.status==="error"){self.$.errores.innerHTML+="<span>"+response.msg+"</span>"}else{self.$.sl.selected.push(self.stores.indexOf(store))}})})}for(var e in ajax){ajax[e].addEventListener("read-error-connection",function(event){self.$.errores.innerHTML+="<span>"+"Error de conexión: "+event.type+". Servidor:"+liebre.tools.getBaseUrl()+"</span>"})}for(var e in ajax){ajax[e].addEventListener("read-error",function(event){self.$.errores.innerHTML+="<span>"+"Error: "+event.type+". "+event.detail.xhr.statusText+". "+event.detail.xhr.response+"</span>"})}for(var e in ajax){ajax[e].addEventListener("read-complete",function(event){self.hechos=self.hechos+1})}},go:function(complete){var self=this;this.complete=complete||function(){};this.hidden=false;this.items=this.getItems();this.stores=this.getStores();this.$.sl.selected=[];this.hechos=0;function goAjax(index){var ajax=self.shadowRoot.querySelector("read-ajax[store='"+self.stores[index]+"']");ajax.model=ajax.getAttribute("model");ajax.baseUrl=liebre.tools.getBaseUrl();ajax.go()}window.liebre.countData(this.stores,function(response){if(response.status==="error"){self.$.errores.innerHTML+="<span>"+response.msg+"</span>";self.$.bt.hidden=false;return}for(var n in response.number){if(response.number[n]>0){self.hechos=self.hechos+1;self.$.sl.selected.push(n);continue}goAjax(n)}})},hechosChanged:function(){if(this.hechos===0){return}if(this.hechos===this.stores.length){if(this.$.errores.innerHTML===""){this.__reset();this.complete()}else{this.$.bt.hidden=false}}},handlerTap:function(){this.async(function(){this.__reset();this.complete()})},__reset:function(){this.hidden=true;this.items=[];this.stores=[];this.$.sl.selected=[];this.hechos=0},getStores:function(){return["CIIU","Ciudad","ActividadAltoRiesgo","Riesgo","Departamento","Rango","Externo"]},getItems:function(){return["CIIU","Ciudades","Activiades Alto Riesgo","Clases de Riesgos","Departamentos","Rangos","Tipos de Terceros"]}});</script>
 </polymer-element>
 <polymer-element name="x-app" assetpath="x-app/">
   <template>

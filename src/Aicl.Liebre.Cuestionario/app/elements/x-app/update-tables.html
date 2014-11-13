@@ -9,6 +9,7 @@
 		<read-ajax store="ActividadAltoRiesgo" model="actividadaltoriesgo" id="ActividadAltoRiesgo"></read-ajax>
 		<read-ajax store="Riesgo" model="riesgo" id="Riesgo"></read-ajax>
 		<read-ajax store="Rango" model="rango" id="Rango"></read-ajax>
+		<read-ajax store="Externo" model="externo" id="Externo"></read-ajax>
 		<span class="title">Actualizando Tablas...</span>
 		<core-selector id="sl" class="list"  layout vertical multi notap>
 			<template repeat="{{item in items}}">
@@ -129,11 +130,11 @@
 			},
 			
 			getStores:function(){
-				return ['CIIU','Ciudad','ActividadAltoRiesgo','Riesgo','Departamento','Rango'];
+				return ['CIIU','Ciudad','ActividadAltoRiesgo','Riesgo','Departamento','Rango','Externo'];
 			},
 			
 			getItems:function(){
-				return ['CIIU','Ciudades', 'Activiades Alto Riesgo','Clases de Riesgos','Departamentos','Rangos'];
+				return ['CIIU','Ciudades', 'Activiades Alto Riesgo','Clases de Riesgos','Departamentos','Rangos','Tipos de Terceros'];
 			}
 		})
 	</script>

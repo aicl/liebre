@@ -436,6 +436,11 @@
 		config.model = config.model|| 'rango';
 		window.liebre.remote.read(config);
 	};
+	window.liebre.remote.readExterno= function(config){
+		config = config || {};
+		config.model = config.model|| 'externo';
+		window.liebre.remote.read(config);
+	};
 		
 	// ver 1
 	var schema = {
@@ -497,6 +502,10 @@
 			autoIncrement:false
 		},{
 			name:'Rango',
+			keyPath:'Codigo',
+			autoIncrement:false
+		},{
+			name:'Externo',
 			keyPath:'Codigo',
 			autoIncrement:false
 		},{
@@ -800,6 +809,10 @@
 	
 	window.liebre.getRangos=function(config){
 		window.liebre.getData('Rango', config);
+	};
+	
+	window.liebre.getExternos=function(config){
+		window.liebre.getData('Externo', config);
 	};
 		
 	// complete : function({status: 'ok' ||'error',  error: null|| error, msg:'' })
@@ -1160,6 +1173,9 @@
 	
 	window.liebre.putRango=function(data, complete){
 		window.liebre.putData('Rango', data, complete);
+	};
+	window.liebre.putExterno=function(data, complete){
+		window.liebre.putData('Externo', data, complete);
 	};
 	
 	window.liebre.countData=function(storeName, complete){

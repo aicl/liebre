@@ -54,6 +54,7 @@
     <Compile Include="Riesgo.cs" />
     <Compile Include="Rango.cs" />
     <Compile Include="Respuesta.cs" />
+    <Compile Include="Externo.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="ServiceStack.Common">

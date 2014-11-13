@@ -49,8 +49,8 @@
 			  </core-list>
 		  </core-dropdown>
 	  </div>
-	  <paper-input  readonly  label="codigo/descripcion" floatinglabel
-				   value="{{selected?selected.Codigo:''}}"
+	  <paper-input  readonly  label="Actividad - CIIU" floatinglabel
+				   value="{{selected?(selected.Codigo+'-'+selected.Descripcion):''}}"
 				   on-tap="{{handlerTap}}">
 	  </paper-input>
 	</div>	

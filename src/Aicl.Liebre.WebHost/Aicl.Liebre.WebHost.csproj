@@ -110,6 +110,7 @@
     <Content Include="q\scripts\vendor\underscore-min.js" />
     <Content Include="q\scripts\vendor\ydn.db-is-core-qry.js.map" />
     <Content Include="q\scripts\vendor\underscore-min.map" />
+    <Content Include="json\externos.json" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Global.asax.cs">

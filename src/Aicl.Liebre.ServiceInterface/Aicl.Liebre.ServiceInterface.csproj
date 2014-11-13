@@ -48,6 +48,7 @@
     <Compile Include="RiesgoService.cs" />
     <Compile Include="ActividadAltoRiesgoService.cs" />
     <Compile Include="RangoService.cs" />
+    <Compile Include="ExternoService.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="ServiceStack">
