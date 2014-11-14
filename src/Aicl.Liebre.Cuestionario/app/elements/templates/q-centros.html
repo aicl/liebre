@@ -99,6 +99,14 @@
 			go:function(){
 				if(!this.value){
 					this.value=[{Nombre:null,Ciudad:null,Riesgos:[{Riesgo:null, Rango:null}]}];
+				}				
+				else if (typeof this.value==='string'){
+					try{
+						this.value=JSON.parse(this.value);
+					}
+					catch(e){
+						this.value=[{Nombre:null,Ciudad:null,Riesgos:[{Riesgo:null, Rango:null}]}];
+					}
 				}
 			},
 			valueChanged:function(){

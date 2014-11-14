@@ -13,7 +13,6 @@
 		  .content{
 			  padding: 10px;
 		  }
-		  		  
 		  /* begin clock */
 		  .clock{
           border-radius: 60px;
@@ -21,7 +20,6 @@
           height: 80px;
           width: 80px;
           position: relative;
-
           top: 28%;
           top: -webkit-calc(50% - 43px);
           top: calc(50% - 43px);
@@ -43,17 +41,14 @@
           -webkit-animation: clock 2s linear infinite;
           animation: clock 2s linear infinite;
         }
-
         @-webkit-keyframes clock{
           0%{-webkit-transform:rotate(0deg);}
           100%{-webkit-transform:rotate(360deg);}
         }
-
         @keyframes clock{
           0%{transform:rotate(0deg);}
           100%{transform:rotate(360deg);}
         }
-
         .clock:before{
           content: "";
           position: absolute;
@@ -68,35 +63,29 @@
           -webkit-animation: clock 12s linear infinite;
           animation: clock 12s linear infinite;
         }
-
         @-webkit-keyframes clock{
           0%{-webkit-transform:rotate(0deg);}
           100%{-webkit-transform:rotate(360deg);}
         }
-
         @keyframes clock{
           0%{transform:rotate(0deg);}
           100%{transform:rotate(360deg);}
-        }
-		  
+        } 
 		/*
         author: TaniaLD;
         url: http://codepen.io/TaniaLD/
         */
-
         /* -------------- dot -------------- */
         .dot{
           position: relative;
           width: 12px;
           height: 12px;
-
           top: 46%;
           top: -webkit-calc(50% - 6px);
           top: calc(50% - 6px);
           left: 46%;
           left: -webkit-calc(50% - 6px);
           left: calc(50% - 6px);
-
           border-radius: 12px;
           background-color: {{color}};
           -webkit-transform-origin:  50% 50%;
@@ -104,7 +93,6 @@
           -webkit-animation: dot 1s ease-in-out infinite;
           animation: dot 1s ease-in-out infinite;
         }
-
         .dot:before{
           content: "";
           position: absolute;
@@ -116,7 +104,6 @@
           width: 12px;
           border-radius: 12px;
         }
-
         .dot:after{
           content: "";
           position: absolute;
@@ -128,40 +115,34 @@
           width: 12px;
           border-radius: 12px;
         }
-
         @-webkit-keyframes dot{
           0%{-webkit-transform:rotate(0deg);}
           50%{-webkit-transform:rotate(180deg);}
           100%{-webkit-transform:rotate(180deg);}
         }
-
         @keyframes dot{
           0%{transform:rotate(0deg);}
           50%{transform:rotate(180deg);}
           100%{transform:rotate(180deg);}
         }
-		
-		  /* -------------- circle -------------- */
+		/* -------------- circle -------------- */
         .circle{
           position: relative;
           height: 80px;
           width: 80px;
           border-radius: 80px;
           border: 3px solid {{color}};
-
           top: 28%;
           top: -webkit-calc(50% - 43px);
           top: calc(50% - 43px);
           left: 35%;
           left: -webkit-calc(50% - 43px);
           left: calc(50% - 43px);
-
           -webkit-transform-origin: 50% 50%;
           transform-origin: 50% 50%;
           -webkit-animation: circle 3s linear infinite;
           animation: circle 3s linear infinite;
         }
-
         .circle:after{
           content: "";
           position: absolute;
@@ -172,12 +153,10 @@
           border-radius: 10px;
           background-color: {{color}};
         }
-
         @-webkit-keyframes circle{
           0%{-webkit-transform:rotate(0deg);}
           100%{-webkit-transform:rotate(360deg);}
         }
-
         @keyframes circle{
           0%{transform:rotate(0deg);}
           100%{transform:rotate(360deg);}
@@ -191,7 +170,6 @@
 			  </div>
 		  </div>
 	  </div>
-	  
   </template>
   <script>
     Polymer({

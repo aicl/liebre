@@ -55,9 +55,6 @@
 			},
 			
 			handlerActivate:function(event, detail, sender){				
-				if(!this.value){
-					this.value=[];
-				}
 				if (! _.some(this.value, function(c){ return c.Codigo===detail.item.Codigo})){
 					this.value.push(detail.item);
 				}
@@ -71,6 +68,17 @@
 				this.fire("element-ready");
 			},
 			go:function(){
+				if(!this.value){
+					this.value=[];
+				}
+				else if (typeof this.value==='string'){
+					try{
+						this.value=JSON.parse(this.value);
+					}
+					catch(e){
+						this.value=[];
+					}
+				}
 			},
 			valueChanged:function(){
 				console.log("q-ciiu valueChanged");

@@ -46,9 +46,6 @@
 	<script>
 		Polymer({
 			handlerAddItem:function(){
-				if(!this.value){
-					this.value=[];
-				}
 				this.value.unshift({Nombre:null,CIIU:null,Externo:null,Rango:null});
 			},
 			handlerDeleteItem:function(event, detail, sender){
@@ -60,6 +57,17 @@
 				this.fire("element-ready");
 			},
 			go:function(){
+				if(!this.value){
+					this.value=[];
+				}
+				else if (typeof this.value==='string'){
+					try{
+						this.value=JSON.parse(this.value);
+					}
+					catch(e){
+						this.value=[];
+					}
+				}
 			},
 			valueChanged:function(){
 				console.log("q-tercerizados valueChanged", this.value);

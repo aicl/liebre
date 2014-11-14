@@ -1,18 +1,13 @@
-<link rel="import" href="../../bower_components/paper-dialog/paper-dialog-transition.html">
-<link rel="import" href="../../bower_components/paper-dialog/paper-dialog.html">
 <polymer-element name="dialog-base" attributes="heading">
 	<template>
 		<content select='paper-dialog'></content>
 	</template>
 	<script>
-		Polymer({	
-						
+		Polymer({							
 			editable:true,
-			
 			get dialog(){
 				return this.__dialog;
 			},
-			
 			set _dialog(value){
 				if(this.__dialog) return;
 				this.__dialog=value;
@@ -22,29 +17,23 @@
 				}.bind(this));
 			
 			},
-			
 			set data(value){
 				this._oldValue= value;
 				this._newValue= Object.clone(value);
-			},
-						
+			},			
 			set validateFn(value){
 				this._validateFn=value;
 			},
-			
 			set handlerOkTap(value){
 				this._handlerOkTap=value;
-			},
-						
+			},			
 			created:function(){
 				this._newValue={};
 				this._oldValue={};
 			},
-			
 			toggle:function(){
 				this.__dialog.toggle();
 			},
-			
 			_delegateOkTap:function(event, detail, sender){
 				var v=true;
 				if(this._validateFn){
@@ -66,7 +55,6 @@
 					inputs[i].disabled=!this.editable;
 				}
 			},
-			
 			getInput:function(name){
 				return this.__dialog.querySelector("[name='"+name+ "']");
 			}

@@ -1,4 +1,3 @@
-<link rel="import" href="../../bower_components/core-ajax/core-ajax.html">
 <polymer-element name="update-ajax"  extends="core-ajax">
 	<script>
 		Polymer({				
@@ -7,13 +6,10 @@
 			model:"",
 			baseUrl:"",
 			method:"post",
-			handleAs:"json",
-			
+			handleAs:"json",			
 			created:function(){
-						
 				this.data={};
 				var self=this;
-				
 				this.addEventListener("core-response", function(e) {
 					if(e.detail.xhr.status===0){
 						self.fire("update-error-connection", {xhr:e.detail.xhr});
@@ -33,7 +29,6 @@
 				});
 				this.super(); 
 			},
-			
 			go:function(){				
 				this.data={};
 				this.url=this.baseUrl+"/"+this.action+"/"+ this.model+"?format=json";

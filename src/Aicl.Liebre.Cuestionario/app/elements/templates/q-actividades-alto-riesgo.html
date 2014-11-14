@@ -43,6 +43,17 @@
 				this.fire("element-ready");
 			},
 			go:function(){
+				if(!this.value){
+					this.value=[];
+				}
+				else if (typeof this.value==='string'){
+					try{
+						this.value=JSON.parse(this.value);
+					}
+					catch(e){
+						this.value=[];
+					}
+				}
 			},
 			valueChanged:function(){
 				console.log("q-actividades Alto riegso valueChanged", this.value);
@@ -50,9 +61,6 @@
 			},
 			handlerCheck:function(event, detail, sender){
 				var item =sender.templateInstance.model.item;
-				if(!this.value){
-					this.value=[];
-				}
 				
 				if(item.Checked){
 					this.value.push(item);
