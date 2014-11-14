@@ -4,7 +4,7 @@
 	  <flatiron-director route="{{route}}" autoHash></flatiron-director>
 	  <core-pages selected="{{route}}" valueattr="hash">
 		  <div hash="" class="page">      
-			  <app-header-panel id="hp" on-l-icon-tap="{{ fireBack }}"
+			  <app-header-panel id="hp" on-l-icon-tap="{{ menuTap }}"
 								licon="menu" ricon="cloud-download"
 								on-r-icon-tap="{{handlerShowDownload}}"
 								titulo="Cuestionarios SGSST">
@@ -27,7 +27,6 @@
   </template>
   <script>
 	  Polymer({		  		   
-		  route:"",
 		  created:function(){
 			  this.readCuestionario = {
 				  response:this.readCuestionarioResponse.bind(this),
@@ -53,15 +52,12 @@
 			  this.$.qp.saveRespuesta=  this.saveRespuesta.bind(this);
 			  this.$.qp.getGuias=  this.getGuias.bind(this);
 			  this.$.qp.saveRespuestaGuia=  this.saveRespuestaGuia.bind(this);
-			  
 			  window.addEventListener('online',  this.updateOnlineStatus.bind(this));
 			  window.addEventListener('offline', this.updateOnlineStatus.bind(this)); 
-			  
-			  this.actualizarTablas(); //TODO : quitar
-			  
 		  },
 		  go:function(){
-			  //TODO : poner this.actualizarTablas()
+			  this.route="";
+			  this.actualizarTablas();
 		  },
 		  actualizarTablas:function(complete){
 			  this.$.ut.go(this.mostrarCuestionarios.bind(this));
@@ -81,6 +77,9 @@
 		  },
 		  updateOnlineStatus: function (event) {
 			 this.$.hp.ri.disabled= !navigator.onLine;
+		  },
+		  handlerBack:function(){
+			  this.route= this.route==='preguntas'? 'capitulos':'';
 		  },
 		  handlerUpdateCuestionario:function(event, detail, sender){
 			  var cuestionario = detail.item;

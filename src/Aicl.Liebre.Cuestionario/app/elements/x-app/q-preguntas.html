@@ -1,7 +1,7 @@
 <polymer-element name="q-preguntas" attributes="capitulo, selected">
   <template>
     <style></style>
-	  <app-header-panel id="hp" on-l-icon-tap="{{ fireBack }}"	licon="menu" ricon="work"
+	  <app-header-panel id="hp" on-l-icon-tap="{{ fireBack }}"	licon="arrow-back" ricon="work"
 						titulo="{{capitulo.Numeral+': ' +capitulo.Titulo +'-'+ capitulo.Estandar}}"
 						tclass="text">
 		  <div class="card" layout vertical  hidden?="{{selected!='0' || !capitulo.Preguntas.length}}">	  
@@ -51,8 +51,8 @@
 			  this.quiz.currentGuiaIndex=0;
 			  this.guias=[];
 		  },
-		  fireBackTap: function (event, detail, sender) {
-			  this.fire('back-tap');
+		  fireBack: function (event, detail, sender) {
+			  this.fire("preguntas-back");
 		  },
 		  nextTap:function(event, detail, sender) {	  
 			  if(!Object.compare(this.capitulo.Preguntas[this.capitulo.Current].Respuesta, this.answer)){
@@ -99,8 +99,8 @@
 				  this.capitulo.Current= this.capitulo.Current+1;
 			  }
 			  else{
-				  this.capitulo.Current=0;
-			  	  this.fireBackTap();
+				  //this.capitulo.Current=0;
+			  	  this.fireBack();
 			  }
 		  },
 		  prevTap:function(event, detail, sender){
