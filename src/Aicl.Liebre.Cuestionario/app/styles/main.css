@@ -156,7 +156,7 @@ body /deep/	.guia-titulo, body /deep/ .quiz-titulo{
 	font-weight: bold;
 }
 body /deep/	.guia-detalle, body /deep/ .quiz-detalle{	
-	overflow: auto;
+	/*overflow: auto;*/
 	font-size: small;
 }	
 

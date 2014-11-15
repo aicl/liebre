@@ -2,14 +2,14 @@
 <template>
 	<style>
 		core-list{
-			height: 280px;
+			height: 245px;
 		}
 		core-dropdown{
 			box-shadow: 1px 1px 1px 1px;
 		}
 		.item {
 		  box-sizing: border-box;
-		  height: 40px;
+		  height: 35px;
 		  border-bottom: 1px solid #ddd;
 		  padding: 4px;
 		  cursor: default;
@@ -38,7 +38,7 @@
 							   value="{{selected?(selected.Descripcion):''}}">
 				  </paper-input>
 			  </div>
-			  <core-list data="{{data}}" height="40" flex on-core-activate="{{handlerActivate}}">
+			  <core-list data="{{data}}" height="35" flex on-core-activate="{{handlerActivate}}">
 				  <template>
 					  <div class="item {{ {selected: selected} | tokenList }}"
 						   >{{model.Descripcion}}</div>
