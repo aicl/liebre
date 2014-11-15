@@ -205,6 +205,8 @@
 					  this.$.te.text= response.msg;
 					  this.$.te.show();
 				  }
+				  console.log("llamando mostrarCuestionario");
+				  this.mostrarCuestionarios();
 			  }.bind(this));
 		  },
 		  updateCuestionarioResponse:function(event){
@@ -220,7 +222,6 @@
 					  this.$.te.show();
 					  return;
 				  }
-				  this.mostrarCuestionarios();
 			  }.bind(this));
 		  },  
 		  readError:function(event){
