@@ -8,7 +8,7 @@ namespace Aicl.Liebre.ServiceInterface
 		public object Get(ReadPregunta request){
 
 			return ServiceBase.CreateResponse (
-				Store.GetByQuery<Pregunta> (q => q.IdCapitulo == request.IdCapitulo, q=>q.Numeral??q.Id));
+				Store.ReadPregunta(request));
 		}
 
 		public object Post(CreatePregunta request)

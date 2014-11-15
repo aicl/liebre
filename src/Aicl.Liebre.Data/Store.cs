@@ -10,6 +10,7 @@ using ServiceStack.Model;
 using System.Linq;
 using ServiceStack.Text;
 using System.IO;
+using System.Text;
 
 namespace Aicl.Liebre.Data
 {
@@ -51,7 +52,6 @@ namespace Aicl.Liebre.Data
 			var cl= GetCollection<T> ();
 			return cl.FindOne (Query<T>.EQ (e => e.Id, id));
 		}
-
 
 		public List<T> GetByQuery<T>( Expression<Func<T, bool>> predicate, 
 			Func<T, object> orderBy=null, string orderType="") 
@@ -147,12 +147,13 @@ namespace Aicl.Liebre.Data
 			response.Plantilla = GetById<Plantilla> (response.Diagnostico.IdPlantilla);
 			response.Empresa = GetById<Empresa> ( response.Diagnostico.IdEmpresa);
 
-			response.Capitulos = GetByQuery<Capitulo> (q => q.IdPlantilla == response.Diagnostico.IdPlantilla, q=>q.Numeral);
+			response.Capitulos = GetByQuery<Capitulo> (q => q.IdPlantilla == response.Diagnostico.IdPlantilla)
+				.OrderBy( q=> NormalizeNumeral(q.Numeral)).ToList();
 
 			var capIds = response.Capitulos.ConvertAll (e => e.Id);
 
 			var p = GetCollection<Pregunta>().Find( Query<Pregunta>.In ((q) => q.IdCapitulo, capIds ))
-				.OrderBy(q=>q.Numeral).ToList();
+				.OrderBy(q=>NormalizeNumeral( q.Numeral)).ToList();
 			var r = GetByQuery<Respuesta> (q => q.IdDiagnostico == response.Diagnostico.Id, q=>q.IdPregunta);
 
 			var g = GetByQuery<Guia> (q => q.IdPlantilla == response.Plantilla.Id, q=>q.Id);
@@ -322,6 +323,26 @@ namespace Aicl.Liebre.Data
 
 		public ListResult<ActividadAltoRiesgo> ReadActividaAltoRiesgo(ReadActividadAltoRiesgo request){
 			return ReadFromFile<ActividadAltoRiesgo> ("actividadesaltoriesgo.json");
+		}
+
+
+		public List<Pregunta> ReadPregunta(ReadPregunta request){
+			var cl = GetCollection<Pregunta> (); 
+			var docs= cl.Find(Query<Pregunta>.Where(q=>q.IdCapitulo==request.IdCapitulo));  
+			return docs.ToList ().OrderBy (q =>  NormalizeNumeral(q.Numeral)).ToList ();
+		}
+		public List<Capitulo> ReadCapitulo(ReadCapitulo request){
+			var cl = GetCollection<Capitulo> (); 
+			var docs= cl.Find(Query<Capitulo>.Where(q=>q.IdPlantilla==request.IdPlantilla));  
+			return docs.ToList ().OrderBy (q =>  NormalizeNumeral(q.Numeral)).ToList ();
+		}
+
+		static string NormalizeNumeral(string numeral){
+			var a = numeral.Split ('.');
+			var t = new StringBuilder ();
+			Array.ForEach (a, i => t.Append (i.PadLeft (4, '0')));
+			return t.ToString();
+
 		}
 
 		ListResult<T> ReadFromFile<T>(string fileName){
