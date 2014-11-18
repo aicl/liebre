@@ -31,10 +31,7 @@
 			background-color: #000f62;
 			color:#fff;
 		}
-		
-		
     </style>
-	  
 	  <web-loader id='wl' display='none'></web-loader>
 	  <core-pages selected="{{route}}" valueattr="hash">
 		  <div hash="plantillas" class="page">      
@@ -64,12 +61,8 @@
 	  <paper-toast id="error" role="alert" text="Error"></paper-toast>
 	  <paper-toast id="error_connection" role="alert"></paper-toast>
 	  <paper-toast id="complete" text="Operación realizada!"></paper-toast>
-	  
-	 
   </template>
-
   <script>
-
 	  Polymer({		  		   
 		  route:"plantillas",
 		  routeChanged:function(old, current){
@@ -246,6 +239,8 @@
 			  this.$.pcp.handlerDeletePregunta= this.handlerDeletePregunta.bind(this);		  
 			  this.$.pcp.handlerShowGuiasToSelect= this.handlerShowGuiasToSelect.bind(this);
 			  this.$.pcp.handlerRemoveGuia=this.handlerSavePregunta.bind(this);
+			  this.$.pcp.handlerSaveQ= this.handlerSavePregunta.bind(this);
+			  this.$.pcp.handlerRemoveQ= this.handlerSavePregunta.bind(this);
 		  },
 		  
 		  domReady:function(){

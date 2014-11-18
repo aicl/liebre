@@ -2,7 +2,6 @@
 <link rel="import" href="../../bower_components/core-item/core-item.html">
 <link rel="import" href="../../bower_components/core-icons/core-icons.html">
 <link rel="import" href="../../bower_components/core-icons/image-icons.html">
-
 <polymer-element name="pl-cap-pregunta-card" attributes="item,guias">
   <template>
     <style>    
@@ -42,54 +41,69 @@
 		}
 
 	</style>
-	  			  <div layout vertical>
-					  <div layout horizontal center>
-						  <div flex class="text">{{item.Numeral}}</div>
-						  <core-icon-button icon="delete"  on-tap="{{ fireDelete }}"></core-icon-button>
-						  <core-icon-button icon="create"  on-tap="{{ fireEdit }}"></core-icon-button>
-					  </div>
-					  <div class="titulo">{{item.Enunciado}}</div>
-					  <div class="text">Disponible 'No Aplica': {{item.NoAplicaDisponible?'SI':'NO'}}</div>
-					  <div class="text">{{item.Metodo}}</div>
-					  <span raisedbutton on-tap="{{ fireMostrarGuiasToSelect }}" >Guias</span>
-					  <template repeat="{{g in item.IdGuias}}">
-						  <div layout horizontal center>
-							  <core-icon-button icon="delete" 
-								 on-tap="{{ fireRemoveGuia }}"></core-icon-button>
-							  <div flex class="text">{{g | formatGuia }}</div>
-							  
-						  </div>
-					  </template>
-				  </div>
-				  				  
-	  	<content></content>  
+		<div layout vertical>
+		  <div layout horizontal center>
+			  <div flex class="text">{{item.Numeral}}</div>
+			  <core-icon-button icon="delete"  on-tap="{{ fireDelete }}"></core-icon-button>
+			  <core-icon-button icon="create"  on-tap="{{ fireEdit }}"></core-icon-button>
+		  </div>
+		  <div class="titulo">{{item.Enunciado}}</div>
+		  <div class="text">Disponible 'No Aplica': {{item.NoAplicaDisponible?'SI':'NO'}}</div>
+		  <div class="text">{{item.Metodo}}</div>
+		  <div layout horizontal center>
+			  <core-icon-button icon="add-circle" on-tap="{{ fireShowNuevaQ }}"></core-icon-button>
+			  <span>Preguntas</span>
+		  </div>
+		  <template repeat="{{ q, index in item.Preguntas}}">
+			  <div layout horizontal center>
+				  <core-icon-button icon="delete"  on-tap="{{ fireRemoveQ }}"></core-icon-button>
+				  <core-icon-button icon="create"  on-tap="{{ fireEditQ }}"></core-icon-button>
+				  <div flex class="text">{{ q }}</div>
+			  </div>
+		  </template>
+		  <span raisedbutton on-tap="{{ fireMostrarGuiasToSelect }}" >Guias</span>
+		  <template repeat="{{g in item.IdGuias}}">
+			  <div layout horizontal center>
+				  <core-icon-button icon="delete" 
+					 on-tap="{{ fireRemoveGuia }}"></core-icon-button>
+				  <div flex class="text">{{g | formatGuia }}</div>
+			  </div>
+		  </template>
+		</div>
+		<content></content>  
   </template>
   <script>
-
     Polymer({
+		fireShowNuevaQ:function(e, detail, sender){
+			liebre.tools.blink(sender);
+			this.fire("nueva-q");
+		},
+		fireRemoveQ:function(e, detail, sender){
+			liebre.tools.blink(sender);
+			var model= sender.templateInstance.model;
+			this.fire("remove-q", {index:model.index, item:model.q});
+		},
+		fireEditQ:function(e, detail, sender){	
+			var model= sender.templateInstance.model;
+			liebre.tools.blink(sender);
+			this.fire("edit-q",{index:model.index, item:model.q});
+		},
 		fireDelete:function(e, detail, sender){
 			liebre.tools.blink(sender);
 			this.fire("delete-pregunta");
 		},
-		
 		fireEdit:function(e, detail, sender){	
-			
 			liebre.tools.blink(sender);
 			this.fire("edit-pregunta");				
 		},
-		
 		fireRemoveGuia:function(e, detail, sender){
 			var m = sender.templateInstance.model;
-			console.log('preparemos para remover', e, detail, sender);
-			console.log('model', m);
 			this.fire("remove-guia", {guia: m.g});
 		},
-		
 		fireMostrarGuiasToSelect:function(e, detail, sender){
 			liebre.tools.blink(sender);
 			this.fire("mostrar-guias-to-select");
 		},
-		
 		formatGuia:function(v){
 			for(var g in this.guias){
 				if (this.guias[g].Id===v){
@@ -97,10 +111,7 @@
 				}   
 			}
 			return v;	
-		}
-						
+		}				
     });
-
   </script>
-
 </polymer-element>

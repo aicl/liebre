@@ -162,7 +162,12 @@ namespace Aicl.Liebre.Data
 			p.ForEach (q => response.Preguntas.Add (new ViewPregunta {
 				Pregunta = q,
 				Respuesta = r.FirstOrDefault (rq => rq.IdPregunta == q.Id) ??
-				new Respuesta{ IdPregunta = q.Id, IdDiagnostico = response.Diagnostico.Id }
+					new Respuesta{ 
+					IdPregunta = q.Id, 
+					IdDiagnostico = response.Diagnostico.Id, 
+					Respuestas=new List<bool>(q.Preguntas.Count),
+					Valor=(short?)(q.Preguntas.Count>0?(object)0:null)
+				}
 			}));
 					
 			g.ForEach (q => response.Guias.Add (new ViewGuia { 
@@ -253,10 +258,11 @@ namespace Aicl.Liebre.Data
 
 				var cl = GetCollection<Respuesta> ();
 				BulkWriteOperation bw = cl.InitializeOrderedBulkOperation ();
-				request.Data.Respuestas.ForEach (r =>
+				request.Data.Respuestas.ForEach (r =>{
+					r.Valor=(short?)((r.Respuestas.Count==0 || r.Respuestas.Exists(v=>!v))?0:1);
 					bw.Find (Query<Respuesta>.Where (q => q.IdDiagnostico == descarga.IdDiagnostico && q.IdPregunta == r.IdPregunta))
 					.Upsert ().UpdateOne (Update<Respuesta>
-						.Set (f => f.Valor, r.Valor).Set (f => f.NoAplicaChecked, r.NoAplicaChecked)));
+							.Set (f => f.Valor, r.Valor).Set (f => f.NoAplicaChecked, r.NoAplicaChecked).Set(f=>f.Respuestas,r.Respuestas) );});
 				var wc = bw.Execute ();
 				bwr.PopulateWith (wc);
 				bwr.UpsertsCount = wc.Upserts.Count;

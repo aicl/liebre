@@ -12,6 +12,7 @@ namespace Aicl.Liebre.Model
 		public Pregunta ()
 		{
 			IdGuias = new List<string> ();
+			Preguntas = new List<string> ();
 		}
 		[BsonRepresentation(BsonType.ObjectId)]
 		public string Id { get ; set;}
@@ -21,6 +22,7 @@ namespace Aicl.Liebre.Model
 		public string Metodo { get; set; } // metodo verificacion
 		public bool NoAplicaDisponible { get; set; }
 		public List<string> IdGuias { get; set; }
+		public List<string> Preguntas { get; set; }
 	}
 
 	[Route("/read/pregunta","GET")]

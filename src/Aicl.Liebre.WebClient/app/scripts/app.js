@@ -109,7 +109,7 @@
 	};
 		
 	window.liebre.tools.toFormData=function(obj){
-		if (!obj || obj === null ){
+		if (typeof obj==='undefined' || obj === null ){
 			return  null;
 		}
 				

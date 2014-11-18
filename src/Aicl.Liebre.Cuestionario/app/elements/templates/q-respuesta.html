@@ -1,0 +1,69 @@
+<link rel="import" href="../common/q-base.html">
+<link rel="import" href="../../bower_components/core-selector/core-selector.html">
+<polymer-element name="q-respuesta" extends="q-base" attributes="respuesta">
+<template>
+	<style>
+		.item{
+			padding: 5px 20px 5px 10px;
+			background: white;
+			border-radius: 4px;
+			margin: 0px 10px 10px 10px ;
+		}
+		paper-toggle-button{
+			background: rgb(212,212,212);
+			padding: 10px;
+			border-radius: 4px;
+		}
+	</style>
+ <shadow></shadow>
+  <div layout vertical>
+  <div horizontal layout center center-justified layout>
+    <core-selector selected="{{value}}" horizontal layout>
+		<span raised class="false" horizontal layout center 
+			  disabled?="{{rb.checked || estado!='red'}} || quiz.Preguntas.length>0">
+			<span>No</span>
+		</span>
+		<span raised class="true" horizontal layout center 
+			  disabled?="{{rb.checked || estado!='red'}} quiz.Preguntas.length>0">
+			<span>Si</span>
+		</span>
+    </core-selector>
+  </div>
+	  <div disabled?="{{rb.checked || estado!='red'}}">  
+		<template repeat="{{ prg, index in quiz.Preguntas}}">
+			<div layout horizontal center class="item">
+				<div class="text" flex>{{prg}}</div>
+				<paper-toggle-button checked="{{ respuesta.Respuestas[index] }}" 
+									 on-change="{{handlerCheck}}"></paper-toggle-button>
+			</div>
+		</template>
+	</div>
+  </div>
+</template>
+	<script>
+		Polymer({
+			domReady:function(){
+				this.fire("element-ready");
+			},
+			go:function(){
+			},
+			valueChanged:function(){
+				this.respuesta.Valor=this.value;
+				if(this.quiz.Preguntas.length>0 && this.respuesta.Respuestas.length===0){
+					console.log("vamos a crear el arreglo");
+					for(var i=0; i<this.quiz.Preguntas.length; i++){
+						console.log("adding ", i);
+						this.respuesta.Respuestas.push(false);
+					}
+				}
+				console.log("q-respuesta valueChanged 2", this.respuesta);
+			},
+			handlerCheck:function(e, d, s){
+				console.log("respuestas length:'%s'",this.respuesta.Respuestas.length, this.respuesta.Respuestas);
+				console.log("preguntas length:'%s'",this.quiz.Preguntas.length, this.quiz.Preguntas);
+				this.respuesta.Respuestas[s.templateInstance.model.index]=s.checked;
+				this.value= _.contains(this.respuesta.Respuestas,false)?0:1;
+			}
+		})
+	</script>
+</polymer-element>

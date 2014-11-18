@@ -23,7 +23,6 @@
 			padding: 10px 0px 0px 0px
 		}
 	  </style>
-	  
 	  <app-header-panel on-l-icon-tap="{{ firePreguntasBack }}"	licon="arrow-back" ricon="add-circle"
 						on-r-icon-tap="{{handlerShowNuevaPregunta}}"
 						titulo="{{capitulo.Titulo}}" tclass="small">
@@ -33,12 +32,14 @@
 									on-edit-pregunta="{{handlerShowEditPregunta}}"
 									on-delete-pregunta="{{handlerShowDeletePregunta}}"
 									on-mostrar-guias-to-select="{{delegateShowGuiasToSelect}}"
-									on-remove-guia="{{ handlerShowRemoveGuia }}">
+									on-remove-guia="{{ handlerShowRemoveGuia }}"
+									on-nueva-q="{{handlerShowNuevaQ}}"
+									on-remove-q="{{handlerShowRemoveQ}}"
+									on-edit-q="{{handlerShowEditQ}}">
 				  </pl-cap-pregunta-card>
 			  </template>
 		  </div>
-	  </app-header-panel>
-	  	  
+	  </app-header-panel> 	  
 	  <paper-dialog id="dialog" backdrop style="top:0px;">
 		  <paper-input label="Numeral" required floatinglabel id="Numeral" value="{{_onedit.Numeral}}">
 		  </paper-input>
@@ -75,8 +76,6 @@
 							   affirmative autofocus>
 			</paper-icon-button>
 		</paper-dialog>
-	  
-	  
 	  <paper-dialog id="removeGuia" heading="Remover Guia?" backdrop style="top:0px;">
 			<paper-icon-button icon="cancel" dismissive></paper-icon-button>
 			<paper-icon-button icon="check" 
@@ -84,6 +83,27 @@
 							   affirmative autofocus>
 			</paper-icon-button>
 	  </paper-dialog>
+	  
+	  <paper-dialog id="dialogQ" backdrop style="top:0px;">
+		  <paper-input label="Enunciado" required floatinglabel value="{{_qText}}" id="EnunciadoQ"
+					   multiline rows="4">
+		  </paper-input>
+		  <paper-icon-button icon="cancel" dismissive></paper-icon-button>
+		  <paper-icon-button icon="check" 
+							 on-tap="{{ delegateSaveQ }}"
+							 affirmative autofocus>
+		  </paper-icon-button>
+		</paper-dialog>
+	    <paper-dialog id="dialogRemoveQ" backdrop style="top:0px;">
+		  <paper-input label="Enunciado" readOnly required floatinglabel value="{{_qText}}"
+					   multiline rows="4"></paper-input>
+		  <paper-icon-button icon="cancel" dismissive></paper-icon-button>
+		  <paper-icon-button icon="check" 
+							 on-tap="{{ delegateRemoveQ }}"
+							 affirmative autofocus>
+		  </paper-icon-button>
+		</paper-dialog>
+	  
 	  
   </template>
   <script>
@@ -102,6 +122,30 @@
 		
 		firePreguntasBack:function(){
 			this.fire("preguntas-back");
+		},
+		
+		handlerShowNuevaQ:function(event, detail, sender){
+			this._current=sender.templateInstance.model.item;
+			this._onedit= Object.clone(this._current);
+			this._qIndex=-1;
+			this._qText="";
+			this.$.dialogQ.toggle();
+		},
+		
+		handlerShowEditQ:function(event, detail, sender){
+			this._current=sender.templateInstance.model.item;
+			this._onedit= Object.clone(this._current);
+			this._qIndex=detail.index;
+			this._qText= detail.item;
+			this.$.dialogQ.toggle();
+		},
+		
+		handlerShowRemoveQ:function(event, detail, sender){
+			this._current=sender.templateInstance.model.item;
+			this._onedit= Object.clone(this._current);
+			this._qIndex=detail.index;
+			this._qText= detail.item;
+			this.$.dialogRemoveQ.toggle();
 		},
 		
 		handlerShowEditPregunta:function(e, detail, sender){	
@@ -158,6 +202,32 @@
 			this._onedit= Object.clone(this._current);
 			if(this.handlerShowGuiasToSelect){
 				this.handlerShowGuiasToSelect(e, {item:this._current}, sender);
+			}
+		},
+		
+		delegateSaveQ:function(e, d, s){
+			if(this.handlerSaveQ){
+				if(this.$.EnunciadoQ.invalid ||
+				   (this._qIndex<0?false:( this._onedit.Preguntas[this._qIndex]===this.$.EnunciadoQ ) )){
+					return;
+				}
+				if(this._qIndex<0){
+					if(!this._onedit.Preguntas){
+						this._onedit.Preguntas=[];
+					}
+					this._onedit.Preguntas.push(this.$.EnunciadoQ.value);
+				}
+				else{
+					this._onedit.Preguntas[this._qIndex]=this.$.EnunciadoQ.value;
+				}
+				this.handlerSaveQ(e, {item:this._onedit}, s);
+			}
+		},
+		
+		delegateRemoveQ:function(e, d, s){
+			if(this.handlerRemoveQ){
+				this._onedit.Preguntas.splice(this._qIndex,1);
+				this.handlerRemoveQ(e, {item:this._onedit}, s);
 			}
 		},
 		

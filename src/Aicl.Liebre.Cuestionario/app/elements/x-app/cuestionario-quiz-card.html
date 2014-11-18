@@ -5,19 +5,15 @@
 		<div class="quiz-titulo">{{pregunta.Enunciado}}</div>
     </div>
     <div class="quiz-detalle" on-quiz-answered="{{ quizAnswered }}">
-		<q-si-no id="quiz" name="true-false" quiz="{{ pregunta }}" 
+		<q-respuesta id="quiz" name="true-false" quiz="{{ pregunta }}" 
 								value="{{ respuesta.Valor }}"
 								estado="{{estado}}"
-								noAplicaChecked="{{ respuesta.NoAplicaChecked }}">
-		</q-si-no>
+								noAplicaChecked="{{ respuesta.NoAplicaChecked }}"
+					 respuesta={{respuesta}}></q-respuesta>
 	</div>
   </template>
   <script>
 	  Polymer({
-		  quizAnswered:function(){
-			  console.log("quizAnswered value, pregunta, respuesta",
-						  this.$.quiz.value, this.pregunta, this.respuesta);
-		  }
 	  });
   </script>
 </polymer-element>

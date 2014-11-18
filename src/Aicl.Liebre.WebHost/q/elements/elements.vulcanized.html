@@ -3257,6 +3257,34 @@ To change the ink color:
 <script>Polymer("q-entero",{eventDelegates:{input:"answered"},domReady:function(){this.fire("element-ready")},go:function(){},valueChanged:function(){console.log("q-entero valueChanged");if(this.respuesta)this.respuesta.Valor=this.value}});</script>
 </polymer-element></div><div hidden>
 
+<polymer-element name="q-respuesta" extends="q-base" attributes="respuesta" assetpath="templates/">
+<template>
+	<style>.item{padding:5px 20px 5px 10px;background:#fff;border-radius:4px;margin:0 10px 10px}paper-toggle-button{background:#d4d4d4;padding:10px;border-radius:4px}</style>
+ <shadow></shadow>
+  <div layout="" vertical="">
+  <div horizontal="" layout="" center="" center-justified="">
+    <core-selector selected="{{value}}" horizontal="" layout="">
+		<span raised="" class="false" horizontal="" layout="" center="" disabled?="{{rb.checked || estado!=&apos;red&apos;}} || quiz.Preguntas.length&gt;0">
+			<span>No</span>
+		</span>
+		<span raised="" class="true" horizontal="" layout="" center="" disabled?="{{rb.checked || estado!=&apos;red&apos;}} quiz.Preguntas.length&gt;0">
+			<span>Si</span>
+		</span>
+    </core-selector>
+  </div>
+	  <div disabled?="{{rb.checked || estado!=&apos;red&apos;}}">  
+		<template repeat="{{ prg, index in quiz.Preguntas}}">
+			<div layout="" horizontal="" center="" class="item">
+				<div class="text" flex="">{{prg}}</div>
+				<paper-toggle-button checked="{{ respuesta.Respuestas[index] }}" on-change="{{handlerCheck}}"></paper-toggle-button>
+			</div>
+		</template>
+	</div>
+  </div>
+</template>
+	<script>Polymer("q-respuesta",{domReady:function(){this.fire("element-ready")},go:function(){},valueChanged:function(){this.respuesta.Valor=this.value;if(this.quiz.Preguntas.length>0&&this.respuesta.Respuestas.length===0){console.log("vamos a crear el arreglo");for(var i=0;i<this.quiz.Preguntas.length;i++){console.log("adding ",i);this.respuesta.Respuestas.push(false)}}console.log("q-respuesta valueChanged 2",this.respuesta)},handlerCheck:function(e,d,s){console.log("respuestas length:'%s'",this.respuesta.Respuestas.length,this.respuesta.Respuestas);console.log("preguntas length:'%s'",this.quiz.Preguntas.length,this.quiz.Preguntas);this.respuesta.Respuestas[s.templateInstance.model.index]=s.checked;this.value=_.contains(this.respuesta.Respuestas,false)?0:1}});</script>
+</polymer-element></div><div hidden>
+
 <polymer-element name="q-si-no" extends="q-base" assetpath="templates/">
 <template>
  <style></style>
@@ -3335,11 +3363,10 @@ To change the ink color:
 		<div class="quiz-titulo">{{pregunta.Enunciado}}</div>
     </div>
     <div class="quiz-detalle" on-quiz-answered="{{ quizAnswered }}">
-		<q-si-no id="quiz" name="true-false" quiz="{{ pregunta }}" value="{{ respuesta.Valor }}" estado="{{estado}}" noaplicachecked="{{ respuesta.NoAplicaChecked }}">
-		</q-si-no>
+		<q-respuesta id="quiz" name="true-false" quiz="{{ pregunta }}" value="{{ respuesta.Valor }}" estado="{{estado}}" noaplicachecked="{{ respuesta.NoAplicaChecked }}" respuesta="{{respuesta}}"></q-respuesta>
 	</div>
   </template>
-  <script>Polymer("cuestionario-quiz-card",{quizAnswered:function(){console.log("quizAnswered value, pregunta, respuesta",this.$.quiz.value,this.pregunta,this.respuesta)}});</script>
+  <script>Polymer("cuestionario-quiz-card",{});</script>
 </polymer-element></div><div hidden><polymer-element name="q-capitulos" assetpath="x-app/">
   <template>
     <style></style>
@@ -3379,8 +3406,7 @@ To change the ink color:
 				  <paper-fab icon="check" on-tap="{{ nextTap }} " class="navicon" no-visible?="{{( answer.Valor == null) &amp;&amp; ( quiz.NoAplicaDisponible?!answer.NoAplicaChecked:true )}}">
 				  </paper-fab>
 			  </div>
-			  <cuestionario-quiz-card pregunta="{{ quiz }}" respuesta="{{ answer }}" on-quiz-answered="{{quizAnswered}}" estado="{{estado}}">
-			  </cuestionario-quiz-card>  
+			  <cuestionario-quiz-card pregunta="{{ quiz }}" respuesta="{{ answer }}" estado="{{estado}}"></cuestionario-quiz-card>  
 		  </div>
 		  <div class="card" layout="" vertical="" hidden?="{{selected!=&apos;1&apos;}}">
 			  <div class="card-header" layout="" horizontal="" center="">

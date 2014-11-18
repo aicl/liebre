@@ -15,10 +15,8 @@
 									 no-visible?="{{( answer.Valor == null) && ( quiz.NoAplicaDisponible?!answer.NoAplicaChecked:true )}}">
 				  </paper-fab>
 			  </div>
-			  <cuestionario-quiz-card pregunta="{{ quiz }}" respuesta="{{ answer }}" 
-						 on-quiz-answered="{{quizAnswered}}"
-									  estado="{{estado}}">
-			  </cuestionario-quiz-card>  
+			  <cuestionario-quiz-card pregunta="{{ quiz }}" respuesta="{{ answer }}"
+									  estado="{{estado}}"></cuestionario-quiz-card>  
 		  </div>
 		  <div class="card" layout vertical hidden?="{{selected!='1'}}">
 			  <div class="card-header" layout horizontal center >

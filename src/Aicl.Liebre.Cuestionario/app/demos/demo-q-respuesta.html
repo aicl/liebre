@@ -1,0 +1,72 @@
+<!doctype html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>q-actividades-alto-riesgo</title>
+  <meta name="description" content="Diagnostico SGSST, Decreto 1443 de 2014">
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0"/>	  	
+  <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+
+  <!-- build:css styles/main.css -->
+  <link rel="stylesheet" href="../styles/main.css" shim-shadowdom>
+  <!-- endbuild-->
+
+  <script src="../bower_components/platform/platform.js"></script>
+  
+  <!--  
+  <script src="bower_components/polymer/polymer.js"></script>
+  <link rel="import" href="bower_components/polymer/layout.html">
+  !-->
+  
+	
+  <!-- build:vulcanized elements/elements.vulcanized.html -->
+  <link rel="import" href="../bower_components/polymer/polymer.html">	
+  <script src="../flatiron-director/director.min.js"></script>
+  <link rel="import" href="../flatiron-director/flatiron-director.html">	
+  <link rel="import" href="../elements/elements.html">
+  <!-- endbuild-->
+	<style>	 
+    
+    
+	</style>
+</head>
+<body fullbleed unresolved>
+	<read-ajax id="read"></read-ajax>
+	<create-ajax id="create"></create-ajax>
+	<update-ajax id="update"></update-ajax>
+	<delete-ajax id="delete"></delete-ajax>
+
+	<!-- style="height:500px;" height="100vh" -->
+	<cuestionario-quiz-card class="card" id="element" >
+	</cuestionario-quiz-card>
+		
+		
+	<script src="../scripts/vendor/ydn.db-is-core-qry.js"></script>
+	<script src="../scripts/vendor/underscore-min.js"></script>
+	  
+	<!-- build:js scripts/app.js -->
+	<script src="../scripts/app.js"></script>
+	<script>
+		document.addEventListener('polymer-ready', function() {
+			var elemento= document.querySelector("#element");
+			elemento.estado="red";
+			elemento.pregunta={
+				Enunciado: "Actividades de su empresa",
+				Id: "545907a08bd8c0169f1164d4",
+				IdPlantilla: "542c61db8bd8c10d1c809830",
+				Tipo: "centros",
+				Preguntas:["Tiene algun Protocolo","Cumple con Todo", "actualiza leyes"]
+			};
+			
+			elemento.respuesta={
+				IdDiagnostico: "545914758bd8c0169f1164de",
+				IdGuia: "545907a08bd8c0169f1164d4",
+				Respuestas:[false, false, false]
+			};
+		
+		});
+	</script>		
+		
+</body>
+</html>

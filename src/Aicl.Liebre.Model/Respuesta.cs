@@ -11,6 +11,7 @@ namespace Aicl.Liebre.Model
 	{
 		public Respuesta ()
 		{
+			Respuestas = new List<bool> ();
 		}
 		[BsonRepresentation(BsonType.ObjectId)]
 		public string Id { get; set; }
@@ -18,6 +19,7 @@ namespace Aicl.Liebre.Model
 		public string IdPregunta { get; set; }
 		public bool? NoAplicaChecked { get; set; }
 		public short? Valor { get; set; }
+		public List<bool> Respuestas{ get; set; }
 	}
 
 	[Route("/read/respuesta","GET")]
