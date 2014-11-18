@@ -11,7 +11,7 @@ license that can be found in the LICENSE file.
         autoHash: false,
         ready: function() {
           this.router.on(/(.*)/, function(route) {
-            this.route = route;
+            this.route = (route && route.startsWith(window.location.origin))?'':route;
           }.bind(this));
           this.route = this.router.getRoute() ? 
             this.router.getRoute().join(this.router.delimiter): '';
