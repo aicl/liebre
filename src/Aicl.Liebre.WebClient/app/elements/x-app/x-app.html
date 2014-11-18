@@ -16,20 +16,19 @@
 
   <script>
 	  Polymer({   
-		  route:"",
-		  tag:"",
-		  
 		  get menuPanel() {
 			return this.$.menuPanel;
 		  },
-		  		  
 		  ready:function(){
-			  
+		  },
+		  go:function(){
 			  this.$.menuPanel.config.items=[
 				  {text:"Plantillas", tag:'x-plantilla', route:'plantillas'},
 				  {text:"Empresas", tag:'x-empresa', route:'empresas'},
 				  {text:"Diagnosticos", tag:'x-diagnostico', route:'diagnosticos'}
-			  ]
+			  ];
+			  this.route='';
+			  this.tag='';
 		  },
 		  
 		  mainIconTap: function(){
@@ -65,15 +64,12 @@
 				  this.route='';
 				  this.tag='';
 				  
-				  var t = document.createElement('div');
-				  
+				  var t = document.createElement('div');				  
 				  var fc = this.$.frameContainer;
 				  fc.removeChild(fc.firstElementChild);
 				  fc.appendChild(t);
-				  
 				  return ;
 			  }
-			  
 			  // actualizar el route del elemente activo....
 			  this.$.frameContainer.firstElementChild.route=current;
 			  this.tag= this.findTag(current);
