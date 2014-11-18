@@ -1,15 +1,4 @@
-<link rel="import" href="../../bower_components/paper-dialog/paper-dialog-transition.html">
-<link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
-<link rel="import" href="../../bower_components/core-icons/core-icons.html">
-<link rel="import" href="../../bower_components/core-icons/image-icons.html">
-<link rel="import" href="../../bower_components/paper-dialog/paper-dialog.html">
-<link rel="import" href="../../bower_components/paper-input/paper-input.html">
-<link rel="import" href="../../bower_components/core-pages/core-pages.html">
-<link rel="import" href="../common/my-paper-date-input.html">
-<link rel="import" href="plantilla-card.html">
-
 <polymer-element name="plantilla-list">
-
   <template>
     <style>    
       :host {  		  
@@ -37,10 +26,7 @@
 			transform-origin: 0% 0%;
 			font-size: 0.75em;
 		}				
-		
     </style>
-	  
-	  
 	  <div layout vertical center>	  
 	  <template repeat="{{item in plantillas}}">
 		  <plantilla-card item="{{item}}" on-edit-plantilla="{{handlerShowEditPlantilla}}"
