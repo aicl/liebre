@@ -259,7 +259,7 @@ namespace Aicl.Liebre.Data
 				var cl = GetCollection<Respuesta> ();
 				BulkWriteOperation bw = cl.InitializeOrderedBulkOperation ();
 				request.Data.Respuestas.ForEach (r =>{
-					r.Valor=(short?)((r.Respuestas.Count==0 || r.Respuestas.Exists(v=>!v))?0:1);
+					r.Valor=(short?)((r.Respuestas.Count==0 || r.Respuestas.Exists(v=>false))?0:1);
 					bw.Find (Query<Respuesta>.Where (q => q.IdDiagnostico == descarga.IdDiagnostico && q.IdPregunta == r.IdPregunta))
 					.Upsert ().UpdateOne (Update<Respuesta>
 							.Set (f => f.Valor, r.Valor).Set (f => f.NoAplicaChecked, r.NoAplicaChecked).Set(f=>f.Respuestas,r.Respuestas) );});
