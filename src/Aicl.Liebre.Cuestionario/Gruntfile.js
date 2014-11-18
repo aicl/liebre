@@ -314,7 +314,7 @@ module.exports = function (grunt) {
 			src: ['dist/index.html'],
 			overwrite: true,                 // overwrite matched source files
 			replacements: [{
-				from: '<!--<html manifest="appcache.manifest">!-->',
+				from: '<html fake-manifest="appcache.manifest">',
 				to:   '<html manifest="appcache.manifest">'
 			},{
 				from: '<link rel="stylesheet" href="styles/main.css">',
