@@ -166,7 +166,7 @@ namespace Aicl.Liebre.Data
 					IdPregunta = q.Id, 
 					IdDiagnostico = response.Diagnostico.Id, 
 					Respuestas=new List<bool>(q.Preguntas.Count),
-					Valor=(short?)(q.Preguntas.Count>0?(object)0:null)
+					Valor = (q.Preguntas.Count > 0 ? (short)0 : default(short?))
 				}
 			}));
 					
