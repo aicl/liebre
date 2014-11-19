@@ -298,7 +298,7 @@
 				msg: 'Cuestionarios OK',
 				data:[]
 			};
-			db.values('Cuestionario')
+			db.values('Cuestionario',null, 20000)
 			.done(function(aData){
 				if(aData[0]){
 					response.data= aData;					
