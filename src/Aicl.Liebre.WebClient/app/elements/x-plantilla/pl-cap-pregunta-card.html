@@ -8,6 +8,7 @@
 			  <core-icon-button icon="create"  on-tap="{{ fireEdit }}"></core-icon-button>
 		  </div>
 		  <div class="titulo">{{item.Enunciado}}</div>
+		  <div class="text">Requisito: {{item.Requisito.Descripcion}}</div>
 		  <div class="text">Disponible 'No Aplica': {{item.NoAplicaDisponible?'SI':'NO'}}</div>
 		  <div class="text">{{item.Metodo}}</div>
 		  <div layout horizontal center>

@@ -22,7 +22,8 @@
 		  <paper-input label="Numeral" required floatinglabel id="Numeral" value="{{_onedit.Numeral}}">
 		  </paper-input>
 		  <paper-input label="Enunciado" required floatinglabel id="Enunciado" value="{{_onedit.Enunciado}}"
-					   multiline rows="4"></paper-input>
+					   multiline rows="3"></paper-input>
+		  <requisitos-dropdown data="{{requisitos}}" selected="{{_onedit.Requisito}}"></requisitos-dropdown>
 		  <div horizontal layout>
 			  <paper-checkbox id="NoAplicaDisponible" checked="{{ _onedit.NoAplicaDisponible }}"></paper-checkbox>
 			  <span>Disponible 'No Aplica'</span>
@@ -85,6 +86,7 @@
 			this.guias=[];
 			this._current={};
 			this._onedit={};
+			this.requisitos=[];
 		},
 		firePreguntasBack:function(){
 			this.fire("preguntas-back");

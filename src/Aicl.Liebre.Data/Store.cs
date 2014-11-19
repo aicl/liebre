@@ -329,6 +329,10 @@ namespace Aicl.Liebre.Data
 			return ReadFromFile<Externo> ("externos.json");
 		}
 
+		public ListResult<Requisito> ReadRequisito(ReadRequisito request){
+			return ReadFromFile<Requisito> ("requisitos.json");
+		}
+
 		public ListResult<ActividadAltoRiesgo> ReadActividaAltoRiesgo(ReadActividadAltoRiesgo request){
 			return ReadFromFile<ActividadAltoRiesgo> ("actividadesaltoriesgo.json");
 		}

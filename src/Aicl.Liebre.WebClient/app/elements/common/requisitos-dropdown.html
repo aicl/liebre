@@ -1,0 +1,72 @@
+<polymer-element name="requisitos-dropdown" attributes="selected,valign,data">
+<template>
+	<style>
+		
+		core-list{
+			height: 120px;
+			width: 300px
+		}
+		core-dropdown{
+			box-shadow: 1px 1px 1px 1px;
+		}
+		.item {
+		  box-sizing: border-box;
+		  height: 35px;
+		  border-bottom: 1px solid #ddd;
+		  padding: 4px;
+		  cursor: default;
+		  background-color: white;
+		  overflow: hidden;
+		}
+		.selected {
+		  background: silver;
+		}
+		.si{
+			width: 38px;
+			height: 38px;
+		}		
+		.core-transition{
+			overflow: hidden;
+		}
+		paper-input{
+			width: 250px;
+		}
+	</style>
+	<div layout horizontal>	
+		<div relative>
+		  <core-icon-button id="trigger" icon="{{opened?'arrow-drop-up':'arrow-drop-down'}}"
+							on-tap="{{toggle}}"></core-icon-button>
+		  <core-dropdown relatedTarget="{{$.trigger}}" opened="{{opened}}" halign="left" valign="{{valign}}">
+			  <div layout horizontal on-tap="{{toggle}}">
+				  <core-icon-button class="si" icon="arrow-drop-up"></core-icon-button>
+				  <paper-input id="fake"  readonly 
+							   value="{{selected?(selected.Descripcion):''}}">
+				  </paper-input>
+			  </div>
+			  <core-list data="{{data}}" height="35" flex on-core-activate="{{handlerActivate}}">
+				  <template>
+					  <div class="item {{ {selected: selected} | tokenList }}"
+						   >{{model.Descripcion}}</div>
+				  </template>
+			  </core-list>
+		  </core-dropdown>
+		</div>
+		<paper-input  readonly hidden?="{{opened}}" label="Requisito" floatinglabel
+				   value="{{selected?(selected.Descripcion):''}}"
+				   on-tap="{{toggle}}"></paper-input>
+	</div>
+</template>
+		<script>
+		Polymer({
+			valign:"top",
+			toggle:function(){
+				this.opened=!this.opened;
+			},
+			handlerActivate:function(event, detail, sender){
+				this.selected= detail.data;
+				this.opened=false;
+				this.asyncFire('rango-select',{item:this.selected});
+			}	
+		})
+	</script>
+</polymer-element>

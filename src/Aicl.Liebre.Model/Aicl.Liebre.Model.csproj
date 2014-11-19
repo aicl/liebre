@@ -55,6 +55,7 @@
     <Compile Include="Rango.cs" />
     <Compile Include="Respuesta.cs" />
     <Compile Include="Externo.cs" />
+    <Compile Include="Requisito.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="ServiceStack.Common">

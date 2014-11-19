@@ -161,7 +161,15 @@
 				  error:this.readError.bind(this),
 				  errorConnection: this.readErrorConnection.bind(this),
 				  complete:this.readComplete.bind(this)
-			  }
+			  };
+			  this.rqReadRequisitos = {
+				  model:'requisito',
+				  response:this.readRequisitosResponse.bind(this),
+				  error:this.readError.bind(this),
+				  errorConnection: this.readErrorConnection.bind(this),
+				  complete:this.readComplete.bind(this),
+				  urlparams:{}
+			  };
 		  },
 		  ready:function(){  
 			  var t = document.createElement('template');
@@ -319,6 +327,7 @@
 				  data[d].FechaFinal=window.liebre.tools.formatDate(data[d].FechaFinal);
 			  }
 			  this.$.pl.plantillas= data;
+			  window.liebre.remote.read(this.rqReadRequisitos);
 		  },
 		  readCapitulosResponse:function(event){
 			  this.$.pc.capitulos = event.detail.data;
@@ -339,6 +348,9 @@
 		  },
 		  readPreguntasResponse:function(event){
 			  this.$.pcp.preguntas = event.detail.data;
+		  },
+		  readRequisitosResponse:function(event){
+			  this.$.pcp.requisitos = event.detail.data;
 		  },
 		  readError:function(event){
 			  console.log("error", event);

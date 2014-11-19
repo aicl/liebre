@@ -113,6 +113,7 @@
     <Content Include="json\externos.json" />
     <Content Include="scripts\vendor\underscore-min.js" />
     <Content Include="scripts\vendor\underscore-min.map" />
+    <Content Include="json\requisitos.json" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Global.asax.cs">

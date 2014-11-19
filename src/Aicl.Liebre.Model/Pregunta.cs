@@ -13,6 +13,7 @@ namespace Aicl.Liebre.Model
 		{
 			IdGuias = new List<string> ();
 			Preguntas = new List<string> ();
+			Requisito = new Requisito{ Codigo = "RQO00", Descripcion = "No Asignado" };
 		}
 		[BsonRepresentation(BsonType.ObjectId)]
 		public string Id { get ; set;}
@@ -23,6 +24,7 @@ namespace Aicl.Liebre.Model
 		public bool NoAplicaDisponible { get; set; }
 		public List<string> IdGuias { get; set; }
 		public List<string> Preguntas { get; set; }
+		public Requisito Requisito{ get; set; }
 	}
 
 	[Route("/read/pregunta","GET")]
