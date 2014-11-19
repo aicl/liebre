@@ -20,11 +20,11 @@
   <div horizontal layout center center-justified layout>
     <core-selector selected="{{value}}" horizontal layout>
 		<span raised class="false" horizontal layout center 
-			  disabled?="{{rb.checked || estado!='red'}} || quiz.Preguntas.length>0">
+			  disabled?="{{rb.checked || estado!='red' || quiz.Preguntas.length>0}}">
 			<span>No</span>
 		</span>
 		<span raised class="true" horizontal layout center 
-			  disabled?="{{rb.checked || estado!='red'}} quiz.Preguntas.length>0">
+			  disabled?="{{rb.checked || estado!='red' || quiz.Preguntas.length>0 }}">
 			<span>Si</span>
 		</span>
     </core-selector>

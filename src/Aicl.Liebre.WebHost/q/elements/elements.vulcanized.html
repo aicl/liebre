@@ -3265,10 +3265,10 @@ To change the ink color:
   <div layout="" vertical="">
   <div horizontal="" layout="" center="" center-justified="">
     <core-selector selected="{{value}}" horizontal="" layout="">
-		<span raised="" class="false" horizontal="" layout="" center="" disabled?="{{rb.checked || estado!=&apos;red&apos;}} || quiz.Preguntas.length&gt;0">
+		<span raised="" class="false" horizontal="" layout="" center="" disabled?="{{rb.checked || estado!=&apos;red&apos; || quiz.Preguntas.length&gt;0}}">
 			<span>No</span>
 		</span>
-		<span raised="" class="true" horizontal="" layout="" center="" disabled?="{{rb.checked || estado!=&apos;red&apos;}} quiz.Preguntas.length&gt;0">
+		<span raised="" class="true" horizontal="" layout="" center="" disabled?="{{rb.checked || estado!=&apos;red&apos; || quiz.Preguntas.length&gt;0 }}">
 			<span>Si</span>
 		</span>
     </core-selector>
