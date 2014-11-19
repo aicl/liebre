@@ -1,68 +1,39 @@
 <polymer-element name="x-empresa" attributes="route">
   <template>
-    <style>
-		.page{
-			height: 100vh;
-			overflow: auto; 
-			width: 100vw;
-		}
-		
-		paper-toast {
-			bottom: 0;
-			left: 0;
-			width: 100%;
-		}
-		
-		#error, #error_connection{
-			background-color: #620000;
-			color:#fff;
-		}
-		#complete{
-			background-color: #000f62;
-			color:#fff;
-		}
-		
-    </style>
-	  
-	  <web-loader id='wl' display='none'></web-loader>
+    <style></style>	  
 	  <core-pages selected="{{route}}" valueattr="hash">
 		  <div hash="empresas" class="page">      
 			  <app-header-panel id="menuPanel" on-l-icon-tap="{{ fireBack }}"
 								licon="arrow-back" ricon="add-circle"
 								on-r-icon-tap="{{handlerShowNuevaEmpresa}}"
 								titulo="Gestión de Empresas">
-				  <empresa-list id="em" ></empresa-list>
+				  <empresa-list id="em"></empresa-list>
 			  </app-header-panel>
 		  </div>
 		  <div hash="empresas/diagnosticos" class="page" id="diagnosticos">
 			  <emp-diagnostico id="dg" on-diagnostico-back="{{handlerBack}}"></emp-diagnostico>
 		  </div>
 	  </core-pages>
-	  <paper-toast id="error" role="alert" text="Error"></paper-toast>
-	  <paper-toast id="error_connection" role="alert"></paper-toast>
-	  <paper-toast id="complete" text="Operación realizada!"></paper-toast>
+	  <paper-toast id="error" class="error" role="alert" text="Error"></paper-toast>
+	  <paper-toast id="error_connection" class="error_connection" role="alert"></paper-toast>
+	  <paper-toast id="complete" class="complete" text="Operación realizada!"></paper-toast>
+	  <web-loader id='wl' display='none'></web-loader>
   </template>
-
   <script>
-
 	  Polymer({		  		   
 		  route:"empresas",
-		  
 		  fireBack:function(){
 			  this.fire('x-back');
 		  },
 		  routeChanged:function(old, current){
 			  location.hash=current;
 		  },
-		  	
 		  get menuPanel() {
 			return this.$.menuPanel;
 		  },
-		  
 		  handlerShowNuevaEmpresa:function(event){
 			  this.$.em.handlerShowNueva();
 		  },
-		  
 		  created:function(){
 			  this.rqReadEmpresas = {
 				  model:'empresa',
@@ -160,22 +131,18 @@
 			  this.$.dg.handlerCreateDescarga= this.handlerCreateDescarga.bind(this);
 			  this.$.dg.handlerDeleteDescarga= this.handlerDeleteDescarga.bind(this);
 			  
-		  },
-		  		  
+		  },	  
 		  domReady:function(){
 			  this.fire("element-ready");
 		  },
-		  
 		  go:function(){
 			  this.plantillas=null;
 			  window.liebre.remote.read(this.rqReadEmpresas);
 			  this.$.wl.display="block";
-		  },
-		  		  
+		  },	  
 		  handlerBack:function(){
 			  this.route=this.route.substring(0,this.route.lastIndexOf("/"));
 		  },
-		  
 		  handlerMostrarDiagnosticos:function(e,detail, sender){
 			  this.$.dg.empresa=detail.item;
 			  this.$.dg.diagnosticos=[];
@@ -183,7 +150,6 @@
 			  window.liebre.remote.read(this.rqReadDiagnosticos);
 			  this.$.wl.display="block";
 		  },
-		  
 		  handlerSaveEmpresa:function(e, detail, sender){
 			if(detail.item.Id){
 				window.liebre.remote.update(detail.item, this.rqUpdateEmpresa);
@@ -192,11 +158,9 @@
 				window.liebre.remote.create(detail.item, this.rqCreateEmpresa);
 			}
 		  },
-		  
 		  handlerDeleteEmpresa:function(e, detail, sender){
 			  window.liebre.remote.delete(detail.item, this.rqDeleteEmpresa);
 		  },
-		  	
 		  handlerSaveDiagnostico:function(e, detail, sender){
 			  if(detail.item.Id){
 				  liebre.remote.update(detail.item, this.rqUpdateDiagnostico);
@@ -205,24 +169,18 @@
 				  liebre.remote.create(detail.item, this.rqCreateDiagnostico);
 			  }
 		  },
-		  
 		  handlerDeleteDiagnostico:function(e, detail, sender){
 			  liebre.remote.delete(detail.item, this.rqDeleteDiagnostico);
 		  },
-		  
-		  handlerCreateDescarga:function(e, detail, sender){
-			  
+		  handlerCreateDescarga:function(e, detail, sender){  
 			  liebre.remote.create(detail.item, this.rqCreateDescarga);
 		  },
-		  
 		  handlerDeleteDescarga:function(e, detail, sender){
 			  liebre.remote.delete(detail.item, this.rqDeleteDescarga);
-		  },
-		  		  		  
+		  },	  		  
 		  readEmpresasResponse:function(event){
 			  this.$.em.empresas= event.detail.data;
 		  },
-		  
 		  readDiagnosticosResponse:function(event){
 			  var data = event.detail.data;
 			  for (var d in data){
@@ -237,7 +195,6 @@
 			  }
 			  this.route="empresas/diagnosticos";
 		  },
-		  
 		  readPlantillasResponse:function(event){
 			  var data = event.detail.data;
 			  for (var d in data){
@@ -246,8 +203,7 @@
 			  }
 			  this.plantillas=data;
 		  	  this.$.dg.plantillas= this.plantillas;
-		  },
-		  		  		  
+		  },	  		  
 		  readError:function(event){
 			  console.log("error", event);
 			  this.$.error.text= "Error: "+ event.type+". "+
@@ -269,7 +225,6 @@
 				  event.type+ ". Servidor:"+ liebre.tools.getBaseUrl();
 			  this.$.error_connection.show();
 		  },
-		  
 		  createEmpresaResponse:function(event){	
 			var data = event.detail.data;
 			this.$.em.empresas.unshift(data);
@@ -296,8 +251,7 @@
 			if(index>=0){
 				this.$.em.empresas.splice(index,1);
 			}
-		  },
-		  		  
+		  },	  
 		  createDiagnosticoResponse:function(event){	
 			console.log("Diagnostico reponse: create", event);
 			var data = event.detail.data;
@@ -329,7 +283,6 @@
 				this.$.dg.diagnosticos.splice(index,1);
 			}
 		  },
-		  
 		  createDescargaResponse:function(event){	
 			  console.log("Descarga reponse: create", event);
 			  var data = event.detail.data;
@@ -340,7 +293,6 @@
 				}
 			  }
 		  },
-		  
 		  deleteDescargaResponse:function(event){
 			  console.log("Descarga reponse: delete", event);
 			  var diagnostico= this.$.dg.current;
@@ -356,9 +308,6 @@
 				  this.$.dg.current.Descargas.splice(index,1);
 			  }	  
 		  }
-		  
     });
-
   </script>
-
 </polymer-element>

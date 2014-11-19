@@ -2843,7 +2843,7 @@ To change the bar color for unchecked state:
 </polymer-element>
 </div><div hidden><polymer-element name="app-header-panel" attributes="titulo,ricon,licon,tclass" assetpath="common/">
   <template>
-    <style>#header{width:100vw;height:100vh;-webkit-overflow-scrolling:touch}#toolbar{color:#fff;background-color:#080d31}#section{position:absolute;top:0;bottom:0;left:0;right:0;overflow:auto}.small{font-size:small}.medium{font-size:medium}</style>
+    <style>#header{width:100vw;height:100vh;-webkit-overflow-scrolling:touch}#toolbar{color:#fff;background-color:#080d31}#section{position:absolute;top:0;bottom:0;left:0;right:0;overflow:auto}</style>
     <core-header-panel mode="scroll" id="header" flex="">
       <core-toolbar id="toolbar" class="narrow">
         <paper-icon-button icon="[[licon||&apos;arrow-back&apos;]]" on-tap="{{ fireLiconTap }}" style="margin: 0px;"></paper-icon-button>
@@ -2857,7 +2857,8 @@ To change the bar color for unchecked state:
     </core-header-panel>
   </template>
   <script>Polymer("app-header-panel",{get ri(){return this.$.ri},get tb(){return this.$.tb},get toolbar(){return this.$.toolbar},get header(){return this.$.header},fireLiconTap:function(event,detail,sender){this.fire("l-icon-tap",sender)},fireRiconTap:function(event,detail,sender){this.fire("r-icon-tap",sender)}});</script>
-</polymer-element></div><div hidden><polymer-element name="create-ajax" extends="core-ajax" assetpath="common/">
+</polymer-element>
+</div><div hidden><polymer-element name="create-ajax" extends="core-ajax" assetpath="common/">
 	<script>Polymer("create-ajax",{dataProperty:"Data",action:"create",model:"",baseUrl:"",method:"post",handleAs:"json",created:function(){this.data={};var self=this;this.addEventListener("core-response",function(e){if(e.detail.xhr.status===0){self.fire("create-error-connection",{xhr:e.detail.xhr})}else{self.data=e.detail.response[self.dataProperty];self.fire("create-response",{data:self.data})}});this.addEventListener("core-error",function(e){self.fire("create-error",{xhr:e.detail.xhr})});this.addEventListener("core-complete",function(e){self.fire("create-complete",{xhr:e.detail.xhr})});this.super()},go:function(){this.data={};this.url=this.baseUrl+"/"+this.action+"/"+this.model+"?format=json";this.super()}});</script>
 </polymer-element></div><div hidden><polymer-element name="delete-ajax" extends="core-ajax" assetpath="common/">
 	<script>Polymer("delete-ajax",{dataProperty:"Data",action:"delete",model:"",baseUrl:"",method:"post",handleAs:"json",created:function(){this.data={};var self=this;this.addEventListener("core-response",function(e){if(e.detail.xhr.status===0){self.fire("delete-error-connection",{xhr:e.detail.xhr})}else{self.data=e.detail.response[self.dataProperty];self.fire("delete-response",{data:self.data})}});this.addEventListener("core-error",function(e){self.fire("delete-error",{xhr:e.detail.xhr})});this.addEventListener("core-complete",function(e){self.fire("delete-complete",{xhr:e.detail.xhr})});this.super()},go:function(){this.data={};this.url=this.baseUrl+"/"+this.action+"/"+this.model+"?format=json";this.super()}});</script>

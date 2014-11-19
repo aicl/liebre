@@ -1,79 +1,10 @@
 <polymer-element name="emp-diagnostico">
   <template>
-	  <style>
-		  :host {  
-			display: block;
-			position: relative;
-			padding: 0px;    
-		  }
-		  
-        paper-icon-button{
-			border-radius: 10px;
-		}
-		paper-icon-button, span[raisedbutton] {
-			background-color: rgb(8, 13, 49); ;
-			color: white;
-		}		
-		span[raisedbutton]{
-			font-size: small;
-			padding: 8px;
-			border-radius: 4px;
-		}
-		.titulo{
-			padding:0px 5px 0px 5px;
-		}
-		.text{
-			padding:5px 5px 0px 5px;
-			margin-bottom:  6px;
-			font-size: small;
-		}
-		.card {
-		  display: block;
-		  position: relative;
-		  padding: 10px 5px 10px 5px ;    
-		  margin: 10px 0px 10px 0px;
-		  box-shadow: 0 1px 2px 0 ;
-		  border-radius: 2px;
-		  overflow: hidden;	
-		  max-width: 512px;
-		  background-color: rgb(212, 212, 212);
-		  width: 100vw;  
-		}
-		.list {
-          display: block;
-          border: 1px solid #ccc;
-          border-bottom: none;
-          background: #666;
-          color: white;
-          list-style: none;
-          margin: 0;
-          padding: 0;
-        } 
-        .list > * {
-          padding: 12px 20px;
-          border-bottom: 1px solid #ccc;
-		  font-size: small;
-        }    
-        .list > *.core-selected {
-          background: #333;
-        }
-		span.core-selected:after {
-          content: "\2713";
-          position: absolute;
-          padding-left: 10px;
-			
-		}
-		core-selector{
-			max-width: 512px;
-			width: 100vw;
-		} 
-		  
-	  </style>
-	  
+	  <style></style>
 	  <app-header-panel on-l-icon-tap="{{ fireBack }}"	licon="arrow-back" ricon="add-circle"
 						on-r-icon-tap="{{handlerShowNuevo}}"
 						titulo="{{empresa.Nombre }}">
-		  <div layout vertical center>
+		  <div layout vertical>
 			  <template repeat="{{item in diagnosticos}}">
 				  <div class="card">
 					  <div layout horizontal center>
@@ -97,34 +28,25 @@
 			  </template>
 		  </div>
 	  </app-header-panel>
-	
-	  <paper-dialog id="dialog" backdrop style="top:0px;">
+	  <paper-dialog id="dialog" backdrop layered autoCloseDisabled>
 		  <paper-input label="Creado" disabled floatinglabel id="Creado" value="{{_onedit.Creado}}"></paper-input>
 		  <paper-input label="Descripción" required floatinglabel id="Descripcion" value="{{_onedit.Descripcion}}"
-					   multiline rows="2">
-		  </paper-input>
-		  			
+					   multiline rows="2"></paper-input>
 		  <paper-icon-button icon="cancel" dismissive></paper-icon-button>
 		  <paper-icon-button icon="check" 
 							 on-tap="{{ delegateSave }}"
-							 affirmative autofocus>
-		  </paper-icon-button>
+							 affirmative autofocus></paper-icon-button>
 	  </paper-dialog>
-	  
-	  <paper-dialog id="borrar" backdrop style="top:0px;">
+	  <paper-dialog id="borrar" backdrop layered autoCloseDisabled>
 		  <paper-input disabled label="Creado" disabled floatinglabel value="{{_onedit.Creado}}"></paper-input>
 		  <paper-input disabled label="Descripción" floatinglabel value="{{_onedit.Descripcion}}"
-					   multiline rows="2">
-		  </paper-input>
+					   multiline rows="2"></paper-input>
 		  <paper-icon-button icon="cancel" dismissive></paper-icon-button>
 		  <paper-icon-button icon="check" 
 							   on-tap="{{ delegateDelete }}"
-							   affirmative autofocus>
-		  </paper-icon-button>
+							   affirmative autofocus></paper-icon-button>
 	  </paper-dialog>
-	  
-	  
-	  <paper-dialog id="showpl" heading="Seleccione una plantilla:" backdrop style="top:0px;">
+	  <paper-dialog id="showpl" heading="Seleccione una plantilla:" layered autoCloseDisabled>
 		  <core-selector class="list" valueattr="index" id="sl" layout vertical>
 			  <template repeat="{{item in plantillas}}">
 				  <span index="{{item.Id}}">{{item.Titulo+'-'+item.Version}}</span>
@@ -133,34 +55,26 @@
 		  <paper-icon-button icon="cancel" dismissive></paper-icon-button>
 		  <paper-icon-button icon="check" 
 							 on-tap="{{ handlerCheckSelected }}"
-							 affirmative autofocus>
-		  </paper-icon-button>
+							 affirmative autofocus></paper-icon-button>
 	  </paper-dialog>
-	  
-	  <paper-dialog id="showdown" heading="Generar clave de instalación?" backdrop style="top:0px;">
+	  <paper-dialog id="showdown" heading="Generar clave de instalación?" layered autoCloseDisabled>
 		  <paper-icon-button icon="cancel" dismissive></paper-icon-button>
 		  <paper-icon-button icon="check" 
 							 on-tap="{{ delegateCreateDescarga }}"
-							 affirmative autofocus>
-		  </paper-icon-button>
+							 affirmative autofocus></paper-icon-button>
 	  </paper-dialog>
-	  
-	  <paper-dialog id="deletedescarga" heading="Borrar Descarga?" backdrop style="top:0px;">
+	  <paper-dialog id="deletedescarga" heading="Borrar Descarga?" layered autoCloseDisabled>
 		  <paper-icon-button icon="cancel" dismissive></paper-icon-button>
 		  <paper-icon-button icon="check" 
 							 on-tap="{{ delegateDeleteDescarga }}"
-							 affirmative autofocus>
-		  </paper-icon-button>
+							 affirmative autofocus></paper-icon-button>
 	  </paper-dialog>
-	  
   </template>
   <script>
     Polymer({
-		
 		get current() {
 			return this._current;
 		},
-		
 		created:function(){
 			this.empresa={};
 			this.diagnosticos =[];
@@ -170,44 +84,37 @@
 			this._onedit={};
 			this._descarga={};
 		},
-		
 		fireBack:function(){
 			this.fire("diagnostico-back");
-		},
-				
+		},		
 		handlerShowEdit:function(e, detail, sender){	
 			this._current=sender.templateInstance.model.item;
 			this._onedit= Object.clone(this._current);
 			this.idPlantilla= this._current.IdPlantilla;
 			this.$.dialog.toggle();
-		},
-				
+		},		
 		handlerShowNuevo:function(){
 			this.idPlantilla="";
 			this.$.sl.selected=null;
 			this.$.showpl.toggle();
 		},
-		
 		handlerCheckSelected:function(){
 			if(!this.$.sl.selected) return;
 			this.idPlantilla=this.$.sl.selected;
 			this._current={Id:"", Creado:"", Descripcion:"", IdPlantilla:"", IdEmpresa:""};
 			this._onedit= Object.clone(this._current);
 			this.$.dialog.toggle();
-		},
-							
+		},					
 		handlerShowDelete:function(e, detail, sender){	
 			this._current=sender.templateInstance.model.item;
 			this._onedit= Object.clone(this._current);
 			this.$.borrar.toggle();
 		},
-		
 		handlerShowDownload:function(e, detail, sender){
 			this._current=sender.templateInstance.model.item;
 			this._onedit= Object.clone(this._current);
 			this.$.showdown.toggle();
 		},
-		
 		handlerShowDeleteDescarga:function(e, detail, sender){	
 			console.log("sender.templateInstance.model.item,sender.templateInstance.model.g",
 						sender.templateInstance.model.item,
@@ -218,26 +125,22 @@
 			this._descarga=sender.templateInstance.model.g;
 			this.$.deletedescarga.toggle();
 		},
-		
 		delegateCreateDescarga:function(e, detail, sender){
 			if(this.handlerCreateDescarga){	
 				var d= {IdDiagnostico: this._current.Id};
 				this.handlerCreateDescarga(e, {item:d}, sender);
 			}
 		},
-		
 		delegateDeleteDescarga:function(e, detail, sender){
 			if(this.handlerDeleteDescarga){
 				this.handlerDeleteDescarga(e, {item:this._descarga}, sender);
 			}
 		},
-		
 		delegateDelete:function(e, detail, sender){
 			if(this.handlerDelete){
 				this.handlerDelete(e, {item:this._onedit}, sender);
 			}
 		},
-		
 		delegateSave:function(e, detail, sender){	
 			console.log("delegateSave this.empresa.Id:'%s', this.idPlantilla:'%s' ",
 						this.empresa.Id, this.idPlantilla);
@@ -252,7 +155,5 @@
 			}
 		}		
     });
-
   </script>
-
 </polymer-element>

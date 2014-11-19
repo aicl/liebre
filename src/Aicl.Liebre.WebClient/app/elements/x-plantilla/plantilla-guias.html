@@ -1,38 +1,28 @@
 <polymer-element name="plantilla-guias">
   <template>
-    <style>
-		:host {  
-			display: block;
-			position: relative;
-			padding: 0px;    
-		}				
-	</style>
-	  
+    <style></style>
 	  <app-header-panel on-l-icon-tap="{{ fireGuiasBack }}"	licon="arrow-back" ricon="add-circle"
 						on-r-icon-tap="{{handlerShowNuevaGuia}}"
 						titulo="{{plantilla.Titulo +' - '+ plantilla.Version}}">
-		  <div layout vertical center>
+		  <div layout vertical>
 				  <template repeat="{{item in guias}}">
 					  <plantilla-guia-card item="{{item}}"
 								  on-edit-guia="{{ handlerShowEditGuia }}"
-								  on-delete-guia="{{handlerShowDeleteGuia}}">
-					  </plantilla-guia-card>
+								  on-delete-guia="{{handlerShowDeleteGuia}}"
+										   class="card"></plantilla-guia-card>
 				  </template>
 		  </div>
 	  </app-header-panel>
-	
-	  <paper-dialog id="dialog" backdrop style="top:0px;">
+	  <paper-dialog id="dialog" backdrop layered autoCloseDisabled>
 		  <paper-input label="Enunciado" required floatinglabel id="Enunciado" value="{{_onedit.Enunciado}}"
-					   multiline rows="4">
-		  </paper-input>
+					   multiline rows="4"></paper-input>
 		  <paper-input label="Tipo" floatinglabel id="Tipo" value="{{_onedit.Tipo}}"></paper-input>			
 		  <paper-icon-button icon="cancel" dismissive></paper-icon-button>
 		  <paper-icon-button icon="check" 
 							 on-tap="{{ delegateSaveGuia }}"
-							 affirmative autofocus>
-		  </paper-icon-button>
+							 affirmative autofocus></paper-icon-button>
 		</paper-dialog>
-	    <paper-dialog id="borrar" backdrop style="top:0px;">
+	    <paper-dialog id="borrar" backdrop layered autoCloseDisabled>
 			<paper-input disabled label="Enunciado" required floatinglabel value="{{_onedit.Enunciado}}"
 						 multiline rows="4">
 			</paper-input>
@@ -40,14 +30,10 @@
 			<paper-icon-button icon="cancel" dismissive></paper-icon-button>
 			<paper-icon-button icon="check" 
 							   on-tap="{{ delegateDeleteGuia }}"
-							   affirmative autofocus>
-			</paper-icon-button>
+							   affirmative autofocus></paper-icon-button>
 		</paper-dialog>
-	   
   </template>
-
   <script>
-
     Polymer({				
 		created:function(){
 			this.plantilla={};
@@ -55,34 +41,28 @@
 			this._current={};
 			this._onedit={};	
 		},
-		
 		fireGuiasBack:function(){
 			this.fire("guias-back");
-		},
-				
+		},		
 		handlerShowEditGuia:function(e, detail, sender){	
 			this._current=sender.templateInstance.model.item;
 			this._onedit= Object.clone(this._current);
 			this.$.dialog.toggle();
-		},
-				
+		},		
 		handlerShowNuevaGuia:function(){
 			this._current={Enunciado:"", Tipo:"multiline", IdPlantilla:""};
 			this._onedit= Object.clone(this._current);
 			this.$.dialog.toggle();
-		},
-							
+		},					
 		handlerShowDeleteGuia:function(e, detail, sender){	
 			this._onedit=sender.templateInstance.model.item;
 			this.$.borrar.toggle();
 		},
-		
 		delegateDeleteGuia:function(e, detail, sender){
 			if(this.handlerDeleteGuia){
 				this.handlerDeleteGuia(e, {item:this._onedit}, sender);
 			}
 		},
-		
 		delegateSaveGuia:function(e, detail, sender){		
 			if(this.$.Enunciado.invalid || Object.compare(this._current, this._onedit)) return;
 			if(this.handlerSaveGuia){
@@ -90,9 +70,6 @@
 				this.handlerSaveGuia(e, {item:this._onedit}, sender);
 			}			
 		}		
-		
     });
-
   </script>
-
 </polymer-element>

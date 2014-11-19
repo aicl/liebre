@@ -1,23 +1,10 @@
 <polymer-element name="pl-cap-preguntas">
   <template>
-	  <style>
-		  :host { 
-			  display: block;
-			  padding: 0px;  
-		  }
-		
-		paper-checkbox + span{
-			padding: 10px 0px 0px 10px
-		}
-		
-		paper-checkbox {
-			padding: 10px 0px 0px 0px
-		}
-	  </style>
+	  <style></style>
 	  <app-header-panel on-l-icon-tap="{{ firePreguntasBack }}"	licon="arrow-back" ricon="add-circle"
 						on-r-icon-tap="{{handlerShowNuevaPregunta}}"
-						titulo="{{capitulo.Titulo}}" tclass="small">
-		  <div layout vertical center>
+						titulo="{{capitulo.Titulo}}" tclass="text">
+		  <div layout vertical>
 			  <template repeat="{{item in preguntas}}">
 				  <pl-cap-pregunta-card item="{{item}}"  guias="{{guias}}"
 									on-edit-pregunta="{{handlerShowEditPregunta}}"
@@ -26,17 +13,16 @@
 									on-remove-guia="{{ handlerShowRemoveGuia }}"
 									on-nueva-q="{{handlerShowNuevaQ}}"
 									on-remove-q="{{handlerShowRemoveQ}}"
-									on-edit-q="{{handlerShowEditQ}}">
-				  </pl-cap-pregunta-card>
+									on-edit-q="{{handlerShowEditQ}}"
+										class="card"></pl-cap-pregunta-card>
 			  </template>
 		  </div>
 	  </app-header-panel> 	  
-	  <paper-dialog id="dialog" backdrop style="top:0px;">
+	  <paper-dialog id="dialog" backdrop layered autoCloseDisabled>
 		  <paper-input label="Numeral" required floatinglabel id="Numeral" value="{{_onedit.Numeral}}">
 		  </paper-input>
 		  <paper-input label="Enunciado" required floatinglabel id="Enunciado" value="{{_onedit.Enunciado}}"
-					   multiline rows="4">
-		  </paper-input>
+					   multiline rows="4"></paper-input>
 		  <div horizontal layout>
 			  <paper-checkbox id="NoAplicaDisponible" checked="{{ _onedit.NoAplicaDisponible }}"></paper-checkbox>
 			  <span>Disponible 'No Aplica'</span>
@@ -46,15 +32,13 @@
 		  <paper-icon-button icon="cancel" dismissive></paper-icon-button>
 		  <paper-icon-button icon="check" 
 							 on-tap="{{ delegateSavePregunta }}"
-							 affirmative autofocus>
-		  </paper-icon-button>
+							 affirmative autofocus></paper-icon-button>
 		</paper-dialog>
-	    <paper-dialog id="borrar" backdrop style="top:0px;">
-		    <paper-input disabled label="Numeral" required floatinglabel value="{{_onedit.Numeral}}">
-		    </paper-input>
+	    <paper-dialog id="borrar" backdrop layered autoCloseDisabled>
+		    <paper-input disabled label="Numeral" required floatinglabel 
+						 value="{{_onedit.Numeral}}"></paper-input>
 			<paper-input disabled label="Enunciado"  floatinglabel value="{{_onedit.Enunciado}}"
-						 multiline rows="4">
-			</paper-input>
+						 multiline rows="4"></paper-input>
 			<div horizontal layout>
 			  <paper-checkbox disabled checked="{{ _onedit.NoAplicaDisponible }}"></paper-checkbox>
 			  <span>Disponible 'No Aplica'</span>
@@ -64,45 +48,37 @@
 			<paper-icon-button icon="cancel" dismissive></paper-icon-button>
 			<paper-icon-button icon="check" 
 							   on-tap="{{ delegateDeletePregunta }}"
-							   affirmative autofocus>
-			</paper-icon-button>
+							   affirmative autofocus></paper-icon-button>
 		</paper-dialog>
-	  <paper-dialog id="removeGuia" heading="Remover Guia?" backdrop style="top:0px;">
+	  <paper-dialog id="removeGuia" heading="Remover Guia?" layered autoCloseDisabled>
 			<paper-icon-button icon="cancel" dismissive></paper-icon-button>
 			<paper-icon-button icon="check" 
 							   on-tap="{{ delegateRemoveGuia }}"
-							   affirmative autofocus>
-			</paper-icon-button>
+							   affirmative autofocus></paper-icon-button>
 	  </paper-dialog>
 	  
-	  <paper-dialog id="dialogQ" backdrop style="top:0px;">
+	  <paper-dialog id="dialogQ" backdrop layered autoCloseDisabled>
 		  <paper-input label="Enunciado" required floatinglabel value="{{_qText}}" id="EnunciadoQ"
-					   multiline rows="4">
-		  </paper-input>
+					   multiline rows="4"></paper-input>
 		  <paper-icon-button icon="cancel" dismissive></paper-icon-button>
 		  <paper-icon-button icon="check" 
 							 on-tap="{{ delegateSaveQ }}"
-							 affirmative autofocus>
-		  </paper-icon-button>
+							 affirmative autofocus></paper-icon-button>
 		</paper-dialog>
-	    <paper-dialog id="dialogRemoveQ" backdrop style="top:0px;">
+	    <paper-dialog id="dialogRemoveQ" backdrop layered autoCloseDisabled>
 		  <paper-input label="Enunciado" readOnly required floatinglabel value="{{_qText}}"
 					   multiline rows="4"></paper-input>
 		  <paper-icon-button icon="cancel" dismissive></paper-icon-button>
 		  <paper-icon-button icon="check" 
 							 on-tap="{{ delegateRemoveQ }}"
-							 affirmative autofocus>
-		  </paper-icon-button>
+							 affirmative autofocus></paper-icon-button>
 		</paper-dialog>
-	  
-	  
   </template>
   <script>
     Polymer({						
-		 get current() {
+		get current() {
 			return this._current;
-		  },
-		
+		},
 		created:function(){
 			this.capitulo={};
 			this.preguntas =[];
@@ -110,11 +86,9 @@
 			this._current={};
 			this._onedit={};
 		},
-		
 		firePreguntasBack:function(){
 			this.fire("preguntas-back");
 		},
-		
 		handlerShowNuevaQ:function(event, detail, sender){
 			this._current=sender.templateInstance.model.item;
 			this._onedit= Object.clone(this._current);
@@ -122,7 +96,6 @@
 			this._qText="";
 			this.$.dialogQ.toggle();
 		},
-		
 		handlerShowEditQ:function(event, detail, sender){
 			this._current=sender.templateInstance.model.item;
 			this._onedit= Object.clone(this._current);
@@ -130,7 +103,6 @@
 			this._qText= detail.item;
 			this.$.dialogQ.toggle();
 		},
-		
 		handlerShowRemoveQ:function(event, detail, sender){
 			this._current=sender.templateInstance.model.item;
 			this._onedit= Object.clone(this._current);
@@ -138,30 +110,25 @@
 			this._qText= detail.item;
 			this.$.dialogRemoveQ.toggle();
 		},
-		
 		handlerShowEditPregunta:function(e, detail, sender){	
 			this._current=sender.templateInstance.model.item;
 			this._onedit= Object.clone(this._current);
 			this.$.dialog.toggle();
-		},
-				
+		},		
 		handlerShowNuevaPregunta:function(){
 			this._current={Enunciado:"", Metodo:"", NoAplicaDisponible:false, IdCapitulo:"", IdGuias:[]};
 			this._onedit= Object.clone(this._current);
 			this.$.dialog.toggle();
-		},
-				
+		},		
 		handlerShowDeletePregunta:function(e, detail, sender){	
 			this._onedit=sender.templateInstance.model.item;
 			this.$.borrar.toggle();
 		},
-		
 		delegateDeletePregunta:function(e, detail, sender){
 			if(this.handlerDeletePregunta){
 				this.handlerDeletePregunta(e, {item:this._onedit}, sender);
 			}
 		},
-		
 		delegateSavePregunta:function(e, detail, sender){				
 			if(this.$.Enunciado.invalid || this.$.Numeral.invalid ||
 			   Object.compare(this._current, this._onedit)) return;
@@ -171,7 +138,6 @@
 				this.handlerSavePregunta(e, {item:this._onedit}, sender);
 			}			
 		},
-		
 		delegateRemoveGuia:function(e, detail, sender){
 			if(this.handlerRemoveGuia){
 				var index=-1;
@@ -186,8 +152,7 @@
 					this.handlerRemoveGuia(e, {item:this._onedit, guia:this.guiaToRemove}, sender);
 				}
 			}
-		},
-					
+		},			
 		delegateShowGuiasToSelect:function(e, detail, sender){
 			this._current=sender.templateInstance.model.item;
 			this._onedit= Object.clone(this._current);
@@ -195,7 +160,6 @@
 				this.handlerShowGuiasToSelect(e, {item:this._current}, sender);
 			}
 		},
-		
 		delegateSaveQ:function(e, d, s){
 			if(this.handlerSaveQ){
 				if(this.$.EnunciadoQ.invalid ||
@@ -214,14 +178,12 @@
 				this.handlerSaveQ(e, {item:this._onedit}, s);
 			}
 		},
-		
 		delegateRemoveQ:function(e, d, s){
 			if(this.handlerRemoveQ){
 				this._onedit.Preguntas.splice(this._qIndex,1);
 				this.handlerRemoveQ(e, {item:this._onedit}, s);
 			}
 		},
-		
 		handlerShowRemoveGuia:function(e,detail, sender){
 			this._current= sender.templateInstance.model.item;
 			this._onedit= Object.clone(this._current);

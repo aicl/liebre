@@ -1,28 +1,6 @@
 <polymer-element name="x-plantilla" attributes="route">
   <template>
-    <style>
-		.page{
-			height: 100vh;
-			overflow: auto; 
-			width: 100vw;
-		}
-		
-		paper-toast {
-			bottom: 0;
-			left: 0;
-			width: 100%;
-		}
-		
-		#error, #error_connection{
-			background-color: #620000;
-			color:#fff;
-		}
-		#complete{
-			background-color: #000f62;
-			color:#fff;
-		}
-    </style>
-	  <web-loader id='wl' display='none'></web-loader>
+    <style></style>
 	  <core-pages selected="{{route}}" valueattr="hash">
 		  <div hash="plantillas" class="page">      
 			  <menu-panel id="menuPanel" 
@@ -30,8 +8,7 @@
 						  on-main-icon-tap="{{ mainIconTap }}" 
 						  icon="arrow-back"
 						  titulo="Gestión de Plantillas" >
-				  <plantilla-list id="pl" >
-				  </plantilla-list>
+				  <plantilla-list id="pl"></plantilla-list>
 			  </menu-panel>
 		  </div>
 		  <div hash="plantillas/capitulos" class="page" id="capitulos">
@@ -48,9 +25,10 @@
 							on-check-selected="{{handlerCheckSelectedGuias}}"></select-guias>
 		  </div>	  
 	  </core-pages>
-	  <paper-toast id="error" role="alert" text="Error"></paper-toast>
-	  <paper-toast id="error_connection" role="alert"></paper-toast>
-	  <paper-toast id="complete" text="Operación realizada!"></paper-toast>
+	  <paper-toast id="error"class="error" role="alert" text="Error"></paper-toast>
+	  <paper-toast id="error_connection" class="error_connection" role="alert"></paper-toast>
+	  <paper-toast id="complete" class="complete" text="Operación realizada!"></paper-toast>
+	  <web-loader id='wl' display='none'></web-loader>
   </template>
   <script>
 	  Polymer({		  		   
@@ -58,21 +36,16 @@
 		  routeChanged:function(old, current){
 			  location.hash=current;
 		  },
-		  	
 		  get menuPanel() {
 			return this.$.menuPanel;
-		  },
-		  
-		  		  
+		  },	  		  
 		  __bajarTap:function(event){
 			  console.log("bajartap", this);		
 		  },
-		  
 		  __nuevoTap:function(event){
 			  console.log("nuevotap", this);
 			  this.$.pl.handlerShowNuevaPlantilla();
 		  },
-		  
 		  created:function(){
 			  this.rqReadPlantillas = {
 				  model:'plantilla',
@@ -101,8 +74,7 @@
 				  error:this.readError.bind(this),
 				  errorConnection: this.readErrorConnection.bind(this),
 				  complete:this.readComplete.bind(this)
-			  };
-			  
+			  };  
 			  this.rqReadCapitulos = {
 				  model:'capitulo',
 				  response:this.readCapitulosResponse.bind(this),
@@ -132,7 +104,6 @@
 				  errorConnection: this.readErrorConnection.bind(this),
 				  complete:this.readComplete.bind(this)
 			  }
-			  
 			  this.rqReadGuias = {
 				  model:'guia',
 				  response:this.readGuiasResponse.bind(this),
@@ -162,7 +133,6 @@
 				  errorConnection: this.readErrorConnection.bind(this),
 				  complete:this.readComplete.bind(this)
 			  };
-			  
 			  this.rqReadPreguntas = {
 				  model:'pregunta',
 				  response:this.readPreguntasResponse.bind(this),
@@ -192,11 +162,8 @@
 				  errorConnection: this.readErrorConnection.bind(this),
 				  complete:this.readComplete.bind(this)
 			  }
-			  
 		  },
-		  
-		  ready:function(){
-			  
+		  ready:function(){  
 			  var t = document.createElement('template');
 			  t.innerHTML = 
 				  '<paper-icon-button id="_nuevo" on-tap="{{}}" icon="add-circle"></paper-icon-button>';
@@ -211,8 +178,7 @@
 			  x.addEventListener("tap", this.__nuevoTap.bind(this) );
 			  
 			  x =this.$.menuPanel.tb.querySelector("#_down");
-			  x.addEventListener("tap", this.__bajarTap.bind(this) ); 			  
-			  			  
+			  x.addEventListener("tap", this.__bajarTap.bind(this) );
 			  this.$.pl.handlerMostrarCapitulos=this.handlerMostrarCapitulos.bind(this);
 			  this.$.pl.handlerSavePlantilla= this.handlerSavePlantilla.bind(this);
 			  this.$.pl.handlerDeletePlantilla= this.handlerDeletePlantilla.bind(this);
@@ -236,20 +202,16 @@
 		  domReady:function(){
 			  this.fire("element-ready");
 		  },
-		  
 		  go:function(){
 			  window.liebre.remote.read(this.rqReadPlantillas);
 			  this.$.wl.display="block";
 		  },
-		  
 		  mainIconTap: function(){
 			 this.fire("x-back");
 		  },
-		  
 		  handlerBack:function(){
 			  this.route=this.route.substring(0,this.route.lastIndexOf("/"));
 		  },
-		  
 		  handlerMostrarCapitulos:function(e,detail, sender){
 			  this.$.pc.plantilla=detail.item;
 			  this.$.pc.capitulos=[];
@@ -257,7 +219,6 @@
 			  window.liebre.remote.read(this.rqReadCapitulos);
 			  this.$.wl.display="block";
 		  },
-		  
 		  handlerMostrarGuias:function(e,detail, sender){
 			  this.$.pg.plantilla=detail.item;
 			  this.$.pg.guias=[];
@@ -265,7 +226,6 @@
 			  window.liebre.remote.read(this.rqReadGuias);
 			  this.$.wl.display="block";
 		  },
-		  
 		  handlerMostrarPreguntas:function(e, detail, sender){
 			  
 			  this.$.pcp.capitulo=detail.item;
@@ -277,13 +237,11 @@
 			  this.$.wl.display="block";		  
 			  
 		  },
-		  
 		  handlerShowGuiasToSelect:function(e, detail, sender){
 			  this.$.sg.plantilla=this.$.pc.plantilla;
 			  this.$.sg.clearSelected();
 			  this.route="plantillas/capitulos/preguntas/sg";
 		  },
-		  
 		  handlerSavePlantilla:function(e, detail, sender){
 			if(detail.item.Id){
 				window.liebre.remote.update(detail.item, this.rqUpdatePlantilla);
@@ -292,11 +250,9 @@
 				window.liebre.remote.create(detail.item, this.rqCreatePlantilla);
 			}
 		  },
-		  
 		  handlerDeletePlantilla:function(e, detail, sender){
 			  window.liebre.remote.delete(detail.item, this.rqDeletePlantilla);
 		  },
-		  	
 		  handlerSaveCapitulo:function(e, detail, sender){
 			  if(detail.item.Id){
 				  liebre.remote.update(detail.item, this.rqUpdateCapitulo);
@@ -305,12 +261,9 @@
 				  liebre.remote.create(detail.item, this.rqCreateCapitulo);
 			  }
 		  },
-		  
 		  handlerDeleteCapitulo:function(e, detail, sender){
 			  liebre.remote.delete(detail.item, this.rqDeleteCapitulo);
 		  },
-		  	
-		  
 		  handlerSaveGuia:function(e, detail, sender){
 			  if(detail.item.Id){
 				  liebre.remote.update(detail.item, this.rqUpdateGuia);
@@ -319,12 +272,9 @@
 				  liebre.remote.create(detail.item, this.rqCreateGuia);
 			  }
 		  },
-		  
 		  handlerDeleteGuia:function(e, detail, sender){
 			  liebre.remote.delete(detail.item, this.rqDeleteGuia);
 		  },
-		  		  
-		  
 		  handlerSavePregunta:function(e, detail, sender){
 			if(detail.item.Id){
 				liebre.remote.update(detail.item, this.rqUpdatePregunta);
@@ -333,13 +283,10 @@
 				liebre.remote.create(detail.item, this.rqCreatePregunta);
 			}
 		  },
-		  
 		  handlerDeletePregunta:function(e, detail, sender){
 			  liebre.remote.delete(detail.item, this.rqDeletePregunta);
 		  },
-		  
-		  handlerCheckSelectedGuias:function(e, detail, sender){
-			  
+		  handlerCheckSelectedGuias:function(e, detail, sender){  
 			  if(detail.selected!=null){
 				  var current = this.$.pcp.current;
 				  var s=[]
@@ -365,7 +312,6 @@
 			  }
 			  this.handlerBack();
 		  },
-		  		  
 		  readPlantillasResponse:function(event){
 			  var data = event.detail.data;
 			  for (var d in data){
@@ -374,12 +320,10 @@
 			  }
 			  this.$.pl.plantillas= data;
 		  },
-		  
 		  readCapitulosResponse:function(event){
 			  this.$.pc.capitulos = event.detail.data;
 			  this.route="plantillas/capitulos";
-		  },
-		  		  
+		  },	  
 		  readGuiasResponse:function(event){
 			  if(this.route==='plantillas'){
 				 this.$.pg.guias = event.detail.data;
@@ -393,11 +337,9 @@
 				  this.$.wl.display="block";
 			  }
 		  },
-		  
 		  readPreguntasResponse:function(event){
 			  this.$.pcp.preguntas = event.detail.data;
 		  },
-		  
 		  readError:function(event){
 			  console.log("error", event);
 			  this.$.error.text= "Error: "+ event.type+". "+
@@ -418,7 +360,6 @@
 				  event.type+ ". Servidor:"+ liebre.tools.getBaseUrl();
 			  this.$.error_connection.show();
 		  },
-		  
 		  createPlantillaResponse:function(event){	
 			var data = event.detail.data;
 			data.FechaInicial=window.liebre.tools.formatDate(data.FechaInicial);
@@ -449,8 +390,6 @@
 				this.$.pl.plantillas.splice(index,1);
 			}
 		  },
-		  
-		  
 		  createCapituloResponse:function(event){	
 			console.log("Capitulo reponse: create", event);
 			this.$.pc.capitulos.unshift(event.detail.data);
@@ -479,8 +418,6 @@
 				this.$.pc.capitulos.splice(index,1);
 			}
 		  },
-		  
-		  
 		  createGuiaResponse:function(event){	
 			console.log("Guia reponse: create", event);
 			this.$.pg.guias.unshift(event.detail.data);
@@ -509,8 +446,6 @@
 				this.$.pg.guias.splice(index,1);
 			}
 		  },
-		  
-		  
 		  createPreguntaResponse:function(event){	
 			console.log("Pregunta reponse: create", event);
 			this.$.pcp.preguntas.unshift(event.detail.data);
@@ -538,10 +473,7 @@
 			if(index>=0){
 				this.$.pcp.preguntas.splice(index,1);
 			}
-		  }
-		  		
+		  }	
     });
-
   </script>
-
 </polymer-element>

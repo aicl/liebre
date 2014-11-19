@@ -1,69 +1,20 @@
 <polymer-element name="plantilla-card" attributes="item">
   <template>
-    <style>    
-      :host {
-		  display: block;
-		  position: relative;
-			padding: 10px 5px 10px 5px ;    
-			margin: 10px 0px 10px 0px;
-			box-shadow: 0 1px 2px 0 ;
-			border-radius: 2px;
-			overflow: hidden;	
-			max-width: 512px;
-			background-color: rgb(212, 212, 212);
-			width: 100vw;  
-	  }
-		
-		core-icon-button{
-			border-radius: 10px;
-		}
-		core-icon-button, span[raisedbutton] {
-			background-color: rgb(8, 13, 49); ;
-			color: white;
-		}		
-		span[raisedbutton]{
-			font-size: small;
-			padding: 8px;
-			border-radius: 4px;
-		}
-		.label-text{
-			overflow: hidden;
-			text-overflow: ellipsis;
-			white-space: nowrap;
-			display: inline-block;
-			max-width: 100%;
-			-moz-transform-origin: 0% 0%;
-			-webkit-transform-origin: 0% 0%;
-			transform-origin: 0% 0%;
-			font-size: 0.75em;
-		}
-				
-		.titulo{
-			padding:10px 5px 0px 5px;
-		}
-		.text{
-			padding:5px 5px 0px 5px;
-			margin-bottom:  6px;
-			font-size: small;
-		}
-
-	</style>
-	  			  <div layout horizontal>
+    <style></style>
+	  			  <div layout horizontal center>
 					  <div flex class="titulo">{{item.Titulo}}</div>
-
 					  <core-icon-button icon="delete" 
 								 on-tap="{{ fireDeletePlantilla }}"></core-icon-button>
 					  <core-icon-button  icon="create" 
-										 on-tap="{{ fireEditPlantilla }}">
-					  </core-icon-button>
+										 on-tap="{{ fireEditPlantilla }}"></core-icon-button>
 				  </div>
 				  <div class="text">Version: {{item.Version}}</div>
 				  <div class="text">
 					  Desde  : {{item.FechaInicial  }} hasta : {{item.FechaFinal  }}
 				  </div>
-				  <div style="padding:5px 5px 0px 5px;">
-					  <span raisedbutton on-tap="{{ fireMostrarCapitulos }}">Capitulos</span>
-					  <span raisedbutton on-tap="{{ fireMostrarGuias }}" >Guias</span>
+				  <div class="span-btn">
+					  <span raised on-tap="{{ fireMostrarCapitulos }}">Capitulos</span>
+					  <span raised on-tap="{{ fireMostrarGuias }}" >Guias</span>
 				  </div> 
 	  	<content></content>  
   </template>

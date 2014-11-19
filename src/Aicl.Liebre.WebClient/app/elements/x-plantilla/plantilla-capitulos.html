@@ -1,53 +1,40 @@
 <polymer-element name="plantilla-capitulos">
   <template>
-	  <style>
-		:host {
-			display: block;
-			position: relative;
-			padding: 0px;    
-		}			
-	  </style>
-	  	  
+	  <style></style>
 	  <app-header-panel on-l-icon-tap="{{ fireCapitulosBack }}"	licon="arrow-back" ricon="add-circle"
 						on-r-icon-tap="{{handlerShowNuevoCapitulo}}"
 						titulo="{{plantilla.Titulo +' - '+ plantilla.Version}}">
-		  <div layout vertical center>
+		  <div layout vertical>
 			  <template repeat="{{item in capitulos}}">
 				  <plantilla-cap-card item="{{item}}"
 								  on-edit-capitulo="{{ handlerShowEditCapitulo }}"
 								  on-delete-capitulo="{{handlerShowDeleteCapitulo}}"
 								  on-mostrar-preguntas ="{{ delegateMostrarPreguntas }}"
-								  >
-				  </plantilla-cap-card>
+									  class="card"></plantilla-cap-card>
 			  </template>
 		  </div>
 	  </app-header-panel>
-	    
-	  <paper-dialog id="dialog" backdrop style="top:0px;">
-		  <paper-input label="Numeral" required floatinglabel id="Numeral" value="{{_onedit.Numeral}}">
-		  </paper-input>
+	  <paper-dialog id="dialog" backdrop layered autoCloseDisabled>
+		  <paper-input label="Numeral" required floatinglabel id="Numeral" 
+					   value="{{_onedit.Numeral}}"></paper-input>
 		  <paper-input label="Titulo" required floatinglabel id="Titulo" value="{{_onedit.Titulo}}"></paper-input>
-		  <paper-input label="Estandar" floatinglabel id="Version" value="{{_onedit.Estandar}}"></paper-input>			
+		  <paper-input label="Estandar" floatinglabel id="Version" value="{{_onedit.Estandar}}"></paper-input>	
 		  <paper-icon-button icon="cancel" dismissive></paper-icon-button>
 		  <paper-icon-button icon="check" 
 							 on-tap="{{ delegateSaveCapitulo }}"
-							 affirmative autofocus>
-		  </paper-icon-button>
-		</paper-dialog>
-	    <paper-dialog id="borrar" backdrop style="top:0px;">
-			<paper-input disabled label="Numeral" required floatinglabel  value="{{_onedit.Numeral}}">
-			</paper-input>
-			<paper-input disabled label="Titulo" required floatinglabel value="{{_onedit.Titulo}}">
-			</paper-input>
+							 affirmative autofocus></paper-icon-button>
+	   </paper-dialog>
+	   <paper-dialog id="borrar" backdrop layered autoCloseDisabled>
+			<paper-input disabled label="Numeral" required floatinglabel 
+						 value="{{_onedit.Numeral}}"></paper-input>
+			<paper-input disabled label="Titulo" required floatinglabel 
+						 value="{{_onedit.Titulo}}"></paper-input>
 			<paper-input disabled label="Estandar" floatinglabel  value="{{_onedit.Estandar}}"></paper-input>
-			
 			<paper-icon-button icon="cancel" dismissive></paper-icon-button>
 			<paper-icon-button icon="check" 
 							   on-tap="{{ delegateDeleteCapitulo }}"
-							   affirmative autofocus>
-			</paper-icon-button>
-		</paper-dialog>
-	   
+							   affirmative autofocus></paper-icon-button>
+	   </paper-dialog>
   </template>
   <script>
     Polymer({
@@ -57,23 +44,19 @@
 			this._current={};
 			this._onedit={};	
 		},
-		
 		fireCapitulosBack:function(){
 			this.fire("capitulos-back");
-		},
-				
+		},		
 		handlerShowEditCapitulo:function(e, detail, sender){	
 			this._current=sender.templateInstance.model.item;
 			this._onedit= Object.clone(this._current);
 			this.$.dialog.toggle();
-		},
-				
+		},		
 		handlerShowNuevoCapitulo:function(){
 			this._current={Titulo:"", Estandar:"", IdPlantilla:""};
 			this._onedit= Object.clone(this._current);
 			this.$.dialog.toggle();
-		},
-							
+		},					
 		handlerShowDeleteCapitulo:function(e, detail, sender){	
 			this._onedit=sender.templateInstance.model.item;
 			this.$.borrar.toggle();
@@ -84,7 +67,6 @@
 				this.handlerDeleteCapitulo(e, {item:this._onedit}, sender);
 			}
 		},
-		
 		delegateSaveCapitulo:function(e, detail, sender){		
 			if(this.$.Titulo.invalid || this.$.Numeral.invalid ||
 			   Object.compare(this._current, this._onedit)) return;
@@ -93,7 +75,6 @@
 				this.handlerSaveCapitulo(e, {item:this._onedit}, sender);
 			}			
 		},
-		
 		delegateMostrarPreguntas:function(e, detail, sender){
 			if(this.handlerMostrarPreguntas){
 				this.handlerMostrarPreguntas(e, detail, sender);

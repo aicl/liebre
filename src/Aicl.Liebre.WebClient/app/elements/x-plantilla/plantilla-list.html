@@ -1,75 +1,42 @@
 <polymer-element name="plantilla-list">
   <template>
-    <style>    
-      :host {  		  
-		display: block;
-		position: relative;
-		padding: 0px;    
-      }
-		
-		paper-icon-button{
-			border-radius: 10px;
-		}
-		paper-icon-button {
-			background-color: rgb(8, 13, 49); ;
-			color: white;
-		}		
-		
-		.label-text{
-			overflow: hidden;
-			text-overflow: ellipsis;
-			white-space: nowrap;
-			display: inline-block;
-			max-width: 100%;
-			-moz-transform-origin: 0% 0%;
-			-webkit-transform-origin: 0% 0%;
-			transform-origin: 0% 0%;
-			font-size: 0.75em;
-		}				
-    </style>
-	  <div layout vertical center>	  
+    <style></style>
+	  <div layout vertical>	  
 	  <template repeat="{{item in plantillas}}">
 		  <plantilla-card item="{{item}}" on-edit-plantilla="{{handlerShowEditPlantilla}}"
 						  on-delete-plantilla="{{handlerShowDeletePlantilla}}"
 						  on-mostrar-capitulos="{{delegateMostrarCapitulos}}"
-						  on-mostrar-guias="{{delegateMostrarGuias}}">
-		  </plantilla-card>
+						  on-mostrar-guias="{{delegateMostrarGuias}}"
+						  class="card"></plantilla-card>
 	  </template>
 	  </div>	  
-	  	  
-		<paper-dialog id="dialog" backdrop style="top:0px;">
-			<paper-input label="Titulo" required floatinglabel id="Titulo" value="{{_onedit.Titulo}}">
-			</paper-input>
+		<paper-dialog id="dialog" backdrop layered autoCloseDisabled>
+			<paper-input label="Titulo" required floatinglabel id="Titulo" 
+						 value="{{_onedit.Titulo}}"></paper-input>
 			<paper-input label="Version" floatinglabel id="Version" value="{{_onedit.Version}}"></paper-input>
 			<span class="label-text">Fecha Inicial</span>
 			<my-paper-date-input  id="FechaInicial" value="{{_onedit.FechaInicial}}"></my-paper-date-input>
 			<span class="label-text">Fecha Final</span>
-			<my-paper-date-input  id="FechaFinal" value="{{_onedit.FechaFinal}}"></my-paper-date-input>
-			
+			<my-paper-date-input id="FechaFinal" value="{{_onedit.FechaFinal}}"></my-paper-date-input>
 		  <paper-icon-button icon="cancel" dismissive></paper-icon-button>
 		  <paper-icon-button icon="check" 
 							 on-tap="{{ delegateSavePlantilla }}"
-							 affirmative autofocus>
-		  </paper-icon-button>
+							 affirmative autofocus></paper-icon-button>
 		</paper-dialog>
-	    <paper-dialog id="borrar" backdrop style="top:0px;">
-			<paper-input disabled label="Titulo" required floatinglabel value="{{_onedit.Titulo}}">
-			</paper-input>
+	    <paper-dialog id="borrar" backdrop layered autoCloseDisabled>
+			<paper-input disabled label="Titulo" required floatinglabel 
+						 value="{{_onedit.Titulo}}"></paper-input>
 			<paper-input disabled label="Version" floatinglabel  value="{{_onedit.Version}}"></paper-input>
 			<span class="label-text">Fecha Inicial</span>
 			<my-paper-date-input disabled  value="{{_onedit.FechaInicial}}"></my-paper-date-input>
 			<span class="label-text">Fecha Final</span>
 			<my-paper-date-input disabled value="{{_onedit.FechaFinal}}"></my-paper-date-input>
-			
 		  <paper-icon-button icon="cancel" dismissive></paper-icon-button>
 		  <paper-icon-button icon="check" 
 							 on-tap="{{ delegateDeletePlantilla }}"
-							 affirmative autofocus>
-		  </paper-icon-button>
+							 affirmative autofocus></paper-icon-button>
 		</paper-dialog>
-	  	  
   </template>
-
   <script>
     Polymer({		
 		created:function(){

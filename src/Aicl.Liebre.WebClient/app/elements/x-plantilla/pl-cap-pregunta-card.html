@@ -1,42 +1,6 @@
 <polymer-element name="pl-cap-pregunta-card" attributes="item,guias">
   <template>
-    <style>    
-      :host {
-		  display: block;
-		  position: relative;
-			padding: 10px 5px 10px 5px ;    
-			margin: 10px 0px 10px 0px;
-			box-shadow: 0 1px 2px 0 ;
-			border-radius: 2px;
-			overflow: hidden;	
-			max-width: 512px;
-			background-color: rgb(212, 212, 212);
-			width: 100vw;  
-	  }
-		
-		core-icon-button {
-		}		
-		
-		span[raisedbutton]{
-			background-color: rgb(8, 13, 49); ;
-			color: white;
-			font-size: small;
-			padding: 8px;
-			border-radius: 4px;
-			width: 40px;
-			margin: 0px 4px;
-		}
-		
-		.titulo{
-			padding:0px 5px 0px 5px;
-		}
-		.text{
-			padding:5px 5px 0px 5px;
-			margin-bottom:  6px;
-			font-size: small;
-		}
-
-	</style>
+    <style></style>
 		<div layout vertical>
 		  <div layout horizontal center>
 			  <div flex class="text">{{item.Numeral}}</div>
@@ -57,7 +21,10 @@
 				  <div flex class="text">{{ q }}</div>
 			  </div>
 		  </template>
-		  <span raisedbutton on-tap="{{ fireMostrarGuiasToSelect }}" >Guias</span>
+		  <div layout horizontal center>
+			  <core-icon-button icon="add-circle" on-tap="{{ fireMostrarGuiasToSelect }}"></core-icon-button>
+			  <span>Guias</span>
+		  </div>
 		  <template repeat="{{g in item.IdGuias}}">
 			  <div layout horizontal center>
 				  <core-icon-button icon="delete" 
