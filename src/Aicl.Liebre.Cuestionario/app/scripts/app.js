@@ -124,14 +124,14 @@
 				}
 			};
 			var kv= window.ydn.db.KeyRange.starts([cuestionario.Diagnostico.Id]);
-			db.values('Pregunta', 'Pregunta.IdCapitulo', kv)
+			db.values('Pregunta', 'Pregunta.IdCapitulo', kv,2000)
 			.done(function(d){
 				if(d[0]){
 					for(var i in d){
 						response.data.Respuestas.push(d[i].Respuesta);
 					}
 				}
-				db.values('Guia',  kv)
+				db.values('Guia',  kv,2000)
 				.done(function(d){
 					if(d[0]){
 						for(var i in d){
@@ -298,7 +298,7 @@
 				msg: 'Cuestionarios OK',
 				data:[]
 			};
-			db.values('Cuestionario',null, 20000)
+			db.values('Cuestionario')
 			.done(function(aData){
 				if(aData[0]){
 					response.data= aData;					
