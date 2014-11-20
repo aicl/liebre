@@ -130,6 +130,10 @@
     <Content Include="scripts\vendor\underscore-min.map" />
     <Content Include="json\requisitos.json" />
     <Content Include="Views\_Layout.cshtml" />
+    <Content Include="Views\DiagnosticoInfo.cshtml">
+      <Generator>RazorTemplatePreprocessor</Generator>
+      <LastGenOutput>DiagnosticoInfo.cs</LastGenOutput>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Global.asax.cs">
@@ -179,10 +183,6 @@
     <None Include="q\flatiron-director\LICENSE" />
     <None Include="q\flatiron-director\LICENSE.TXT" />
     <None Include="q\flatiron-director\PATENTS" />
-    <None Include="Views\DiagnosticoInfo.cshtml">
-      <Generator>RazorTemplatePreprocessor</Generator>
-      <LastGenOutput>DiagnosticoInfo.cs</LastGenOutput>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="bower_components\" />
