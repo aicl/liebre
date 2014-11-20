@@ -50,6 +50,7 @@
     <Compile Include="RangoService.cs" />
     <Compile Include="ExternoService.cs" />
     <Compile Include="RequisitoService.cs" />
+    <Compile Include="DiagnosticoInfoService.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="ServiceStack">

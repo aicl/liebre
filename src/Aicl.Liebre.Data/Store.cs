@@ -349,6 +349,47 @@ namespace Aicl.Liebre.Data
 			return docs.ToList ().OrderBy (q =>  NormalizeNumeral(q.Numeral)).ToList ();
 		}
 
+
+		public  DiagnosticoInfoResponse ReadDiagnosticoInfo(DiagnosticoInfo request)
+		{
+			var response = new DiagnosticoInfoResponse ();
+
+			response.Diagnostico = GetById<Diagnostico> (request.Id);
+			response.Plantilla = GetById<Plantilla> (response.Diagnostico.IdPlantilla);
+			response.Empresa = GetById<Empresa> ( response.Diagnostico.IdEmpresa);
+
+			response.Capitulos = GetByQuery<Capitulo> (q => q.IdPlantilla == response.Diagnostico.IdPlantilla)
+				.OrderBy( q=> NormalizeNumeral(q.Numeral)).ToList();
+
+			var capIds = response.Capitulos.ConvertAll (e => e.Id);
+
+			var p = GetCollection<Pregunta>().Find( Query<Pregunta>.In ((q) => q.IdCapitulo, capIds ))
+				.OrderBy(q=>NormalizeNumeral( q.Numeral)).ToList();
+			var r = GetByQuery<Respuesta> (q => q.IdDiagnostico == response.Diagnostico.Id, q=>q.IdPregunta);
+
+			var g = GetByQuery<Guia> (q => q.IdPlantilla == response.Plantilla.Id, q=>q.Id);
+			var rg = GetByQuery<RespuestaGuia> (q => q.IdDiagnostico == response.Diagnostico.Id, q=>q.IdGuia);
+
+			p.ForEach (q => response.Preguntas.Add (new ViewPregunta {
+				Pregunta = q,
+				Respuesta = r.FirstOrDefault (rq => rq.IdPregunta == q.Id) ??
+					new Respuesta{ 
+					IdPregunta = q.Id, 
+					IdDiagnostico = response.Diagnostico.Id, 
+					Respuestas=new List<bool>(q.Preguntas.Count),
+					Valor = (q.Preguntas.Count > 0 ? (short)0 : default(short?))
+				}
+			}));
+
+			g.ForEach (q => response.Guias.Add (new ViewGuia { 
+				Guia = q, 
+				Respuesta = rg.FirstOrDefault (rq => rq.IdGuia == q.Id) ??
+					new RespuestaGuia { IdGuia = q.Id, IdDiagnostico = response.Diagnostico.Id }
+			}));
+
+			return response;
+		}
+
 		static string NormalizeNumeral(string numeral){
 			var a = numeral.Split ('.');
 			var t = new StringBuilder ();

@@ -4,6 +4,7 @@ using Funq;
 using Aicl.Liebre.Data;
 using ServiceStack.Configuration;
 using MongoDB.Bson.Serialization.Conventions;
+using ServiceStack.Razor;
 
 
 namespace Aicl.Liebre.WebHost
@@ -15,8 +16,8 @@ namespace Aicl.Liebre.WebHost
 		}
 
 		public override void Configure(Container container){
-			//Plugins.Add(new CorsFeature());
-			base.SetConfig(new HostConfig
+			Plugins.Add(new RazorFormat());
+			SetConfig(new HostConfig
 				{
 					GlobalResponseHeaders = {
 						{ "Access-Control-Allow-Origin", "*" },
@@ -27,11 +28,8 @@ namespace Aicl.Liebre.WebHost
 				});
 
 			var appSettings = new AppSettings();
-
 			var url = appSettings.Get("MONGOLAB_URI", appSettings.Get("MONGOTEST_URI") );
-
 			var conventions = new ConventionPack { new IgnoreExtraElementsConvention(true) };
-
 			ConventionRegistry.Register ("IgnoreExtraElements", conventions, _ => true);
 
 			container.Register<Store> (new Store (url));

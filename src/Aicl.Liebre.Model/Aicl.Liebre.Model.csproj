@@ -56,6 +56,7 @@
     <Compile Include="Respuesta.cs" />
     <Compile Include="Externo.cs" />
     <Compile Include="Requisito.cs" />
+    <Compile Include="DiagnosticoInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="ServiceStack.Common">

@@ -129,12 +129,17 @@
     <Content Include="scripts\vendor\underscore-min.js" />
     <Content Include="scripts\vendor\underscore-min.map" />
     <Content Include="json\requisitos.json" />
+    <Content Include="Views\_Layout.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="AppHost.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Shared\Info.cshtml" />
+    <Content Include="Views\DiagnosticoInfo.cshtml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v11.0\WebApplications\Microsoft.WebApplication.targets" />
@@ -181,6 +186,8 @@
     <Folder Include="styles\" />
     <Folder Include="q\" />
     <Folder Include="json\" />
+    <Folder Include="Views\" />
+    <Folder Include="Views\Shared\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Aicl.Liebre.Model\Aicl.Liebre.Model.csproj">
