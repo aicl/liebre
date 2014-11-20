@@ -74,6 +74,385 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 -->
 
 <!--
+
+`core-dropdown` is an element that is initially hidden and is positioned relatively to another
+element, usually the element that triggers the dropdown. The dropdown and the triggering element
+should be children of the same offsetParent, e.g. the same `<div>` with `position: relative`.
+It can be used to implement dropdown menus, menu buttons, etc..
+
+Example:
+
+    <template is="auto-binding">
+      <div relative>
+        <core-icon-button id="trigger" icon="menu"></core-icon-button>
+        <core-dropdown relatedTarget="{{$.trigger}}">
+          <core-menu>
+            <core-item>Cut</core-item>
+            <core-item>Copy</core-item>
+            <core-item>Paste</core-item>
+          </core-menu>
+        </core-dropdown>
+      </div>
+    </template>
+
+Positioning
+-----------
+
+By default, the dropdown is absolutely positioned on top of the `relatedTarget` with the top and
+left edges aligned. The `halign` and `valign` properties controls the various alignments. The size
+of the dropdown is automatically restrained such that it is entirely visible on the screen. Use the
+`margin`
+
+If you need more control over the dropdown's position, use CSS. The `halign` and `valign` properties are
+ignored if the dropdown is positioned with CSS.
+
+Example:
+
+    <style>
+      /* manually position the dropdown below the trigger */
+      core-dropdown {
+        position: absolute;
+        top: 38px;
+        left: 0;
+      }
+    </style>
+
+    <template is="auto-binding">
+      <div relative>
+        <core-icon-button id="trigger" icon="menu"></core-icon-button>
+        <core-dropdown relatedTarget="{{$.trigger}}">
+          <core-menu>
+            <core-item>Cut</core-item>
+            <core-item>Copy</core-item>
+            <core-item>Paste</core-item>
+          </core-menu>
+        </core-dropdown>
+      </div>
+    </template>
+
+@group Polymer Core Elements
+@element core-dropdown
+@homepage github.io
+-->
+
+
+<!--
+Copyright (c) 2014 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+
+<!--
+Copyright (c) 2014 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+
+<!--
+Copyright (c) 2014 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<!--
+
+`<core-transition>` is an abstraction of an animation. It is used to implement pluggable
+transitions, for example in `<core-overlay>`. You can extend this class to create a custom
+animation, instantiate it, and import it where you need the animation.
+
+All instances of `<core-transition>` are stored in a single database with `type=transition`.
+For more about the database, please see the documentation for `<core-meta>`.
+
+Each instance of `<core-transition>` objects are shared across all the clients, so you should
+not store state information specific to the animated element in the transition. Rather, store
+it on the element.
+
+Example:
+
+my-transition.html:
+
+    <polymer-element name="my-transition" extends="core-transition">
+        <script>
+            go: function(node) {
+                node.style.transition = 'opacity 1s ease-out';
+                node.style.opacity = 0;
+            }
+        </script>
+    </polymer-element>
+
+    <my-transition id="my-fade-out"></my-transition>
+
+my-transition-demo.html:
+
+    <link href="components/core-meta/core-meta.html" rel="import">
+    <link href="my-transition.html" rel="import">
+
+    <div id="animate-me"></div>
+
+    <script>
+        // Get the core-transition
+        var meta = document.createElement('core-meta');
+        meta.type = 'transition';
+        var transition = meta.byId('my-fade-out');
+
+        // Run the animation
+        var animated = document.getElementById('animate-me');
+        transition.go(animated);
+    </script>
+
+@group Polymer Core Elements
+@element core-transition
+@extends core-meta
+@status beta
+@homepage github.io
+-->
+<!--
+Fired when the animation finishes.
+
+@event core-transitionend
+@param {Object} detail
+@param {Object} detail.node The animated node
+-->
+
+<!--
+Copyright (c) 2014 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<!--
+`core-meta` provides a method of constructing a self-organizing database.
+It is useful to collate element meta-data for things like catalogs and for 
+designer.
+
+Example, an element folder has a `metadata.html` file in it, that contains a 
+`core-meta`, something like this:
+
+    <core-meta id="my-element" label="My Element">
+      <property name="color" value="blue"></property>
+    </core-meta>
+
+An application can import as many of these files as it wants, and then use 
+`core-meta` again to access the collected data.
+
+    <script>
+      var meta = document.createElement('core-meta');
+      console.log(meta.list); // dump a list of all meta-data elements that have been created
+    </script>
+
+Use `byId(id)` to retrive a specific core-meta.
+
+    <script>
+      var meta = document.createElement('core-meta');
+      console.log(meta.byId('my-element'));
+    </script>
+
+By default all meta-data are stored in a single databse.  If your meta-data 
+have different types and want them to be stored separately, use `type` to 
+differentiate them.
+
+Example:
+
+    <core-meta id="x-foo" type="xElt"></core-meta>
+    <core-meta id="x-bar" type="xElt"></core-meta>
+    <core-meta id="y-bar" type="yElt"></core-meta>
+
+    <script>
+      var meta = document.createElement('core-meta');
+      meta.type = 'xElt';
+      console.log(meta.list);
+    </script>
+
+@group Polymer Core Elements
+@element core-meta
+@homepage github.io
+-->
+
+
+
+<polymer-element name="core-meta" attributes="label type" hidden assetpath="../bower_components/core-meta/">
+<script>(function(){var SKIP_ID="meta";var metaData={},metaArray={};Polymer("core-meta",{type:"default",alwaysPrepare:true,ready:function(){this.register(this.id)},get metaArray(){var t=this.type;if(!metaArray[t]){metaArray[t]=[]}return metaArray[t]},get metaData(){var t=this.type;if(!metaData[t]){metaData[t]={}}return metaData[t]},register:function(id,old){if(id&&id!==SKIP_ID){this.unregister(this,old);this.metaData[id]=this;this.metaArray.push(this)}},unregister:function(meta,id){delete this.metaData[id||meta.id];var i=this.metaArray.indexOf(meta);if(i>=0){this.metaArray.splice(i,1)}},get list(){return this.metaArray},byId:function(id){return this.metaData[id]}})})();</script>
+</polymer-element>
+
+
+<polymer-element name="core-transition" extends="core-meta" assetpath="../bower_components/core-transition/">
+  
+  <script>Polymer("core-transition",{type:"transition",go:function(node,state){this.complete(node)},setup:function(node){},teardown:function(node){},complete:function(node){this.fire("core-transitionend",null,node)},listenOnce:function(node,event,fn,args){var self=this;var listener=function(){fn.apply(self,args);node.removeEventListener(event,listener,false)};node.addEventListener(event,listener,false)}});</script>
+</polymer-element>
+<!--
+Copyright (c) 2014 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+
+
+<polymer-element name="core-key-helper" assetpath="../bower_components/core-overlay/">
+  <script>Polymer("core-key-helper",{ENTER_KEY:13,ESCAPE_KEY:27});</script>
+</polymer-element>
+
+<!--
+Copyright (c) 2014 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<polymer-element name="core-overlay-layer" assetpath="../bower_components/core-overlay/">
+<template>
+  <style>:host{position:fixed;top:0;left:0;z-index:1000;display:none}:host(.core-opened){display:block}</style>
+  <content></content>
+</template>
+<script>(function(){Polymer("core-overlay-layer",{publish:{opened:false},openedChanged:function(){this.classList.toggle("core-opened",this.opened)},addElement:function(element){if(!this.parentNode){document.querySelector("body").appendChild(this)}if(element.parentNode!==this){element.__contents=[];var ip$=element.querySelectorAll("content");for(var i=0,l=ip$.length,n;i<l&&(n=ip$[i]);i++){this.moveInsertedElements(n);this.cacheDomLocation(n);n.parentNode.removeChild(n);element.__contents.push(n)}this.cacheDomLocation(element);this.updateEventController(element);var h=this.makeHost();h.shadowRoot.appendChild(element);element.__host=h}},makeHost:function(){var h=document.createElement("overlay-host");h.createShadowRoot();this.appendChild(h);return h},moveInsertedElements:function(insertionPoint){var n$=insertionPoint.getDistributedNodes();var parent=insertionPoint.parentNode;insertionPoint.__contents=[];for(var i=0,l=n$.length,n;i<l&&(n=n$[i]);i++){this.cacheDomLocation(n);this.updateEventController(n);insertionPoint.__contents.push(n);parent.appendChild(n)}},updateEventController:function(element){element.eventController=this.element.findController(element)},removeElement:function(element){element.eventController=null;this.replaceElement(element);var h=element.__host;if(h){h.parentNode.removeChild(h)}},replaceElement:function(element){if(element.__contents){for(var i=0,c$=element.__contents,c;c=c$[i];i++){this.replaceElement(c)}element.__contents=null}if(element.__parentNode){var n=element.__nextElementSibling&&element.__nextElementSibling===element.__parentNode?element.__nextElementSibling:null;element.__parentNode.insertBefore(element,n)}},cacheDomLocation:function(element){element.__nextElementSibling=element.nextElementSibling;element.__parentNode=element.parentNode}})})();</script>
+</polymer-element>
+
+
+<!--
+The `core-overlay` element displays overlayed on top of other content. It starts
+out hidden and is displayed by setting its `opened` property to true.
+A `core-overlay's` opened state can be toggled by calling the `toggle`
+method.
+
+The `core-overlay` will, by default, show/hide itself when it's opened. The 
+`target` property may be set to another element to cause that element to 
+be shown when the overlay is opened.
+
+It's common to want a `core-overlay` to animate to its opened
+position. The `core-overlay` element uses a `core-transition` to handle
+animation. The default transition is `core-transition-fade` which 
+causes the overlay to fade in when displayed. See 
+<a href="../core-transition/">`core-transition`</a> for more
+information about customizing a `core-overlay's` opening animation. The
+`backdrop` property can be set to true to show a backdrop behind the overlay
+that will darken the rest of the window.
+
+An element that should close the `core-overlay` will automatically
+do so if it's given the `core-overlay-toggle` attribute. This attribute
+can be customized with the `closeAttribute` property. You can also use
+`closeSelector` if more general matching is needed.
+
+By default  `core-overlay` will close whenever the user taps outside it or
+presses the escape key. This behavior can be turned off via the
+`autoCloseDisabled` property.
+
+    <core-overlay>
+      <h2>Dialog</h2>
+      <input placeholder="say something..." autofocus>
+      <div>I agree with this wholeheartedly.</div>
+      <button core-overlay-toggle>OK</button>
+    </core-overlay>
+
+`core-overlay` will automatically size and position itself according to the 
+following rules. The overlay's size is constrained such that it does not
+overflow the screen. This is done by setting maxHeight/maxWidth on the 
+`sizingTarget`. If the `sizingTarget` already has a setting for one of these
+properties, it will not be overridden. The overlay should
+be positioned via css or imperatively using the `core-overlay-position` event.
+If the overlay is not positioned vertically via setting `top` or `bottom`, it
+will be centered vertically. The same is true horizontally via a setting to 
+`left` or `right`. In addition, css `margin` can be used to provide some space
+around the overlay. This can be used to ensure
+that, for example, a drop shadow is always visible around the overlay.
+
+@group Core Elements
+@element core-overlay
+@homepage github.io
+-->
+<!--
+Fired when the `core-overlay`'s `opened` property changes.
+
+@event core-overlay-open
+@param {Object} detail
+@param {Object} detail.opened the opened state
+-->
+<!--
+Fired when the `core-overlay` has completely opened.
+
+@event core-overlay-open-completed
+-->
+<!--
+Fired when the `core-overlay` has completely closed.
+
+@event core-overlay-close-completed
+-->
+<!--
+Fired when the `core-overlay` needs to position itself. Optionally, implement
+in order to position an overlay via code. If the overlay was not otherwise
+positioned, it's important to indicate how the overlay has been positioned by
+setting the `dimensions.position` object. For example, if the overlay has been
+positioned via setting `right` and `top`, set dimensions.position to an
+object like this: `{v: 'top', h: 'right'}`.
+
+@event core-overlay-position
+@param {Object} detail
+@param {Object} detail.target the overlay target
+@param {Object} detail.sizingTarget the overlay sizing target
+@param {Object} detail.opened the opened state
+-->
+<style>.core-overlay-backdrop{position:fixed;top:0;left:0;width:100vw;height:100vh;background-color:#000;opacity:0;transition:opacity .2s}.core-overlay-backdrop.core-opened{opacity:.6}</style>
+
+<polymer-element name="core-overlay" assetpath="../bower_components/core-overlay/">
+<script>(function(){Polymer("core-overlay",{publish:{target:null,sizingTarget:null,opened:false,backdrop:false,layered:false,autoCloseDisabled:false,autoFocusDisabled:false,closeAttribute:"core-overlay-toggle",closeSelector:"",transition:"core-transition-fade"},captureEventName:"tap",targetListeners:{tap:"tapHandler",keydown:"keydownHandler","core-transitionend":"transitionend"},registerCallback:function(element){this.layer=document.createElement("core-overlay-layer");this.keyHelper=document.createElement("core-key-helper");this.meta=document.createElement("core-transition");this.scrim=document.createElement("div");this.scrim.className="core-overlay-backdrop"},ready:function(){this.target=this.target||this;Platform.flush()},toggle:function(){this.opened=!this.opened},open:function(){this.opened=true},close:function(){this.opened=false},domReady:function(){this.ensureTargetSetup()},targetChanged:function(old){if(this.target){if(this.target.tabIndex<0){this.target.tabIndex=-1}this.addElementListenerList(this.target,this.targetListeners);this.target.style.display="none";this.target.__overlaySetup=false}if(old){this.removeElementListenerList(old,this.targetListeners);var transition=this.getTransition();if(transition){transition.teardown(old)}else{old.style.position="";old.style.outline=""}old.style.display=""}},transitionChanged:function(old){if(!this.target){return}if(old){this.getTransition(old).teardown(this.target)}this.target.__overlaySetup=false},ensureTargetSetup:function(){if(!this.target||this.target.__overlaySetup){return}if(!this.sizingTarget){this.sizingTarget=this.target}this.target.__overlaySetup=true;this.target.style.display="";var transition=this.getTransition();if(transition){transition.setup(this.target)}var style=this.target.style;var computed=getComputedStyle(this.target);if(computed.position==="static"){style.position="fixed"}style.outline="none";style.display="none"},openedChanged:function(){this.transitioning=true;this.ensureTargetSetup();this.prepareRenderOpened();this.async(function(){this.target.style.display="";this.target.offsetWidth;this.renderOpened()});this.fire("core-overlay-open",this.opened)},prepareRenderOpened:function(){if(this.opened){addOverlay(this)}this.prepareBackdrop();this.async(function(){if(!this.autoCloseDisabled){this.enableElementListener(this.opened,document,this.captureEventName,"captureHandler",true)}});this.enableElementListener(this.opened,window,"resize","resizeHandler");if(this.opened){this.target.offsetHeight;this.discoverDimensions();this.preparePositioning();this.positionTarget();this.updateTargetDimensions();this.finishPositioning();if(this.layered){this.layer.addElement(this.target);this.layer.opened=this.opened}}},renderOpened:function(){var transition=this.getTransition();if(transition){transition.go(this.target,{opened:this.opened})}else{this.transitionend()}this.renderBackdropOpened()},transitionend:function(e){if(e&&e.target!==this.target){return}this.transitioning=false;if(!this.opened){this.resetTargetDimensions();this.target.style.display="none";this.completeBackdrop();removeOverlay(this);if(this.layered){if(!currentOverlay()){this.layer.opened=this.opened}this.layer.removeElement(this.target)}}this.fire("core-overlay-"+(this.opened?"open":"close")+"-completed");this.applyFocus()},prepareBackdrop:function(){if(this.backdrop&&this.opened){if(!this.scrim.parentNode){document.body.appendChild(this.scrim);this.scrim.style.zIndex=currentOverlayZ()-1}trackBackdrop(this)}},renderBackdropOpened:function(){if(this.backdrop&&getBackdrops().length<2){this.scrim.classList.toggle("core-opened",this.opened)}},completeBackdrop:function(){if(this.backdrop){trackBackdrop(this);if(getBackdrops().length===0){this.scrim.parentNode.removeChild(this.scrim)}}},preparePositioning:function(){this.target.style.transition=this.target.style.webkitTransition="none";this.target.style.transform=this.target.style.webkitTransform="none";this.target.style.display=""},discoverDimensions:function(){if(this.dimensions){return}var target=getComputedStyle(this.target);var sizer=getComputedStyle(this.sizingTarget);this.dimensions={position:{v:target.top!=="auto"?"top":target.bottom!=="auto"?"bottom":null,h:target.left!=="auto"?"left":target.right!=="auto"?"right":null,css:target.position},size:{v:sizer.maxHeight!=="none",h:sizer.maxWidth!=="none"},margin:{top:parseInt(target.marginTop)||0,right:parseInt(target.marginRight)||0,bottom:parseInt(target.marginBottom)||0,left:parseInt(target.marginLeft)||0}}},finishPositioning:function(target){this.target.style.display="none";this.target.style.transform=this.target.style.webkitTransform="";this.target.offsetWidth;this.target.style.transition=this.target.style.webkitTransition=""},getTransition:function(name){return this.meta.byId(name||this.transition)},getFocusNode:function(){return this.target.querySelector("[autofocus]")||this.target},applyFocus:function(){var focusNode=this.getFocusNode();if(this.opened){if(!this.autoFocusDisabled){focusNode.focus()}}else{focusNode.blur();if(currentOverlay()==this){console.warn("Current core-overlay is attempting to focus itself as next! (bug)")}else{focusOverlay()}}},positionTarget:function(){this.fire("core-overlay-position",{target:this.target,sizingTarget:this.sizingTarget,opened:this.opened});if(!this.dimensions.position.v){this.target.style.top="0px"}if(!this.dimensions.position.h){this.target.style.left="0px"}},updateTargetDimensions:function(){this.sizeTarget();this.repositionTarget()},sizeTarget:function(){this.sizingTarget.style.boxSizing="border-box";var dims=this.dimensions;var rect=this.target.getBoundingClientRect();if(!dims.size.v){this.sizeDimension(rect,dims.position.v,"top","bottom","Height")}if(!dims.size.h){this.sizeDimension(rect,dims.position.h,"left","right","Width")}},sizeDimension:function(rect,positionedBy,start,end,extent){var dims=this.dimensions;var flip=positionedBy===end;var m=flip?start:end;var ws=window["inner"+extent];var o=dims.margin[m]+(flip?ws-rect[end]:rect[start]);var offset="offset"+extent;var o2=this.target[offset]-this.sizingTarget[offset];this.sizingTarget.style["max"+extent]=ws-o-o2+"px"},repositionTarget:function(){if(this.dimensions.position.css!=="fixed"){return}if(!this.dimensions.position.v){var t=(window.innerHeight-this.target.offsetHeight)/2;t-=this.dimensions.margin.top;this.target.style.top=t+"px"}if(!this.dimensions.position.h){var l=(window.innerWidth-this.target.offsetWidth)/2;l-=this.dimensions.margin.left;this.target.style.left=l+"px"}},resetTargetDimensions:function(){if(!this.dimensions.size.v){this.sizingTarget.style.maxHeight=""}if(!this.dimensions.size.h){this.sizingTarget.style.maxWidth=""}this.dimensions=null},tapHandler:function(e){if(e.target&&(this.closeSelector&&e.target.matches(this.closeSelector))||this.closeAttribute&&e.target.hasAttribute(this.closeAttribute)){this.toggle()}else{if(this.autoCloseJob){this.autoCloseJob.stop();this.autoCloseJob=null}}},captureHandler:function(e){if(!this.autoCloseDisabled&&currentOverlay()==this){this.autoCloseJob=this.job(this.autoCloseJob,function(){this.close()})}},keydownHandler:function(e){if(!this.autoCloseDisabled&&e.keyCode==this.keyHelper.ESCAPE_KEY){this.close();e.stopPropagation()}},resizeHandler:function(){this.updateTargetDimensions()},addElementListenerList:function(node,events){for(var i in events){this.addElementListener(node,i,events[i])}},removeElementListenerList:function(node,events){for(var i in events){this.removeElementListener(node,i,events[i])}},enableElementListener:function(enable,node,event,methodName,capture){if(enable){this.addElementListener(node,event,methodName,capture)}else{this.removeElementListener(node,event,methodName,capture)}},addElementListener:function(node,event,methodName,capture){var fn=this._makeBoundListener(methodName);if(node&&fn){Polymer.addEventListener(node,event,fn,capture)}},removeElementListener:function(node,event,methodName,capture){var fn=this._makeBoundListener(methodName);if(node&&fn){Polymer.removeEventListener(node,event,fn,capture)}},_makeBoundListener:function(methodName){var self=this,method=this[methodName];if(!method){return}var bound="_bound"+methodName;if(!this[bound]){this[bound]=function(e){method.call(self,e)}}return this[bound]}});var overlays=[];function addOverlay(overlay){var z0=currentOverlayZ();overlays.push(overlay);var z1=currentOverlayZ();if(z1<=z0){applyOverlayZ(overlay,z0)}}function removeOverlay(overlay){var i=overlays.indexOf(overlay);if(i>=0){overlays.splice(i,1);setZ(overlay,"")}}function applyOverlayZ(overlay,aboveZ){setZ(overlay.target,aboveZ+2)}function setZ(element,z){element.style.zIndex=z}function currentOverlay(){return overlays[overlays.length-1]}var DEFAULT_Z=10;function currentOverlayZ(){var z;var current=currentOverlay();if(current){var z1=window.getComputedStyle(current.target).zIndex;if(!isNaN(z1)){z=Number(z1)}}return z||DEFAULT_Z}function focusOverlay(){var current=currentOverlay();if(current&&!current.transitioning){current.applyFocus()}}var backdrops=[];function trackBackdrop(element){if(element.opened){backdrops.push(element)}else{var i=backdrops.indexOf(element);if(i>=0){backdrops.splice(i,1)}}}function getBackdrops(){return backdrops}})();</script>
+</polymer-element>
+
+
+<!--
+
+`core-dropdown-overlay` is a helper class to position an overlay relative to another
+element within the same offsetParent.
+
+@group Polymer Core Elements
+@element core-dropdown-overlay
+@extends core-overlay
+@homepage github.io
+-->
+
+<polymer-element name="core-dropdown-overlay" extends="core-overlay" assetpath="../bower_components/core-dropdown/">
+<script>Polymer("core-dropdown-overlay",{publish:{relatedTarget:null,halign:"left",valign:"top"},measure:function(){var target=this.target;var pos=target.style.position;target.style.position="fixed";target.style.left="0px";target.style.top="0px";var rect=target.getBoundingClientRect();target.style.position=pos;target.style.left=null;target.style.top=null;return rect},resetTargetDimensions:function(){var dims=this.dimensions;var style=this.target.style;if(dims.position.h_by===this.localName){style[dims.position.h]=null}if(dims.position.v_by===this.localName){style[dims.position.v]=null}this.super()},positionTarget:function(){if(!this.relatedTarget){this.super();return}var target=this.target;var related=this.relatedTarget;var rect=this.measure();target.style.width=rect.width+"px";target.style.height=rect.height+"px";var t_op=target.offsetParent;var r_op=related.offsetParent;if(window.ShadowDOMPolyfill){t_op=wrap(t_op);r_op=wrap(r_op)}if(t_op!==r_op&&t_op!==related){console.warn("core-dropdown-overlay: dropdown's offsetParent must be the relatedTarget or the relatedTarget's offsetParent!")}var dims=this.dimensions;var margin=dims.margin;var inside=t_op===related;if(!dims.position.h){if(this.halign==="right"){target.style.right=(inside?0:t_op.offsetWidth-related.offsetLeft-related.offsetWidth)-margin.right+"px";dims.position.h="right"}else{target.style.left=(inside?0:related.offsetLeft)-margin.left+"px";dims.position.h="left"}dims.position.h_by=this.localName}if(!dims.position.v){if(this.valign==="bottom"){target.style.bottom=(inside?0:t_op.offsetHeight-related.offsetTop-related.offsetHeight)-margin.bottom+"px";dims.position.v="bottom"}else{target.style.top=(inside?0:related.offsetTop)-margin.top+"px";dims.position.v="top"}dims.position.v_by=this.localName}}});</script>
+</polymer-element>
+
+
+<polymer-element name="core-dropdown" assetpath="../bower_components/core-dropdown/">
+<template>
+
+  <style>:host{position:absolute;overflow:auto;background-color:#fff}</style>
+
+  <core-dropdown-overlay id="overlay" target="{{}}" relatedtarget="{{relatedTarget}}" opened="{{opened}}" halign="{{halign}}" valign="{{valign}}" margin="{{margin}}" transition="{{transition}}" autofocusdisabled="{{autoFocusDisabled}}"></core-dropdown-overlay>
+
+  <content></content>
+
+</template>
+<script>Polymer("core-dropdown",{publish:{relatedTarget:null,opened:false,halign:"left",valign:"top",autoFocusDisabled:false,transition:null}});</script>
+</polymer-element>
+</div><div hidden><!--
+Copyright (c) 2014 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<!--
 `core-header-panel` contains a header section and a content panel section.
 
 __Important:__ The `core-header-panel` will not display if its parent does not have a height.
@@ -285,68 +664,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
  */
 -->
 
-<!--
-Copyright (c) 2014 The Polymer Project Authors. All rights reserved.
-This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
-The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
-The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
-Code distributed by Google as part of the polymer project is also
-subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
--->
-
-<!--
-`core-meta` provides a method of constructing a self-organizing database.
-It is useful to collate element meta-data for things like catalogs and for 
-designer.
-
-Example, an element folder has a `metadata.html` file in it, that contains a 
-`core-meta`, something like this:
-
-    <core-meta id="my-element" label="My Element">
-      <property name="color" value="blue"></property>
-    </core-meta>
-
-An application can import as many of these files as it wants, and then use 
-`core-meta` again to access the collected data.
-
-    <script>
-      var meta = document.createElement('core-meta');
-      console.log(meta.list); // dump a list of all meta-data elements that have been created
-    </script>
-
-Use `byId(id)` to retrive a specific core-meta.
-
-    <script>
-      var meta = document.createElement('core-meta');
-      console.log(meta.byId('my-element'));
-    </script>
-
-By default all meta-data are stored in a single databse.  If your meta-data 
-have different types and want them to be stored separately, use `type` to 
-differentiate them.
-
-Example:
-
-    <core-meta id="x-foo" type="xElt"></core-meta>
-    <core-meta id="x-bar" type="xElt"></core-meta>
-    <core-meta id="y-bar" type="yElt"></core-meta>
-
-    <script>
-      var meta = document.createElement('core-meta');
-      meta.type = 'xElt';
-      console.log(meta.list);
-    </script>
-
-@group Polymer Core Elements
-@element core-meta
-@homepage github.io
--->
-
-
-
-<polymer-element name="core-meta" attributes="label type" hidden assetpath="../bower_components/core-meta/">
-<script>(function(){var SKIP_ID="meta";var metaData={},metaArray={};Polymer("core-meta",{type:"default",alwaysPrepare:true,ready:function(){this.register(this.id)},get metaArray(){var t=this.type;if(!metaArray[t]){metaArray[t]=[]}return metaArray[t]},get metaData(){var t=this.type;if(!metaData[t]){metaData[t]={}}return metaData[t]},register:function(id,old){if(id&&id!==SKIP_ID){this.unregister(this,old);this.metaData[id]=this;this.metaArray.push(this)}},unregister:function(meta,id){delete this.metaData[id||meta.id];var i=this.metaArray.indexOf(meta);if(i>=0){this.metaArray.splice(i,1)}},get list(){return this.metaArray},byId:function(id){return this.metaData[id]}})})();</script>
-</polymer-element>
 
 
 <polymer-element name="core-iconset" extends="core-meta" attributes="src width icons iconSize" assetpath="../bower_components/core-iconset/">
@@ -736,203 +1053,142 @@ Code distributed by Google as part of the polymer project is also
 subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
 -->
 
-
 <!--
-Copyright (c) 2014 The Polymer Project Authors. All rights reserved.
-This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
-The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
-The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
-Code distributed by Google as part of the polymer project is also
-subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
--->
+`core-list` displays a virtual, 'infinite' list. The template inside the 
+`core-list` element represents the dom to create for each list item. The
+`data` property specifies an array of list item data. The `height` property
+represents the fixed height of a list item (variable height list items are
+not yet supported).
 
-<!--
+`core-list` manages a viewport of data based on the current scroll position.
+For performance reasons, not every item in the list is rendered at once.
 
-`<core-transition>` is an abstraction of an animation. It is used to implement pluggable
-transitions, for example in `<core-overlay>`. You can extend this class to create a custom
-animation, instantiate it, and import it where you need the animation.
+List item templates should bind to template models of the following structure
 
-All instances of `<core-transition>` are stored in a single database with `type=transition`.
-For more about the database, please see the documentation for `<core-meta>`.
+    {
+      index: 0,         // list index for this item
+      selected: false,  // selection state for this item
+      model: {          // user data corresponding to data[index]
+        /* user data  */
+      }
+    }
 
-Each instance of `<core-transition>` objects are shared across all the clients, so you should
-not store state information specific to the animated element in the transition. Rather, store
-it on the element.
+For example, given the following data array:
 
-Example:
+    [
+      {name: 'Bob', checked: true},
+      {name: 'Tim', checked: false},
+      ...
+    ]
 
-my-transition.html:
+The following code would render the list (note the `name` and `checked`
+properties are bound from the `model` object provided to the template
+scope):
 
-    <polymer-element name="my-transition" extends="core-transition">
-        <script>
-            go: function(node) {
-                node.style.transition = 'opacity 1s ease-out';
-                node.style.opacity = 0;
-            }
-        </script>
-    </polymer-element>
+    <core-list data="{{data}}" height="80">
+      <template>
+        <div class="{{ {selected: selected} | tokenList }}">
+          List row: {{index}}, User data from model: {{model.name}}
+          <input type="checkbox" checked="{{model.checked}}">
+        </div>
+      </template>
+    </core-list>
 
-    <my-transition id="my-fade-out"></my-transition>
-
-my-transition-demo.html:
-
-    <link href="components/core-meta/core-meta.html" rel="import">
-    <link href="my-transition.html" rel="import">
-
-    <div id="animate-me"></div>
-
-    <script>
-        // Get the core-transition
-        var meta = document.createElement('core-meta');
-        meta.type = 'transition';
-        var transition = meta.byId('my-fade-out');
-
-        // Run the animation
-        var animated = document.getElementById('animate-me');
-        transition.go(animated);
-    </script>
+By default, the list supports selection via tapping. Styling the selection 
+should be done via binding to the `selected` property of each model.
 
 @group Polymer Core Elements
-@element core-transition
-@extends core-meta
-@status beta
-@homepage github.io
+@element core-list
+-->
+
+<!--
+Copyright (c) 2014 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
 -->
 <!--
-Fired when the animation finishes.
+@group Polymer Core Elements
 
-@event core-transitionend
-@param {Object} detail
-@param {Object} detail.node The animated node
--->
+The `<core-selection>` element is used to manage selection state. It has no
+visual appearance and is typically used in conjunction with another element.
+For example, [core-selector](#core-selector)
+use a `<core-selection>` to manage selection.
 
+To mark an item as selected, call the `select(item)` method on 
+`<core-selection>`. The item itself is an argument to this method.
 
+The `<core-selection>`element manages selection state for any given set of
+items. When an item is selected, the `core-select` event is fired.
 
-<polymer-element name="core-transition" extends="core-meta" assetpath="../bower_components/core-transition/">
+The attribute `multi` indicates if multiple items can be selected at once.
   
-  <script>Polymer("core-transition",{type:"transition",go:function(node,state){this.complete(node)},setup:function(node){},teardown:function(node){},complete:function(node){this.fire("core-transitionend",null,node)},listenOnce:function(node,event,fn,args){var self=this;var listener=function(){fn.apply(self,args);node.removeEventListener(event,listener,false)};node.addEventListener(event,listener,false)}});</script>
-</polymer-element>
+Example:
+ 
+    <polymer-element name="selection-example">
+       <template>
+         <style>
+           polyfill-next-selector { content: ':host > .selected'; }
+           ::content > .selected {
+             font-weight: bold;
+             font-style: italic;
+           }
+         </style>
+         <ul on-tap="{{itemTapAction}}">
+           <content></content>
+         </ul>
+         <core-selection id="selection" multi
+                         on-core-select="{{selectAction}}"></core-selection>
+       </template>
+       <script>
+         Polymer('selection-example', {
+           itemTapAction: function(e, detail, sender) {
+             this.$.selection.select(e.target);
+           },
+           selectAction: function(e, detail, sender) {
+             detail.item.classList.toggle('selected', detail.isSelected);
+           }
+         });
+       </script>
+    </polymer-element>
+
+    <selection-example>
+      <li>Red</li>
+      <li>Green</li>
+      <li>Blue</li>
+    </selection-example>
+ 
+@element core-selection
+-->
+
 <!--
-Copyright (c) 2014 The Polymer Project Authors. All rights reserved.
-This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
-The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
-The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
-Code distributed by Google as part of the polymer project is also
-subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+Fired when an item's selection state is changed. This event is fired both
+when an item is selected or deselected. The `isSelected` detail property
+contains the selection state.
+
+@event core-select
+@param {Object} detail
+  @param {boolean} detail.isSelected true for selection and false for de-selection
+  @param {Object} detail.item the item element
 -->
 
 
-
-<polymer-element name="core-key-helper" assetpath="../bower_components/core-overlay/">
-  <script>Polymer("core-key-helper",{ENTER_KEY:13,ESCAPE_KEY:27});</script>
+<polymer-element name="core-selection" attributes="multi" hidden assetpath="../bower_components/core-selection/">
+  <script>Polymer("core-selection",{multi:false,ready:function(){this.clear()},clear:function(){this.selection=[]},getSelection:function(){return this.multi?this.selection:this.selection[0]},isSelected:function(item){return this.selection.indexOf(item)>=0},setItemSelected:function(item,isSelected){if(item!==undefined&&item!==null){if(isSelected){this.selection.push(item)}else{var i=this.selection.indexOf(item);if(i>=0){this.selection.splice(i,1)}}this.fire("core-select",{isSelected:isSelected,item:item})}},select:function(item){if(this.multi){this.toggle(item)}else if(this.getSelection()!==item){this.setItemSelected(this.getSelection(),false);this.setItemSelected(item,true)}},toggle:function(item){this.setItemSelected(item,!this.isSelected(item))}});</script>
 </polymer-element>
 
-<!--
-Copyright (c) 2014 The Polymer Project Authors. All rights reserved.
-This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
-The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
-The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
-Code distributed by Google as part of the polymer project is also
-subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
--->
 
-<polymer-element name="core-overlay-layer" assetpath="../bower_components/core-overlay/">
+<polymer-element name="core-list" on-tap="{{tapHandler}}" tabindex="-1" assetpath="../bower_components/core-list/">
 <template>
-  <style>:host{position:fixed;top:0;left:0;z-index:1000;display:none}:host(.core-opened){display:block}</style>
-  <content></content>
+  <core-selection id="selection" multi="{{multi}}" on-core-select="{{selectedHandler}}"></core-selection>
+  <style>:host{display:block;overflow:auto;outline:0}.core-list-viewport>*{overflow:hidden}.core-list-viewport.horizontal{height:100%;white-space:nowrap}.core-list-viewport.horizontal>*{display:inline-block}#viewport{will-change:transform}</style>
+  <div id="viewport" class="core-list-viewport"><content></content></div>
 </template>
-<script>(function(){Polymer("core-overlay-layer",{publish:{opened:false},openedChanged:function(){this.classList.toggle("core-opened",this.opened)},addElement:function(element){if(!this.parentNode){document.querySelector("body").appendChild(this)}if(element.parentNode!==this){element.__contents=[];var ip$=element.querySelectorAll("content");for(var i=0,l=ip$.length,n;i<l&&(n=ip$[i]);i++){this.moveInsertedElements(n);this.cacheDomLocation(n);n.parentNode.removeChild(n);element.__contents.push(n)}this.cacheDomLocation(element);this.updateEventController(element);var h=this.makeHost();h.shadowRoot.appendChild(element);element.__host=h}},makeHost:function(){var h=document.createElement("overlay-host");h.createShadowRoot();this.appendChild(h);return h},moveInsertedElements:function(insertionPoint){var n$=insertionPoint.getDistributedNodes();var parent=insertionPoint.parentNode;insertionPoint.__contents=[];for(var i=0,l=n$.length,n;i<l&&(n=n$[i]);i++){this.cacheDomLocation(n);this.updateEventController(n);insertionPoint.__contents.push(n);parent.appendChild(n)}},updateEventController:function(element){element.eventController=this.element.findController(element)},removeElement:function(element){element.eventController=null;this.replaceElement(element);var h=element.__host;if(h){h.parentNode.removeChild(h)}},replaceElement:function(element){if(element.__contents){for(var i=0,c$=element.__contents,c;c=c$[i];i++){this.replaceElement(c)}element.__contents=null}if(element.__parentNode){var n=element.__nextElementSibling&&element.__nextElementSibling===element.__parentNode?element.__nextElementSibling:null;element.__parentNode.insertBefore(element,n)}},cacheDomLocation:function(element){element.__nextElementSibling=element.nextElementSibling;element.__parentNode=element.parentNode}})})();</script>
+<script>(function(){Polymer("core-list",{publish:{data:null,scrollTarget:null,height:80,extraItems:30,selectionEnabled:true,multi:false,selection:null},_scrollTop:0,observe:{"data template scrollTarget":"initialize","multi selectionEnabled":"_resetSelection"},ready:function(){this._boundScrollHandler=this.scrollHandler.bind(this);this._oldMulti=this.multi;this._oldSelectionEnabled=this.selectionEnabled},attached:function(){this.template=this.querySelector("template");if(!this.template.bindingDelegate){this.template.bindingDelegate=this.element.syntax}},_resetSelection:function(){if(this._oldMulti!=this.multi&&!this.multi||this._oldSelectionEnabled!=this.selectionEnabled&&!this.selectionEnabled){this._clearSelection();this.refresh(true)}else{this.selection=this.$.selection.getSelection()}this._oldMulti=this.multi;this._oldSelectionEnabled=this.selectionEnabled},initialize:function(){if(!this.template){return}if(arguments.length==1){var splices=arguments[0];for(var i=0;i<splices.length;i++){var s=splices[i];for(var j=0;j<s.removed.length;j++){var d=s.removed[j];this.$.selection.setItemSelected(d,false)}}}else{this._clearSelection()}var target=this.scrollTarget||this;if(this._target!==target){if(this._target){this._target.removeEventListener("scroll",this._boundScrollHandler,false)}this._target=target;this._target.addEventListener("scroll",this._boundScrollHandler,false)}var ios=navigator.userAgent.match(/iP(?:hone|ad;(?: U;)? CPU) OS (\d+)/);if(ios&&ios[1]>=8){target.style.webkitOverflowScrolling="touch"}this.initializeData()},initializeData:function(){var currentCount=this._physicalCount||0;var dataLen=this.data&&this.data.length||0;this._visibleCount=Math.ceil(this._target.offsetHeight/this.height);this._physicalCount=Math.min(this._visibleCount+this.extraItems,dataLen);this._physicalCount=Math.max(currentCount,this._physicalCount);this._physicalData=this._physicalData||new Array(this._physicalCount);var needItemInit=false;while(currentCount<this._physicalCount){this._physicalData[currentCount++]={};needItemInit=true}this.template.model=this._physicalData;this.template.setAttribute("repeat","");if(needItemInit){this.onMutation(this,this.initializeItems)}else{this.refresh(true)}},initializeItems:function(){var currentCount=this._physicalItems&&this._physicalItems.length||0;this._physicalItems=this._physicalItems||new Array(this._physicalCount);for(var i=0,item=this.template.nextElementSibling;item&&i<this._physicalCount;++i,item=item.nextElementSibling){this._physicalItems[i]=item;item._transformValue=0}this.refresh(true)},updateItem:function(virtualIndex,physicalIndex){var virtualDatum=this.data&&this.data[virtualIndex];var physicalDatum=this._physicalData[physicalIndex];physicalDatum.model=virtualDatum;physicalDatum.physicalIndex=physicalIndex;physicalDatum.index=virtualIndex;physicalDatum.selected=this.selectionEnabled&&virtualDatum?this._selectedData.get(virtualDatum):null;var physicalItem=this._physicalItems[physicalIndex];physicalItem.hidden=!virtualDatum},scrollHandler:function(e,detail){this._scrollTop=e.detail?e.detail.target.scrollTop:e.target.scrollTop;this.refresh(false)},refresh:function(force){var dataLen=this.data&&this.data.length||0;if(force){if(this._physicalCount<Math.min(this._visibleCount+this.extraItems,dataLen)){this.initializeData();return}this._physicalHeight=this.height*this._physicalCount;this.$.viewport.style.height=this.height*dataLen+"px"}var firstVisibleIndex=Math.floor(this._scrollTop/this.height);var visibleMidpoint=firstVisibleIndex+this._visibleCount/2;var firstReifiedIndex=Math.max(0,Math.floor(visibleMidpoint-this._physicalCount/2));firstReifiedIndex=Math.min(firstReifiedIndex,dataLen-this._physicalCount);firstReifiedIndex=firstReifiedIndex<0?0:firstReifiedIndex;var firstPhysicalIndex=firstReifiedIndex%this._physicalCount;var baseVirtualIndex=firstReifiedIndex-firstPhysicalIndex;var baseTransformValue=Math.floor(this.height*baseVirtualIndex);var nextTransformValue=Math.floor(baseTransformValue+this._physicalHeight);var baseTransformString="translate3d(0,"+baseTransformValue+"px,0)";var nextTransformString="translate3d(0,"+nextTransformValue+"px,0)";this.firstPhysicalIndex=firstPhysicalIndex;this.baseVirtualIndex=baseVirtualIndex;for(var i=0;i<firstPhysicalIndex;++i){var item=this._physicalItems[i];if(force||item._transformValue!=nextTransformValue){this.updateItem(baseVirtualIndex+this._physicalCount+i,i);setTransform(item,nextTransformString,nextTransformValue)}}for(var i=firstPhysicalIndex;i<this._physicalCount;++i){var item=this._physicalItems[i];if(force||item._transformValue!=baseTransformValue){this.updateItem(baseVirtualIndex+i,i);setTransform(item,baseTransformString,baseTransformValue)}}},tapHandler:function(e){var n=e.target;var p=e.path;if(!this.selectionEnabled||n===this){return}requestAnimationFrame(function(){var active=window.ShadowDOMPolyfill?wrap(document.activeElement):this.shadowRoot.activeElement;if(active&&active!=this&&active.parentElement!=this&&document.activeElement!=document.body){return}if(p[0].localName=="input"||p[0].localName=="button"||p[0].localName=="select"){return}var model=n.templateInstance&&n.templateInstance.model;if(model){var vi=model.index,pi=model.physicalIndex;var data=this.data[vi],item=this._physicalItems[pi];this.$.selection.select(data);this.asyncFire("core-activate",{data:data,item:item})}}.bind(this))},selectedHandler:function(e,detail){this.selection=this.$.selection.getSelection();var i$=this.indexesForData(detail.item);this._selectedData.set(detail.item,detail.isSelected);if(i$.physical>=0){this.updateItem(i$.virtual,i$.physical)}},selectItem:function(index){if(!this.selectionEnabled){return}var data=this.data[index];if(data){this.$.selection.select(data)}},setItemSelected:function(index,isSelected){var data=this.data[index];if(data){this.$.selection.setItemSelected(data,isSelected)}},indexesForData:function(data){var virtual=this.data.indexOf(data);var physical=this.virtualToPhysicalIndex(virtual);return{virtual:virtual,physical:physical}},virtualToPhysicalIndex:function(index){for(var i=0,l=this._physicalData.length;i<l;i++){if(this._physicalData[i].index===index){return i}}return-1},clearSelection:function(){this._clearSelection();this.refresh(true)},_clearSelection:function(){this._selectedData=new WeakMap;this.$.selection.clear();this.selection=this.$.selection.getSelection()},scrollToItem:function(index){this.scrollTop=index*this.height}});if(document.documentElement.style.transform!==undefined){var setTransform=function(element,string,value){element.style.transform=string;element._transformValue=value}}else{var setTransform=function(element,string,value){element.style.webkitTransform=string;element._transformValue=value}}})();</script>
 </polymer-element>
-
-
-<!--
-The `core-overlay` element displays overlayed on top of other content. It starts
-out hidden and is displayed by setting its `opened` property to true.
-A `core-overlay's` opened state can be toggled by calling the `toggle`
-method.
-
-The `core-overlay` will, by default, show/hide itself when it's opened. The 
-`target` property may be set to another element to cause that element to 
-be shown when the overlay is opened.
-
-It's common to want a `core-overlay` to animate to its opened
-position. The `core-overlay` element uses a `core-transition` to handle
-animation. The default transition is `core-transition-fade` which 
-causes the overlay to fade in when displayed. See 
-<a href="../core-transition/">`core-transition`</a> for more
-information about customizing a `core-overlay's` opening animation. The
-`backdrop` property can be set to true to show a backdrop behind the overlay
-that will darken the rest of the window.
-
-An element that should close the `core-overlay` will automatically
-do so if it's given the `core-overlay-toggle` attribute. This attribute
-can be customized with the `closeAttribute` property. You can also use
-`closeSelector` if more general matching is needed.
-
-By default  `core-overlay` will close whenever the user taps outside it or
-presses the escape key. This behavior can be turned off via the
-`autoCloseDisabled` property.
-
-    <core-overlay>
-      <h2>Dialog</h2>
-      <input placeholder="say something..." autofocus>
-      <div>I agree with this wholeheartedly.</div>
-      <button core-overlay-toggle>OK</button>
-    </core-overlay>
-
-`core-overlay` will automatically size and position itself according to the 
-following rules. The overlay's size is constrained such that it does not
-overflow the screen. This is done by setting maxHeight/maxWidth on the 
-`sizingTarget`. If the `sizingTarget` already has a setting for one of these
-properties, it will not be overridden. The overlay should
-be positioned via css or imperatively using the `core-overlay-position` event.
-If the overlay is not positioned vertically via setting `top` or `bottom`, it
-will be centered vertically. The same is true horizontally via a setting to 
-`left` or `right`. In addition, css `margin` can be used to provide some space
-around the overlay. This can be used to ensure
-that, for example, a drop shadow is always visible around the overlay.
-
-@group Core Elements
-@element core-overlay
-@homepage github.io
--->
-<!--
-Fired when the `core-overlay`'s `opened` property changes.
-
-@event core-overlay-open
-@param {Object} detail
-@param {Object} detail.opened the opened state
--->
-<!--
-Fired when the `core-overlay` has completely opened.
-
-@event core-overlay-open-completed
--->
-<!--
-Fired when the `core-overlay` has completely closed.
-
-@event core-overlay-close-completed
--->
-<!--
-Fired when the `core-overlay` needs to position itself. Optionally, implement
-in order to position an overlay via code. If the overlay was not otherwise
-positioned, it's important to indicate how the overlay has been positioned by
-setting the `dimensions.position` object. For example, if the overlay has been
-positioned via setting `right` and `top`, set dimensions.position to an
-object like this: `{v: 'top', h: 'right'}`.
-
-@event core-overlay-position
-@param {Object} detail
-@param {Object} detail.target the overlay target
-@param {Object} detail.sizingTarget the overlay sizing target
-@param {Object} detail.opened the opened state
--->
-<style>.core-overlay-backdrop{position:fixed;top:0;left:0;width:100vw;height:100vh;background-color:#000;opacity:0;transition:opacity .2s}.core-overlay-backdrop.core-opened{opacity:.6}</style>
-
-<polymer-element name="core-overlay" assetpath="../bower_components/core-overlay/">
-<script>(function(){Polymer("core-overlay",{publish:{target:null,sizingTarget:null,opened:false,backdrop:false,layered:false,autoCloseDisabled:false,autoFocusDisabled:false,closeAttribute:"core-overlay-toggle",closeSelector:"",transition:"core-transition-fade"},captureEventName:"tap",targetListeners:{tap:"tapHandler",keydown:"keydownHandler","core-transitionend":"transitionend"},registerCallback:function(element){this.layer=document.createElement("core-overlay-layer");this.keyHelper=document.createElement("core-key-helper");this.meta=document.createElement("core-transition");this.scrim=document.createElement("div");this.scrim.className="core-overlay-backdrop"},ready:function(){this.target=this.target||this;Platform.flush()},toggle:function(){this.opened=!this.opened},open:function(){this.opened=true},close:function(){this.opened=false},domReady:function(){this.ensureTargetSetup()},targetChanged:function(old){if(this.target){if(this.target.tabIndex<0){this.target.tabIndex=-1}this.addElementListenerList(this.target,this.targetListeners);this.target.style.display="none";this.target.__overlaySetup=false}if(old){this.removeElementListenerList(old,this.targetListeners);var transition=this.getTransition();if(transition){transition.teardown(old)}else{old.style.position="";old.style.outline=""}old.style.display=""}},transitionChanged:function(old){if(!this.target){return}if(old){this.getTransition(old).teardown(this.target)}this.target.__overlaySetup=false},ensureTargetSetup:function(){if(!this.target||this.target.__overlaySetup){return}if(!this.sizingTarget){this.sizingTarget=this.target}this.target.__overlaySetup=true;this.target.style.display="";var transition=this.getTransition();if(transition){transition.setup(this.target)}var style=this.target.style;var computed=getComputedStyle(this.target);if(computed.position==="static"){style.position="fixed"}style.outline="none";style.display="none"},openedChanged:function(){this.transitioning=true;this.ensureTargetSetup();this.prepareRenderOpened();this.async(function(){this.target.style.display="";this.target.offsetWidth;this.renderOpened()});this.fire("core-overlay-open",this.opened)},prepareRenderOpened:function(){if(this.opened){addOverlay(this)}this.prepareBackdrop();this.async(function(){if(!this.autoCloseDisabled){this.enableElementListener(this.opened,document,this.captureEventName,"captureHandler",true)}});this.enableElementListener(this.opened,window,"resize","resizeHandler");if(this.opened){this.target.offsetHeight;this.discoverDimensions();this.preparePositioning();this.positionTarget();this.updateTargetDimensions();this.finishPositioning();if(this.layered){this.layer.addElement(this.target);this.layer.opened=this.opened}}},renderOpened:function(){var transition=this.getTransition();if(transition){transition.go(this.target,{opened:this.opened})}else{this.transitionend()}this.renderBackdropOpened()},transitionend:function(e){if(e&&e.target!==this.target){return}this.transitioning=false;if(!this.opened){this.resetTargetDimensions();this.target.style.display="none";this.completeBackdrop();removeOverlay(this);if(this.layered){if(!currentOverlay()){this.layer.opened=this.opened}this.layer.removeElement(this.target)}}this.fire("core-overlay-"+(this.opened?"open":"close")+"-completed");this.applyFocus()},prepareBackdrop:function(){if(this.backdrop&&this.opened){if(!this.scrim.parentNode){document.body.appendChild(this.scrim);this.scrim.style.zIndex=currentOverlayZ()-1}trackBackdrop(this)}},renderBackdropOpened:function(){if(this.backdrop&&getBackdrops().length<2){this.scrim.classList.toggle("core-opened",this.opened)}},completeBackdrop:function(){if(this.backdrop){trackBackdrop(this);if(getBackdrops().length===0){this.scrim.parentNode.removeChild(this.scrim)}}},preparePositioning:function(){this.target.style.transition=this.target.style.webkitTransition="none";this.target.style.transform=this.target.style.webkitTransform="none";this.target.style.display=""},discoverDimensions:function(){if(this.dimensions){return}var target=getComputedStyle(this.target);var sizer=getComputedStyle(this.sizingTarget);this.dimensions={position:{v:target.top!=="auto"?"top":target.bottom!=="auto"?"bottom":null,h:target.left!=="auto"?"left":target.right!=="auto"?"right":null,css:target.position},size:{v:sizer.maxHeight!=="none",h:sizer.maxWidth!=="none"},margin:{top:parseInt(target.marginTop)||0,right:parseInt(target.marginRight)||0,bottom:parseInt(target.marginBottom)||0,left:parseInt(target.marginLeft)||0}}},finishPositioning:function(target){this.target.style.display="none";this.target.style.transform=this.target.style.webkitTransform="";this.target.offsetWidth;this.target.style.transition=this.target.style.webkitTransition=""},getTransition:function(name){return this.meta.byId(name||this.transition)},getFocusNode:function(){return this.target.querySelector("[autofocus]")||this.target},applyFocus:function(){var focusNode=this.getFocusNode();if(this.opened){if(!this.autoFocusDisabled){focusNode.focus()}}else{focusNode.blur();if(currentOverlay()==this){console.warn("Current core-overlay is attempting to focus itself as next! (bug)")}else{focusOverlay()}}},positionTarget:function(){this.fire("core-overlay-position",{target:this.target,sizingTarget:this.sizingTarget,opened:this.opened});if(!this.dimensions.position.v){this.target.style.top="0px"}if(!this.dimensions.position.h){this.target.style.left="0px"}},updateTargetDimensions:function(){this.sizeTarget();this.repositionTarget()},sizeTarget:function(){this.sizingTarget.style.boxSizing="border-box";var dims=this.dimensions;var rect=this.target.getBoundingClientRect();if(!dims.size.v){this.sizeDimension(rect,dims.position.v,"top","bottom","Height")}if(!dims.size.h){this.sizeDimension(rect,dims.position.h,"left","right","Width")}},sizeDimension:function(rect,positionedBy,start,end,extent){var dims=this.dimensions;var flip=positionedBy===end;var m=flip?start:end;var ws=window["inner"+extent];var o=dims.margin[m]+(flip?ws-rect[end]:rect[start]);var offset="offset"+extent;var o2=this.target[offset]-this.sizingTarget[offset];this.sizingTarget.style["max"+extent]=ws-o-o2+"px"},repositionTarget:function(){if(this.dimensions.position.css!=="fixed"){return}if(!this.dimensions.position.v){var t=(window.innerHeight-this.target.offsetHeight)/2;t-=this.dimensions.margin.top;this.target.style.top=t+"px"}if(!this.dimensions.position.h){var l=(window.innerWidth-this.target.offsetWidth)/2;l-=this.dimensions.margin.left;this.target.style.left=l+"px"}},resetTargetDimensions:function(){if(!this.dimensions.size.v){this.sizingTarget.style.maxHeight=""}if(!this.dimensions.size.h){this.sizingTarget.style.maxWidth=""}this.dimensions=null},tapHandler:function(e){if(e.target&&(this.closeSelector&&e.target.matches(this.closeSelector))||this.closeAttribute&&e.target.hasAttribute(this.closeAttribute)){this.toggle()}else{if(this.autoCloseJob){this.autoCloseJob.stop();this.autoCloseJob=null}}},captureHandler:function(e){if(!this.autoCloseDisabled&&currentOverlay()==this){this.autoCloseJob=this.job(this.autoCloseJob,function(){this.close()})}},keydownHandler:function(e){if(!this.autoCloseDisabled&&e.keyCode==this.keyHelper.ESCAPE_KEY){this.close();e.stopPropagation()}},resizeHandler:function(){this.updateTargetDimensions()},addElementListenerList:function(node,events){for(var i in events){this.addElementListener(node,i,events[i])}},removeElementListenerList:function(node,events){for(var i in events){this.removeElementListener(node,i,events[i])}},enableElementListener:function(enable,node,event,methodName,capture){if(enable){this.addElementListener(node,event,methodName,capture)}else{this.removeElementListener(node,event,methodName,capture)}},addElementListener:function(node,event,methodName,capture){var fn=this._makeBoundListener(methodName);if(node&&fn){Polymer.addEventListener(node,event,fn,capture)}},removeElementListener:function(node,event,methodName,capture){var fn=this._makeBoundListener(methodName);if(node&&fn){Polymer.removeEventListener(node,event,fn,capture)}},_makeBoundListener:function(methodName){var self=this,method=this[methodName];if(!method){return}var bound="_bound"+methodName;if(!this[bound]){this[bound]=function(e){method.call(self,e)}}return this[bound]}});var overlays=[];function addOverlay(overlay){var z0=currentOverlayZ();overlays.push(overlay);var z1=currentOverlayZ();if(z1<=z0){applyOverlayZ(overlay,z0)}}function removeOverlay(overlay){var i=overlays.indexOf(overlay);if(i>=0){overlays.splice(i,1);setZ(overlay,"")}}function applyOverlayZ(overlay,aboveZ){setZ(overlay.target,aboveZ+2)}function setZ(element,z){element.style.zIndex=z}function currentOverlay(){return overlays[overlays.length-1]}var DEFAULT_Z=10;function currentOverlayZ(){var z;var current=currentOverlay();if(current){var z1=window.getComputedStyle(current.target).zIndex;if(!isNaN(z1)){z=Number(z1)}}return z||DEFAULT_Z}function focusOverlay(){var current=currentOverlay();if(current&&!current.transitioning){current.applyFocus()}}var backdrops=[];function trackBackdrop(element){if(element.opened){backdrops.push(element)}else{var i=backdrops.indexOf(element);if(i>=0){backdrops.splice(i,1)}}}function getBackdrops(){return backdrops}})();</script>
-</polymer-element>
-</div><div hidden><!--
+</div><div hidden>undefined</div><div hidden><!--
 Copyright (c) 2014 The Polymer Project Authors. All rights reserved.
 This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
 The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
@@ -1030,83 +1286,6 @@ Fired when an item element is tapped.
 -->
 
 
-<!--
-Copyright (c) 2014 The Polymer Project Authors. All rights reserved.
-This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
-The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
-The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
-Code distributed by Google as part of the polymer project is also
-subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
--->
-<!--
-@group Polymer Core Elements
-
-The `<core-selection>` element is used to manage selection state. It has no
-visual appearance and is typically used in conjunction with another element.
-For example, [core-selector](#core-selector)
-use a `<core-selection>` to manage selection.
-
-To mark an item as selected, call the `select(item)` method on 
-`<core-selection>`. The item itself is an argument to this method.
-
-The `<core-selection>`element manages selection state for any given set of
-items. When an item is selected, the `core-select` event is fired.
-
-The attribute `multi` indicates if multiple items can be selected at once.
-  
-Example:
- 
-    <polymer-element name="selection-example">
-       <template>
-         <style>
-           polyfill-next-selector { content: ':host > .selected'; }
-           ::content > .selected {
-             font-weight: bold;
-             font-style: italic;
-           }
-         </style>
-         <ul on-tap="{{itemTapAction}}">
-           <content></content>
-         </ul>
-         <core-selection id="selection" multi
-                         on-core-select="{{selectAction}}"></core-selection>
-       </template>
-       <script>
-         Polymer('selection-example', {
-           itemTapAction: function(e, detail, sender) {
-             this.$.selection.select(e.target);
-           },
-           selectAction: function(e, detail, sender) {
-             detail.item.classList.toggle('selected', detail.isSelected);
-           }
-         });
-       </script>
-    </polymer-element>
-
-    <selection-example>
-      <li>Red</li>
-      <li>Green</li>
-      <li>Blue</li>
-    </selection-example>
- 
-@element core-selection
--->
-
-<!--
-Fired when an item's selection state is changed. This event is fired both
-when an item is selected or deselected. The `isSelected` detail property
-contains the selection state.
-
-@event core-select
-@param {Object} detail
-  @param {boolean} detail.isSelected true for selection and false for de-selection
-  @param {Object} detail.item the item element
--->
-
-
-<polymer-element name="core-selection" attributes="multi" hidden assetpath="../bower_components/core-selection/">
-  <script>Polymer("core-selection",{multi:false,ready:function(){this.clear()},clear:function(){this.selection=[]},getSelection:function(){return this.multi?this.selection:this.selection[0]},isSelected:function(item){return this.selection.indexOf(item)>=0},setItemSelected:function(item,isSelected){if(item!==undefined&&item!==null){if(isSelected){this.selection.push(item)}else{var i=this.selection.indexOf(item);if(i>=0){this.selection.splice(i,1)}}this.fire("core-select",{isSelected:isSelected,item:item})}},select:function(item){if(this.multi){this.toggle(item)}else if(this.getSelection()!==item){this.setItemSelected(this.getSelection(),false);this.setItemSelected(item,true)}},toggle:function(item){this.setItemSelected(item,!this.isSelected(item))}});</script>
-</polymer-element>
 
 
 <polymer-element name="core-selector" attributes="selected multi valueattr selectedClass selectedProperty selectedAttribute selectedItem selectedModel selectedIndex notap excludedLocalNames target itemsSelector activateEvent" assetpath="../bower_components/core-selector/">
@@ -2625,6 +2804,29 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 	<script>Polymer("my-paper-date-input",{type:"date"});</script>
 </polymer-element></div><div hidden><polymer-element name="read-ajax" extends="core-ajax" assetpath="common/">
 	<script>Polymer("read-ajax",{dataProperty:"Data",action:"read",model:"",baseUrl:"",method:"get",handleAs:"json",created:function(){this.data=[];var self=this;this.addEventListener("core-response",function(e){if(e.detail.xhr.status===0){self.fire("read-error-connection",{xhr:e.detail.xhr})}else{self.data=e.detail.response[self.dataProperty];self.fire("read-response",{data:self.data})}});this.addEventListener("core-error",function(e){self.fire("read-error",{xhr:e.detail.xhr})});this.addEventListener("core-complete",function(e){self.fire("read-complete",{xhr:e.detail.xhr})});this.super()},go:function(){var _urlparams="";if(this.urlparams){if(typeof this.urlparams==="object"){_urlparams=Object.keys(this.urlparams).map(function(k){return encodeURIComponent(k)+"="+encodeURIComponent(this.urlparams[k])}.bind(this)).join("&");if(_urlparams){_urlparams="?"+_urlparams}}else{_urlparams=this.urlparams}}this.data=[];this.url=this.baseUrl+"/"+this.action+"/"+this.model+_urlparams;this.super()}});</script>
+</polymer-element></div><div hidden><polymer-element name="requisitos-dropdown" attributes="selected,valign,data" assetpath="common/">
+<template>
+	<style>core-list{height:120px;width:300px}core-dropdown{box-shadow:1px 1px 1px 1px}.item{box-sizing:border-box;height:35px;border-bottom:1px solid #ddd;padding:4px;cursor:default;background-color:#fff;overflow:hidden}.selected{background:silver}.si{width:38px;height:38px}.core-transition{overflow:hidden}paper-input{width:250px}</style>
+	<div layout="" horizontal="">	
+		<div relative="">
+		  <core-icon-button id="trigger" icon="{{opened?&apos;arrow-drop-up&apos;:&apos;arrow-drop-down&apos;}}" on-tap="{{toggle}}"></core-icon-button>
+		  <core-dropdown relatedtarget="{{$.trigger}}" opened="{{opened}}" halign="left" valign="{{valign}}">
+			  <div layout="" horizontal="" on-tap="{{toggle}}">
+				  <core-icon-button class="si" icon="arrow-drop-up"></core-icon-button>
+				  <paper-input id="fake" readonly value="{{selected?(selected.Descripcion):&apos;&apos;}}">
+				  </paper-input>
+			  </div>
+			  <core-list data="{{data}}" height="35" flex="" on-core-activate="{{handlerActivate}}">
+				  <template>
+					  <div class="item {{ {selected: selected} | tokenList }}">{{model.Descripcion}}</div>
+				  </template>
+			  </core-list>
+		  </core-dropdown>
+		</div>
+		<paper-input readonly hidden?="{{opened}}" label="Requisito" floatinglabel="" value="{{selected?(selected.Descripcion):&apos;&apos;}}" on-tap="{{toggle}}"></paper-input>
+	</div>
+</template>
+		<script>Polymer("requisitos-dropdown",{valign:"top",toggle:function(){this.opened=!this.opened},handlerActivate:function(event,detail,sender){this.selected=detail.data;this.opened=false;this.asyncFire("rango-select",{item:this.selected})}});</script>
 </polymer-element></div><div hidden><polymer-element name="update-ajax" extends="core-ajax" assetpath="common/">
 	<script>Polymer("update-ajax",{dataProperty:"Data",action:"update",model:"",baseUrl:"",method:"post",handleAs:"json",created:function(){this.data={};var self=this;this.addEventListener("core-response",function(e){if(e.detail.xhr.status===0){self.fire("update-error-connection",{xhr:e.detail.xhr})}else{self.data=e.detail.response[self.dataProperty];self.fire("update-response",{data:self.data})}});this.addEventListener("core-error",function(e){self.fire("update-error",{xhr:e.detail.xhr})});this.addEventListener("core-complete",function(e){self.fire("update-complete",{xhr:e.detail.xhr})});this.super()},go:function(){this.data={};this.url=this.baseUrl+"/"+this.action+"/"+this.model+"?format=json";this.super()}});</script>
 </polymer-element></div><div hidden><polymer-element name="web-loader" attributes="type color display" hidden assetpath="common/">
@@ -2650,6 +2852,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 			  <core-icon-button icon="create" on-tap="{{ fireEdit }}"></core-icon-button>
 		  </div>
 		  <div class="titulo">{{item.Enunciado}}</div>
+		  <div class="text">Requisito: {{item.Requisito.Descripcion}}</div>
 		  <div class="text">Disponible 'No Aplica': {{item.NoAplicaDisponible?'SI':'NO'}}</div>
 		  <div class="text">{{item.Metodo}}</div>
 		  <div layout="" horizontal="" center="">
@@ -2690,7 +2893,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 	  <paper-dialog id="dialog" backdrop="" layered="" autoclosedisabled="">
 		  <paper-input label="Numeral" required floatinglabel="" id="Numeral" value="{{_onedit.Numeral}}">
 		  </paper-input>
-		  <paper-input label="Enunciado" required floatinglabel="" id="Enunciado" value="{{_onedit.Enunciado}}" multiline="" rows="4"></paper-input>
+		  <paper-input label="Enunciado" required floatinglabel="" id="Enunciado" value="{{_onedit.Enunciado}}" multiline="" rows="3"></paper-input>
+		  <requisitos-dropdown data="{{requisitos}}" selected="{{_onedit.Requisito}}"></requisitos-dropdown>
 		  <div horizontal="" layout="">
 			  <paper-checkbox id="NoAplicaDisponible" checked="{{ _onedit.NoAplicaDisponible }}"></paper-checkbox>
 			  <span>Disponible 'No Aplica'</span>
@@ -2726,7 +2930,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 		  <paper-icon-button icon="check" on-tap="{{ delegateRemoveQ }}" affirmative="" autofocus></paper-icon-button>
 		</paper-dialog>
   </template>
-  <script>Polymer("pl-cap-preguntas",{get current(){return this._current},created:function(){this.capitulo={};this.preguntas=[];this.guias=[];this._current={};this._onedit={}},firePreguntasBack:function(){this.fire("preguntas-back")},handlerShowNuevaQ:function(event,detail,sender){this._current=sender.templateInstance.model.item;this._onedit=Object.clone(this._current);this._qIndex=-1;this._qText="";this.$.dialogQ.toggle()},handlerShowEditQ:function(event,detail,sender){this._current=sender.templateInstance.model.item;this._onedit=Object.clone(this._current);this._qIndex=detail.index;this._qText=detail.item;this.$.dialogQ.toggle()},handlerShowRemoveQ:function(event,detail,sender){this._current=sender.templateInstance.model.item;this._onedit=Object.clone(this._current);this._qIndex=detail.index;this._qText=detail.item;this.$.dialogRemoveQ.toggle()},handlerShowEditPregunta:function(e,detail,sender){this._current=sender.templateInstance.model.item;this._onedit=Object.clone(this._current);this.$.dialog.toggle()},handlerShowNuevaPregunta:function(){this._current={Enunciado:"",Metodo:"",NoAplicaDisponible:false,IdCapitulo:"",IdGuias:[]};this._onedit=Object.clone(this._current);this.$.dialog.toggle()},handlerShowDeletePregunta:function(e,detail,sender){this._onedit=sender.templateInstance.model.item;this.$.borrar.toggle()},delegateDeletePregunta:function(e,detail,sender){if(this.handlerDeletePregunta){this.handlerDeletePregunta(e,{item:this._onedit},sender)}},delegateSavePregunta:function(e,detail,sender){if(this.$.Enunciado.invalid||this.$.Numeral.invalid||Object.compare(this._current,this._onedit))return;if(this.handlerSavePregunta){this._onedit.IdCapitulo=this.capitulo.Id;this.handlerSavePregunta(e,{item:this._onedit},sender)}},delegateRemoveGuia:function(e,detail,sender){if(this.handlerRemoveGuia){var index=-1;for(var d in this._onedit.IdGuias){if(this._onedit.IdGuias[d]===this.guiaToRemove){index=this._onedit.IdGuias.indexOf(this._onedit.IdGuias[d]);break}}if(index>=0){this._onedit.IdGuias.splice(index,1);this.handlerRemoveGuia(e,{item:this._onedit,guia:this.guiaToRemove},sender)}}},delegateShowGuiasToSelect:function(e,detail,sender){this._current=sender.templateInstance.model.item;this._onedit=Object.clone(this._current);if(this.handlerShowGuiasToSelect){this.handlerShowGuiasToSelect(e,{item:this._current},sender)}},delegateSaveQ:function(e,d,s){if(this.handlerSaveQ){if(this.$.EnunciadoQ.invalid||(this._qIndex<0?false:this._onedit.Preguntas[this._qIndex]===this.$.EnunciadoQ)){return}if(this._qIndex<0){if(!this._onedit.Preguntas){this._onedit.Preguntas=[]}this._onedit.Preguntas.push(this.$.EnunciadoQ.value)}else{this._onedit.Preguntas[this._qIndex]=this.$.EnunciadoQ.value}this.handlerSaveQ(e,{item:this._onedit},s)}},delegateRemoveQ:function(e,d,s){if(this.handlerRemoveQ){this._onedit.Preguntas.splice(this._qIndex,1);this.handlerRemoveQ(e,{item:this._onedit},s)}},handlerShowRemoveGuia:function(e,detail,sender){this._current=sender.templateInstance.model.item;this._onedit=Object.clone(this._current);this.guiaToRemove=detail.guia;this.$.removeGuia.toggle()}});</script>
+  <script>Polymer("pl-cap-preguntas",{get current(){return this._current},created:function(){this.capitulo={};this.preguntas=[];this.guias=[];this._current={};this._onedit={};this.requisitos=[]},firePreguntasBack:function(){this.fire("preguntas-back")},handlerShowNuevaQ:function(event,detail,sender){this._current=sender.templateInstance.model.item;this._onedit=Object.clone(this._current);this._qIndex=-1;this._qText="";this.$.dialogQ.toggle()},handlerShowEditQ:function(event,detail,sender){this._current=sender.templateInstance.model.item;this._onedit=Object.clone(this._current);this._qIndex=detail.index;this._qText=detail.item;this.$.dialogQ.toggle()},handlerShowRemoveQ:function(event,detail,sender){this._current=sender.templateInstance.model.item;this._onedit=Object.clone(this._current);this._qIndex=detail.index;this._qText=detail.item;this.$.dialogRemoveQ.toggle()},handlerShowEditPregunta:function(e,detail,sender){this._current=sender.templateInstance.model.item;this._onedit=Object.clone(this._current);this.$.dialog.toggle()},handlerShowNuevaPregunta:function(){this._current={Enunciado:"",Metodo:"",NoAplicaDisponible:false,IdCapitulo:"",IdGuias:[]};this._onedit=Object.clone(this._current);this.$.dialog.toggle()},handlerShowDeletePregunta:function(e,detail,sender){this._onedit=sender.templateInstance.model.item;this.$.borrar.toggle()},delegateDeletePregunta:function(e,detail,sender){if(this.handlerDeletePregunta){this.handlerDeletePregunta(e,{item:this._onedit},sender)}},delegateSavePregunta:function(e,detail,sender){if(this.$.Enunciado.invalid||this.$.Numeral.invalid||Object.compare(this._current,this._onedit))return;if(this.handlerSavePregunta){this._onedit.IdCapitulo=this.capitulo.Id;this.handlerSavePregunta(e,{item:this._onedit},sender)}},delegateRemoveGuia:function(e,detail,sender){if(this.handlerRemoveGuia){var index=-1;for(var d in this._onedit.IdGuias){if(this._onedit.IdGuias[d]===this.guiaToRemove){index=this._onedit.IdGuias.indexOf(this._onedit.IdGuias[d]);break}}if(index>=0){this._onedit.IdGuias.splice(index,1);this.handlerRemoveGuia(e,{item:this._onedit,guia:this.guiaToRemove},sender)}}},delegateShowGuiasToSelect:function(e,detail,sender){this._current=sender.templateInstance.model.item;this._onedit=Object.clone(this._current);if(this.handlerShowGuiasToSelect){this.handlerShowGuiasToSelect(e,{item:this._current},sender)}},delegateSaveQ:function(e,d,s){if(this.handlerSaveQ){if(this.$.EnunciadoQ.invalid||(this._qIndex<0?false:this._onedit.Preguntas[this._qIndex]===this.$.EnunciadoQ)){return}if(this._qIndex<0){if(!this._onedit.Preguntas){this._onedit.Preguntas=[]}this._onedit.Preguntas.push(this.$.EnunciadoQ.value)}else{this._onedit.Preguntas[this._qIndex]=this.$.EnunciadoQ.value}this.handlerSaveQ(e,{item:this._onedit},s)}},delegateRemoveQ:function(e,d,s){if(this.handlerRemoveQ){this._onedit.Preguntas.splice(this._qIndex,1);this.handlerRemoveQ(e,{item:this._onedit},s)}},handlerShowRemoveGuia:function(e,detail,sender){this._current=sender.templateInstance.model.item;this._onedit=Object.clone(this._current);this.guiaToRemove=detail.guia;this.$.removeGuia.toggle()}});</script>
 </polymer-element></div><div hidden><polymer-element name="plantilla-cap-card" attributes="item" assetpath="x-plantilla/">
   <template>
     <style></style>
@@ -2898,7 +3102,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 	  <paper-toast id="complete" class="complete" text="Operaci&#xF3;n realizada!"></paper-toast>
 	  <web-loader id="wl" display="none"></web-loader>
   </template>
-  <script>Polymer("x-plantilla",{route:"plantillas",routeChanged:function(old,current){location.hash=current},get menuPanel(){return this.$.menuPanel},__bajarTap:function(event){console.log("bajartap",this)},__nuevoTap:function(event){console.log("nuevotap",this);this.$.pl.handlerShowNuevaPlantilla()},created:function(){this.rqReadPlantillas={model:"plantilla",response:this.readPlantillasResponse.bind(this),error:this.readError.bind(this),errorConnection:this.readErrorConnection.bind(this),complete:this.readComplete.bind(this)};this.rqUpdatePlantilla={model:"plantilla",response:this.updatePlantillaResponse.bind(this),error:this.readError.bind(this),errorConnection:this.readErrorConnection.bind(this),complete:this.readComplete.bind(this)};this.rqCreatePlantilla={model:"plantilla",response:this.createPlantillaResponse.bind(this),error:this.readError.bind(this),errorConnection:this.readErrorConnection.bind(this),complete:this.readComplete.bind(this)};this.rqDeletePlantilla={model:"plantilla",response:this.deletePlantillaResponse.bind(this),error:this.readError.bind(this),errorConnection:this.readErrorConnection.bind(this),complete:this.readComplete.bind(this)};this.rqReadCapitulos={model:"capitulo",response:this.readCapitulosResponse.bind(this),error:this.readError.bind(this),errorConnection:this.readErrorConnection.bind(this),complete:this.readComplete.bind(this),urlparams:{}};this.rqUpdateCapitulo={model:"capitulo",response:this.updateCapituloResponse.bind(this),error:this.readError.bind(this),errorConnection:this.readErrorConnection.bind(this),complete:this.readComplete.bind(this)};this.rqCreateCapitulo={model:"capitulo",response:this.createCapituloResponse.bind(this),error:this.readError.bind(this),errorConnection:this.readErrorConnection.bind(this),complete:this.readComplete.bind(this)};this.rqDeleteCapitulo={model:"capitulo",response:this.deleteCapituloResponse.bind(this),error:this.readError.bind(this),errorConnection:this.readErrorConnection.bind(this),complete:this.readComplete.bind(this)};this.rqReadGuias={model:"guia",response:this.readGuiasResponse.bind(this),error:this.readError.bind(this),errorConnection:this.readErrorConnection.bind(this),complete:this.readComplete.bind(this),urlparams:{}};this.rqUpdateGuia={model:"guia",response:this.updateGuiaResponse.bind(this),error:this.readError.bind(this),errorConnection:this.readErrorConnection.bind(this),complete:this.readComplete.bind(this)};this.rqCreateGuia={model:"guia",response:this.createGuiaResponse.bind(this),error:this.readError.bind(this),errorConnection:this.readErrorConnection.bind(this),complete:this.readComplete.bind(this)};this.rqDeleteGuia={model:"guia",response:this.deleteGuiaResponse.bind(this),error:this.readError.bind(this),errorConnection:this.readErrorConnection.bind(this),complete:this.readComplete.bind(this)};this.rqReadPreguntas={model:"pregunta",response:this.readPreguntasResponse.bind(this),error:this.readError.bind(this),errorConnection:this.readErrorConnection.bind(this),complete:this.readComplete.bind(this),urlparams:{}};this.rqUpdatePregunta={model:"pregunta",response:this.updatePreguntaResponse.bind(this),error:this.readError.bind(this),errorConnection:this.readErrorConnection.bind(this),complete:this.readComplete.bind(this)};this.rqCreatePregunta={model:"pregunta",response:this.createPreguntaResponse.bind(this),error:this.readError.bind(this),errorConnection:this.readErrorConnection.bind(this),complete:this.readComplete.bind(this)};this.rqDeletePregunta={model:"pregunta",response:this.deletePreguntaResponse.bind(this),error:this.readError.bind(this),errorConnection:this.readErrorConnection.bind(this),complete:this.readComplete.bind(this)}},ready:function(){var t=document.createElement("template");t.innerHTML='<paper-icon-button id="_nuevo" on-tap="{{}}" icon="add-circle"></paper-icon-button>';this.$.menuPanel.tb.appendChild(this.instanceTemplate(t));t=document.createElement("template");t.innerHTML='<paper-icon-button id="_down" on-tap="{{}}" icon="cloud-download"></paper-icon-button>';this.$.menuPanel.tb.appendChild(this.instanceTemplate(t));var x=this.$.menuPanel.tb.querySelector("#_nuevo");x.addEventListener("tap",this.__nuevoTap.bind(this));x=this.$.menuPanel.tb.querySelector("#_down");x.addEventListener("tap",this.__bajarTap.bind(this));this.$.pl.handlerMostrarCapitulos=this.handlerMostrarCapitulos.bind(this);this.$.pl.handlerSavePlantilla=this.handlerSavePlantilla.bind(this);this.$.pl.handlerDeletePlantilla=this.handlerDeletePlantilla.bind(this);this.$.pl.handlerMostrarGuias=this.handlerMostrarGuias.bind(this);this.$.pc.handlerMostrarPreguntas=this.handlerMostrarPreguntas.bind(this);this.$.pc.handlerSaveCapitulo=this.handlerSaveCapitulo.bind(this);this.$.pc.handlerDeleteCapitulo=this.handlerDeleteCapitulo.bind(this);this.$.pg.handlerSaveGuia=this.handlerSaveGuia.bind(this);this.$.pg.handlerDeleteGuia=this.handlerDeleteGuia.bind(this);this.$.pcp.handlerSavePregunta=this.handlerSavePregunta.bind(this);this.$.pcp.handlerDeletePregunta=this.handlerDeletePregunta.bind(this);this.$.pcp.handlerShowGuiasToSelect=this.handlerShowGuiasToSelect.bind(this);this.$.pcp.handlerRemoveGuia=this.handlerSavePregunta.bind(this);this.$.pcp.handlerSaveQ=this.handlerSavePregunta.bind(this);this.$.pcp.handlerRemoveQ=this.handlerSavePregunta.bind(this)},domReady:function(){this.fire("element-ready")},go:function(){window.liebre.remote.read(this.rqReadPlantillas);this.$.wl.display="block"},mainIconTap:function(){this.fire("x-back")},handlerBack:function(){this.route=this.route.substring(0,this.route.lastIndexOf("/"))},handlerMostrarCapitulos:function(e,detail,sender){this.$.pc.plantilla=detail.item;this.$.pc.capitulos=[];this.rqReadCapitulos.urlparams.IdPlantilla=detail.item.Id;window.liebre.remote.read(this.rqReadCapitulos);this.$.wl.display="block"},handlerMostrarGuias:function(e,detail,sender){this.$.pg.plantilla=detail.item;this.$.pg.guias=[];this.rqReadGuias.urlparams.IdPlantilla=detail.item.Id;window.liebre.remote.read(this.rqReadGuias);this.$.wl.display="block"},handlerMostrarPreguntas:function(e,detail,sender){this.$.pcp.capitulo=detail.item;this.$.pcp.preguntas=[];this.route="plantillas/capitulos/preguntas";this.rqReadGuias.urlparams.IdPlantilla=this.$.pc.plantilla.Id;window.liebre.remote.read(this.rqReadGuias);this.$.wl.display="block"},handlerShowGuiasToSelect:function(e,detail,sender){this.$.sg.plantilla=this.$.pc.plantilla;this.$.sg.clearSelected();this.route="plantillas/capitulos/preguntas/sg"},handlerSavePlantilla:function(e,detail,sender){if(detail.item.Id){window.liebre.remote.update(detail.item,this.rqUpdatePlantilla)}else{window.liebre.remote.create(detail.item,this.rqCreatePlantilla)}},handlerDeletePlantilla:function(e,detail,sender){window.liebre.remote.delete(detail.item,this.rqDeletePlantilla)},handlerSaveCapitulo:function(e,detail,sender){if(detail.item.Id){liebre.remote.update(detail.item,this.rqUpdateCapitulo)}else{liebre.remote.create(detail.item,this.rqCreateCapitulo)}},handlerDeleteCapitulo:function(e,detail,sender){liebre.remote.delete(detail.item,this.rqDeleteCapitulo)},handlerSaveGuia:function(e,detail,sender){if(detail.item.Id){liebre.remote.update(detail.item,this.rqUpdateGuia)}else{liebre.remote.create(detail.item,this.rqCreateGuia)}},handlerDeleteGuia:function(e,detail,sender){liebre.remote.delete(detail.item,this.rqDeleteGuia)},handlerSavePregunta:function(e,detail,sender){if(detail.item.Id){liebre.remote.update(detail.item,this.rqUpdatePregunta)}else{liebre.remote.create(detail.item,this.rqCreatePregunta)}},handlerDeletePregunta:function(e,detail,sender){liebre.remote.delete(detail.item,this.rqDeletePregunta)},handlerCheckSelectedGuias:function(e,detail,sender){if(detail.selected!=null){var current=this.$.pcp.current;var s=[];for(var i in detail.selected){var found=false;for(var g in current.IdGuias){if(detail.selected[i]===current.IdGuias[g]){found=true;break}}if(!found){s.push(detail.selected[i])}}for(var z in s){current.IdGuias.push(s[z])}if(s.length>0){liebre.remote.update(current,this.rqUpdatePregunta)}}this.handlerBack()},readPlantillasResponse:function(event){var data=event.detail.data;for(var d in data){data[d].FechaInicial=window.liebre.tools.formatDate(data[d].FechaInicial);data[d].FechaFinal=window.liebre.tools.formatDate(data[d].FechaFinal)}this.$.pl.plantillas=data},readCapitulosResponse:function(event){this.$.pc.capitulos=event.detail.data;this.route="plantillas/capitulos"},readGuiasResponse:function(event){if(this.route==="plantillas"){this.$.pg.guias=event.detail.data;this.route="plantillas/guias"}else{this.$.pcp.guias=event.detail.data;this.$.sg.guias=event.detail.data;this.rqReadPreguntas.urlparams.IdCapitulo=this.$.pcp.capitulo.Id;window.liebre.remote.read(this.rqReadPreguntas);this.$.wl.display="block"}},readPreguntasResponse:function(event){this.$.pcp.preguntas=event.detail.data},readError:function(event){console.log("error",event);this.$.error.text="Error: "+event.type+". "+event.detail.xhr.statusText+". "+event.detail.xhr.response;this.$.error.show()},readComplete:function(event){console.log("complete",event);this.$.wl.display="none";if(event.detail.xhr.status===200&&!event.type.startsWith("read")){this.$.complete.text="Operación realizada: "+event.type;this.$.complete.show()}},readErrorConnection:function(event){console.log("error-connection",event);this.$.error_connection.text="Error de conexión: "+event.type+". Servidor:"+liebre.tools.getBaseUrl();this.$.error_connection.show()},createPlantillaResponse:function(event){var data=event.detail.data;data.FechaInicial=window.liebre.tools.formatDate(data.FechaInicial);data.FechaFinal=window.liebre.tools.formatDate(data.FechaFinal);this.$.pl.plantillas.unshift(data)},updatePlantillaResponse:function(event){var data=event.detail.data;data.FechaInicial=window.liebre.tools.formatDate(data.FechaInicial);data.FechaFinal=window.liebre.tools.formatDate(data.FechaFinal);for(var d in this.$.pl.plantillas){if(this.$.pl.plantillas[d].Id===data.Id){this.$.pl.plantillas[d]=data;break}}},deletePlantillaResponse:function(event){var data=event.detail.data;var index=-1;for(var d in this.$.pl.plantillas){if(this.$.pl.plantillas[d].Id===data.Id){index=this.$.pl.plantillas.indexOf(this.$.pl.plantillas[d]);break}}if(index>=0){this.$.pl.plantillas.splice(index,1)}},createCapituloResponse:function(event){console.log("Capitulo reponse: create",event);this.$.pc.capitulos.unshift(event.detail.data)},updateCapituloResponse:function(event){console.log("Capitulo reponse: upadte",event);var data=event.detail.data;for(var d in this.$.pc.capitulos){if(this.$.pc.capitulos[d].Id===data.Id){this.$.pc.capitulos[d]=data;break}}},deleteCapituloResponse:function(event){console.log("Capitulo reponse: delete",event);var data=event.detail.data;var index=-1;for(var d in this.$.pc.capitulos){if(this.$.pc.capitulos[d].Id===data.Id){index=this.$.pc.capitulos.indexOf(this.$.pc.capitulos[d]);break}}if(index>=0){this.$.pc.capitulos.splice(index,1)}},createGuiaResponse:function(event){console.log("Guia reponse: create",event);this.$.pg.guias.unshift(event.detail.data)},updateGuiaResponse:function(event){console.log("Guia reponse: upadte",event);var data=event.detail.data;for(var d in this.$.pg.guias){if(this.$.pg.guias[d].Id===data.Id){this.$.pg.guias[d]=data;break}}},deleteGuiaResponse:function(event){console.log("Guia reponse: delete",event);var data=event.detail.data;var index=-1;for(var d in this.$.pg.guias){if(this.$.pg.guias[d].Id===data.Id){index=this.$.pg.guias.indexOf(this.$.pg.guias[d]);break}}if(index>=0){this.$.pg.guias.splice(index,1)}},createPreguntaResponse:function(event){console.log("Pregunta reponse: create",event);this.$.pcp.preguntas.unshift(event.detail.data)},updatePreguntaResponse:function(event){console.log("Pregunta reponse: update",event);var data=event.detail.data;for(var d in this.$.pcp.preguntas){if(this.$.pcp.preguntas[d].Id===data.Id){this.$.pcp.preguntas[d]=data;break}}},deletePreguntaResponse:function(event){console.log("Pregunta reponse: delete",event);var data=event.detail.data;var index=-1;for(var d in this.$.pcp.preguntas){if(this.$.pcp.preguntas[d].Id===data.Id){index=this.$.pcp.preguntas.indexOf(this.$.pcp.preguntas[d]);break}}if(index>=0){this.$.pcp.preguntas.splice(index,1)}}});</script>
+  <script>Polymer("x-plantilla",{route:"plantillas",routeChanged:function(old,current){location.hash=current},get menuPanel(){return this.$.menuPanel},__bajarTap:function(event){console.log("bajartap",this)},__nuevoTap:function(event){console.log("nuevotap",this);this.$.pl.handlerShowNuevaPlantilla()},created:function(){this.rqReadPlantillas={model:"plantilla",response:this.readPlantillasResponse.bind(this),error:this.readError.bind(this),errorConnection:this.readErrorConnection.bind(this),complete:this.readComplete.bind(this)};this.rqUpdatePlantilla={model:"plantilla",response:this.updatePlantillaResponse.bind(this),error:this.readError.bind(this),errorConnection:this.readErrorConnection.bind(this),complete:this.readComplete.bind(this)};this.rqCreatePlantilla={model:"plantilla",response:this.createPlantillaResponse.bind(this),error:this.readError.bind(this),errorConnection:this.readErrorConnection.bind(this),complete:this.readComplete.bind(this)};this.rqDeletePlantilla={model:"plantilla",response:this.deletePlantillaResponse.bind(this),error:this.readError.bind(this),errorConnection:this.readErrorConnection.bind(this),complete:this.readComplete.bind(this)};this.rqReadCapitulos={model:"capitulo",response:this.readCapitulosResponse.bind(this),error:this.readError.bind(this),errorConnection:this.readErrorConnection.bind(this),complete:this.readComplete.bind(this),urlparams:{}};this.rqUpdateCapitulo={model:"capitulo",response:this.updateCapituloResponse.bind(this),error:this.readError.bind(this),errorConnection:this.readErrorConnection.bind(this),complete:this.readComplete.bind(this)};this.rqCreateCapitulo={model:"capitulo",response:this.createCapituloResponse.bind(this),error:this.readError.bind(this),errorConnection:this.readErrorConnection.bind(this),complete:this.readComplete.bind(this)};this.rqDeleteCapitulo={model:"capitulo",response:this.deleteCapituloResponse.bind(this),error:this.readError.bind(this),errorConnection:this.readErrorConnection.bind(this),complete:this.readComplete.bind(this)};this.rqReadGuias={model:"guia",response:this.readGuiasResponse.bind(this),error:this.readError.bind(this),errorConnection:this.readErrorConnection.bind(this),complete:this.readComplete.bind(this),urlparams:{}};this.rqUpdateGuia={model:"guia",response:this.updateGuiaResponse.bind(this),error:this.readError.bind(this),errorConnection:this.readErrorConnection.bind(this),complete:this.readComplete.bind(this)};this.rqCreateGuia={model:"guia",response:this.createGuiaResponse.bind(this),error:this.readError.bind(this),errorConnection:this.readErrorConnection.bind(this),complete:this.readComplete.bind(this)};this.rqDeleteGuia={model:"guia",response:this.deleteGuiaResponse.bind(this),error:this.readError.bind(this),errorConnection:this.readErrorConnection.bind(this),complete:this.readComplete.bind(this)};this.rqReadPreguntas={model:"pregunta",response:this.readPreguntasResponse.bind(this),error:this.readError.bind(this),errorConnection:this.readErrorConnection.bind(this),complete:this.readComplete.bind(this),urlparams:{}};this.rqUpdatePregunta={model:"pregunta",response:this.updatePreguntaResponse.bind(this),error:this.readError.bind(this),errorConnection:this.readErrorConnection.bind(this),complete:this.readComplete.bind(this)};this.rqCreatePregunta={model:"pregunta",response:this.createPreguntaResponse.bind(this),error:this.readError.bind(this),errorConnection:this.readErrorConnection.bind(this),complete:this.readComplete.bind(this)};this.rqDeletePregunta={model:"pregunta",response:this.deletePreguntaResponse.bind(this),error:this.readError.bind(this),errorConnection:this.readErrorConnection.bind(this),complete:this.readComplete.bind(this)};this.rqReadRequisitos={model:"requisito",response:this.readRequisitosResponse.bind(this),error:this.readError.bind(this),errorConnection:this.readErrorConnection.bind(this),complete:this.readComplete.bind(this),urlparams:{}}},ready:function(){var t=document.createElement("template");t.innerHTML='<paper-icon-button id="_nuevo" on-tap="{{}}" icon="add-circle"></paper-icon-button>';this.$.menuPanel.tb.appendChild(this.instanceTemplate(t));t=document.createElement("template");t.innerHTML='<paper-icon-button id="_down" on-tap="{{}}" icon="cloud-download"></paper-icon-button>';this.$.menuPanel.tb.appendChild(this.instanceTemplate(t));var x=this.$.menuPanel.tb.querySelector("#_nuevo");x.addEventListener("tap",this.__nuevoTap.bind(this));x=this.$.menuPanel.tb.querySelector("#_down");x.addEventListener("tap",this.__bajarTap.bind(this));this.$.pl.handlerMostrarCapitulos=this.handlerMostrarCapitulos.bind(this);this.$.pl.handlerSavePlantilla=this.handlerSavePlantilla.bind(this);this.$.pl.handlerDeletePlantilla=this.handlerDeletePlantilla.bind(this);this.$.pl.handlerMostrarGuias=this.handlerMostrarGuias.bind(this);this.$.pc.handlerMostrarPreguntas=this.handlerMostrarPreguntas.bind(this);this.$.pc.handlerSaveCapitulo=this.handlerSaveCapitulo.bind(this);this.$.pc.handlerDeleteCapitulo=this.handlerDeleteCapitulo.bind(this);this.$.pg.handlerSaveGuia=this.handlerSaveGuia.bind(this);this.$.pg.handlerDeleteGuia=this.handlerDeleteGuia.bind(this);this.$.pcp.handlerSavePregunta=this.handlerSavePregunta.bind(this);this.$.pcp.handlerDeletePregunta=this.handlerDeletePregunta.bind(this);this.$.pcp.handlerShowGuiasToSelect=this.handlerShowGuiasToSelect.bind(this);this.$.pcp.handlerRemoveGuia=this.handlerSavePregunta.bind(this);this.$.pcp.handlerSaveQ=this.handlerSavePregunta.bind(this);this.$.pcp.handlerRemoveQ=this.handlerSavePregunta.bind(this)},domReady:function(){this.fire("element-ready")},go:function(){window.liebre.remote.read(this.rqReadPlantillas);this.$.wl.display="block"},mainIconTap:function(){this.fire("x-back")},handlerBack:function(){this.route=this.route.substring(0,this.route.lastIndexOf("/"))},handlerMostrarCapitulos:function(e,detail,sender){this.$.pc.plantilla=detail.item;this.$.pc.capitulos=[];this.rqReadCapitulos.urlparams.IdPlantilla=detail.item.Id;window.liebre.remote.read(this.rqReadCapitulos);this.$.wl.display="block"},handlerMostrarGuias:function(e,detail,sender){this.$.pg.plantilla=detail.item;this.$.pg.guias=[];this.rqReadGuias.urlparams.IdPlantilla=detail.item.Id;window.liebre.remote.read(this.rqReadGuias);this.$.wl.display="block"},handlerMostrarPreguntas:function(e,detail,sender){this.$.pcp.capitulo=detail.item;this.$.pcp.preguntas=[];this.route="plantillas/capitulos/preguntas";this.rqReadGuias.urlparams.IdPlantilla=this.$.pc.plantilla.Id;window.liebre.remote.read(this.rqReadGuias);this.$.wl.display="block"},handlerShowGuiasToSelect:function(e,detail,sender){this.$.sg.plantilla=this.$.pc.plantilla;this.$.sg.clearSelected();this.route="plantillas/capitulos/preguntas/sg"},handlerSavePlantilla:function(e,detail,sender){if(detail.item.Id){window.liebre.remote.update(detail.item,this.rqUpdatePlantilla)}else{window.liebre.remote.create(detail.item,this.rqCreatePlantilla)}},handlerDeletePlantilla:function(e,detail,sender){window.liebre.remote.delete(detail.item,this.rqDeletePlantilla)},handlerSaveCapitulo:function(e,detail,sender){if(detail.item.Id){liebre.remote.update(detail.item,this.rqUpdateCapitulo)}else{liebre.remote.create(detail.item,this.rqCreateCapitulo)}},handlerDeleteCapitulo:function(e,detail,sender){liebre.remote.delete(detail.item,this.rqDeleteCapitulo)},handlerSaveGuia:function(e,detail,sender){if(detail.item.Id){liebre.remote.update(detail.item,this.rqUpdateGuia)}else{liebre.remote.create(detail.item,this.rqCreateGuia)}},handlerDeleteGuia:function(e,detail,sender){liebre.remote.delete(detail.item,this.rqDeleteGuia)},handlerSavePregunta:function(e,detail,sender){if(detail.item.Id){liebre.remote.update(detail.item,this.rqUpdatePregunta)}else{liebre.remote.create(detail.item,this.rqCreatePregunta)}},handlerDeletePregunta:function(e,detail,sender){liebre.remote.delete(detail.item,this.rqDeletePregunta)},handlerCheckSelectedGuias:function(e,detail,sender){if(detail.selected!=null){var current=this.$.pcp.current;var s=[];for(var i in detail.selected){var found=false;for(var g in current.IdGuias){if(detail.selected[i]===current.IdGuias[g]){found=true;break}}if(!found){s.push(detail.selected[i])}}for(var z in s){current.IdGuias.push(s[z])}if(s.length>0){liebre.remote.update(current,this.rqUpdatePregunta)}}this.handlerBack()},readPlantillasResponse:function(event){var data=event.detail.data;for(var d in data){data[d].FechaInicial=window.liebre.tools.formatDate(data[d].FechaInicial);data[d].FechaFinal=window.liebre.tools.formatDate(data[d].FechaFinal)}this.$.pl.plantillas=data;window.liebre.remote.read(this.rqReadRequisitos)},readCapitulosResponse:function(event){this.$.pc.capitulos=event.detail.data;this.route="plantillas/capitulos"},readGuiasResponse:function(event){if(this.route==="plantillas"){this.$.pg.guias=event.detail.data;this.route="plantillas/guias"}else{this.$.pcp.guias=event.detail.data;this.$.sg.guias=event.detail.data;this.rqReadPreguntas.urlparams.IdCapitulo=this.$.pcp.capitulo.Id;window.liebre.remote.read(this.rqReadPreguntas);this.$.wl.display="block"}},readPreguntasResponse:function(event){this.$.pcp.preguntas=event.detail.data},readRequisitosResponse:function(event){this.$.pcp.requisitos=event.detail.data},readError:function(event){console.log("error",event);this.$.error.text="Error: "+event.type+". "+event.detail.xhr.statusText+". "+event.detail.xhr.response;this.$.error.show()},readComplete:function(event){console.log("complete",event);this.$.wl.display="none";if(event.detail.xhr.status===200&&!event.type.startsWith("read")){this.$.complete.text="Operación realizada: "+event.type;this.$.complete.show()}},readErrorConnection:function(event){console.log("error-connection",event);this.$.error_connection.text="Error de conexión: "+event.type+". Servidor:"+liebre.tools.getBaseUrl();this.$.error_connection.show()},createPlantillaResponse:function(event){var data=event.detail.data;data.FechaInicial=window.liebre.tools.formatDate(data.FechaInicial);data.FechaFinal=window.liebre.tools.formatDate(data.FechaFinal);this.$.pl.plantillas.unshift(data)},updatePlantillaResponse:function(event){var data=event.detail.data;data.FechaInicial=window.liebre.tools.formatDate(data.FechaInicial);data.FechaFinal=window.liebre.tools.formatDate(data.FechaFinal);for(var d in this.$.pl.plantillas){if(this.$.pl.plantillas[d].Id===data.Id){this.$.pl.plantillas[d]=data;break}}},deletePlantillaResponse:function(event){var data=event.detail.data;var index=-1;for(var d in this.$.pl.plantillas){if(this.$.pl.plantillas[d].Id===data.Id){index=this.$.pl.plantillas.indexOf(this.$.pl.plantillas[d]);break}}if(index>=0){this.$.pl.plantillas.splice(index,1)}},createCapituloResponse:function(event){console.log("Capitulo reponse: create",event);this.$.pc.capitulos.unshift(event.detail.data)},updateCapituloResponse:function(event){console.log("Capitulo reponse: upadte",event);var data=event.detail.data;for(var d in this.$.pc.capitulos){if(this.$.pc.capitulos[d].Id===data.Id){this.$.pc.capitulos[d]=data;break}}},deleteCapituloResponse:function(event){console.log("Capitulo reponse: delete",event);var data=event.detail.data;var index=-1;for(var d in this.$.pc.capitulos){if(this.$.pc.capitulos[d].Id===data.Id){index=this.$.pc.capitulos.indexOf(this.$.pc.capitulos[d]);break}}if(index>=0){this.$.pc.capitulos.splice(index,1)}},createGuiaResponse:function(event){console.log("Guia reponse: create",event);this.$.pg.guias.unshift(event.detail.data)},updateGuiaResponse:function(event){console.log("Guia reponse: upadte",event);var data=event.detail.data;for(var d in this.$.pg.guias){if(this.$.pg.guias[d].Id===data.Id){this.$.pg.guias[d]=data;break}}},deleteGuiaResponse:function(event){console.log("Guia reponse: delete",event);var data=event.detail.data;var index=-1;for(var d in this.$.pg.guias){if(this.$.pg.guias[d].Id===data.Id){index=this.$.pg.guias.indexOf(this.$.pg.guias[d]);break}}if(index>=0){this.$.pg.guias.splice(index,1)}},createPreguntaResponse:function(event){console.log("Pregunta reponse: create",event);this.$.pcp.preguntas.unshift(event.detail.data)},updatePreguntaResponse:function(event){console.log("Pregunta reponse: update",event);var data=event.detail.data;for(var d in this.$.pcp.preguntas){if(this.$.pcp.preguntas[d].Id===data.Id){this.$.pcp.preguntas[d]=data;break}}},deletePreguntaResponse:function(event){console.log("Pregunta reponse: delete",event);var data=event.detail.data;var index=-1;for(var d in this.$.pcp.preguntas){if(this.$.pcp.preguntas[d].Id===data.Id){index=this.$.pcp.preguntas.indexOf(this.$.pcp.preguntas[d]);break}}if(index>=0){this.$.pcp.preguntas.splice(index,1)}}});</script>
 </polymer-element></div><div hidden><polymer-element name="emp-diagnostico" assetpath="x-empresa/">
   <template>
 	  <style></style>
