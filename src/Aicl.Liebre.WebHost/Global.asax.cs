@@ -8,7 +8,6 @@ namespace Aicl.Liebre.WebHost
 	{
 		protected void Application_Start (Object sender, EventArgs e)
 		{
-			//Licensing.RegisterLicense(new AppSettings().GetString("servicestack:license"));  
 			new AppHost().Init();
 		}
 

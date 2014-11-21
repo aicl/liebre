@@ -1,38 +1,63 @@
-<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectTypeGuids>{349C5851-65DF-11DA-9384-00065B846F21};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <ProjectGuid>{F5386C78-5C4A-4096-AEBF-6B07F6A2034E}</ProjectGuid>
+    <ProjectTypeGuids>{349C5851-65DF-11DA-9384-00065B846F21};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
     <RootNamespace>Aicl.Liebre.WebHost</RootNamespace>
     <AssemblyName>Aicl.Liebre.WebHost</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <UseIISExpress>false</UseIISExpress>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <OldToolsVersion>4.0</OldToolsVersion>
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+    <TargetFrameworkProfile />
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin</OutputPath>
-    <DefineConstants>DEBUG;</DefineConstants>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <ConsolePause>false</ConsolePause>
+    <PlatformTarget>x86</PlatformTarget>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>full</DebugType>
+    <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin</OutputPath>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <ConsolePause>false</ConsolePause>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.CSharp" />
     <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Web" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Xml" />
-    <Reference Include="System.Web.Services" />
+    <Reference Include="System.Xml.Linq" />
     <Reference Include="ServiceStack">
       <HintPath>..\..\lib\ServiceStack.dll</HintPath>
     </Reference>
@@ -66,19 +91,26 @@
     <Reference Include="System.Web.Razor">
       <HintPath>..\..\lib\System.Web.Razor.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Runtime.Serialization" />
-    <Reference Include="System.Web.ApplicationServices" />
-    <Reference Include="System.Web.DynamicData" />
-    <Reference Include="System.Web.Extensions" />
-    <Reference Include="System.Xml.Linq" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Aicl.Liebre.Model\Aicl.Liebre.Model.csproj">
+      <Project>{8D3332AB-B6C7-4DF1-AAA0-012694E64E81}</Project>
+      <Name>Aicl.Liebre.Model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Aicl.Liebre.Data\Aicl.Liebre.Data.csproj">
+      <Project>{C64110A4-8A19-4120-87B4-2BF05DB978DE}</Project>
+      <Name>Aicl.Liebre.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Aicl.Liebre.ServiceInterface\Aicl.Liebre.ServiceInterface.csproj">
+      <Project>{698BAC58-2034-4266-8D4C-B68A7D7C9389}</Project>
+      <Name>Aicl.Liebre.ServiceInterface</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Global.asax" />
-    <Content Include="web.config" />
+    <Content Include="web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="index.html" />
     <Content Include="404.html" />
     <Content Include="bower_components\platform\platform.js" />
@@ -112,15 +144,11 @@
     <Content Include="q\appcache.manifest" />
     <Content Include="q\favicon.ico" />
     <Content Include="q\robots.txt" />
-    <Content Include="json\CIIU.json">
-      <DeployService-Deploy>True</DeployService-Deploy>
-    </Content>
+    <Content Include="json\CIIU.json" />
     <Content Include="json\ciudades.json" />
     <Content Include="json\departamentos.json" />
     <Content Include="json\riesgos.json" />
-    <Content Include="json\actividadesaltoriesgo.json">
-      <DeployService-Deploy>True</DeployService-Deploy>
-    </Content>
+    <Content Include="json\actividadesaltoriesgo.json" />
     <Content Include="json\rangos.json" />
     <Content Include="q\scripts\vendor\underscore-min.js" />
     <Content Include="q\scripts\vendor\ydn.db-is-core-qry.js.map" />
@@ -129,33 +157,19 @@
     <Content Include="scripts\vendor\underscore-min.js" />
     <Content Include="scripts\vendor\underscore-min.map" />
     <Content Include="json\requisitos.json" />
+    <Content Include="Views\DiagnosticoInfo.cshtml" />
     <Content Include="Views\_Layout.cshtml" />
-    <Content Include="Views\DiagnosticoInfo.cshtml">
-      <Generator>RazorTemplatePreprocessor</Generator>
-      <LastGenOutput>DiagnosticoInfo.cs</LastGenOutput>
-    </Content>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AppHost.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="AppHost.cs" />
-    <Compile Include="Views\DiagnosticoInfo.cs">
-      <DependentUpon>DiagnosticoInfo.cshtml</DependentUpon>
-    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Shared\Info.cshtml" />
   </ItemGroup>
-  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
-  <Import Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v11.0\WebApplications\Microsoft.WebApplication.targets" />
-  <ProjectExtensions>
-    <MonoDevelop>
-      <Properties>
-        <XspParameters Port="8080" Address="192.168.0.2" SslMode="None" SslProtocol="Default" KeyType="None" CertFile="" KeyFile="" PasswordOptions="None" Password="" Verbose="True" />
-      </Properties>
-    </MonoDevelop>
-  </ProjectExtensions>
   <ItemGroup>
     <None Include="bower_components\platform\.bower.json" />
     <None Include="bower_components\platform\README.md" />
@@ -184,29 +198,35 @@
     <None Include="q\flatiron-director\LICENSE.TXT" />
     <None Include="q\flatiron-director\PATENTS" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="bower_components\" />
-    <Folder Include="elements\" />
-    <Folder Include="flatiron-director\" />
-    <Folder Include="scripts\" />
-    <Folder Include="styles\" />
-    <Folder Include="q\" />
-    <Folder Include="json\" />
-    <Folder Include="Views\" />
-    <Folder Include="Views\Shared\" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Aicl.Liebre.Model\Aicl.Liebre.Model.csproj">
-      <Project>{8D3332AB-B6C7-4DF1-AAA0-012694E64E81}</Project>
-      <Name>Aicl.Liebre.Model</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Aicl.Liebre.Data\Aicl.Liebre.Data.csproj">
-      <Project>{C64110A4-8A19-4120-87B4-2BF05DB978DE}</Project>
-      <Name>Aicl.Liebre.Data</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Aicl.Liebre.ServiceInterface\Aicl.Liebre.ServiceInterface.csproj">
-      <Project>{698BAC58-2034-4266-8D4C-B68A7D7C9389}</Project>
-      <Name>Aicl.Liebre.ServiceInterface</Name>
-    </ProjectReference>
-  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>False</UseIIS>
+          <AutoAssignPort>False</AutoAssignPort>
+          <DevelopmentServerPort>2000</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>
+          </IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+    <MonoDevelop>
+      <Properties>
+        <XspParameters Port="8080" Address="127.0.0.1" SslMode="None" SslProtocol="Default" KeyType="None" CertFile="" KeyFile="" PasswordOptions="None" Password="" Verbose="True" />
+      </Properties>
+    </MonoDevelop>
+  </ProjectExtensions>
 </Project>

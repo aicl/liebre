@@ -6,7 +6,6 @@ using ServiceStack.Configuration;
 using MongoDB.Bson.Serialization.Conventions;
 using ServiceStack.Razor;
 
-
 namespace Aicl.Liebre.WebHost
 {
 	public class AppHost:AppHostBase
