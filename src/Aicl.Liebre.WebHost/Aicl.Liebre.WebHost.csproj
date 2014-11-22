@@ -1,93 +1,46 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{F5386C78-5C4A-4096-AEBF-6B07F6A2034E}</ProjectGuid>
     <ProjectTypeGuids>{349C5851-65DF-11DA-9384-00065B846F21};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <ProjectGuid>{BDDD5DE0-EEE7-4B7E-9F6D-D85D3B3ADC90}</ProjectGuid>
     <OutputType>Library</OutputType>
     <RootNamespace>Aicl.Liebre.WebHost</RootNamespace>
     <AssemblyName>Aicl.Liebre.WebHost</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <UseIISExpress>false</UseIISExpress>
-    <FileUpgradeFlags>
-    </FileUpgradeFlags>
-    <UpgradeBackupLocation>
-    </UpgradeBackupLocation>
-    <OldToolsVersion>4.0</OldToolsVersion>
-    <IISExpressSSLPort />
-    <IISExpressAnonymousAuthentication />
-    <IISExpressWindowsAuthentication />
-    <IISExpressUseClassicPipelineMode />
-    <TargetFrameworkProfile />
-    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
-    <RestorePackages>true</RestorePackages>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <OutputPath>bin</OutputPath>
+    <DefineConstants>DEBUG;</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <PlatformTarget>x86</PlatformTarget>
-    <Prefer32Bit>false</Prefer32Bit>
+    <ConsolePause>false</ConsolePause>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
+    <DebugType>full</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
+    <OutputPath>bin</OutputPath>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
+    <ConsolePause>false</ConsolePause>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Microsoft.CSharp" />
     <Reference Include="System" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Web" />
-    <Reference Include="System.Web.ApplicationServices" />
-    <Reference Include="System.Web.DynamicData" />
-    <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Xml" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.Web.Routing" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web.Abstractions" />
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Xml.Linq" />
-    <Reference Include="ServiceStack">
-      <HintPath>..\..\lib\ServiceStack.dll</HintPath>
-    </Reference>
-    <Reference Include="ServiceStack.Interfaces">
-      <HintPath>..\..\lib\ServiceStack.Interfaces.dll</HintPath>
-    </Reference>
-    <Reference Include="ServiceStack.OrmLite">
-      <HintPath>..\..\lib\ServiceStack.OrmLite.dll</HintPath>
-    </Reference>
-    <Reference Include="ServiceStack.OrmLite.MySql">
-      <HintPath>..\..\lib\ServiceStack.OrmLite.MySql.dll</HintPath>
-    </Reference>
-    <Reference Include="ServiceStack.Redis">
-      <HintPath>..\..\lib\ServiceStack.Redis.dll</HintPath>
-    </Reference>
-    <Reference Include="MongoDB.Bson">
-      <HintPath>..\..\lib\MongoDB.Bson.dll</HintPath>
-    </Reference>
-    <Reference Include="MongoDB.Driver">
-      <HintPath>..\..\lib\MongoDB.Driver.dll</HintPath>
-    </Reference>
-    <Reference Include="ServiceStack.Text">
-      <HintPath>..\..\lib\ServiceStack.Text.dll</HintPath>
-    </Reference>
-    <Reference Include="ServiceStack.Common">
-      <HintPath>..\..\lib\ServiceStack.Common.dll</HintPath>
-    </Reference>
-    <Reference Include="ServiceStack.Razor">
-      <HintPath>..\..\lib\ServiceStack.Razor.dll</HintPath>
-    </Reference>
+    <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.Web.Infrastructure">
       <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
     </Reference>
@@ -109,6 +62,42 @@
     <Reference Include="System.Web.Mvc">
       <HintPath>..\packages\Microsoft.AspNet.Mvc.5.2.2\lib\net45\System.Web.Mvc.dll</HintPath>
     </Reference>
+    <Reference Include="MongoDB.Bson">
+      <HintPath>..\..\lib\MongoDB.Bson.dll</HintPath>
+    </Reference>
+    <Reference Include="MongoDB.Driver">
+      <HintPath>..\..\lib\MongoDB.Driver.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\..\lib\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="ServiceStack.Client">
+      <HintPath>..\..\lib\ServiceStack.Client.dll</HintPath>
+    </Reference>
+    <Reference Include="ServiceStack.Common">
+      <HintPath>..\..\lib\ServiceStack.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="ServiceStack">
+      <HintPath>..\..\lib\ServiceStack.dll</HintPath>
+    </Reference>
+    <Reference Include="ServiceStack.Interfaces">
+      <HintPath>..\..\lib\ServiceStack.Interfaces.dll</HintPath>
+    </Reference>
+    <Reference Include="ServiceStack.OrmLite">
+      <HintPath>..\..\lib\ServiceStack.OrmLite.dll</HintPath>
+    </Reference>
+    <Reference Include="ServiceStack.OrmLite.MySql">
+      <HintPath>..\..\lib\ServiceStack.OrmLite.MySql.dll</HintPath>
+    </Reference>
+    <Reference Include="ServiceStack.Razor">
+      <HintPath>..\..\lib\ServiceStack.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="ServiceStack.Redis">
+      <HintPath>..\..\lib\ServiceStack.Redis.dll</HintPath>
+    </Reference>
+    <Reference Include="ServiceStack.Mvc">
+      <HintPath>..\..\lib\ServiceStack.Mvc.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Aicl.Liebre.Model\Aicl.Liebre.Model.csproj">
@@ -125,9 +114,37 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Content\" />
+    <Folder Include="Models\" />
+    <Folder Include="Views\DiagnosticoInfo\" />
+    <Folder Include="bower_components\" />
+    <Folder Include="elements\" />
+    <Folder Include="flatiron-director\" />
+    <Folder Include="json\" />
+    <Folder Include="q\" />
+    <Folder Include="scripts\" />
+    <Folder Include="styles\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="AppHost.cs" />
+    <Compile Include="Controllers\DiagnosticoInfoController.cs" />
+    <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Web.config" />
+    <Content Include="Views\Shared\_Layout.cshtml" />
+    <Content Include="Views\Shared\Error.cshtml" />
+    <Content Include="Views\_ViewStart.cshtml" />
+    <Content Include="Web.config" />
     <Content Include="Global.asax" />
+    <Content Include="packages.config" />
     <Content Include="index.html" />
-    <Content Include="404.html" />
+    <Content Include="Views\DiagnosticoInfo\Index.cshtml" />
+    <Content Include="Views\Home\Index.cshtml" />
     <Content Include="bower_components\platform\platform.js" />
     <Content Include="bower_components\polymer\layout.html" />
     <Content Include="bower_components\polymer\polymer.html" />
@@ -135,15 +152,6 @@
     <Content Include="elements\elements.vulcanized.html" />
     <Content Include="flatiron-director\director.min.js" />
     <Content Include="flatiron-director\flatiron-director.html" />
-    <Content Include="scripts\app.js" />
-    <Content Include="scripts\vendor\ydn.db-is-core-qry.js" />
-    <Content Include="styles\main.css" />
-    <Content Include="bower_components\polymer\polymer.js.map" />
-    <Content Include="bower_components\platform\platform.js.map" />
-    <Content Include="scripts\vendor\ydn.db-is-core-qry.js.map" />
-    <Content Include="appcache.manifest" />
-    <Content Include="robots.txt" />
-    <Content Include="favicon.ico" />
     <Content Include="q\404.html" />
     <Content Include="q\index.html" />
     <Content Include="q\bower_components\platform\platform.js" />
@@ -154,68 +162,42 @@
     <Content Include="q\flatiron-director\director.min.js" />
     <Content Include="q\flatiron-director\flatiron-director.html" />
     <Content Include="q\scripts\app.js" />
+    <Content Include="q\scripts\vendor\underscore-min.js" />
     <Content Include="q\scripts\vendor\ydn.db-is-core-qry.js" />
     <Content Include="q\styles\main.css" />
-    <Content Include="q\appcache.manifest" />
-    <Content Include="q\favicon.ico" />
-    <Content Include="q\robots.txt" />
+    <Content Include="scripts\app.js" />
+    <Content Include="scripts\vendor\underscore-min.js" />
+    <Content Include="scripts\vendor\ydn.db-is-core-qry.js" />
+    <Content Include="styles\main.css" />
+    <Content Include="404.html" />
+    <Content Include="bower_components\platform\platform.js.map" />
+    <Content Include="bower_components\polymer\polymer.js.map" />
+    <Content Include="flatiron-director\AUTHORS" />
+    <Content Include="flatiron-director\LICENSE" />
+    <Content Include="flatiron-director\LICENSE.TXT" />
+    <Content Include="flatiron-director\PATENTS" />
+    <Content Include="json\actividadesaltoriesgo.json" />
     <Content Include="json\CIIU.json" />
     <Content Include="json\ciudades.json" />
     <Content Include="json\departamentos.json" />
-    <Content Include="json\riesgos.json" />
-    <Content Include="json\actividadesaltoriesgo.json" />
-    <Content Include="json\rangos.json" />
-    <Content Include="q\scripts\vendor\underscore-min.js" />
-    <Content Include="q\scripts\vendor\ydn.db-is-core-qry.js.map" />
-    <Content Include="q\scripts\vendor\underscore-min.map" />
     <Content Include="json\externos.json" />
-    <Content Include="scripts\vendor\underscore-min.js" />
-    <Content Include="scripts\vendor\underscore-min.map" />
+    <Content Include="json\rangos.json" />
     <Content Include="json\requisitos.json" />
-    <Content Include="Views\DiagnosticoInfo.cshtml" />
-    <Content Include="Views\_Layout.cshtml" />
-    <Content Include="Web.config">
-      <SubType>Designer</SubType>
-    </Content>
-    <Content Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="AppHost.cs" />
-    <Compile Include="Global.asax.cs">
-      <DependentUpon>Global.asax</DependentUpon>
-    </Compile>
-    <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Shared\Info.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="bower_components\platform\.bower.json" />
-    <None Include="bower_components\platform\README.md" />
-    <None Include="bower_components\platform\bower.json" />
-    <None Include="bower_components\platform\build.log" />
-    <None Include="bower_components\polymer\.bower.json" />
-    <None Include="bower_components\polymer\README.md" />
-    <None Include="bower_components\polymer\bower.json" />
-    <None Include="bower_components\polymer\build.log" />
-    <None Include="flatiron-director\AUTHORS" />
-    <None Include="flatiron-director\LICENSE" />
-    <None Include="flatiron-director\LICENSE.TXT" />
-    <None Include="flatiron-director\PATENTS" />
-    <None Include="q\bower_components\platform\.bower.json" />
-    <None Include="q\bower_components\platform\README.md" />
-    <None Include="q\bower_components\platform\bower.json" />
-    <None Include="q\bower_components\platform\build.log" />
-    <None Include="q\bower_components\platform\platform.js.map" />
-    <None Include="q\bower_components\polymer\.bower.json" />
-    <None Include="q\bower_components\polymer\README.md" />
-    <None Include="q\bower_components\polymer\bower.json" />
-    <None Include="q\bower_components\polymer\build.log" />
-    <None Include="q\bower_components\polymer\polymer.js.map" />
-    <None Include="q\flatiron-director\AUTHORS" />
-    <None Include="q\flatiron-director\LICENSE" />
-    <None Include="q\flatiron-director\LICENSE.TXT" />
-    <None Include="q\flatiron-director\PATENTS" />
+    <Content Include="json\riesgos.json" />
+    <Content Include="q\bower_components\platform\platform.js.map" />
+    <Content Include="q\bower_components\polymer\polymer.js.map" />
+    <Content Include="q\flatiron-director\AUTHORS" />
+    <Content Include="q\flatiron-director\LICENSE" />
+    <Content Include="q\flatiron-director\LICENSE.TXT" />
+    <Content Include="q\flatiron-director\PATENTS" />
+    <Content Include="q\scripts\vendor\underscore-min.map" />
+    <Content Include="q\scripts\vendor\ydn.db-is-core-qry.js.map" />
+    <Content Include="q\appcache.manifest" />
+    <Content Include="q\favicon.ico" />
+    <Content Include="q\robots.txt" />
+    <Content Include="appcache.manifest" />
+    <Content Include="favicon.ico" />
+    <Content Include="robots.txt" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
@@ -225,27 +207,30 @@
   <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
   <ProjectExtensions>
-    <VisualStudio>
-      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
-        <WebProjectProperties>
-          <UseIIS>False</UseIIS>
-          <AutoAssignPort>False</AutoAssignPort>
-          <DevelopmentServerPort>2000</DevelopmentServerPort>
-          <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>
-          </IISUrl>
-          <NTLMAuthentication>False</NTLMAuthentication>
-          <UseCustomServer>False</UseCustomServer>
-          <CustomServerUrl>
-          </CustomServerUrl>
-          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
-        </WebProjectProperties>
-      </FlavorProperties>
-    </VisualStudio>
     <MonoDevelop>
       <Properties>
-        <XspParameters Port="8080" Address="127.0.0.1" SslMode="None" SslProtocol="Default" KeyType="None" CertFile="" KeyFile="" PasswordOptions="None" Password="" Verbose="True" />
+        <XspParameters Port="8080" Address="192.168.0.2" SslMode="None" SslProtocol="Default" KeyType="None" CertFile="" KeyFile="" PasswordOptions="None" Password="" Verbose="True" />
       </Properties>
     </MonoDevelop>
   </ProjectExtensions>
+  <ItemGroup>
+    <None Include="bower_components\platform\.bower.json" />
+    <None Include="bower_components\platform\README.md" />
+    <None Include="bower_components\platform\bower.json" />
+    <None Include="bower_components\platform\build.log" />
+    <None Include="bower_components\polymer\.bower.json" />
+    <None Include="bower_components\polymer\README.md" />
+    <None Include="bower_components\polymer\bower.json" />
+    <None Include="bower_components\polymer\build.log" />
+    <None Include="q\bower_components\platform\.bower.json" />
+    <None Include="q\bower_components\platform\README.md" />
+    <None Include="q\bower_components\platform\bower.json" />
+    <None Include="q\bower_components\platform\build.log" />
+    <None Include="q\bower_components\polymer\.bower.json" />
+    <None Include="q\bower_components\polymer\README.md" />
+    <None Include="q\bower_components\polymer\bower.json" />
+    <None Include="q\bower_components\polymer\build.log" />
+    <None Include="scripts\vendor\underscore-min.map" />
+    <None Include="scripts\vendor\ydn.db-is-core-qry.js.map" />
+  </ItemGroup>
 </Project>
