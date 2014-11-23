@@ -358,7 +358,7 @@ namespace Aicl.Liebre.Data
 			response.Plantilla = GetById<Plantilla> (response.Diagnostico.IdPlantilla);
 			response.Empresa = GetById<Empresa> ( response.Diagnostico.IdEmpresa);
 
-			response.Capitulos = GetByQuery<Capitulo> (q => q.IdPlantilla == response.Diagnostico.IdPlantilla)
+			response.Capitulos = GetByQuery<CapituloInfo> (typeof(Capitulo), q => q.IdPlantilla == response.Diagnostico.IdPlantilla)
 				.OrderBy( q=> NormalizeNumeral(q.Numeral)).ToList();
 
 			var capIds = response.Capitulos.ConvertAll (e => e.Id);
@@ -368,24 +368,32 @@ namespace Aicl.Liebre.Data
 			var r = GetByQuery<Respuesta> (q => q.IdDiagnostico == response.Diagnostico.Id, q=>q.IdPregunta);
 
 			var g = GetByQuery<Guia> (q => q.IdPlantilla == response.Plantilla.Id, q=>q.Id);
-			var rg = GetByQuery<RespuestaGuiaInfo> ("respuestaguia",q => q.IdDiagnostico == response.Diagnostico.Id, q=>q.IdGuia);
-
-			p.ForEach (q => response.Preguntas.Add (new ViewPregunta {
-				Pregunta = q,
-				Respuesta = r.FirstOrDefault (rq => rq.IdPregunta == q.Id) ??
-					new Respuesta{ 
-					IdPregunta = q.Id, 
-					IdDiagnostico = response.Diagnostico.Id, 
-					Respuestas=new List<bool>(q.Preguntas.Count),
-					Valor = (q.Preguntas.Count > 0 ? (short)0 : default(short?))
-				}
-			}));
+			var rg = GetByQuery<RespuestaGuiaInfo> (typeof(RespuestaGuia),q => q.IdDiagnostico == response.Diagnostico.Id, q=>q.IdGuia);
 
 			g.ForEach (q => response.Guias.Add (new ViewGuiaInfo { 
 				Guia = q, 
 				Respuesta = rg.FirstOrDefault (rq => rq.IdGuia == q.Id) ??
 					new RespuestaGuiaInfo { IdGuia = q.Id, IdDiagnostico = response.Diagnostico.Id }
 			}));
+
+			p.ForEach (q =>{
+				var vp=  new ViewPreguntaInfo {
+					Pregunta = q,
+					Respuesta = r.FirstOrDefault (rq => rq.IdPregunta == q.Id) ??
+						new Respuesta{ 
+						IdPregunta = q.Id, 
+						IdDiagnostico = response.Diagnostico.Id, 
+						Respuestas=new List<bool>(q.Preguntas.Count),
+						Valor = (q.Preguntas.Count > 0 ? (short)0 : default(short?))
+					},
+					Guias=response.Guias.FindAll(_g=> q.IdGuias.Contains(_g.Guia.Id))
+				};
+
+				response.Preguntas.Add(vp);
+				var cap = response.Capitulos.First(c=>c.Id==q.IdCapitulo);
+				cap.Preguntas.Add(vp);
+			});
+
 
 			return response;
 		}
@@ -398,7 +406,7 @@ namespace Aicl.Liebre.Data
 
 		}
 
-		ListResult<T> ReadFromFile<T>(string fileName){
+		static ListResult<T> ReadFromFile<T>(string fileName){
 			var file = PathUtils.CombinePaths("~","json",fileName).MapHostAbsolutePath ();
 			using(var fileStream = new FileStream(file, FileMode.Open, FileAccess.Read )){
 				var c= JsonSerializer.DeserializeFromStream<List<T>> (fileStream);
@@ -412,6 +420,11 @@ namespace Aicl.Liebre.Data
 
 		MongoCollection<T> GetCollection<T>(string collection){
 			return Db.GetCollection<T> (collection);
+		}
+
+		List<T> GetByQuery<T>(Type rootType, Expression<Func<T, bool>> predicate,Func<T, object> orderBy=null, string orderType="") where T:class, IDocument
+		{
+			return GetByQuery<T> (rootType.GetCollectionName (), predicate, orderBy, orderType);
 		}
 
 		List<T> GetByQuery<T>(string collection, Expression<Func<T, bool>> predicate,Func<T, object> orderBy=null, string orderType="") where T:class, IDocument

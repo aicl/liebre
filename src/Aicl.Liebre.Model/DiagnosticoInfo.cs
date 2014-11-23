@@ -20,18 +20,26 @@ namespace Aicl.Liebre.Model
 		public DiagnosticoInfoResponse()
 		{
 			Guias = new List<ViewGuiaInfo> ();
-			Capitulos = new List<Capitulo> ();
-			Preguntas = new List<ViewPregunta> ();
+			Capitulos = new List<CapituloInfo> ();
+			Preguntas = new List<ViewPreguntaInfo> ();
 			ResponseStatus = new ResponseStatus ();
 		}
 
 		public Empresa Empresa { get; set; }
 		public Diagnostico Diagnostico { get; set; }
 		public Plantilla Plantilla { get; set; }
-		public List<Capitulo> Capitulos { get; set; }
+		public List<CapituloInfo> Capitulos { get; set; }
 		public List<ViewGuiaInfo> Guias { get; set; }
-		public List<ViewPregunta> Preguntas { get; set; }
+		public List<ViewPreguntaInfo> Preguntas { get; set; }
 		public ResponseStatus ResponseStatus { get; set; }
+	}
+
+	public class CapituloInfo:Capitulo
+	{
+		public CapituloInfo(){
+			Preguntas = new List<ViewPregunta> ();
+		}
+		public List<ViewPregunta> Preguntas { get; set; }
 	}
 
 	public class RespuestaGuiaInfo:IDocument
@@ -57,5 +65,11 @@ namespace Aicl.Liebre.Model
 		public RespuestaGuiaInfo Respuesta { get; set; }
 	}
 
+	public class ViewPreguntaInfo:ViewPregunta{
+		public ViewPreguntaInfo(){
+			Guias = new List<ViewGuiaInfo> ();
+		}
+		public List<ViewGuiaInfo> Guias { get; set; }
+	}
 }
 

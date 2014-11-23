@@ -1,12 +1,26 @@
 ﻿@model Aicl.Liebre.Model.DiagnosticoInfoResponse
+@{
+    Layout = "~/Views/Shared/_InfoLayout.cshtml";
+}
+
 <div style="background:grey; padding:10px;">
 	<h2>@Model.Empresa.Nombre</h2>
 </div>
 <div>
 	@foreach(var capitulo in Model.Capitulos){
-	<span>@capitulo.Numeral + @capitulo.Titulo </span>
-	<span>@(capitulo.Numeral + capitulo.Titulo) </span>
+	<div>@capitulo.Numeral  @capitulo.Titulo  @capitulo.Preguntas.Count() </div>
 	}
 </div>
 
-
+<div layout center vertical>
+	<div style="width:90vw;">
+	  <div layout="" horizontal="" center="" segment="">
+		  <div flex>1.0.1  Capitulo I 1.0.1</div>
+		  <div style="width:5vw;">4</div>
+	  </div>
+	  <div layout horizontal center segment>
+	  	<div flex>2.0.1  Capitulo II</div>
+	  	<div style="width:5vw;">1 </div>
+	  </div>
+	</div>
+</div>

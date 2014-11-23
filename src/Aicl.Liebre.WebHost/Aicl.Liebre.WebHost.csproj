@@ -124,6 +124,7 @@
     <Folder Include="q\" />
     <Folder Include="scripts\" />
     <Folder Include="styles\" />
+    <Folder Include="Content\Styles\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Global.asax.cs">
@@ -198,6 +199,8 @@
     <Content Include="appcache.manifest" />
     <Content Include="favicon.ico" />
     <Content Include="robots.txt" />
+    <Content Include="Views\Shared\_InfoLayout.cshtml" />
+    <Content Include="Content\Styles\polymer-layout.css" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

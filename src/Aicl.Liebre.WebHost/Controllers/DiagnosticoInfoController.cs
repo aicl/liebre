@@ -15,8 +15,6 @@ namespace Aicl.Liebre.WebHost
 			using (var hello = HostContext.ResolveService<DiagnosticoInfoService>(HttpContext))
 			{
 				var result = hello.Get(new DiagnosticoInfo{Id=id} );
-				System.Console.WriteLine (result.Guias [1].Respuesta.Valor.GetType());
-				System.Console.WriteLine (result.Guias [1].Respuesta.Valor);
 				return View (result);
 			}
 		}
