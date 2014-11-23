@@ -260,7 +260,7 @@ namespace Aicl.Liebre.Data
 				BulkWriteOperation bw = cl.InitializeOrderedBulkOperation ();
 				request.Data.Respuestas.ForEach (r =>{
 					if(r.Respuestas.Count>0){
-						r.Valor= (short?)( r.Respuestas.Exists(v=>false)?0:1);
+						r.Valor= (short?)( r.Respuestas.Exists(v=>v==false)?0:1);
 					}
 					bw.Find (Query<Respuesta>.Where (q => q.IdDiagnostico == descarga.IdDiagnostico && q.IdPregunta == r.IdPregunta))
 					.Upsert ().UpdateOne (Update<Respuesta>

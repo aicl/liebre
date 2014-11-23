@@ -1,14 +1,11 @@
-﻿using System;
-using Aicl.Liebre.Model;
-using ServiceStack;
+﻿using Aicl.Liebre.Model;
 
 namespace Aicl.Liebre.ServiceInterface
 {
-	//[ClientCanSwapTemplates]
-	//[DefaultView("DiagnosticoInfo")]
+
 	public class DiagnosticoInfoService:ServiceBase
 	{
-		public object Get(DiagnosticoInfo request){
+		public DiagnosticoInfoResponse Get(DiagnosticoInfo request){
 			return Store.ReadDiagnosticoInfo (request);
 		}
 	}
