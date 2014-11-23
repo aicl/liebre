@@ -201,6 +201,7 @@
     <Content Include="robots.txt" />
     <Content Include="Views\Shared\_InfoLayout.cshtml" />
     <Content Include="Content\Styles\polymer-layout.css" />
+    <Content Include="Content\Styles\info.css" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

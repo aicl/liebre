@@ -1,0 +1,40 @@
+﻿.capitulo-index {
+	width:95vw;
+}
+
+.capitulo-count {
+}
+
+div[red]{
+	background:#d23f31;
+	color:#fff
+}
+
+div[green]{
+	background:#259b24;
+	color:#fff
+}
+
+button[fab]{
+	display: inline-block;
+	position: relative;
+	outline: none;
+	-webkit-user-select: none;
+	user-select: none;
+	cursor: pointer;
+	z-index: 0;
+	box-sizing: border-box;
+	width: 40px;
+	height: 40px;
+	border-radius: 50%;
+	font-size:medium;
+	border:0px;
+}
+button[fab][red]{
+	background:#d23f31;
+	color:#fff
+}
+button[fab][green]{
+	background:#259b24;
+	color:#fff
+}
