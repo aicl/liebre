@@ -368,7 +368,7 @@ namespace Aicl.Liebre.Data
 			var r = GetByQuery<Respuesta> (q => q.IdDiagnostico == response.Diagnostico.Id, q=>q.IdPregunta);
 
 			var g = GetByQuery<Guia> (q => q.IdPlantilla == response.Plantilla.Id, q=>q.Id);
-			var rg = GetByQuery<RespuestaGuia> (q => q.IdDiagnostico == response.Diagnostico.Id, q=>q.IdGuia);
+			var rg = GetByQuery<RespuestaGuiaInfo> ("respuestaguia",q => q.IdDiagnostico == response.Diagnostico.Id, q=>q.IdGuia);
 
 			p.ForEach (q => response.Preguntas.Add (new ViewPregunta {
 				Pregunta = q,
@@ -381,10 +381,10 @@ namespace Aicl.Liebre.Data
 				}
 			}));
 
-			g.ForEach (q => response.Guias.Add (new ViewGuia { 
+			g.ForEach (q => response.Guias.Add (new ViewGuiaInfo { 
 				Guia = q, 
 				Respuesta = rg.FirstOrDefault (rq => rq.IdGuia == q.Id) ??
-					new RespuestaGuia { IdGuia = q.Id, IdDiagnostico = response.Diagnostico.Id }
+					new RespuestaGuiaInfo { IdGuia = q.Id, IdDiagnostico = response.Diagnostico.Id }
 			}));
 
 			return response;
@@ -414,11 +414,14 @@ namespace Aicl.Liebre.Data
 			return Db.GetCollection<T> (collection);
 		}
 
-		List<T> GetByQuery<T>(string collection, Expression<Func<T, bool>> predicate) where T:class, IDocument
+		List<T> GetByQuery<T>(string collection, Expression<Func<T, bool>> predicate,Func<T, object> orderBy=null, string orderType="") where T:class, IDocument
 		{
 			var cl = GetCollection<T> (collection);
 			var docs= cl.Find(Query<T>.Where(predicate));
-			return docs.ToList ();
+			return orderBy == null ? docs.ToList () :
+				orderType.ToUpper ().StartsWith ("DES", StringComparison.InvariantCulture) ?
+				docs.OrderByDescending (orderBy).ToList () :
+				docs.OrderBy (orderBy).ToList ();
 		}
 
 		static Result<T> CreateResult<T>(T data, WriteConcernResult wcr) where T:IDocument
