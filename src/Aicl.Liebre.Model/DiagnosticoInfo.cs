@@ -47,7 +47,7 @@ namespace Aicl.Liebre.Model
 		public bool? NoAplicaChecked { get; set; }
 		public string Tipo { get; set; } // tomar de la guia!!
 		[BsonSerializer(typeof(DynamicSerializer))]
-		public dynamic Valor { get; set; } 
+		public BsonValue Valor { get; set; } 
 
 	}
 

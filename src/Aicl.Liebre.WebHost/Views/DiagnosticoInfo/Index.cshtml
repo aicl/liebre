@@ -1,5 +1,12 @@
 ﻿@model Aicl.Liebre.Model.DiagnosticoInfoResponse
 <div style="background:grey; padding:10px;">
-<h2>@Model.Empresa.Nombre</h2>
+	<h2>@Model.Empresa.Nombre</h2>
 </div>
+<div>
+	@foreach(var capitulo in Model.Capitulos){
+	<span>@capitulo.Numeral + @capitulo.Titulo </span>
+	<span>@(capitulo.Numeral + capitulo.Titulo) </span>
+	}
+</div>
+
 

@@ -55,7 +55,7 @@ namespace Aicl.Liebre.Model
 			}
 			var document = BsonSerializer.Deserialize (bsonReader, type, options);
 
-			return  document.ToJson (type);
+			return  document;
 		}
 
 		public IBsonSerializationOptions GetDefaultSerializationOptions()
