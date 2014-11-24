@@ -14,6 +14,14 @@ namespace Aicl.Liebre.Model
 		public string Id { get; set;}
 	}
 
+	[Route("/read/diagnosticoinfopdf","GET")]
+	public class DiagnosticoInfoPdf
+	{
+		public DiagnosticoInfoPdf ()
+		{
+		}
+		public string Id { get; set;}
+	}
 
 	public class DiagnosticoInfoResponse: IHasResponseStatus
 	{

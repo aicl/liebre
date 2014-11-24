@@ -51,6 +51,7 @@
     <Compile Include="ExternoService.cs" />
     <Compile Include="RequisitoService.cs" />
     <Compile Include="DiagnosticoInfoService.cs" />
+    <Compile Include="Phantomjs.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="ServiceStack">
@@ -63,6 +64,7 @@
     <Reference Include="ServiceStack.Text">
       <HintPath>..\..\lib\ServiceStack.Text.dll</HintPath>
     </Reference>
+    <Reference Include="System.Web" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Aicl.Liebre.Model\Aicl.Liebre.Model.csproj">
