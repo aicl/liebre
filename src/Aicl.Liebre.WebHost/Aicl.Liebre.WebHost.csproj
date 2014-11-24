@@ -208,6 +208,7 @@
     <Content Include="Views\Shared\_InfoLayoutCSS.cshtml" />
     <Content Include="phantomjs\rasterize.js" />
     <Content Include="phantomjs\phantom.exe.config" />
+    <Content Include="phantomjs\phantomjs.exe" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
@@ -243,7 +244,6 @@
     <None Include="scripts\vendor\underscore-min.map" />
     <None Include="scripts\vendor\ydn.db-is-core-qry.js.map" />
     <None Include="phantomjs\phantomjs" />
-    <None Include="phantomjs\phantomjs.exe" />
     <None Include="App_Data\dummy.txt" />
   </ItemGroup>
 </Project>
