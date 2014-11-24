@@ -23,6 +23,16 @@ namespace Aicl.Liebre.Model
 		public string Id { get; set;}
 	}
 
+	public class DiagnosticoInfoPdfResponse: IHasResponseStatus
+	{
+		public DiagnosticoInfoPdfResponse(){
+			ResponseStatus = new ResponseStatus ();
+		}
+
+		public int ExitCode { get; set; }
+		public ResponseStatus ResponseStatus { get; set; }
+	}
+
 	public class DiagnosticoInfoResponse: IHasResponseStatus
 	{
 		public DiagnosticoInfoResponse()
@@ -55,6 +65,7 @@ namespace Aicl.Liebre.Model
 
 		public RespuestaGuiaInfo ()
 		{
+			Valor = BsonNull.Value;
 		}
 		[BsonRepresentation(BsonType.ObjectId)]
 		public string Id { get; set; }

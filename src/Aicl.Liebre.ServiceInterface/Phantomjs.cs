@@ -11,7 +11,9 @@ namespace Aicl.Liebre.ServiceInterface
 		string Rasterize { get; set; }
 
 		public Phantomjs(){
-			Exe = PathUtils.CombinePaths("~","phantomjs","phantomjs").MapHostAbsolutePath ();
+			Exe = PathUtils.CombinePaths("~",
+				"phantomjs",Environment.OSVersion.Platform==PlatformID.Unix? "phantomjs": "phantomjs.exe")
+				.MapHostAbsolutePath ();
 			Rasterize = PathUtils.CombinePaths("~","phantomjs","rasterize.js").MapHostAbsolutePath ();
 		}
 

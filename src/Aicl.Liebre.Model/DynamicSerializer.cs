@@ -54,7 +54,6 @@ namespace Aicl.Liebre.Model
 				break;
 			}
 			var document = BsonSerializer.Deserialize (bsonReader, type, options);
-
 			return  document;
 		}
 
@@ -72,7 +71,9 @@ namespace Aicl.Liebre.Model
 			object document;
 			Type type;
 
-			var json = value.ToString() ; //viene con el JSON.stringify.encode...
+			var json = value.ToString() ; 
+			Console.WriteLine ("serialize");
+			Console.WriteLine (json);
 
 			if (json.StarstAndEnds ("{", "}")) {
 				document = BsonDocument.Parse (json);
