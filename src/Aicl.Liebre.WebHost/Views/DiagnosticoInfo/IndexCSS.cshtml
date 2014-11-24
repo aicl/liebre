@@ -1,0 +1,29 @@
+﻿@model Aicl.Liebre.Model.DiagnosticoInfoResponse
+@{
+    Layout = "~/Views/Shared/_InfoLayoutCSS.cshtml";
+}
+
+<div layout vertical center>
+	<h2>@Model.Empresa.Nombre</h2>
+</div>
+<div>
+
+	@foreach(var capitulo in Model.Capitulos){
+		var totalQ=capitulo.Preguntas.Count();
+		var totalR = capitulo.Preguntas.Count(q=>q.Respuesta.Valor==1);
+		var estado= totalR>=totalQ?"green":"red";
+	
+
+	<div layout center vertical>
+		<div class="capitulo-index">
+		  <div layout horizontal center segment>
+			  <div flex>@capitulo.Numeral  @capitulo.Titulo</div>
+			  <div class="capitulo-count">
+			  	<button fab @estado>@totalR/@totalQ</button>
+			  </div>
+		  </div>
+		</div>
+	</div>
+	}
+</div>
+

@@ -3,28 +3,29 @@
     Layout = "~/Views/Shared/_InfoLayout.cshtml";
 }
 
-<div layout vertical center>
+
+<div class="header">
 	<h2>@Model.Empresa.Nombre</h2>
 </div>
-<div>
-	@foreach(var capitulo in Model.Capitulos){
-
-		
-		var totalQ=capitulo.Preguntas.Count();
-		var totalR = capitulo.Preguntas.Count(q=>q.Respuesta.Valor==1);
-		var estado= totalR>=totalQ?"green":"red";
-	
-
-	<div layout center vertical>
-		<div class="capitulo-index">
-		  <div layout horizontal center segment>
-			  <div flex>@capitulo.Numeral  @capitulo.Titulo</div>
-			  <div class="capitulo-count">
-			  	<button fab @estado>@totalR/@totalQ</button>
-			  </div>
-		  </div>
-		</div>
-	</div>
-	}
+<div class="content">
+	<table class="tb-min tb-index">
+		<thead>
+			<tr>
+				<th>Capítulo</th>
+				<th>Resultado</th>
+			</tr>
+		</thead>
+		<tbody>
+		@foreach(var capitulo in Model.Capitulos){
+			var totalQ=capitulo.Preguntas.Count();
+			var totalR = capitulo.Preguntas.Count(q=>q.Respuesta.Valor==1);
+			var estado= totalR>=totalQ?"green":"red";
+			<tr>
+				<td>@capitulo.Numeral  @capitulo.Titulo</td>
+				<td><button fab @estado>@totalR/@totalQ</button></td>
+			</tr>
+		}
+		</tbody>
+	</table>
 </div>
 

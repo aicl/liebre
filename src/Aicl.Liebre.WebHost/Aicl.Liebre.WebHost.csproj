@@ -202,6 +202,8 @@
     <Content Include="Views\Shared\_InfoLayout.cshtml" />
     <Content Include="Content\Styles\polymer-layout.css" />
     <Content Include="Content\Styles\info.css" />
+    <Content Include="Views\DiagnosticoInfo\IndexCSS.cshtml" />
+    <Content Include="Views\Shared\_InfoLayoutCSS.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
