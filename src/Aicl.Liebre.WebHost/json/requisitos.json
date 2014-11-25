@@ -16,4 +16,5 @@
 {"Codigo":"RQO16", "Descripcion":"Investigación de Incidentes/AP"},
 {"Codigo":"RQO17", "Descripcion":"Control de Registros"},
 {"Codigo":"RQO18", "Descripcion":"Auditoría Interna"},
-{"Codigo":"RQO19", "Descripcion":"Revision por la Dirección"}]
+{"Codigo":"RQO19", "Descripcion":"Revision por la Dirección"},
+{"Codigo":"RQO20", "Descripcion":"No conformidad AC/AP"}]

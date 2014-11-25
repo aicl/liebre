@@ -28,11 +28,15 @@ namespace Aicl.Liebre.WebHost
 				});
 
 			Plugins.Add(new CorsFeature());
+
 			var appSettings = new AppSettings();
 			var url = appSettings.Get("MONGOLAB_URI", appSettings.Get("MONGOTEST_URI") );
 			var conventions = new ConventionPack { new IgnoreExtraElementsConvention(true) };
 			ConventionRegistry.Register ("IgnoreExtraElements", conventions, _ => true);
+
 			container.Register<Store> (new Store (url));
+			container.Register<AppConfig> (new AppConfig (appSettings));
+
 			ControllerBuilder.Current.SetControllerFactory (
 				new FunqControllerFactory (container));
 		}

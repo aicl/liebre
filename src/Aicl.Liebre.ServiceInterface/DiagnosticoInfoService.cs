@@ -1,11 +1,12 @@
-﻿using Aicl.Liebre.Model;
+﻿using System;
+using Aicl.Liebre.Model;
 using ServiceStack;
 using System.IO;
 using ServiceStack.Web;
+using System.Net;
 
 namespace Aicl.Liebre.ServiceInterface
 {
-
 	public class DiagnosticoInfoService:ServiceBase
 	{
 		public object Get(DiagnosticoInfo request){
@@ -14,13 +15,17 @@ namespace Aicl.Liebre.ServiceInterface
 		}
 
 		public IHttpResult Get(DiagnosticoInfoPdf request){
-			var phantom = new Phantomjs ();
-			var outputfile = PathUtils.CombinePaths("~","App_Data", request.Id+".pdf").MapHostAbsolutePath ();
-			var exitCode = phantom.Execute (@"{0}/DiagnosticoInfo/Index?Id={1}".Fmt (Request.GetBaseUrl ().Replace ("/lbr-api", ""), request.Id), outputfile);
-			return exitCode != 0 ?
-				(IHttpResult) new HttpError (phantom.StandardError) :
-				(IHttpResult) new HttpResult (new FileInfo (outputfile), contentType: "application/pdf", asAttachment: true);
+			using (var client = new JsonServiceClient(AppConfig.PhantonjsURL)){
+				try{
+					var httpResponse = client.Get<HttpWebResponse>("/DiagnosticoInfoPdf/Index/{0}".Fmt(request.Id));
+					var responseStream= httpResponse.GetResponseStream();
+					Response.AddHeader("Content-Disposition",httpResponse.Headers["Content-Disposition"]);
+					return new HttpResult(responseStream, httpResponse.ContentType);
+				}
+				catch(Exception e){
+					return new HttpError (e.Message);
+				}
+			}
 		}
 	}
 }
-
