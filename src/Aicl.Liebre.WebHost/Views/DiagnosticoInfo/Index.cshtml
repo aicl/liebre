@@ -58,8 +58,8 @@
 	@foreach(var c in Model.Capitulos)
 	{
 	@:labels.push( @Html.Raw(Json.Encode( c.Titulo)) );
-	@:data1.push( @c.Preguntas.Count() );
-	@:data2.push( @c.Preguntas.Count(q=>q.Respuesta.Valor==1) );
+	@:data2.push( @c.Preguntas.Count() );
+	@:data1.push( @c.Preguntas.Count(q=>q.Respuesta.Valor==1) );
 	}
 	var radarChartData = {
 	    
