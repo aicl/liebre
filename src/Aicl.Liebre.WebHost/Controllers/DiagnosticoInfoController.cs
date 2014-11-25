@@ -4,6 +4,8 @@ using System.Web.Mvc;
 using ServiceStack;
 using Aicl.Liebre.ServiceInterface;
 using Aicl.Liebre.Model;
+using System.Collections.Generic;
+using MongoDB.Bson;
 
 namespace Aicl.Liebre.WebHost
 {
@@ -14,7 +16,11 @@ namespace Aicl.Liebre.WebHost
 			var id = Request.QueryString["Id"]??Request.QueryString["id"];
 			using (var hello = HostContext.ResolveService<DiagnosticoInfoService>(HttpContext))
 			{
-				var result = hello.Get(new DiagnosticoInfo{Id=id} );
+
+				var result = (DiagnosticoInfoResponse) hello.Get(new DiagnosticoInfo{Id=id} );
+				var labels = new List<string> ();
+				result.Capitulos.ForEach (c => labels.Add (c.Titulo));
+				ViewBag.labels = new BsonArray(labels.ToArray ());
 				return View (result);
 			}
 		}

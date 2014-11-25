@@ -98,6 +98,9 @@
     <Reference Include="ServiceStack.Mvc">
       <HintPath>..\..\lib\ServiceStack.Mvc.dll</HintPath>
     </Reference>
+    <Reference Include="ServiceStack.Text">
+      <HintPath>..\..\lib\ServiceStack.Text.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Aicl.Liebre.Model\Aicl.Liebre.Model.csproj">
@@ -127,6 +130,7 @@
     <Folder Include="Content\Styles\" />
     <Folder Include="phantomjs\" />
     <Folder Include="App_Data\" />
+    <Folder Include="Content\Scripts\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Global.asax.cs">
@@ -209,6 +213,7 @@
     <Content Include="phantomjs\rasterize.js" />
     <Content Include="phantomjs\phantom.exe.config" />
     <Content Include="phantomjs\phantomjs.exe" />
+    <Content Include="Content\Scripts\Chart.min.js" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

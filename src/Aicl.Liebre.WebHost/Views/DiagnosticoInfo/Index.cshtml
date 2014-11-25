@@ -2,7 +2,6 @@
 @{
     Layout = "~/Views/Shared/_InfoLayout.cshtml";
 }
-
 <div class="s-header">
     <table class="tb-s-header">
     	<thead>
@@ -49,4 +48,51 @@
 		}
 		</tbody>
 	</table>
+   	<div style="width:100%">
+		<canvas id="canvas" style="height:550px; width:550px"></canvas>
+	</div>
+	<script>
+	var labels=[];
+	var data1=[];
+	var data2=[]
+	@foreach(var c in Model.Capitulos)
+	{
+	@:labels.push( @Html.Raw(Json.Encode( c.Titulo)) );
+	@:data1.push( @c.Preguntas.Count() );
+	@:data2.push( @c.Preguntas.Count(q=>q.Respuesta.Valor==1) );
+	}
+	var radarChartData = {
+	    
+		labels: labels,
+		datasets: [
+			{
+				label: "Total",
+				fillColor: "rgba(220,220,220,0.2)",
+				strokeColor: "rgba(220,220,220,1)",
+				pointColor: "rgba(220,220,220,1)",
+				pointStrokeColor: "#fff",
+				pointHighlightFill: "#fff",
+				pointHighlightStroke: "rgba(220,220,220,1)",
+				data: data1
+			},
+			{
+				label: "Cumplidas",
+				fillColor: "rgba(151,187,205,0.2)",
+				strokeColor: "rgba(151,187,205,1)",
+				pointColor: "rgba(151,187,205,1)",
+				pointStrokeColor: "#fff",
+				pointHighlightFill: "#fff",
+				pointHighlightStroke: "rgba(151,187,205,1)",
+				data: data2
+			}
+		]
+	};
+	window.onload = function(){
+	    Chart.defaults.global.animation= false;
+
+		window.myRadar = new Chart(document.getElementById("canvas").getContext("2d")).Radar(radarChartData, {
+			responsive: true
+		});
+	}
+	</script>
 </div>
