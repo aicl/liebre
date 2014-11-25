@@ -1,4 +1,4 @@
-﻿﻿using System;
+﻿using System;
 using System.Web.Mvc;
 using System.Web.Routing;
 using ServiceStack.MiniProfiler;
@@ -32,6 +32,8 @@ namespace Aicl.Liebre.WebHost
 
 		protected void Application_Start()
 		{
+			ViewEngines.Engines.Clear ();
+			ViewEngines.Engines.Add (new RazorViewEngine ());
 			AreaRegistration.RegisterAllAreas();
 			RegisterGlobalFilters(GlobalFilters.Filters);
 			var appHost= new AppHost();
