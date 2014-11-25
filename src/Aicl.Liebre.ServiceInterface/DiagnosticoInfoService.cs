@@ -1,5 +1,7 @@
 ﻿using Aicl.Liebre.Model;
 using ServiceStack;
+using System.IO;
+using ServiceStack.Web;
 
 namespace Aicl.Liebre.ServiceInterface
 {
@@ -11,20 +13,13 @@ namespace Aicl.Liebre.ServiceInterface
 			return response;
 		}
 
-		public DiagnosticoInfoPdfResponse Get(DiagnosticoInfoPdf request){
+		public IHttpResult Get(DiagnosticoInfoPdf request){
 			var phantom = new Phantomjs ();
-
 			var outputfile = PathUtils.CombinePaths("~","App_Data", request.Id+".pdf").MapHostAbsolutePath ();
-
 			var exitCode = phantom.Execute (@"{0}/DiagnosticoInfo/Index?Id={1}".Fmt (Request.GetBaseUrl ().Replace ("/lbr-api", ""), request.Id), outputfile);
-			var r = new DiagnosticoInfoPdfResponse { ExitCode = exitCode };
-
-			if (exitCode != 0) {
-				r.ResponseStatus.Message = phantom.StandardError;
-			}
-
-			return r;
-
+			return exitCode != 0 ?
+				(IHttpResult) new HttpError (phantom.StandardError) :
+				(IHttpResult) new HttpResult (new FileInfo (outputfile), contentType: "application/pdf", asAttachment: true);
 		}
 	}
 }
