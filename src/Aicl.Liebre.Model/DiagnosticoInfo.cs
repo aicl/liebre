@@ -65,7 +65,7 @@ namespace Aicl.Liebre.Model
 
 		public RespuestaGuiaInfo ()
 		{
-			Valor = BsonNull.Value;
+			//Valor = BsonNull.Value;
 		}
 		[BsonRepresentation(BsonType.ObjectId)]
 		public string Id { get; set; }
@@ -73,8 +73,8 @@ namespace Aicl.Liebre.Model
 		public string IdGuia { get; set; }
 		public bool? NoAplicaChecked { get; set; }
 		public string Tipo { get; set; } // tomar de la guia!!
-		[BsonSerializer(typeof(DynamicSerializer))]
-		public BsonValue Valor { get; set; } 
+		[BsonSerializer(typeof(CustomSerializer))]
+		public string Valor { get; set; } 
 
 	}
 
