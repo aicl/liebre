@@ -16,7 +16,6 @@ namespace Aicl.Liebre.WebHost
 			var id = Request.QueryString["Id"]??Request.QueryString["id"];
 			using (var hello = HostContext.ResolveService<DiagnosticoInfoService>(HttpContext))
 			{
-
 				var result = (DiagnosticoInfoResponse) hello.Get(new DiagnosticoInfo{Id=id} );
 				var labels = new List<string> ();
 				result.Capitulos.ForEach (c => labels.Add (c.Titulo));
