@@ -34,6 +34,7 @@
     <Compile Include="Store.cs" />
     <Compile Include="MongoExtensions.cs" />
     <Compile Include="AppConfig.cs" />
+    <Compile Include="InfoFormat.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Aicl.Liebre.Model\Aicl.Liebre.Model.csproj">
@@ -62,5 +63,10 @@
     <Reference Include="ServiceStack">
       <HintPath>..\..\lib\ServiceStack.dll</HintPath>
     </Reference>
+    <Reference Include="ServiceStack.Client">
+      <HintPath>..\..\lib\ServiceStack.Client.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net" />
+    <Reference Include="System.Web" />
   </ItemGroup>
 </Project>

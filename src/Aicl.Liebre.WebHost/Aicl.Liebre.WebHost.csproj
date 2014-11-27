@@ -131,6 +131,7 @@
     <Folder Include="phantomjs\" />
     <Folder Include="App_Data\" />
     <Folder Include="Content\Scripts\" />
+    <Folder Include="InfoDir\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Global.asax.cs">
@@ -211,6 +212,8 @@
     <Content Include="Views\DiagnosticoInfo\IndexCSS.cshtml" />
     <Content Include="Views\Shared\_InfoLayoutCSS.cshtml" />
     <Content Include="Content\Scripts\Chart.min.js" />
+    <Content Include="InfoDir\DiagnosticoInfo.html" />
+    <Content Include="InfoDir\InfoFormat.html" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
@@ -246,5 +249,6 @@
     <None Include="scripts\vendor\underscore-min.map" />
     <None Include="scripts\vendor\ydn.db-is-core-qry.js.map" />
     <None Include="App_Data\dummy.txt" />
+    <None Include="InfoDir\dummy.txt" />
   </ItemGroup>
 </Project>

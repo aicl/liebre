@@ -8,6 +8,7 @@ using System.Web.Mvc;
 using ServiceStack.Mvc;
 using System;
 using ServiceStack.Logging;
+using ServiceStack.Formats;
 
 namespace Aicl.Liebre.WebHost
 {
@@ -26,6 +27,9 @@ namespace Aicl.Liebre.WebHost
 					DebugMode = true,
 					HandlerFactoryPath = "lbr-api",
 				});
+
+			Plugins.RemoveAll(x => x is HtmlFormat);
+			Plugins.Add(new InfoFormat());
 
 			Plugins.Add(new CorsFeature());
 

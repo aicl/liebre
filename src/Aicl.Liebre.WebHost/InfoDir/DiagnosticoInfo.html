@@ -1,0 +1,117 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>${Title}</title>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="description" content="Diagnostico SGSST, Decreto 1443 de 2014">
+	<meta name="mobile-web-app-capable" content="yes" />
+	<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0"/>
+    <style>
+        @import "//ajax.googleapis.com/ajax/libs/dojo/1.10.2/dojo/resources/dojo.css";
+	    @import "//ajax.googleapis.com/ajax/libs/dojo/1.10.2/dijit/themes/claro/claro.css";
+	    @import "//ajax.googleapis.com/ajax/libs/dojo/1.10.2/dojox/charting/resources/Legend.css";
+    </style>
+    <script type="text/javascript">
+        var PhantomJSPrinting = {
+            header: { height: "1cm", contents: function(pageNum, numPages) { return pageNum + "/" + numPages; } },
+            footer: { height: "1cm", 
+                      contents: function(pageNum, numPages) {
+                          return "<span style='float:right'>" + pageNum + " / " + numPages + "</span>" } }
+        };
+        window.PhantomJSPrinting=PhantomJSPrinting;
+    </script>
+	<script src="//ajax.googleapis.com/ajax/libs/dojo/1.10.2/dojo/dojo.js" data-dojo-config="async: true"></script>
+</head>
+${MvcIncludes}
+<body class="claro>
+    <h1 id="greeting">Hello</h1>
+	<div id="legend1"></div>
+    <div id="spider" style="width: 400px; height: 400px; margin: 25px 0px 0px 0px; border-radius: 10px;
+		border: 2px solid gray;	border-style: solid;background: #e7eef6;page-break-after: always;"></div>
+    <div id="chartOne" style="width: 400px; height: 240px; margin: 25px 0px 0px 0px;"></div>
+    <div id="simplechart" style="width: 250px; height: 150px; margin: 25px 0px 0px 0px;"></div>
+	<div id="resultDiv"></div>
+    <script>
+    // <![CDATA[
+    	var data = ${Dto};
+
+        require(["dojo/dom","dojox/charting/Chart", "dojox/charting/axis2d/Default", "dojox/charting/plot2d/Spider", "dojox/charting/themes/PlotKit/blue", "dojox/charting/plot2d/Lines",  "dojox/charting/plot2d/StackedAreas", "dojox/charting/themes/Wetland" , "dojo/json",
+        "dojo/_base/array", "dojox/charting/widget/Legend", "dojo/ready"],
+        function(dom,Chart, Default, Spider, PlotKit, Lines, StackedAreas, Wetland,  JSON, arrayUtil, Legend, ready){
+        ready(function(){  
+			var resultDiv = dom.byId("resultDiv");
+			var body = document.querySelector("body");
+                 
+            var html = "<h2>JSON Data</h2>" +
+                "<p>JSON encoded data:</p>" +
+                "<p><code>" + JSON.stringify(data) + "</code></p>"+
+                "<h3>Accessing the JSON data  CIIU</h3>" +
+                "<p><strong>items</strong> An array of items." +
+                "Each item has a name and a value.  The type of " +
+                "the value is shown in parentheses.</p><dl>";
+ 
+            arrayUtil.forEach(data.Capitulos, function(item,i){
+                html += "<dt>" + item.Titulo +
+                    "</dt><dd>" + item.Numeral +
+                    " (" + (typeof item.Numeral) + ")</dd>";
+            });
+            html += "</dl>";
+
+			var c = new Chart("chartOne");
+	    	c.addPlot("default", {type: StackedAreas, tension:3})
+    	    .addAxis("x", {fixLower: "major", fixUpper: "major"})
+        	.addAxis("y", {vertical: true, fixLower: "major", fixUpper: "major", min: 0})
+        	.setTheme(Wetland)
+        	.addSeries("Series A", [1, 2, 0.5, 1.5, 1, 2.8, 0.4])
+        	.addSeries("Series B", [2.6, 1.8, 2, 1, 1.4, 0.7, 2])
+        	.addSeries("Series C", [6.3, 1.8, 3, 0.5, 4.4, 2.7, 2])
+        	.render();
+
+        	var chart1 = new Chart("simplechart",{
+      			title: "Production(Quantity)",
+      			titlePos: "top",
+      			titleGap: 25,
+      			titleFont: "normal normal normal 15pt Arial",
+      			titleFontColor: "orange"
+      		});
+      		chart1.addPlot("default", {type: Lines});
+			chart1.addAxis("x");
+			chart1.addAxis("y", {vertical: true});
+			chart1.addSeries("Series 1", [1, 2, 2, 3, 4, 5, 5, 7]);
+			chart1.render();
+
+			var chart = new Chart("spider");                                                                                                
+			chart.setTheme(dojox.charting.themes.PlotKit.blue);
+			chart.theme.plotarea.fill = null;
+			chart.theme.chart.fill = null;
+			chart.addPlot("default", {
+				type: "Spider",
+				labelOffset: -10,
+				divisions: 7,
+				axisColor:      "lightgray",
+				fill: null,
+				spiderColor:    "silver",
+				seriesFillAlpha: 0.2,
+				spiderOrigin:	 0.16,
+				markerSize:  	 3,
+				precision:		 0,
+				spiderType:	 	 "polygon"
+			});
+			chart.addSeries("China", {data: {"GDP": 2,"area": 6,"population": 2000,"inflation": 15,"growth": 12}}, { fill: "blue" });
+			chart.addSeries("France", {data: {"GDP": 6,"area": 15,"population": 500,"inflation": 5,"growth": 6}}, { fill: "red" });
+			chart.addSeries("USA", {data: {"GDP": 3,"area": 20,"population": 1500,"inflation": 10,"growth": 3}}, { fill: "green" });
+			chart.addSeries("Japan", {data: {"GDP": 4,"area": 2,"population": 1000,"inflation": 20,"growth": 2}}, { fill: "yellow" });
+			chart.addSeries("Korean", {data: {"GDP": 10,"area": 10,"population": 800,"inflation": 2,"growth": 18}}, { fill: "orange" });
+			chart.addSeries("Canada", {data: {"GDP": 1,"area": 18,"population": 300,"inflation": 3,"growth": 15}}, { fill: "purple" });
+			chart.render();
+			new Legend({chart: chart, horizontal: true}, "legend1");
+            resultDiv.innerHTML = html;
+            body.setAttribute("_ready", "true");
+        });
+        });
+    // ]]>
+    </script>
+</body>
+</html>
