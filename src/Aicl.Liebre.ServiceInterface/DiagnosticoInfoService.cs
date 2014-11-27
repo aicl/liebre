@@ -17,7 +17,7 @@ namespace Aicl.Liebre.ServiceInterface
 		public IHttpResult Get(DiagnosticoInfoPdf request){
 			using (var client = new JsonServiceClient(AppConfig.PhantonjsURL)){
 				try{
-					var httpResponse = client.Get<HttpWebResponse>("/DiagnosticoInfoPdf/Index/{0}".Fmt(request.Id));
+					var httpResponse = client.Get<HttpWebResponse>("/DiagnosticoInfoPdf/Index?id={0}".Fmt(request.Id));
 					var responseStream= httpResponse.GetResponseStream();
 					Response.AddHeader("Content-Disposition",httpResponse.Headers["Content-Disposition"]);
 					return new HttpResult(responseStream, httpResponse.ContentType);
