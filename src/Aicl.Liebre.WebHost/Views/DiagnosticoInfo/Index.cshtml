@@ -93,6 +93,9 @@
 		window.myRadar = new Chart(document.getElementById("canvas").getContext("2d")).Radar(radarChartData, {
 			responsive: true
 		});
+		var body = document.querySelector("body");
+		body.setAttribute("_ready", "true");
+
 	}
 	</script>
 </div>
