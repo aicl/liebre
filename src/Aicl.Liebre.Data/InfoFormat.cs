@@ -83,9 +83,6 @@ namespace Aicl.Liebre.Data
 
 				var now = DateTime.UtcNow;
 				var requestName = request.OperationName ?? dto.GetType().GetOperationName();
-
-				var templatePath = "/{0}/{1}.html".Fmt (InfoDir, requestName);
-				var file = HostContext.VirtualPathProvider.GetFile(templatePath);
 				html = GetHtml (request, requestName)
 					.Replace ("${Dto}", json)
 					.Replace ("${Title}", string.Format (@"{0} - {1}", requestName, now))

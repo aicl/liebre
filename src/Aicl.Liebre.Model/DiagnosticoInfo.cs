@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using MongoDB.Bson.Serialization.Attributes;
 using MongoDB.Bson;
+using System.Linq;
 
 namespace Aicl.Liebre.Model
 {
@@ -41,6 +42,7 @@ namespace Aicl.Liebre.Model
 			Capitulos = new List<CapituloInfo> ();
 			Preguntas = new List<ViewPreguntaInfo> ();
 			ResponseStatus = new ResponseStatus ();
+			Requisitos = new List<ViewRequisito> ();
 		}
 
 		public Empresa Empresa { get; set; }
@@ -50,6 +52,7 @@ namespace Aicl.Liebre.Model
 		public List<ViewGuiaInfo> Guias { get; set; }
 		public List<ViewPreguntaInfo> Preguntas { get; set; }
 		public ResponseStatus ResponseStatus { get; set; }
+		public List<ViewRequisito> Requisitos { get; set; }
 	}
 
 	public class CapituloInfo:Capitulo
@@ -58,6 +61,10 @@ namespace Aicl.Liebre.Model
 			Preguntas = new List<ViewPregunta> ();
 		}
 		public List<ViewPregunta> Preguntas { get; set; }
+
+		public int TotalQ { get; set; }
+		public int TotalR { get; set; }
+
 	}
 
 	public class RespuestaGuiaInfo:IDocument
@@ -90,5 +97,21 @@ namespace Aicl.Liebre.Model
 		}
 		public List<ViewGuiaInfo> Guias { get; set; }
 	}
+
+	public class ViewRequisito:Requisito{
+
+		public int TotalQ { get; set; }
+		public int TotalR { get; set; }
+	}
 }
 
+/*
+ * public int TotalQ { 
+			get { 	return Preguntas.Count; 	} 
+		}
+		public int TotalR{
+			get {
+				return Preguntas.Count (q => q.Respuesta.Valor == 1);
+			}
+		}
+ */

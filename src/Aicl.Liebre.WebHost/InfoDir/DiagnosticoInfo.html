@@ -169,21 +169,14 @@ ${MvcIncludes}
 			var data2={};
 			arrayUtil.forEach(data.Capitulos, function(capitulo,i){
 				
-				var totalQ=capitulo.Preguntas.length;
-				var totalR = 0;
-				arrayUtil.forEach(capitulo.Preguntas, function(pregunta,j){
-					if(pregunta.Valor===1) ++totalR;
-				});
-				var estado= totalR>=totalQ?"green":"red";
-                htmlIndice += lang.replace("<tr><td>{capitulo.Numeral}  {capitulo.Titulo}</td><td><button fab {estado}>{totalR}/{totalQ}</button></td></tr>",
+				var estado= capitulo.TotalR>=capitulo.TotalQ?"green":"red";
+                htmlIndice += lang.replace("<tr><td>{capitulo.Numeral}  {capitulo.Titulo}</td><td><button fab {estado}>{capitulo.TotalR}/{capitulo.TotalQ}</button></td></tr>",
                 {
                 	capitulo:capitulo,
-                	estado:estado,
-                	totalR:totalR,
-                	totalQ:totalQ
+                	estado:estado
                 });
-				data1[capitulo.Titulo]= totalQ;
-				data2[capitulo.Titulo]= totalR;
+				data1[capitulo.Titulo]= capitulo.TotalQ;
+				data2[capitulo.Titulo]= capitulo.TotalR;
             });
             document.getElementById("Indice").innerHTML= htmlIndice;
                           

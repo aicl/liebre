@@ -376,6 +376,7 @@ namespace Aicl.Liebre.Data
 					new RespuestaGuiaInfo { IdGuia = q.Id, IdDiagnostico = response.Diagnostico.Id }
 			}));
 
+
 			p.ForEach (q =>{
 				var vp=  new ViewPreguntaInfo {
 					Pregunta = q,
@@ -386,11 +387,21 @@ namespace Aicl.Liebre.Data
 						Respuestas=new List<bool>(q.Preguntas.Count),
 						Valor = (q.Preguntas.Count > 0 ? (short)0 : default(short?))
 					},
-					Guias=response.Guias.FindAll(_g=> q.IdGuias.Contains(_g.Guia.Id))
+					Guias=response.Guias.FindAll(_g=> q.IdGuias.Contains(_g.Guia.Id)),
 				};
+
+				var req =response.Requisitos.FirstOrDefault(rrq=>rrq.Codigo==vp.Pregunta.Requisito.Codigo);
+				if(req==default(Requisito)){
+					req= new ViewRequisito{Codigo= vp.Pregunta.Requisito.Codigo, Descripcion=vp.Pregunta.Requisito.Descripcion};
+					response.Requisitos.Add(req);
+				}
+				++req.TotalQ;
+				if(vp.Respuesta.Valor==1) ++req.TotalR;
 
 				response.Preguntas.Add(vp);
 				var cap = response.Capitulos.First(c=>c.Id==q.IdCapitulo);
+				++cap.TotalQ; 
+				if(vp.Respuesta.Valor==1) ++cap.TotalR;
 				cap.Preguntas.Add(vp);
 			});
 
