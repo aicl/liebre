@@ -176,7 +176,7 @@ ${MvcIncludes}
                 	estado:estado
                 });
 				data1[capitulo.Titulo]= capitulo.TotalQ;
-				data2[capitulo.Titulo]= capitulo.TotalR;
+				data2[capitulo.Titulo]= capitulo.TotalR==capitulo.TotalQ?capitulo.TotalR+0.001:capitulo.TotalR;
             });
             document.getElementById("Indice").innerHTML= htmlIndice;
                           
