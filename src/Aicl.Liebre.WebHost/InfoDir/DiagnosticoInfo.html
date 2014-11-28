@@ -9,6 +9,78 @@
 	<meta name="mobile-web-app-capable" content="yes" />
 	<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0"/>
     <style>
+		div[red]{
+			background:#d23f31;
+			color:#fff
+		}
+		div[green]{
+			background:#259b24;
+			color:#fff
+		}
+		button[fab]{
+			display: inline-block;
+			position: relative;
+			outline: none;
+			-webkit-user-select: none;
+			user-select: none;
+			cursor: pointer;
+			z-index: 0;
+			box-sizing: border-box;
+			width: 56px;
+			height: 56px;
+			border-radius: 50%;
+			font-size:medium;
+			border:0px;
+		}
+		button[fab][red]{
+			background:#d23f31;
+			color:#fff
+		}
+		button[fab][green]{
+			background:#259b24;
+			color:#fff
+		}
+		/* tabla */
+		.tb-min, .tb-header, .tb-s-header, .tb-one-col
+		{
+			font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
+			font-size: 12px;
+			background: #fff;
+			width: 95%;
+			border-collapse: collapse;
+			text-align: left;
+		}
+		.tb-min th
+		{
+			font-size: 14px;
+			font-weight: normal;
+			color: #039;
+			padding: 10px 8px;
+			border-bottom: 2px solid #6678b1;
+		}
+		.tb-min td
+		{
+			border-bottom: 1px solid #ccc;
+			color: #669;
+			padding: 6px 8px;
+		}
+
+		table.tb-one-col > tr td:first-child{
+			width: 100%;
+		}
+
+		table.tb-index tr td:first-child, table.tb-index tr th:first-child{
+			width: 80%;
+		}
+		table.tb-s-header tr td:first-child, table.tb-index tr th:first-child{
+			width: 20%;
+		}
+		div.content, div.header, div.s-header{
+			padding:0px 0px 0px 10px;
+			width:auto;
+		}
+	    .center { margin-left: auto;    margin-right: auto;    width: 95%;  }
+
         @import "//ajax.googleapis.com/ajax/libs/dojo/1.10.2/dojo/resources/dojo.css";
 	    @import "//ajax.googleapis.com/ajax/libs/dojo/1.10.2/dijit/themes/claro/claro.css";
 	    @import "//ajax.googleapis.com/ajax/libs/dojo/1.10.2/dojox/charting/resources/Legend.css";
@@ -25,63 +97,96 @@
 	<script src="//ajax.googleapis.com/ajax/libs/dojo/1.10.2/dojo/dojo.js" data-dojo-config="async: true"></script>
 </head>
 ${MvcIncludes}
-<body class="claro>
-    <h1 id="greeting">Hello</h1>
-	<div id="legend1"></div>
-    <div id="spider" style="width: 400px; height: 400px; margin: 25px 0px 0px 0px; border-radius: 10px;
-		border: 2px solid gray;	border-style: solid;background: #e7eef6;page-break-after: always;"></div>
-    <div id="chartOne" style="width: 400px; height: 240px; margin: 25px 0px 0px 0px;"></div>
-    <div id="simplechart" style="width: 250px; height: 150px; margin: 25px 0px 0px 0px;"></div>
-	<div id="resultDiv"></div>
+<body class="claro">
+	<div class="s-header">
+	<div class="center">
+    <table class="tb-s-header">
+    	<thead>
+			<tr>
+				<th>Logo de la Empresa</th>
+				<th><h1>Nombre de la Empresa</h1></th>
+			</tr>
+		</thead>
+		<tbody>
+		</tbody>
+    </table>
+    </div>
+	</div>
+	<div class="header">
+		<div class="center">
+	    <table class="tb-header">
+	    	<thead>
+				<tr>
+					<th><h2 id="Empresa.Nombre">@data.Empresa.Nombre</h2></th>
+				</tr>
+				<tr>
+					<th><span id="Empresa.Nit">@data.Empresa.Nit</span></th>
+				</tr>
+			</thead>
+			<tbody>
+			</tbody>
+	    </table>
+	    </div>
+	</div>
+	<div class="content">
+	   <div class="center">
+		<table class="tb-min tb-index">
+			<thead>
+				<tr>
+					<th>Capítulo</th>
+					<th>Resultado</th>
+				</tr>
+			</thead>
+			<tbody id="Indice"></tbody>
+		</table>
+		</div>
+	</div>
+
+	<div class="content" style="margin-top:20px; page-break-before: always;">
+		<div class="center" style=" text-align: center;">
+			<h2>Cumplimiento Por Capítulos</h2>
+	    	<div id="spider" style="height: 500px; border-radius: 10px;bborder: 2px solid gray;	border-style: solid;background: #e7eef6"></div>
+	    	<span style='float:left'><div id="legend1"></div></span>
+	    </div>
+	</div>
     <script>
     // <![CDATA[
     	var data = ${Dto};
 
-        require(["dojo/dom","dojox/charting/Chart", "dojox/charting/axis2d/Default", "dojox/charting/plot2d/Spider", "dojox/charting/themes/PlotKit/blue", "dojox/charting/plot2d/Lines",  "dojox/charting/plot2d/StackedAreas", "dojox/charting/themes/Wetland" , "dojo/json",
+        require(["dojo/_base/lang","dojox/charting/Chart", "dojox/charting/axis2d/Default", "dojox/charting/plot2d/Spider",
+        "dojox/charting/themes/PlotKit/blue", "dojox/charting/plot2d/Lines",  "dojox/charting/plot2d/StackedAreas",
+        "dojox/charting/themes/Wetland", 
         "dojo/_base/array", "dojox/charting/widget/Legend", "dojo/ready"],
-        function(dom,Chart, Default, Spider, PlotKit, Lines, StackedAreas, Wetland,  JSON, arrayUtil, Legend, ready){
+        function(lang, Chart, Default, Spider, PlotKit, Lines, StackedAreas, Wetland, arrayUtil, Legend, ready){
         ready(function(){  
-			var resultDiv = dom.byId("resultDiv");
+			var resultDiv = document.getElementById("resultDiv");
 			var body = document.querySelector("body");
-                 
-            var html = "<h2>JSON Data</h2>" +
-                "<p>JSON encoded data:</p>" +
-                "<p><code>" + JSON.stringify(data) + "</code></p>"+
-                "<h3>Accessing the JSON data  CIIU</h3>" +
-                "<p><strong>items</strong> An array of items." +
-                "Each item has a name and a value.  The type of " +
-                "the value is shown in parentheses.</p><dl>";
- 
-            arrayUtil.forEach(data.Capitulos, function(item,i){
-                html += "<dt>" + item.Titulo +
-                    "</dt><dd>" + item.Numeral +
-                    " (" + (typeof item.Numeral) + ")</dd>";
+			document.getElementById("Empresa.Nombre").innerHTML= data.Empresa.Nombre;
+			document.getElementById("Empresa.Nit").innerHTML= data.Empresa.Nit;
+
+			var htmlIndice="";
+			var data1={};
+			var data2={};
+			arrayUtil.forEach(data.Capitulos, function(capitulo,i){
+				
+				var totalQ=capitulo.Preguntas.length;
+				var totalR = 0;
+				arrayUtil.forEach(capitulo.Preguntas, function(pregunta,j){
+					if(pregunta.Valor===1) ++totalR;
+				});
+				var estado= totalR>=totalQ?"green":"red";
+                htmlIndice += lang.replace("<tr><td>{capitulo.Numeral}  {capitulo.Titulo}</td><td><button fab {estado}>{totalR}/{totalQ}</button></td></tr>",
+                {
+                	capitulo:capitulo,
+                	estado:estado,
+                	totalR:totalR,
+                	totalQ:totalQ
+                });
+				data1[capitulo.Titulo]= totalQ;
+				data2[capitulo.Titulo]= totalR;
             });
-            html += "</dl>";
-
-			var c = new Chart("chartOne");
-	    	c.addPlot("default", {type: StackedAreas, tension:3})
-    	    .addAxis("x", {fixLower: "major", fixUpper: "major"})
-        	.addAxis("y", {vertical: true, fixLower: "major", fixUpper: "major", min: 0})
-        	.setTheme(Wetland)
-        	.addSeries("Series A", [1, 2, 0.5, 1.5, 1, 2.8, 0.4])
-        	.addSeries("Series B", [2.6, 1.8, 2, 1, 1.4, 0.7, 2])
-        	.addSeries("Series C", [6.3, 1.8, 3, 0.5, 4.4, 2.7, 2])
-        	.render();
-
-        	var chart1 = new Chart("simplechart",{
-      			title: "Production(Quantity)",
-      			titlePos: "top",
-      			titleGap: 25,
-      			titleFont: "normal normal normal 15pt Arial",
-      			titleFontColor: "orange"
-      		});
-      		chart1.addPlot("default", {type: Lines});
-			chart1.addAxis("x");
-			chart1.addAxis("y", {vertical: true});
-			chart1.addSeries("Series 1", [1, 2, 2, 3, 4, 5, 5, 7]);
-			chart1.render();
-
+            document.getElementById("Indice").innerHTML= htmlIndice;
+                          
 			var chart = new Chart("spider");                                                                                                
 			chart.setTheme(dojox.charting.themes.PlotKit.blue);
 			chart.theme.plotarea.fill = null;
@@ -89,7 +194,7 @@ ${MvcIncludes}
 			chart.addPlot("default", {
 				type: "Spider",
 				labelOffset: -10,
-				divisions: 7,
+				divisions: 3,
 				axisColor:      "lightgray",
 				fill: null,
 				spiderColor:    "silver",
@@ -99,15 +204,10 @@ ${MvcIncludes}
 				precision:		 0,
 				spiderType:	 	 "polygon"
 			});
-			chart.addSeries("China", {data: {"GDP": 2,"area": 6,"population": 2000,"inflation": 15,"growth": 12}}, { fill: "blue" });
-			chart.addSeries("France", {data: {"GDP": 6,"area": 15,"population": 500,"inflation": 5,"growth": 6}}, { fill: "red" });
-			chart.addSeries("USA", {data: {"GDP": 3,"area": 20,"population": 1500,"inflation": 10,"growth": 3}}, { fill: "green" });
-			chart.addSeries("Japan", {data: {"GDP": 4,"area": 2,"population": 1000,"inflation": 20,"growth": 2}}, { fill: "yellow" });
-			chart.addSeries("Korean", {data: {"GDP": 10,"area": 10,"population": 800,"inflation": 2,"growth": 18}}, { fill: "orange" });
-			chart.addSeries("Canada", {data: {"GDP": 1,"area": 18,"population": 300,"inflation": 3,"growth": 15}}, { fill: "purple" });
+			chart.addSeries("Meta", {data: data1}, { fill: "blue" });
+			chart.addSeries("Alcanzado", {data: data2}, { fill: "red" });
 			chart.render();
 			new Legend({chart: chart, horizontal: true}, "legend1");
-            resultDiv.innerHTML = html;
             body.setAttribute("_ready", "true");
         });
         });
