@@ -176,7 +176,7 @@ ${MvcIncludes}
                 	estado:estado
                 });
 				data1[capitulo.Titulo]= capitulo.TotalQ;
-				data2[capitulo.Titulo]= capitulo.TotalR==capitulo.TotalQ?capitulo.TotalR+0.001:capitulo.TotalR;
+				data2[capitulo.Titulo]= capitulo.TotalR;
             });
             document.getElementById("Indice").innerHTML= htmlIndice;
                           
@@ -197,8 +197,13 @@ ${MvcIncludes}
 				precision:		 0,
 				spiderType:	 	 "polygon"
 			});
-			chart.addSeries("Meta", {data: data1}, { fill: "blue" });
-			chart.addSeries("Alcanzado", {data: data2}, { fill: "red" });
+
+			for ( var i in data1){
+				chart.addAxis(data1[i], {  min:0, max:data1[i].Titulo});
+			}
+			chart.addSeries("Alcanzado", {data: data2}, { fill: "green" });
+			chart.addSeries("Meta", {data: data1}, { fill: "red" });
+
 			chart.render();
 			new Legend({chart: chart, horizontal: true}, "legend1");
             body.setAttribute("_ready", "true");
