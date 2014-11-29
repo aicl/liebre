@@ -176,7 +176,7 @@ ${MvcIncludes}
                 	estado:estado
                 });
 				data1[capitulo.Titulo]= capitulo.TotalQ;
-				data2[capitulo.Titulo]= capitulo.TotalR;
+				data2[capitulo.Titulo]= capitulo.Total;
             });
             document.getElementById("Indice").innerHTML= htmlIndice;
                           
@@ -191,7 +191,7 @@ ${MvcIncludes}
 				axisColor:      "lightgray",
 				fill: null,
 				spiderColor:    "silver",
-				seriesFillAlpha: 0.2,
+				seriesFillAlpha: 0.5,
 				spiderOrigin:	 0.16,
 				markerSize:  	 3,
 				precision:		 0,
@@ -203,7 +203,7 @@ ${MvcIncludes}
 				chart.addAxis(i, {  min:0, max:data1[i]});
 			}
 			chart.addSeries("Alcanzado", {data: data2}, { fill: "green" });
-			chart.addSeries("Meta", {data: data1}, { fill: "red" });
+			chart.addSeries("Meta", {data: data1}, { fill: "white" });
 
 			chart.render();
 			new Legend({chart: chart, horizontal: true}, "legend1");
