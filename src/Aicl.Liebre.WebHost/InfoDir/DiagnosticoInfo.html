@@ -199,7 +199,8 @@ ${MvcIncludes}
 			});
 
 			for ( var i in data1){
-				chart.addAxis(data1[i], {  min:0, max:data1[i].Titulo});
+				console.log(data1[i], data1[i].Titulo);
+				chart.addAxis(i, {  min:0, max:data1[i]});
 			}
 			chart.addSeries("Alcanzado", {data: data2}, { fill: "green" });
 			chart.addSeries("Meta", {data: data1}, { fill: "red" });
