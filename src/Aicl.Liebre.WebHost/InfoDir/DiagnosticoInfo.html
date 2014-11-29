@@ -175,8 +175,8 @@ ${MvcIncludes}
                 	capitulo:capitulo,
                 	estado:estado
                 });
-				data1[capitulo.Titulo]= capitulo.TotalQ;
-				data2[capitulo.Titulo]= capitulo.TotalR;
+				data1[capitulo.Titulo]= 100;
+				data2[capitulo.Titulo]= (capitulo.TotalR/capitulo.TotalQ)*100;
             });
             document.getElementById("Indice").innerHTML= htmlIndice;
                           
