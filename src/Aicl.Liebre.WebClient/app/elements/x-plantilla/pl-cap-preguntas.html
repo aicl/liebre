@@ -19,8 +19,8 @@
 		  </div>
 	  </app-header-panel> 	  
 	  <paper-dialog id="dialog" backdrop layered autoCloseDisabled>
-		  <paper-input label="Numeral" required floatinglabel id="Numeral" value="{{_onedit.Numeral}}">
-		  </paper-input>
+		  <paper-input label="Numeral" required floatinglabel id="Numeral" 
+					   value="{{_onedit.Numeral}}"></paper-input>
 		  <paper-input label="Enunciado" required floatinglabel id="Enunciado" value="{{_onedit.Enunciado}}"
 					   multiline rows="3"></paper-input>
 		  <requisitos-dropdown data="{{requisitos}}" selected="{{_onedit.Requisito}}"></requisitos-dropdown>
@@ -28,10 +28,10 @@
 					   value="{{_onedit.ComentarioSi}}" multiline rows="2"></paper-input>
 		  <paper-input label="Comentario/NO"  floatinglabel id="ComentarioNo" 
 					   value="{{_onedit.ComentarioNo}}" multiline rows="3"></paper-input>
-		  <paper-input label="Recomenadación/SI"  floatinglabel id="RecomenadacionSi" 
-					   value="{{_onedit.RecomenadacionSi}}" multiline rows="2"></paper-input>
-		  <paper-input label="Recomenadación/NO"  floatinglabel id="RecomenadacionNo" 
-					   value="{{_onedit.RecomenadacionNo}}" multiline rows="3"></paper-input>
+		  <paper-input label="Recomendación/SI"  floatinglabel id="RecomendacionSi" 
+					   value="{{_onedit.RecomendacionSi}}" multiline rows="2"></paper-input>
+		  <paper-input label="Recomendación/NO"  floatinglabel id="RecomendacionNo" 
+					   value="{{_onedit.RecomendacionNo}}" multiline rows="3"></paper-input>
 		  <div horizontal layout>
 			  <paper-checkbox id="NoAplicaDisponible" checked="{{ _onedit.NoAplicaDisponible }}"></paper-checkbox>
 			  <span>Disponible 'No Aplica'</span>
