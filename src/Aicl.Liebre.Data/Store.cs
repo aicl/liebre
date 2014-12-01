@@ -433,6 +433,10 @@ namespace Aicl.Liebre.Data
 			return Db.GetCollection<T> (collection);
 		}
 
+		MongoCollection<T> GetCollection<T>(Type rootType){
+			return Db.GetCollection<T> (rootType.GetCollectionName());
+		}
+
 		List<T> GetByQuery<T>(Type rootType, Expression<Func<T, bool>> predicate,Func<T, object> orderBy=null, string orderType="") where T:class, IDocument
 		{
 			return GetByQuery<T> (rootType.GetCollectionName (), predicate, orderBy, orderType);

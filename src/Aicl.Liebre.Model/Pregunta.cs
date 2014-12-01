@@ -25,6 +25,10 @@ namespace Aicl.Liebre.Model
 		public List<string> IdGuias { get; set; }
 		public List<string> Preguntas { get; set; }
 		public Requisito Requisito{ get; set; }
+		public string ComentarioSi { get; set; }
+		public string ComentarioNo { get; set; }
+		public string RecomenadacionSi { get; set; }
+		public string RecomenadacionNo { get; set; }
 	}
 
 	[Route("/read/pregunta","GET")]

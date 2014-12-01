@@ -145,7 +145,7 @@ ${MvcIncludes}
 	<div class="content" style="margin-top:20px; page-break-before: always;">
 		<div class="center" style=" text-align: center;">
 			<h2>Cumplimiento Por Capítulos</h2>
-	    	<div id="spider" style="height: 700px; border-radius: 10px;bborder: 2px solid gray;	border-style: solid;background: #e7eef6"></div>
+	    	<div id="spider" style="height: 700px; border-radius: 10px;border: 2px solid gray;	border-style: solid;background: #e7eef6"></div>
 	    	<span style='float:left'><div id="legend1"></div></span>
 	    </div>
 	</div>
@@ -159,8 +159,7 @@ ${MvcIncludes}
         "dojo/_base/array", "dojox/charting/widget/Legend", "dojo/ready"],
         function(lang, Chart, Default, Spider, PlotKit, Lines, StackedAreas, Wetland, arrayUtil, Legend, ready){
         ready(function(){  
-			var resultDiv = document.getElementById("resultDiv");
-			var body = document.querySelector("body");
+			
 			document.getElementById("Empresa.Nombre").innerHTML= data.Empresa.Nombre;
 			document.getElementById("Empresa.Nit").innerHTML= data.Empresa.Nit;
 
@@ -175,11 +174,11 @@ ${MvcIncludes}
                 	capitulo:capitulo,
                 	estado:estado
                 });
-				data1[capitulo.Titulo]= 100;
-				data2[capitulo.Titulo]= (capitulo.TotalR/capitulo.TotalQ)*100;
+				data1[capitulo.Titulo]= capitulo.TotalQ;
+				data2[capitulo.Titulo]= capitulo.TotalR;
             });
             document.getElementById("Indice").innerHTML= htmlIndice;
-                          
+                        
 			var chart = new Chart("spider");                                                                                                
 			chart.setTheme(dojox.charting.themes.PlotKit.blue);
 			chart.theme.plotarea.fill = null;
@@ -187,11 +186,11 @@ ${MvcIncludes}
 			chart.addPlot("default", {
 				type: "Spider",
 				labelOffset: -10,
-				divisions: 10,
+				divisions: 3,
 				axisColor:      "lightgray",
 				fill: null,
 				spiderColor:    "silver",
-				seriesFillAlpha: 0.5,
+				seriesFillAlpha: 0.3,
 				spiderOrigin:	 0.16,
 				markerSize:  	 3,
 				precision:		 0,
@@ -207,6 +206,8 @@ ${MvcIncludes}
 
 			chart.render();
 			new Legend({chart: chart, horizontal: true}, "legend1");
+
+			var body = document.querySelector("body");
             body.setAttribute("_ready", "true");
         });
         });
