@@ -1,5 +1,7 @@
 ﻿using ServiceStack;
 using System.Collections.Generic;
+using MongoDB.Bson.Serialization.Attributes;
+using MongoDB.Bson;
 
 namespace Aicl.Liebre.Model
 {
@@ -43,9 +45,31 @@ namespace Aicl.Liebre.Model
 		public Descarga Descarga { get; set; }
 	}
 
+
+	public class PreguntaDescarga{
+
+		public PreguntaDescarga ()
+		{
+			IdGuias = new List<string> ();
+			Preguntas = new List<string> ();
+			//Requisito = new Requisito{ Codigo = "RQO00", Descripcion = "No Asignado" };
+		}
+
+		[BsonRepresentation(BsonType.ObjectId)]
+		public string Id { get ; set;}
+		public string IdCapitulo { get; set;}
+		public string Numeral { get; set; }
+		public string Enunciado { get; set; }
+		public string Metodo { get; set; } // metodo verificacion
+		public bool NoAplicaDisponible { get; set; }
+		public List<string> IdGuias { get; set; }
+		public List<string> Preguntas { get; set; }
+
+	}
+
 	public class ViewPregunta
 	{
-		public Pregunta Pregunta { get; set; }
+		public PreguntaDescarga Pregunta { get; set; }
 		public Respuesta Respuesta { get; set; }
 	}
 

@@ -58,9 +58,9 @@ namespace Aicl.Liebre.Model
 	public class CapituloInfo:Capitulo
 	{
 		public CapituloInfo(){
-			Preguntas = new List<ViewPregunta> ();
+			Preguntas = new List<ViewPreguntaInfo> ();
 		}
-		public List<ViewPregunta> Preguntas { get; set; }
+		public List<ViewPreguntaInfo> Preguntas { get; set; }
 
 		public int TotalQ { get; set; }
 		public int TotalR { get; set; }
@@ -91,10 +91,12 @@ namespace Aicl.Liebre.Model
 		public RespuestaGuiaInfo Respuesta { get; set; }
 	}
 
-	public class ViewPreguntaInfo:ViewPregunta{
+	public class ViewPreguntaInfo{
 		public ViewPreguntaInfo(){
 			Guias = new List<ViewGuiaInfo> ();
 		}
+		public Pregunta Pregunta { get; set; }
+		public Respuesta Respuesta { get; set; }
 		public List<ViewGuiaInfo> Guias { get; set; }
 	}
 

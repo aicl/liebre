@@ -152,7 +152,7 @@ namespace Aicl.Liebre.Data
 
 			var capIds = response.Capitulos.ConvertAll (e => e.Id);
 
-			var p = GetCollection<Pregunta>().Find( Query<Pregunta>.In ((q) => q.IdCapitulo, capIds ))
+			var p = GetCollection<PreguntaDescarga>(typeof(Pregunta)).Find( Query<Pregunta>.In ((q) => q.IdCapitulo, capIds ))
 				.OrderBy(q=>NormalizeNumeral( q.Numeral)).ToList();
 			var r = GetByQuery<Respuesta> (q => q.IdDiagnostico == response.Diagnostico.Id, q=>q.IdPregunta);
 
@@ -404,7 +404,6 @@ namespace Aicl.Liebre.Data
 				if(vp.Respuesta.Valor==1) ++cap.TotalR;
 				cap.Preguntas.Add(vp);
 			});
-
 
 			return response;
 		}
