@@ -41,7 +41,7 @@
 			color:#fff
 		}
 		/* tabla */
-		.tb-min, .tb-header, .tb-s-header, .tb-one-col
+		.tb-min, .tb-header, .tb-s-header, .tb-one-col, .tb-rq
 		{
 			font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
 			font-size: 12px;
@@ -57,6 +57,7 @@
 			color: #039;
 			padding: 10px 8px;
 			border-bottom: 2px solid #6678b1;
+			text-align:center;
 		}
 		.tb-min td
 		{
@@ -72,17 +73,30 @@
 		table.tb-index tr td:first-child, table.tb-index tr th:first-child{
 			width: 80%;
 		}
-		table.tb-s-header tr td:first-child, table.tb-index tr th:first-child{
+
+		table.tb-index tr td:first-child+td{
+			text-align:center;
+		}
+
+		table.tb-s-header tr td:first-child, table.tb-s-header tr th:first-child{
 			width: 20%;
 		}
+
+		table.tb-rq tr td:first-child{
+			width: 40%;
+		}
+
 		div.content, div.header, div.s-header{
 			padding:0px 0px 0px 10px;
 			width:auto;
 		}
 	    .center { margin-left: auto;    margin-right: auto;    width: 95%;  }
 
+	    .hbar {background-color: #259b24;color: #fff;text-align: center;padding: 4px;font-size: medium; border-radius:2px;}
+
+
         @import "//ajax.googleapis.com/ajax/libs/dojo/1.10.2/dojo/resources/dojo.css";
-	    @import "//ajax.googleapis.com/ajax/libs/dojo/1.10.2/dojox/charting/resources/Legend.css";
+
     </style>
     <script type="text/javascript">
         var PhantomJSPrinting = {
@@ -148,14 +162,30 @@
 	    	<!-- <span style='float:left'><div id="legend1"></div></span> !-->
 	    </div>
 	</div>
+
+	<div class="content" style="margin-top:20px; page-break-before: always;">
+	   <div class="center" style="text-align: center;">
+	    <h2>Cumplimiento Por Requisitos</h2>
+		<table class="tb-min tb-rq">
+			<thead>
+				<tr>
+					<th>Requisito</th>
+					<th>Resultado</th>
+				</tr>
+			</thead>
+			<tbody id="IndiceRequisitos"></tbody>
+		</table>
+		</div>
+	</div>
+
     <script>
     // <![CDATA[
     	var data = ${Dto};
 
         require(["dojo/_base/lang","dojox/charting/Chart", "dojox/charting/axis2d/Default", "dojox/charting/plot2d/Spider",
         "dojox/charting/themes/PlotKit/blue", 
-        "dojo/_base/array", "dojox/charting/widget/Legend", "dojo/ready"],
-        function(lang, Chart, Default, Spider, PlotKit,  arrayUtil, Legend, ready){
+        "dojo/_base/array",  "dojo/ready"],
+        function(lang, Chart, Default, Spider, PlotKit,  arrayUtil, ready){
         ready(function(){  
 			
 			document.getElementById("Empresa.Nombre").innerHTML= data.Empresa.Nombre;
@@ -202,6 +232,25 @@
 			chart.addSeries("Meta", {data: data1}, { fill: "white" });
 			chart.render();
 			//new Legend({chart: chart, horizontal: true}, "legend1");
+
+
+			var htmlIndiceRequisitos="";
+
+			arrayUtil.forEach(data.Requisitos, function(requisito,i){
+				
+				var valor= (requisito.TotalR/requisito.TotalQ)*100;
+                htmlIndiceRequisitos += 
+                lang.replace("<tr><td>{requisito.Descripcion}</td><td><div class='hbar' style='background-image: linear-gradient( to right, #259b24, #259b24 {valor}%, #d23f31 0% );'>{requisito.TotalR}/{requisito.TotalQ}</div></td></tr>",
+                {
+                	requisito:requisito,
+                	valor:valor
+                });
+				
+            });
+            document.getElementById("IndiceRequisitos").innerHTML= htmlIndiceRequisitos;
+
+
+
 			var body = document.querySelector("body");
             body.setAttribute("_ready", "true");
         });

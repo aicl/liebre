@@ -405,6 +405,8 @@ namespace Aicl.Liebre.Data
 				cap.Preguntas.Add(vp);
 			});
 
+			response.Requisitos = response.Requisitos.OrderByDescending(x=>x.TotalR>0? x.TotalQ:x.TotalQ*-1).OrderByDescending (x => (double) x.TotalR / (double) x.TotalQ).ToList ();
+
 			return response;
 		}
 
