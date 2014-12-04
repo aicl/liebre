@@ -239,11 +239,15 @@
 			arrayUtil.forEach(data.Requisitos, function(requisito,i){
 				
 				var valor= (requisito.TotalR/requisito.TotalQ)*100;
+				var green = "#259b24";
+				var red = (valor>=100)?"#259b24":"#d23f31";
                 htmlIndiceRequisitos += 
-                lang.replace("<tr><td>{requisito.Descripcion}</td><td><div class='hbar' style='background-image: linear-gradient( to right, #259b24, #259b24 {valor}%, #d23f31 0% );'>{requisito.TotalR}/{requisito.TotalQ}</div></td></tr>",
+                lang.replace("<tr><td>{requisito.Descripcion}</td><td><div class='hbar' style='background-image: linear-gradient( to right, {green}, {green} {valor}%, {red} 0% ); background: -webkit-gradient(linear, left top, right top, color-stop({valor}%,{green}), color-stop({valor}%,{red}), color-stop({valor}%,{red}), color-stop({valor}%,{red}));'>{requisito.TotalR}/{requisito.TotalQ}</div></td></tr>",
                 {
                 	requisito:requisito,
-                	valor:valor
+                	valor:valor,
+                	green:green,
+                	red:red
                 });
 				
             });
