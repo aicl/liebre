@@ -58,9 +58,9 @@ namespace Aicl.Liebre.Model
 	public class CapituloInfo:Capitulo
 	{
 		public CapituloInfo(){
-			Preguntas = new List<ViewPreguntaInfo> ();
+			//Preguntas = new List<ViewPreguntaInfo> ();
 		}
-		public List<ViewPreguntaInfo> Preguntas { get; set; }
+		//public List<ViewPreguntaInfo> Preguntas { get; set; }
 
 		public int TotalQ { get; set; }
 		public int TotalR { get; set; }

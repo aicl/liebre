@@ -78,6 +78,10 @@
 			text-align:center;
 		}
 
+		table.tb-cmp tr td:first-child+td, table.tb-cmp tr td:first-child+td+td{
+			width:48%;
+		}
+
 		table.tb-s-header tr td:first-child, table.tb-s-header tr th:first-child{
 			width: 20%;
 		}
@@ -178,6 +182,13 @@
 		</div>
 	</div>
 
+	<div class="content" style="margin-top:5px; page-break-before: always;" >
+		<div class="center" style="text-align: center;">
+	    	<h2>Cumplimiento Por Requisitos</h2>
+			<div id="Cumplimiento" style="text-align: center;"></div>
+		</div>
+	</div>
+
     <script>
     // <![CDATA[
     	var data = ${Dto};
@@ -233,9 +244,7 @@
 			chart.render();
 			//new Legend({chart: chart, horizontal: true}, "legend1");
 
-
 			var htmlIndiceRequisitos="";
-
 			arrayUtil.forEach(data.Requisitos, function(requisito,i){
 				
 				var valor= (requisito.TotalR/requisito.TotalQ)*100;
@@ -252,6 +261,42 @@
 				
             });
             document.getElementById("IndiceRequisitos").innerHTML= htmlIndiceRequisitos;
+            //
+
+            var htmlCumplimiento="";
+			arrayUtil.forEach(data.Requisitos, function(requisito,i){
+				var preguntas= arrayUtil.filter(data.Preguntas, function(item){ 
+					return item.Pregunta.Requisito.Codigo===requisito.Codigo
+				});
+				var filas="";
+				arrayUtil.forEach(preguntas, function(pregunta,j){
+					var marca= pregunta.Respuesta.Valor===1? 'Si': 'No';
+					var comentario= pregunta.Respuesta.Valor===1? (pregunta.Pregunta.ComentarioSi)||'OK': (pregunta.Pregunta.ComentarioNo)||'Mal';
+					var recomendacion= pregunta.Respuesta.Valor===1? (pregunta.Pregunta.RecomendacionSi)||'Continuar': (pregunta.Pregunta.RecomendacionNo)||'Resolver y Documentar';
+					filas+=
+					lang.replace('<tr><td>{marca}</td><td>{comentario}</td><td>{recomendacion}</td></tr>',{
+						marca:marca,
+						comentario:comentario,
+						recomendacion:recomendacion
+					});
+				});
+
+                htmlCumplimiento += 
+                lang.replace(
+'<table class="tb-min tb-cmp" style="margin-top:10px; page-break-after: always;">'+
+	//'<thead>'+
+		'<tr><th colspan="3">{requisito.Descripcion}: {requisito.TotalR}/{requisito.TotalQ}</th></tr>'+
+		'<tr><th></th><th>Comentario</th><th>Recomendación</th></tr>'+
+	//'</thead>'+
+	'<tbody>{filas}</tbody>'+
+'</table>',
+                {
+                	requisito:requisito,
+                	filas:filas
+                });
+				
+            });
+            document.getElementById("Cumplimiento").innerHTML= htmlCumplimiento;
 
 			var body = document.querySelector("body");
             body.setAttribute("_ready", "true");
@@ -261,3 +306,4 @@
     </script>
 </body>
 </html>
+
