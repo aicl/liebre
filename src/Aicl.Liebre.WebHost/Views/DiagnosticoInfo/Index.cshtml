@@ -38,8 +38,8 @@
 		</thead>
 		<tbody>
 		@foreach(var capitulo in Model.Capitulos){
-			var totalQ=capitulo.Preguntas.Count();
-			var totalR = capitulo.Preguntas.Count(q=>q.Respuesta.Valor==1);
+			var totalQ=capitulo.TotalQ;
+			var totalR = capitulo.TotalR;
 			var estado= totalR>=totalQ?"green":"red";
 			<tr>
 				<td>@capitulo.Numeral  @capitulo.Titulo</td>
@@ -58,8 +58,8 @@
 	@foreach(var c in Model.Capitulos)
 	{
 	@:labels.push( @Html.Raw(Json.Encode( c.Titulo)) );
-	@:data2.push( @c.Preguntas.Count() );
-	@:data1.push( @c.Preguntas.Count(q=>q.Respuesta.Valor==1) );
+	@:data2.push( @c.TotalQ );
+	@:data1.push( @c.TotalR );
 	}
 	var radarChartData = {
 	    

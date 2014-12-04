@@ -9,8 +9,8 @@
 <div>
 
 	@foreach(var capitulo in Model.Capitulos){
-		var totalQ=capitulo.Preguntas.Count();
-		var totalR = capitulo.Preguntas.Count(q=>q.Respuesta.Valor==1);
+		var totalQ=capitulo.TotalQ;
+		var totalR = capitulo.TotalR;
 		var estado= totalR>=totalQ?"green":"red";
 	
 
