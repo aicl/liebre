@@ -1,99 +1,119 @@
 ﻿[{"Codigo":"RQO01", "Descripcion":"SG-SST",
-"Normas":[{"Codigo":"NRM001", "Numerales":"1,2,3,4","Titulo":"Objeto y Campo de Aplicación,Definiciones, SG-SST."},
-{"Codigo":"", "Numerales":"1,2,3,4.1", "Titulo":"Objeto y campo de aplicación, Referencias normativas, Términos y definiciones, Requisitos generales"},
-{"Codigo":"", "Numerales":"", "Titulo":"Introducción, Alcance, Glosario"}]},
+	"Decreto":{"Numerales":"1,2,3,4","Titulo":"Objeto y Campo de Aplicación,Definiciones, SG-SST"},
+	"OHSAS":{"Numerales":"1,2,3,4.1", "Titulo":"Objeto y campo de aplicación, Referencias normativas, Términos y definiciones, Requisitos generales"},
+	"RUC":{"Numerales":"", "Titulo":"Introducción, Alcance, Glosario"}
+},
 
-{"Codigo":"RQO02", "Descripcion":"Generales", 
-"Normas":[{"Codigo":"NRM001", "Numerales":"", "Titulo":""},
-{"Codigo":"NRM002", "Numerales":"", "Titulo":""},
-{"Codigo":"NRM003", "Numerales":"", "Titulo":""}]},
+{"Codigo":"RQO02", "Descripcion":"Generales",
+	"Decreto":{"Numerales":"", "Titulo":""},
+	"OHSAS":{"Numerales":"", "Titulo":""},
+	"RUC":{"Numerales":"", "Titulo":""}
+},
 
-{"Codigo":"RQO03", "Descripcion":"Política SST", 
-"Normas":[{"Codigo":"NRM001", "Numerales":"5,6,7", "Titulo":"Politica en SST"},
-{"Codigo":"NRM002", "Numerales":"4.2", "Titulo":"Politica de S Y SO"},
-{"Codigo":"NRM003", "Numerales":"1.1", "Titulo":"Política de seguridad, salud en el trabajo y ambiente"}]},
+{"Codigo":"RQO03", "Descripcion":"Política SST",
+	"Decreto":{"Numerales":"5,6,7", "Titulo":"Politica en SST"},
+	"OHSAS":{"Numerales":"4.2", "Titulo":"Politica de S Y SO"},
+	"RUC":{"Numerales":"1.1", "Titulo":"Política de seguridad, salud en el trabajo y ambiente"}
+},
 
-{"Codigo":"RQO04", "Descripcion":"Identificación de Peligros", 
-"Normas":[{"Codigo":"NRM001", "Numerales":"15,24", "Titulo":"Identificación de Peligros, Evaluación y Valoración de los Riesgos, Medidas de prevención y control"},
-{"Codigo":"NRM002", "Numerales":"4.3.1, 4.5.1", "Titulo":"Identificación de peligros. Valoración de riesgos y Determinación de los controles, Medición y seguimiento del desempeño"},
-{"Codigo":"NRM003", "Numerales":"2.2,3.2.1", "Titulo":"Requisitos Legales y de otra índole, Selección de contratistas"}]},
+{"Codigo":"RQO04", "Descripcion":"Identificación de Peligros",
+	"Decreto":{"Numerales":"15,24", "Titulo":"Identificación de Peligros, Evaluación y Valoración de los Riesgos, Medidas de prevención y control"},
+	"OHSAS":{"Numerales":"4.3.1, 4.5.1", "Titulo":"Identificación de peligros. Valoración de riesgos y Determinación de los controles, Medición y seguimiento del desempeño"},
+	"RUC":{"Numerales":"2.2,3.2.1", "Titulo":"Requisitos Legales y de otra índole, Selección de contratistas"}
+},
 
-{"Codigo":"RQO05", "Descripcion":"Requisitos Legales", 
-"Normas":[{"Codigo":"NRM001", "Numerales":"16", "Titulo":"Evaluación inicial"},
-{"Codigo":"NRM002", "Numerales":"4.3.2", "Titulo":"Requisitos legales y otros"},
-{"Codigo":"NRM003", "Numerales":"2.2", "Titulo":"Requisitos Legales y de otra índole"}]},
+{"Codigo":"RQO05", "Descripcion":"Requisitos Legales",
+	"Decreto":{"Numerales":"16", "Titulo":"Evaluación inicial"},
+	"OHSAS":{"Numerales":"4.3.2", "Titulo":"Requisitos legales y otros"},
+	"RUC":{"Numerales":"2.2", "Titulo":"Requisitos Legales y de otra índole"}
+},
 
-{"Codigo":"RQO06", "Descripcion":"Objetivos y Programas", 
-"Normas":[{"Codigo":"NRM001", "Numerales":"17,18", "Titulo":"Planificación del Trabajo SG-SST,Objetivos en materia de seguridad y salud en el trabajo"},
-{"Codigo":"NRM002", "Numerales":"4.3.3", "Titulo":"Objetivos y programas"},
-{"Codigo":"NRM003", "Numerales":"1.3, 3.2.3", "Titulo":"Objetivos y metas, Programas de gestióngit "}]},
+{"Codigo":"RQO06", "Descripcion":"Objetivos y Programas",
+	"Decreto":{"Numerales":"17,18", "Titulo":"Planificación del Trabajo SG-SST,Objetivos en materia de seguridad y salud en el trabajo"},
+	"OHSAS":{"Numerales":"4.3.3", "Titulo":"Objetivos y programas"},
+	"RUC":{"Numerales":"1.3, 3.2.3", "Titulo":"Objetivos y metas, Programas de gestióngit "}
+},
 
 {"Codigo":"RQO07", "Descripcion":"Recursos, Funciones, Responsabilidad", 
-"Normas":[{"Codigo":"NRM001", "Numerales":"8,10,34", "Titulo":"Mejora continua, Obligaciones de los Empleadores y responsabilidades de  los trabajadores"},
-{"Codigo":"NRM002", "Numerales":"4.4.1", "Titulo":"Recursos, funciones, rendición de cuentas y autoridad"},
-{"Codigo":"NRM003", "Numerales":"1.2,1.4,2.3", "Titulo":"Elementos Visibles del Compromiso Gerencial (Reuniones Gerenciales, Revisión Gerencial), Recursos, Responsabilidades"}]},
+	"Decreto":{"Numerales":"8,10,34", "Titulo":"Mejora continua, Obligaciones de los Empleadores y responsabilidades de  los trabajadores"},
+	"OHSAS":{"Numerales":"4.4.1", "Titulo":"Recursos, funciones, rendición de cuentas y autoridad"},
+	"RUC":{"Numerales":"1.2,1.4,2.3", "Titulo":"Elementos Visibles del Compromiso Gerencial (Reuniones Gerenciales, Revisión Gerencial), Recursos, Responsabilidades"}
+},
 
-{"Codigo":"RQO08", "Descripcion":"Competencia, Formación", 
-"Normas":[{"Codigo":"NRM001", "Numerales":"9,11,35", "Titulo":"Obligaciones de las ARL's, Capacitación en SST, Capacitación obligatoria"},
-{"Codigo":"NRM002", "Numerales":"4.4.2", "Titulo":"Competencia. Formación y toma de conciencia"},
-{"Codigo":"NRM003", "Numerales":"2.4,2.5,2.6", "Titulo":"Competencias, Capacitación y entrenamiento, Programa de Inducción"}]},
+{"Codigo":"RQO08", "Descripcion":"Competencia, Formación",
+	"Decreto":{"Numerales":"9,11,35", "Titulo":"Obligaciones de las ARL's, Capacitación en SST, Capacitación obligatoria"},
+	"OHSAS":{"Numerales":"4.4.2", "Titulo":"Competencia. Formación y toma de conciencia"},
+	"RUC":{"Numerales":"2.4,2.5,2.6", "Titulo":"Competencias, Capacitación y entrenamiento, Programa de Inducción"}
+},
 
-{"Codigo":"RQO09", "Descripcion":"Comunicación, Participación y Consulta", 
-"Normas":[{"Codigo":"NRM001", "Numerales":"14", "Titulo":"Comunicación"},
-{"Codigo":"NRM002", "Numerales":"4.4.3", "Titulo":"Comunicación, participación y consulta"},
-{"Codigo":"NRM003", "Numerales":"2.7", "Titulo":"Motivación. Comunicación participación y consulta"}]},
+{"Codigo":"RQO09", "Descripcion":"Comunicación, Participación y Consulta",
+	"Decreto":{"Numerales":"14", "Titulo":"Comunicación"},
+	"OHSAS":{"Numerales":"4.4.3", "Titulo":"Comunicación, participación y consulta"},
+	"RUC":{"Numerales":"2.7", "Titulo":"Motivación. Comunicación participación y consulta"}
+},
 
-{"Codigo":"RQO10", "Descripcion":"Documentación"},
-"Normas":[{"Codigo":"NRM001", "Numerales":"12", "Titulo":"Documentación del SG-SST"},
-{"Codigo":"NRM002", "Numerales":"4.4.4", "Titulo":"Documentación"},
-{"Codigo":"NRM003", "Numerales":"2.1", "Titulo":"Documentación"}]},
+{"Codigo":"RQO10", "Descripcion":"Documentación",
+	"Decreto":{"Numerales":"12", "Titulo":"Documentación del SG-SST"},
+	"OHSAS":{"Numerales":"4.4.4", "Titulo":"Documentación"},
+	"RUC":{"Numerales":"2.1", "Titulo":"Documentación"}
+},
 
-{"Codigo":"RQO11", "Descripcion":"Control de Documentos", 
-"Normas":[{"Codigo":"NRM001", "Numerales":"", "Titulo":""},
-{"Codigo":"NRM002", "Numerales":"", "Titulo":""},
-{"Codigo":"NRM003", "Numerales":"", "Titulo":""}]},
+{"Codigo":"RQO11", "Descripcion":"Control de Documentos",
+	"Decreto":{"Numerales":"", "Titulo":""},
+	"OHSAS":{"Numerales":"", "Titulo":""},
+	"RUC":{"Numerales":"", "Titulo":""}
+},
 
 {"Codigo":"RQO12", "Descripcion":"Control Operacional",
-"Normas":[{"Codigo":"NRM001", "Numerales":"23,26,27,28", "Titulo":"Gestión de los peligros y riesgos, Gestión del cambio, Adquisiciones, Contratación"},
-{"Codigo":"NRM002", "Numeral":"4.4.6", "Titulo":"Control operacional"},
-{"Codigo":"NRM003", "Numerales":"3.2,3.2.2,3.2.4,3.2.5,3.2.6,4.4", "Titulo":"Tratamiento del riesgo, Visitantes,Comunidad y Autoridad,Subprograma de Medicina Preventiva y del Trabajo, Subprograma de higiene industrial, Subprograma de seguridad industrial, Inspecciones"}]},
+	"Decreto":{"Numerales":"23,26,27,28", "Titulo":"Gestión de los peligros y riesgos, Gestión del cambio, Adquisiciones, Contratación"},
+	"OHSAS":{"Numerales":"4.4.6", "Titulo":"Control operacional"},
+	"RUC":{"Numerales":"3.2,3.2.2,3.2.4,3.2.5,3.2.6,4.4", "Titulo":"Tratamiento del riesgo, Visitantes,Comunidad y Autoridad,Subprograma de Medicina Preventiva y del Trabajo, Subprograma de higiene industrial, Subprograma de seguridad industrial, Inspecciones"}
+},
 
 {"Codigo":"RQO13", "Descripcion":"Preparación Respuesta Emergencia", 
-"Normas":[{"Codigo":"NRM001", "Numerales":"25", "Titulo":"Prevención, preparación y respuesta ante emergencias"},
-{"Codigo":"NRM002", "Numerales":"4.4.7", "Titulo":"Preparación y respuesta ante emergencias"},
-{"Codigo":"NRM003", "Numerales":"3.2.7", "Titulo":"Planes de emergencia"}]},
+	"Decreto":{"Numerales":"25", "Titulo":"Prevención, preparación y respuesta ante emergencias"},
+	"OHSAS":{"Numerales":"4.4.7", "Titulo":"Preparación y respuesta ante emergencias"},
+	"RUC":{"Numerales":"3.2.7", "Titulo":"Planes de emergencia"}
+},
 
-{"Codigo":"RQO14", "Descripcion":"Medición seguimiento", 
-"Normas":[{"Codigo":"NRM001", "Numerales":"19,20,21,22", "Titulo":"Indicadores del SG-SST"},
-{"Codigo":"NRM002", "Numerales":"", "Titulo":""},
-{"Codigo":"NRM003", "Numerales":"", "Titulo":""}]},
+{"Codigo":"RQO14", "Descripcion":"Medición seguimiento",
+	"Decreto":{"Numerales":"19,20,21,22", "Titulo":"Indicadores del SG-SST"},
+	"OHSAS":{"Numerales":"", "Titulo":""},
+	"RUC":{"Numerales":"", "Titulo":""}
+},
 
-{"Codigo":"RQO15", "Descripcion":"Evaluación y Cumplimiento Legal", 
-"Normas":[{"Codigo":"NRM001", "Numerales":"12", "Titulo":"Documentación del SGSST"},
-{"Codigo":"NRM002", "Numerales":"4.5.2", "Titulo":"Evaluación del cumplimiento legal y otros"},
-{"Codigo":"NRM003", "Numerales":"4.5", "Titulo":"Seguimiento a los requisitos legales"}]},
+{"Codigo":"RQO15", "Descripcion":"Evaluación y Cumplimiento Legal",
+	"Decreto":{"Numerales":"12", "Titulo":"Documentación del SGSST"},
+	"OHSAS":{"Numerales":"4.5.2", "Titulo":"Evaluación del cumplimiento legal y otros"},
+	"RUC":{"Numerales":"4.5", "Titulo":"Seguimiento a los requisitos legales"}
+},
 
-{"Codigo":"RQO16", "Descripcion":"Investigación de Incidentes/AP", 
-"Normas":[{"Codigo":"NRM001", "Numerales":"32", "Titulo":"Investigación de incidentes, accidentes de trabajo y enfermedades laborales"},
-{"Codigo":"NRM002", "Numerales":"4.5.3.1", "Titulo":"Investigación de incidentes"},
-{"Codigo":"NRM003", "Numerales":"4.1", "Titulo":"Accidentalidad"}]},
+{"Codigo":"RQO16", "Descripcion":"Investigación de Incidentes/AP",
+	"Decreto":{"Numerales":"32", "Titulo":"Investigación de incidentes, accidentes de trabajo y enfermedades laborales"},
+	"OHSAS":{"Numerales":"4.5.3.1", "Titulo":"Investigación de incidentes"},
+	"RUC":{"Numerales":"4.1", "Titulo":"Accidentalidad"}
+},
 
-{"Codigo":"RQO17", "Descripcion":"Control de Registros", 
-"Normas":[{"Codigo":"NRM001", "Numerales":"13", "Titulo":"Conservación de los documentos"},
-{"Codigo":"NRM002", "Numerales":"4.4.5,4.5.4", "Titulo":"Control de documentos, Control de los registros"},
-{"Codigo":"NRM003", "Numerales":"", "Titulo":"Manual de Gestión,Control de Registros,Control de Documentos"}]},
+{"Codigo":"RQO17", "Descripcion":"Control de Registros",
+	"Decreto":{"Numerales":"13", "Titulo":"Conservación de los documentos"},
+	"OHSAS":{"Numerales":"4.4.5,4.5.4", "Titulo":"Control de documentos, Control de los registros"},
+	"RUC":{"Numerales":"", "Titulo":"Manual de Gestión,Control de Registros,Control de Documentos"}
+},
 
 {"Codigo":"RQO18", "Descripcion":"Auditoría Interna", 
-"Normas":[{"Codigo":"NRM001", "Numerales":"29,30", "Titulo":"Auditoría y Alcance de cumplimiento del SG-SST"},
-{"Codigo":"NRM002", "Numerales":"4.5.5", "Titulo":"Auditoría interna"},
-{"Codigo":"NRM003", "Numerales":"4.2", "Titulo":"Auditorías Internas al SGSSTA"}]},
+	"Decreto":{"Numerales":"29,30", "Titulo":"Auditoría y Alcance de cumplimiento del SG-SST"},
+	"OHSAS":{"Numerales":"4.5.5", "Titulo":"Auditoría interna"},
+	"RUC":{"Numerales":"4.2", "Titulo":"Auditorías Internas al SGSSTA"}
+},
 
-{"Codigo":"RQO19", "Descripcion":"Revision por la Dirección", 
-"Normas":[{"Codigo":"NRM001", "Numerales":"31", "Titulo":"Revisión por la alta Dirección"},
-{"Codigo":"NRM002", "Numerales":"4.6", "Titulo":"Revisión por la dirección"},
-{"Codigo":"NRM003", "Numerales":"1.2", "Titulo":"Elementos Visibles del Compromiso Gerencial (Reuniones Gerenciales. Revisión Gerencial)"}]},
+{"Codigo":"RQO19", "Descripcion":"Revision por la Dirección",
+	"Decreto":{"Numerales":"31", "Titulo":"Revisión por la alta Dirección"},
+	"OHSAS":{"Numerales":"4.6", "Titulo":"Revisión por la dirección"},
+	"RUC":{"Numerales":"1.2", "Titulo":"Elementos Visibles del Compromiso Gerencial (Reuniones Gerenciales. Revisión Gerencial)"}
+},
 
-{"Codigo":"RQO20", "Descripcion":"No conformidad AC/AP"}, 
-"Normas":[{"Codigo":"NRM001", "Numerales":"33", "Titulo":"Acción preventiva y correctiva"},
-{"Codigo":"NRM002", "Numerales":"4.5.3.2", "Titulo":"No conformidad. Accion correctiva y acción preventiva"},
-{"Codigo":"NRM003", "Numerales":"4.3", "Titulo":"Acciones Correctivas y Preventivas"}]]
+{"Codigo":"RQO20", "Descripcion":"No conformidad AC/AP",
+	"Decreto":{"Numerales":"33", "Titulo":"Acción preventiva y correctiva"},
+	"OHSAS":{"Numerales":"4.5.3.2", "Titulo":"No conformidad. Accion correctiva y acción preventiva"},
+	"RUC":{"Numerales":"4.3", "Titulo":"Acciones Correctivas y Preventivas"}
+}]
