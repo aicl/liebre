@@ -214,6 +214,7 @@
     <Content Include="Content\Scripts\Chart.min.js" />
     <Content Include="InfoDir\DiagnosticoInfo.html" />
     <Content Include="InfoDir\InfoFormat.html" />
+    <Content Include="json\normas.json" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

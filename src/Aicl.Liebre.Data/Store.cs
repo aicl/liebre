@@ -402,9 +402,10 @@ namespace Aicl.Liebre.Data
 				var cap = response.Capitulos.First(c=>c.Id==q.IdCapitulo);
 				++cap.TotalQ; 
 				if(vp.Respuesta.Valor==1) ++cap.TotalR;
-				//cap.Preguntas.Add(vp);
+
 			});
 
+			response.Preguntas = response.Preguntas.OrderByDescending (q => q.Respuesta.Valor).ToList();
 			response.Requisitos = response.Requisitos.OrderByDescending(x=>x.TotalR>0? x.TotalQ:x.TotalQ*-1).OrderByDescending (x => (double) x.TotalR / (double) x.TotalQ).ToList ();
 
 			return response;
