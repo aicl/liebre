@@ -21,9 +21,14 @@
 	  <paper-dialog id="dialog" backdrop layered autoCloseDisabled>
 		  <paper-input label="Numeral" required floatinglabel id="Numeral" 
 					   value="{{_onedit.Numeral}}"></paper-input>
-		  <paper-input label="Enunciado" required floatinglabel id="Enunciado" value="{{_onedit.Enunciado}}"
-					   multiline rows="3"></paper-input>
-		  <requisitos-dropdown data="{{requisitos}}" selected="{{_onedit.Requisito}}"></requisitos-dropdown>
+		  <paper-input label="OHSAS" required floatinglabel id="OHSAS" 
+					   value="{{_onedit.OHSAS}}"></paper-input>
+		  <paper-input label="RUC" required floatinglabel id="RUC" 
+					   value="{{_onedit.RUC}}"></paper-input>
+		  <paper-input label="Enunciado" required floatinglabel id="Enunciado" 
+					   value="{{_onedit.Enunciado}}" multiline rows="3"></paper-input>
+		  <requisitos-dropdown data="{{requisitos}}" 
+							   selected="{{_onedit.Requisito}}"></requisitos-dropdown>
 		  <paper-input label="Comentario/SI"  floatinglabel id="ComentarioSi" 
 					   value="{{_onedit.ComentarioSi}}" multiline rows="2"></paper-input>
 		  <paper-input label="Comentario/NO"  floatinglabel id="ComentarioNo" 

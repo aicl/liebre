@@ -87,7 +87,7 @@
 		}
 
 		table.tb-rq tr td:first-child{
-			width: 40%;
+			width: 60%;
 		}
 
 		div.content, div.header, div.s-header{
@@ -146,7 +146,8 @@
 	</div>
 	<div class="content">
 	   <div class="center" style="text-align: center;">
-	    <h2>Cumplimiento Por Capítulos</h2>
+	    <h2>Decreto 1443-2014</h2>
+	    <h3>Cumplimiento Por Capítulos</h3>
 		<table class="tb-min tb-index" style="text-align: left;">
 			<thead>
 				<tr>
@@ -161,7 +162,8 @@
 
 	<div class="content" style="margin-top:20px; page-break-before: always;">
 		<div class="center" style="text-align: center;">
-			<h2>Cumplimiento Por Capítulos</h2>
+			<h2>Decreto 1443-2014</h2>
+			<h3>Cumplimiento Por Capítulos</h3>
 	    	<div id="spider" style="text-align: left;height: 700px; border-radius: 10px;border: 2px solid gray;	border-style: solid;background: #e7eef6"></div>
 	    	<!-- <span style='float:left'><div id="legend1"></div></span> !-->
 	    </div>
@@ -213,8 +215,8 @@
                 	capitulo:capitulo,
                 	estado:estado
                 });
-				data1[capitulo.Titulo]= capitulo.TotalQ;
-				data2[capitulo.Titulo]= capitulo.TotalR;
+				data1[capitulo.Titulo]= 100;
+				data2[capitulo.Titulo]= (capitulo.TotalR/capitulo.TotalQ)*100;
             });
             document.getElementById("Indice").innerHTML= htmlIndice;
                         

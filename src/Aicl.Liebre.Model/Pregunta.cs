@@ -29,6 +29,8 @@ namespace Aicl.Liebre.Model
 		public string ComentarioNo { get; set; }
 		public string RecomendacionSi { get; set; }
 		public string RecomendacionNo { get; set; }
+		public string OHSAS { get; set; }
+		public string RUC { get; set; }
 	}
 
 	[Route("/read/pregunta","GET")]
