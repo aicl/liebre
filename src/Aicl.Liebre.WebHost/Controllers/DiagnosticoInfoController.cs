@@ -9,6 +9,7 @@ using MongoDB.Bson;
 
 namespace Aicl.Liebre.WebHost
 {
+	/*
 	public class DiagnosticoInfoController:ServiceStackController
 	{
 		public ActionResult Index ()
@@ -24,4 +25,5 @@ namespace Aicl.Liebre.WebHost
 			}
 		}
 	}
+	*/
 }

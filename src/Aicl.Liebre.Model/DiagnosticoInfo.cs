@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using MongoDB.Bson.Serialization.Attributes;
 using MongoDB.Bson;
-using System.Linq;
 
 namespace Aicl.Liebre.Model
 {
@@ -11,8 +10,10 @@ namespace Aicl.Liebre.Model
 	{
 		public DiagnosticoInfo ()
 		{
+			Norma = "Decreto";
 		}
 		public string Id { get; set;}
+		public string Norma { get; set; }
 	}
 
 	[Route("/read/diagnosticoinfopdf","GET")]
@@ -20,8 +21,10 @@ namespace Aicl.Liebre.Model
 	{
 		public DiagnosticoInfoPdf ()
 		{
+			Norma = "Decreto";
 		}
 		public string Id { get; set;}
+		public string Norma { get; set; }
 	}
 
 	public class DiagnosticoInfoPdfResponse: IHasResponseStatus
@@ -42,6 +45,7 @@ namespace Aicl.Liebre.Model
 			Capitulos = new List<CapituloInfo> ();
 			Preguntas = new List<ViewPreguntaInfo> ();
 			ResponseStatus = new ResponseStatus ();
+			Normas = new List<Norma> ();
 			Requisitos = new List<ViewRequisito> ();
 		}
 
@@ -52,15 +56,16 @@ namespace Aicl.Liebre.Model
 		public List<ViewGuiaInfo> Guias { get; set; }
 		public List<ViewPreguntaInfo> Preguntas { get; set; }
 		public ResponseStatus ResponseStatus { get; set; }
+		public string Norma { get; set; }
+		public List<Norma> Normas { get; set; }
 		public List<ViewRequisito> Requisitos { get; set; }
 	}
 
 	public class CapituloInfo:Capitulo
 	{
 		public CapituloInfo(){
-			//Preguntas = new List<ViewPreguntaInfo> ();
+
 		}
-		//public List<ViewPreguntaInfo> Preguntas { get; set; }
 
 		public int TotalQ { get; set; }
 		public int TotalR { get; set; }
@@ -106,14 +111,3 @@ namespace Aicl.Liebre.Model
 		public int TotalR { get; set; }
 	}
 }
-
-/*
- * public int TotalQ { 
-			get { 	return Preguntas.Count; 	} 
-		}
-		public int TotalR{
-			get {
-				return Preguntas.Count (q => q.Respuesta.Valor == 1);
-			}
-		}
- */

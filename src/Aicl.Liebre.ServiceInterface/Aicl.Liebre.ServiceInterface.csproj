@@ -50,7 +50,6 @@
     <Compile Include="RangoService.cs" />
     <Compile Include="ExternoService.cs" />
     <Compile Include="RequisitoService.cs" />
-    <Compile Include="DiagnosticoInfoService.cs" />
     <Compile Include="Phantomjs.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -78,5 +77,8 @@
       <Project>{C64110A4-8A19-4120-87B4-2BF05DB978DE}</Project>
       <Name>Aicl.Liebre.Data</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="DiagnosticoInfoService.cs" />
   </ItemGroup>
 </Project>
