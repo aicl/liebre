@@ -337,6 +337,9 @@ namespace Aicl.Liebre.Data
 			return ReadFromFile<ActividadAltoRiesgo> ("actividadesaltoriesgo.json");
 		}
 
+		public ListResult<Norma> ReadNorma(ReadNorma request){
+			return ReadFromFile<Norma> ("normas.json");
+		}
 
 		public List<Pregunta> ReadPregunta(ReadPregunta request){
 			var cl = GetCollection<Pregunta> (); 
@@ -353,6 +356,8 @@ namespace Aicl.Liebre.Data
 		public  DiagnosticoInfoResponse ReadDiagnosticoInfo(DiagnosticoInfo request)
 		{
 			var response = new DiagnosticoInfoResponse ();
+			response.Norma = request.Norma;
+			response.Normas = ReadNorma (new Aicl.Liebre.Model.ReadNorma ()).Data;
 
 			response.Diagnostico = GetById<Diagnostico> (request.Id);
 			response.Plantilla = GetById<Plantilla> (response.Diagnostico.IdPlantilla);

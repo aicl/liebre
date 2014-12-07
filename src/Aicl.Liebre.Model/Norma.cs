@@ -1,4 +1,7 @@
-﻿namespace Aicl.Liebre.Model
+﻿using ServiceStack;
+using System.Collections.Generic;
+
+namespace Aicl.Liebre.Model
 {
 	public class Norma:IDocument
 	{
@@ -13,5 +16,16 @@
 		public string Contenido { get; set; }
 		public string Alias { get; set; }
 
+	}
+
+	[Route("/read/norma","GET")]
+	public class ReadNorma:IReturn<ReadNormaResponse>
+	{
+	}
+
+	public class ReadNormaResponse: IHasResponseStatus 
+	{
+		public IEnumerable <Norma> Data {get;set;}
+		public ResponseStatus ResponseStatus {get;set;}
 	}
 }

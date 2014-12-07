@@ -51,6 +51,7 @@
     <Compile Include="ExternoService.cs" />
     <Compile Include="RequisitoService.cs" />
     <Compile Include="Phantomjs.cs" />
+    <Compile Include="DiagnosticoInfoService.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="ServiceStack">
@@ -77,8 +78,5 @@
       <Project>{C64110A4-8A19-4120-87B4-2BF05DB978DE}</Project>
       <Name>Aicl.Liebre.Data</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="DiagnosticoInfoService.cs" />
   </ItemGroup>
 </Project>
