@@ -52,7 +52,6 @@ namespace Aicl.Liebre.Model
 		{
 			IdGuias = new List<string> ();
 			Preguntas = new List<string> ();
-			//Requisito = new Requisito{ Codigo = "RQO00", Descripcion = "No Asignado" };
 		}
 
 		[BsonRepresentation(BsonType.ObjectId)]

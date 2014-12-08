@@ -19,16 +19,10 @@ namespace Aicl.Liebre.Model
 		public int MinValue { get; set; }
 
 	}
-
-
+		
 	[Route("/read/rango","GET")]
 	public class ReadRango:IReturn<ReadRangoResponse>
 	{
-		/*public string Codigo { get; set; }
-		public string Nombre { get; set; }
-		public Departamento Departamento { get; set; }
-		public int? Skip { get; set; }
-		public int? Rows { get; set; }*/
 	}
 
 	public class ReadRangoResponse: IHasResponseStatus 

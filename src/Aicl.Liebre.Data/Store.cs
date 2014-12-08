@@ -372,15 +372,13 @@ namespace Aicl.Liebre.Data
 				.OrderBy(q=>NormalizeNumeral( q.Numeral)).ToList();
 			var r = GetByQuery<Respuesta> (q => q.IdDiagnostico == response.Diagnostico.Id, q=>q.IdPregunta);
 
-			var g = GetByQuery<Guia> (q => q.IdPlantilla == response.Plantilla.Id, q=>q.Id);
+			/*var g = GetByQuery<Guia> (q => q.IdPlantilla == response.Plantilla.Id, q=>q.Id);
 			var rg = GetByQuery<RespuestaGuiaInfo> (typeof(RespuestaGuia),q => q.IdDiagnostico == response.Diagnostico.Id, q=>q.IdGuia);
-
 			g.ForEach (q => response.Guias.Add (new ViewGuiaInfo { 
 				Guia = q, 
 				Respuesta = rg.FirstOrDefault (rq => rq.IdGuia == q.Id) ??
 					new RespuestaGuiaInfo { IdGuia = q.Id, IdDiagnostico = response.Diagnostico.Id }
-			}));
-
+			}));*/
 
 			p.ForEach (q =>{
 				var vp=  new ViewPreguntaInfo {
@@ -392,27 +390,47 @@ namespace Aicl.Liebre.Data
 						Respuestas=new List<bool>(q.Preguntas.Count),
 						Valor = (q.Preguntas.Count > 0 ? (short)0 : default(short?))
 					},
-					Guias=response.Guias.FindAll(_g=> q.IdGuias.Contains(_g.Guia.Id)),
+					//Guias=response.Guias.FindAll(_g=> q.IdGuias.Contains(_g.Guia.Id)),
 				};
-
-				var req =response.Requisitos.FirstOrDefault(rrq=>rrq.Codigo==vp.Pregunta.Requisito.Codigo);
-				if(req==default(Requisito)){
-					req= new ViewRequisito{Codigo= vp.Pregunta.Requisito.Codigo, Descripcion=vp.Pregunta.Requisito.Descripcion};
-					response.Requisitos.Add(req);
-				}
-				++req.TotalQ;
-				if(vp.Respuesta.Valor==1) ++req.TotalR;
 
 				response.Preguntas.Add(vp);
 				var cap = response.Capitulos.First(c=>c.Id==q.IdCapitulo);
 				++cap.TotalQ; 
 				if(vp.Respuesta.Valor==1) ++cap.TotalR;
 
+				response.Normas.ForEach(n=>{
+					var sc = n.Alias=="Decreto"?vp.Pregunta.Decreto: n.Alias=="OHSAS"? vp.Pregunta.OHSAS:vp.Pregunta.RUC;
+					var item = n.Items.FirstOrDefault(i=>i.Codigo== sc) ;
+					if (item==default(NormaItem) ){
+						item= new NormaItem{Codigo=vp.Pregunta.Numeral};
+						n.Items.Add(item);
+					}
+
+					var grupo= n.Grupos.FirstOrDefault(gr=>gr.Codigos.Contains(sc));
+					if(grupo==default(NormaGrupo)){
+						grupo = new NormaGrupo();
+						grupo.Codigos.Add(vp.Pregunta.Numeral);
+						n.Grupos.Add(grupo);
+					}
+
+					++grupo.TotalQ;
+					++item.TotalQ;
+					++n.TotalQ;
+					if(vp.Respuesta.Valor==1) {
+						++n.TotalR;
+						++item.TotalR;
+						++grupo.TotalR;
+					}
+				});
+
 			});
 
 			response.Preguntas = response.Preguntas.OrderByDescending (q => q.Respuesta.Valor).ToList();
-			response.Requisitos = response.Requisitos.OrderByDescending(x=>x.TotalR>0? x.TotalQ:x.TotalQ*-1).OrderByDescending (x => (double) x.TotalR / (double) x.TotalQ).ToList ();
-
+			response.Normas.ForEach (n => {
+				n.Items= n.Items.OrderByDescending(x=>x.TotalR>0?x.TotalQ:x.TotalQ*-1).OrderByDescending (x => (double) x.TotalR / (double) x.TotalQ).ToList ();
+				n.Grupos= n.Grupos.OrderByDescending(x=>x.TotalR>0?x.TotalQ:x.TotalQ*-1).OrderByDescending (x => (double) x.TotalR / (double) x.TotalQ).ToList ();
+			});
+	
 			return response;
 		}
 

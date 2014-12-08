@@ -1,3 +1,12 @@
-﻿[{"Codigo":"NRM001", "Nombre":"Decreto 1443-2014", "Anotacion":"", "Titulo":"Artículo", "Contenido":"Numeral", "Alias":"Decreto"},
-{"Codigo":"NRM002", "Nombre":"OHSAS 18001", "Anotacion":"Cumplimiento del Decreto 1443-2014 comparado con OHSAS 18001","Titulo":"Numeral","Contenido":"OHSAS", "Alias":"OHSAS"},
-{"Codigo":"NRM003", "Nombre":"RUC", "Anotacion":"Cumplimiento del Decreto 1443-2014 comparado con RUC","Titulo":"Numeral", "Contenido":"RUC", "Alias":"RUC"}]
+﻿[{"Codigo":"NRM001", "Nombre":"Decreto 1443-2014", "Anotacion":"", "Titulo":"Artículo", "Contenido":"Numeral", "Alias":"Decreto",
+	"Items":[{"Codigo":"1","Titulo":"El Primero del Decreto"}],
+    "Grupos":[{"Codigos":["1"],"Titulo":"El primero del Decreto"}]
+},
+{"Codigo":"NRM002", "Nombre":"OHSAS 18001", "Anotacion":"Cumplimiento del Decreto 1443/2014 comparado con OHSAS 18001","Titulo":"Numeral","Contenido":"OHSAS", "Alias":"OHSAS",
+	"Items":[{"Codigo":"1.1","Titulo":"El primero OHSAS"}],
+	"Grupos":[{"Codigos":["1.1"],"Titulo":"El primero OHSAS"}]
+},
+{"Codigo":"NRM003", "Nombre":"RUC", "Anotacion":"Cumplimiento del Decreto 1443/2014 comparado con RUC","Titulo":"Numeral", "Contenido":"RUC", "Alias":"RUC",
+	"Items":[{"Codigo":"1","Titulo":"El primero del RUC"}],
+	"Grupos":[{"Codigos":["1"],"Titulo":"El primero del RUC"}]
+}]

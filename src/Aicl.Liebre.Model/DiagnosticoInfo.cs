@@ -41,24 +41,22 @@ namespace Aicl.Liebre.Model
 	{
 		public DiagnosticoInfoResponse()
 		{
-			Guias = new List<ViewGuiaInfo> ();
+			//Guias = new List<ViewGuiaInfo> ();
 			Capitulos = new List<CapituloInfo> ();
 			Preguntas = new List<ViewPreguntaInfo> ();
 			ResponseStatus = new ResponseStatus ();
 			Normas = new List<Norma> ();
-			Requisitos = new List<ViewRequisito> ();
 		}
 
 		public Empresa Empresa { get; set; }
 		public Diagnostico Diagnostico { get; set; }
 		public Plantilla Plantilla { get; set; }
 		public List<CapituloInfo> Capitulos { get; set; }
-		public List<ViewGuiaInfo> Guias { get; set; }
+		//public List<ViewGuiaInfo> Guias { get; set; }
 		public List<ViewPreguntaInfo> Preguntas { get; set; }
 		public ResponseStatus ResponseStatus { get; set; }
 		public string Norma { get; set; }
 		public List<Norma> Normas { get; set; }
-		public List<ViewRequisito> Requisitos { get; set; }
 	}
 
 	public class CapituloInfo:Capitulo
@@ -105,9 +103,5 @@ namespace Aicl.Liebre.Model
 		public List<ViewGuiaInfo> Guias { get; set; }
 	}
 
-	public class ViewRequisito:Requisito{
 
-		public int TotalQ { get; set; }
-		public int TotalR { get; set; }
-	}
 }
