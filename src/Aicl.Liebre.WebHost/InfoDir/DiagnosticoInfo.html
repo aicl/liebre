@@ -291,10 +291,24 @@
 					preguntas= preguntas.concat(pc);
 				});
 				var filas="";
+				var lis="";
 				arrayUtil.forEach(preguntas, function(pregunta,j){
 					var codigo = pregunta.Pregunta[norma.Alias]|| pregunta.Pregunta.Numeral;
 					var marca= pregunta.Respuesta.Valor===1? 'si': 'no';
-					var clave= (pregunta.Respuesta.Valor!==1  && (pregunta.Pregunta.Clave || pregunta.Pregunta.ResumenNo))?"warning":"";
+					var clave='';
+					var li='';
+					if(marca==='si'){
+						if( pregunta.Pregunta.ResumenSi) li=  pregunta.Pregunta.ResumenSi;
+					}
+					else{
+						if(pregunta.Pregunta.Clave || pregunta.Pregunta.ResumenNo){
+							clave='warning';
+							if( pregunta.Pregunta.ResumenNo) li=  pregunta.Pregunta.ResumenNo;
+						}
+					}
+					if(li){
+						lis+= '<li>'+ li + '</li>';
+					}
 					var comentario= pregunta.Respuesta.Valor===1? (pregunta.Pregunta.ComentarioSi)||'OK': (pregunta.Pregunta.ComentarioNo)||'Mal';
 					var recomendacion= pregunta.Respuesta.Valor===1? (pregunta.Pregunta.RecomendacionSi)||'Continuar': (pregunta.Pregunta.RecomendacionNo)||'Resolver y Documentar';
 					filas+=
@@ -314,12 +328,17 @@
 		'<tr><th></th><th></th><th>{numeralArticulo}</th><th>Comentario</th><th>Recomendación</th></tr>'+
 	//'</thead>'+
 	'<tbody>{filas}</tbody>'+
+	'<tr><td colspan="4"><ul>{lis}</ul></td><td><div class="hbar center" style="width:50%;background-image: linear-gradient( to right, {green}, {green} {valor}%, {red} 0% ); background: -webkit-gradient(linear, left top, right top, color-stop({valor}%,{green}), color-stop({valor}%,{red}), color-stop({valor}%,{red}), color-stop({valor}%,{red}));">{grupo.TotalR}/{grupo.TotalQ}</td></th>'+
 '</table>',
                 {
                 	titulo:titulo,
                 	grupo:grupo,
                 	filas:filas,
-                	numeralArticulo:norma.Titulo
+                	numeralArticulo:norma.Titulo,
+                	valor:valor,
+                	green:green,
+                	red:red,
+                	lis :lis
                 });
             });
 			document.getElementById("ArticuloNumeral").innerHTML=norma.Titulo;
