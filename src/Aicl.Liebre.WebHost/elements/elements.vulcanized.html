@@ -2753,6 +2753,116 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 </template>
 <script>(function(){var currentToast;Polymer("paper-toast",{text:"",duration:3e3,opened:false,responsiveWidth:"480px",swipeDisabled:false,eventDelegates:{trackstart:"trackStart",track:"track",trackend:"trackEnd",transitionend:"transitionEnd"},narrowModeChanged:function(){this.classList.toggle("fit-bottom",this.narrowMode)},openedChanged:function(){if(this.opened){this.dismissJob=this.job(this.dismissJob,this.dismiss,this.duration)}else{this.dismissJob&&this.dismissJob.stop();this.dismiss()}},toggle:function(){this.opened=!this.opened},show:function(){if(currentToast){currentToast.dismiss()}currentToast=this;this.opened=true},dismiss:function(){if(this.dragging){this.shouldDismiss=true}else{this.opened=false;if(currentToast===this){currentToast=null}}},trackStart:function(e){if(!this.swipeDisabled){e.preventTap();this.vertical=e.yDirection;this.w=this.offsetWidth;this.h=this.offsetHeight;this.dragging=true;this.classList.add("dragging")}},track:function(e){if(this.dragging){var s=this.style;if(this.vertical){var y=e.dy;s.opacity=(this.h-Math.abs(y))/this.h;s.webkitTransform=s.transform="translate3d(0, "+y+"px, 0)"}else{var x=e.dx;s.opacity=(this.w-Math.abs(x))/this.w;s.webkitTransform=s.transform="translate3d("+x+"px, 0, 0)"}}},trackEnd:function(e){if(this.dragging){this.classList.remove("dragging");this.style.opacity=null;this.style.webkitTransform=this.style.transform=null;var cl=this.classList;if(this.vertical){cl.toggle("fade-out-down",e.yDirection===1&&e.dy>0);cl.toggle("fade-out-up",e.yDirection===-1&&e.dy<0)}else{cl.toggle("fade-out-right",e.xDirection===1&&e.dx>0);cl.toggle("fade-out-left",e.xDirection===-1&&e.dx<0)}this.dragging=false}},transitionEnd:function(){var cl=this.classList;if(cl.contains("fade-out-right")||cl.contains("fade-out-left")||cl.contains("fade-out-down")||cl.contains("fade-out-up")){this.dismiss();cl.remove("fade-out-right","fade-out-left","fade-out-down","fade-out-up")}else if(this.shouldDismiss){this.dismiss()}this.shouldDismiss=false}})})();</script>
 </polymer-element>
+</div><div hidden><!--
+Copyright (c) 2014 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<!--
+`paper-tabs` is a `core-selector` styled to look like tabs. Tabs make it easy to 
+explore and switch between different views or functional aspects of an app, or 
+to browse categorized data sets.
+
+Use `selected` property to get or set the selected tab.
+
+Example:
+
+    <paper-tabs selected="0">
+      <paper-tab>TAB 1</paper-tab>
+      <paper-tab>TAB 2</paper-tab>
+      <paper-tab>TAB 3</paper-tab>
+    </paper-tabs>
+
+See <a href="#paper-tab">paper-tab</a> for more information about 
+`paper-tab`.
+
+Styling tabs:
+
+To change the sliding bar color:
+
+    paper-tabs.pink::shadow #selectionBar {
+      background-color: #ff4081;
+    }
+
+@group Paper Elements
+@element paper-tabs
+@extends core-selector
+@homepage github.io
+-->
+
+
+<!--
+Copyright (c) 2014 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<!--
+`paper-tab` is styled to look like a tab.  It should be used in conjunction with
+`paper-tabs`.
+
+Example:
+
+    <paper-tabs selected="0">
+      <paper-tab>TAB 1</paper-tab>
+      <paper-tab>TAB 2</paper-tab>
+      <paper-tab>TAB 3</paper-tab>
+    </paper-tabs>
+    
+Styling tab:
+
+To change the ink color:
+
+    .pink paper-tab::shadow #ink {
+      color: #ff4081;
+    }
+
+@group Paper Elements
+@element paper-tab
+@homepage github.io
+-->
+
+
+
+<polymer-element name="paper-tab" attributes="noink" role="tab" assetpath="../bower_components/paper-tabs/">
+<template>
+
+  <style>:host{display:block;position:relative;overflow:hidden}#tabContainer{position:absolute;top:0;right:0;bottom:0;left:0}.tab-content{transition:opacity .1s cubic-bezier(0.4,0,1,1),color .1s cubic-bezier(0.4,0,1,1);cursor:default;pointer-events:none}:host(:not(.core-selected)) .tab-content{opacity:.6}#ink{position:absolute;top:0;right:0;bottom:0;left:0;color:#ffff8d}:host[noink] #ink{pointer-events:none}:host-context(paper-tabs[noink]) #ink{pointer-events:none}</style>
+  
+  <div id="tabContainer" center-justified="" center="" horizontal="" layout="">
+  
+    <div class="tab-content"><content></content></div>
+    <paper-ripple id="ink" initialopacity="0.95" opacitydecayvelocity="0.98"></paper-ripple>
+    
+  </div>
+  
+</template>
+<script>Polymer("paper-tab",{noink:false});</script>
+</polymer-element>
+
+
+<polymer-element name="paper-tabs" extends="core-selector" attributes="noink nobar" role="tablist" assetpath="../bower_components/paper-tabs/">
+<template>
+
+  <style>:host{display:block;position:relative;font-size:14px;font-weight:500;height:48px;overflow:hidden}#tabsContainer{position:absolute;top:0;right:0;bottom:0;left:0;white-space:nowrap}#selectionBar{position:absolute;height:2px;bottom:0;left:0;width:0;background-color:#ffff8d;transition:width,left}#selectionBar[hidden]{display:hidden}#selectionBar.expand{transition-duration:.15s;transition-timing-function:cubic-bezier(0.4,0,1,1)}#selectionBar.contract{transition-duration:.18s;transition-timing-function:cubic-bezier(0,0,.2,1)}polyfill-next-selector{content:'#tabsContainer > *:not(#selectionBar)'}::content>*{-ms-flex:1;-webkit-flex:1;flex:1}</style>
+  
+  <div id="tabsContainer" horizontal="" layout="">
+  
+    <shadow></shadow>
+    <div id="selectionBar" hidden?="{{nobar}}" on-transitionend="{{barTransitionEnd}}"></div>
+    
+  </div>
+    
+</template>
+<script>Polymer("paper-tabs",{noink:false,nobar:false,activateEvent:"down",nostretch:false,selectedIndexChanged:function(old){var s=this.$.selectionBar.style;if(!this.selectedItem){s.width=0;s.left=0;return}var w=100/this.items.length;if(this.nostretch||old===null||old===-1){s.width=w+"%";s.left=this.selectedIndex*w+"%";return}var m=5;this.$.selectionBar.classList.add("expand");if(old<this.selectedIndex){s.width=w+w*(this.selectedIndex-old)-m+"%";this._transitionCounter=1}else{s.width=w+w*(old-this.selectedIndex)-m+"%";s.left=this.selectedIndex*w+m+"%";this._transitionCounter=2}},barTransitionEnd:function(e){this._transitionCounter--;var cl=this.$.selectionBar.classList;if(cl.contains("expand")&&!this._transitionCounter){cl.remove("expand");cl.add("contract");var s=this.$.selectionBar.style;var w=100/this.items.length;s.width=w+"%";s.left=this.selectedIndex*w+"%"}else if(cl.contains("contract")){cl.remove("contract")}}});</script>
+</polymer-element>
 </div><div hidden><polymer-element name="app-header-panel" attributes="titulo,ricon,licon,tclass" assetpath="common/">
   <template>
     <style></style>
@@ -2891,20 +3001,36 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 		  </div>
 	  </app-header-panel> 	  
 	  <paper-dialog id="dialog" backdrop="" layered="" autoclosedisabled="">
+		  <paper-tabs selected="{{selectedTab}}">
+		  	<paper-tab>Enunciado</paper-tab>
+		  	<paper-tab>Comentarios</paper-tab>
+		  </paper-tabs>
+		  <core-pages selected="{{selectedTab}}" style="min-width: 512px;height: 80vh;">
+		  <div layout="" vertical="" center="">
 		  <paper-input label="Numeral" required floatinglabel="" id="Numeral" value="{{_onedit.Numeral}}"></paper-input>
+		  <paper-input label="Decreto" required floatinglabel="" id="Decreto" value="{{_onedit.Decreto}}"></paper-input>
 		  <paper-input label="OHSAS" required floatinglabel="" id="OHSAS" value="{{_onedit.OHSAS}}"></paper-input>
 		  <paper-input label="RUC" required floatinglabel="" id="RUC" value="{{_onedit.RUC}}"></paper-input>
 		  <paper-input label="Enunciado" required floatinglabel="" id="Enunciado" value="{{_onedit.Enunciado}}" multiline="" rows="3"></paper-input>
-		  <requisitos-dropdown data="{{requisitos}}" selected="{{_onedit.Requisito}}"></requisitos-dropdown>
+		  <div horizontal="" layout="" style="width:70%">
+			  <paper-checkbox id="Clave" checked="{{ _onedit.Clave }}"></paper-checkbox>
+			  <span>Clave?</span>
+		  </div>
+		  <div horizontal="" layout="" style="width:70%">
+			  <paper-checkbox id="NoAplicaDisponible" checked="{{ _onedit.NoAplicaDisponible }}"></paper-checkbox>
+			  <span>Disponible 'No Aplica'</span>
+		  </div>
+		  </div>
+		  <div layout="" vertical="" center="">
 		  <paper-input label="Comentario/SI" floatinglabel="" id="ComentarioSi" value="{{_onedit.ComentarioSi}}" multiline="" rows="2"></paper-input>
 		  <paper-input label="Comentario/NO" floatinglabel="" id="ComentarioNo" value="{{_onedit.ComentarioNo}}" multiline="" rows="3"></paper-input>
 		  <paper-input label="Recomendaci&#xF3;n/SI" floatinglabel="" id="RecomendacionSi" value="{{_onedit.RecomendacionSi}}" multiline="" rows="2"></paper-input>
 		  <paper-input label="Recomendaci&#xF3;n/NO" floatinglabel="" id="RecomendacionNo" value="{{_onedit.RecomendacionNo}}" multiline="" rows="3"></paper-input>
-		  <div horizontal="" layout="">
-			  <paper-checkbox id="NoAplicaDisponible" checked="{{ _onedit.NoAplicaDisponible }}"></paper-checkbox>
-			  <span>Disponible 'No Aplica'</span>
+		  <paper-input label="Resumen/SI" floatinglabel="" id="ResumenSi" value="{{_onedit.ResumenSi}}" multiline="" rows="2"></paper-input>
+		  <paper-input label="Resumen/NO" floatinglabel="" id="ResumenNo" value="{{_onedit.ResumenNo}}" multiline="" rows="3"></paper-input>
+		  <paper-input label="Metodo" floatinglabel="" id="Metodo" value="{{_onedit.Metodo}}" multiline="" rows="2"></paper-input>
 		  </div>
-		  <paper-input label="Metodo" floatinglabel="" id="Metodo" value="{{_onedit.Metodo}}" multiline="" rows="2"></paper-input>			
+		  </core-pages>
 		  <paper-icon-button icon="cancel" dismissive=""></paper-icon-button>
 		  <paper-icon-button icon="check" on-tap="{{ delegateSavePregunta }}" affirmative="" autofocus></paper-icon-button>
 		</paper-dialog>
@@ -2935,7 +3061,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 		  <paper-icon-button icon="check" on-tap="{{ delegateRemoveQ }}" affirmative="" autofocus></paper-icon-button>
 		</paper-dialog>
   </template>
-  <script>Polymer("pl-cap-preguntas",{get current(){return this._current},created:function(){this.capitulo={};this.preguntas=[];this.guias=[];this._current={};this._onedit={};this.requisitos=[]},firePreguntasBack:function(){this.fire("preguntas-back")},handlerShowNuevaQ:function(event,detail,sender){this._current=sender.templateInstance.model.item;this._onedit=Object.clone(this._current);this._qIndex=-1;this._qText="";this.$.dialogQ.toggle()},handlerShowEditQ:function(event,detail,sender){this._current=sender.templateInstance.model.item;this._onedit=Object.clone(this._current);this._qIndex=detail.index;this._qText=detail.item;this.$.dialogQ.toggle()},handlerShowRemoveQ:function(event,detail,sender){this._current=sender.templateInstance.model.item;this._onedit=Object.clone(this._current);this._qIndex=detail.index;this._qText=detail.item;this.$.dialogRemoveQ.toggle()},handlerShowEditPregunta:function(e,detail,sender){this._current=sender.templateInstance.model.item;this._onedit=Object.clone(this._current);this.$.dialog.toggle()},handlerShowNuevaPregunta:function(){this._current={Enunciado:"",Metodo:"",NoAplicaDisponible:false,IdCapitulo:"",IdGuias:[]};this._onedit=Object.clone(this._current);this.$.dialog.toggle()},handlerShowDeletePregunta:function(e,detail,sender){this._onedit=sender.templateInstance.model.item;this.$.borrar.toggle()},delegateDeletePregunta:function(e,detail,sender){if(this.handlerDeletePregunta){this.handlerDeletePregunta(e,{item:this._onedit},sender)}},delegateSavePregunta:function(e,detail,sender){if(this.$.Enunciado.invalid||this.$.Numeral.invalid||Object.compare(this._current,this._onedit))return;if(this.handlerSavePregunta){this._onedit.IdCapitulo=this.capitulo.Id;this.handlerSavePregunta(e,{item:this._onedit},sender)}},delegateRemoveGuia:function(e,detail,sender){if(this.handlerRemoveGuia){var index=-1;for(var d in this._onedit.IdGuias){if(this._onedit.IdGuias[d]===this.guiaToRemove){index=this._onedit.IdGuias.indexOf(this._onedit.IdGuias[d]);break}}if(index>=0){this._onedit.IdGuias.splice(index,1);this.handlerRemoveGuia(e,{item:this._onedit,guia:this.guiaToRemove},sender)}}},delegateShowGuiasToSelect:function(e,detail,sender){this._current=sender.templateInstance.model.item;this._onedit=Object.clone(this._current);if(this.handlerShowGuiasToSelect){this.handlerShowGuiasToSelect(e,{item:this._current},sender)}},delegateSaveQ:function(e,d,s){if(this.handlerSaveQ){if(this.$.EnunciadoQ.invalid||(this._qIndex<0?false:this._onedit.Preguntas[this._qIndex]===this.$.EnunciadoQ)){return}if(this._qIndex<0){if(!this._onedit.Preguntas){this._onedit.Preguntas=[]}this._onedit.Preguntas.push(this.$.EnunciadoQ.value)}else{this._onedit.Preguntas[this._qIndex]=this.$.EnunciadoQ.value}this.handlerSaveQ(e,{item:this._onedit},s)}},delegateRemoveQ:function(e,d,s){if(this.handlerRemoveQ){this._onedit.Preguntas.splice(this._qIndex,1);this.handlerRemoveQ(e,{item:this._onedit},s)}},handlerShowRemoveGuia:function(e,detail,sender){this._current=sender.templateInstance.model.item;this._onedit=Object.clone(this._current);this.guiaToRemove=detail.guia;this.$.removeGuia.toggle()}});</script>
+  <script>Polymer("pl-cap-preguntas",{get current(){return this._current},created:function(){this.capitulo={};this.preguntas=[];this.guias=[];this._current={};this._onedit={};this.requisitos=[]},firePreguntasBack:function(){this.fire("preguntas-back")},handlerShowNuevaQ:function(event,detail,sender){this._current=sender.templateInstance.model.item;this._onedit=Object.clone(this._current);this._qIndex=-1;this._qText="";this.$.dialogQ.toggle()},handlerShowEditQ:function(event,detail,sender){this._current=sender.templateInstance.model.item;this._onedit=Object.clone(this._current);this._qIndex=detail.index;this._qText=detail.item;this.$.dialogQ.toggle()},handlerShowRemoveQ:function(event,detail,sender){this._current=sender.templateInstance.model.item;this._onedit=Object.clone(this._current);this._qIndex=detail.index;this._qText=detail.item;this.$.dialogRemoveQ.toggle()},handlerShowEditPregunta:function(e,detail,sender){this._current=sender.templateInstance.model.item;this._onedit=Object.clone(this._current);this.selectedTab=0;this.$.dialog.toggle()},handlerShowNuevaPregunta:function(){this._current={Enunciado:"",Metodo:"",NoAplicaDisponible:false,IdCapitulo:"",IdGuias:[]};this._onedit=Object.clone(this._current);this.selectedTab=0;this.$.dialog.toggle()},handlerShowDeletePregunta:function(e,detail,sender){this._onedit=sender.templateInstance.model.item;this.$.borrar.toggle()},delegateDeletePregunta:function(e,detail,sender){if(this.handlerDeletePregunta){this.handlerDeletePregunta(e,{item:this._onedit},sender)}},delegateSavePregunta:function(e,detail,sender){if(this.$.Enunciado.invalid||this.$.Numeral.invalid||Object.compare(this._current,this._onedit))return;if(this.handlerSavePregunta){this._onedit.IdCapitulo=this.capitulo.Id;this.handlerSavePregunta(e,{item:this._onedit},sender)}},delegateRemoveGuia:function(e,detail,sender){if(this.handlerRemoveGuia){var index=-1;for(var d in this._onedit.IdGuias){if(this._onedit.IdGuias[d]===this.guiaToRemove){index=this._onedit.IdGuias.indexOf(this._onedit.IdGuias[d]);break}}if(index>=0){this._onedit.IdGuias.splice(index,1);this.handlerRemoveGuia(e,{item:this._onedit,guia:this.guiaToRemove},sender)}}},delegateShowGuiasToSelect:function(e,detail,sender){this._current=sender.templateInstance.model.item;this._onedit=Object.clone(this._current);if(this.handlerShowGuiasToSelect){this.handlerShowGuiasToSelect(e,{item:this._current},sender)}},delegateSaveQ:function(e,d,s){if(this.handlerSaveQ){if(this.$.EnunciadoQ.invalid||(this._qIndex<0?false:this._onedit.Preguntas[this._qIndex]===this.$.EnunciadoQ)){return}if(this._qIndex<0){if(!this._onedit.Preguntas){this._onedit.Preguntas=[]}this._onedit.Preguntas.push(this.$.EnunciadoQ.value)}else{this._onedit.Preguntas[this._qIndex]=this.$.EnunciadoQ.value}this.handlerSaveQ(e,{item:this._onedit},s)}},delegateRemoveQ:function(e,d,s){if(this.handlerRemoveQ){this._onedit.Preguntas.splice(this._qIndex,1);this.handlerRemoveQ(e,{item:this._onedit},s)}},handlerShowRemoveGuia:function(e,detail,sender){this._current=sender.templateInstance.model.item;this._onedit=Object.clone(this._current);this.guiaToRemove=detail.guia;this.$.removeGuia.toggle()}});</script>
 </polymer-element></div><div hidden><polymer-element name="plantilla-cap-card" attributes="item" assetpath="x-plantilla/">
   <template>
     <style></style>

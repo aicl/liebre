@@ -19,16 +19,32 @@
 		  </div>
 	  </app-header-panel> 	  
 	  <paper-dialog id="dialog" backdrop layered autoCloseDisabled>
+		  <paper-tabs selected="{{selectedTab}}">
+		  	<paper-tab>Enunciado</paper-tab>
+		  	<paper-tab>Comentarios</paper-tab>
+		  </paper-tabs>
+		  <core-pages selected="{{selectedTab}}" style="min-width: 512px;height: 80vh;">
+		  <div layout vertical center>
 		  <paper-input label="Numeral" required floatinglabel id="Numeral" 
 					   value="{{_onedit.Numeral}}"></paper-input>
+		  <paper-input label="Decreto" required floatinglabel id="Decreto" 
+					   value="{{_onedit.Decreto}}"></paper-input>
 		  <paper-input label="OHSAS" required floatinglabel id="OHSAS" 
 					   value="{{_onedit.OHSAS}}"></paper-input>
 		  <paper-input label="RUC" required floatinglabel id="RUC" 
 					   value="{{_onedit.RUC}}"></paper-input>
 		  <paper-input label="Enunciado" required floatinglabel id="Enunciado" 
 					   value="{{_onedit.Enunciado}}" multiline rows="3"></paper-input>
-		  <requisitos-dropdown data="{{requisitos}}" 
-							   selected="{{_onedit.Requisito}}"></requisitos-dropdown>
+		  <div horizontal layout style="width:70%">
+			  <paper-checkbox id="Clave" checked="{{ _onedit.Clave }}"></paper-checkbox>
+			  <span>Clave?</span>
+		  </div>
+		  <div horizontal layout style="width:70%">
+			  <paper-checkbox id="NoAplicaDisponible" checked="{{ _onedit.NoAplicaDisponible }}"></paper-checkbox>
+			  <span>Disponible 'No Aplica'</span>
+		  </div>
+		  </div>
+		  <div layout vertical center>
 		  <paper-input label="Comentario/SI"  floatinglabel id="ComentarioSi" 
 					   value="{{_onedit.ComentarioSi}}" multiline rows="2"></paper-input>
 		  <paper-input label="Comentario/NO"  floatinglabel id="ComentarioNo" 
@@ -37,12 +53,14 @@
 					   value="{{_onedit.RecomendacionSi}}" multiline rows="2"></paper-input>
 		  <paper-input label="Recomendación/NO"  floatinglabel id="RecomendacionNo" 
 					   value="{{_onedit.RecomendacionNo}}" multiline rows="3"></paper-input>
-		  <div horizontal layout>
-			  <paper-checkbox id="NoAplicaDisponible" checked="{{ _onedit.NoAplicaDisponible }}"></paper-checkbox>
-			  <span>Disponible 'No Aplica'</span>
-		  </div>
+		  <paper-input label="Resumen/SI"  floatinglabel id="ResumenSi" 
+					   value="{{_onedit.ResumenSi}}" multiline rows="2"></paper-input>
+		  <paper-input label="Resumen/NO"  floatinglabel id="ResumenNo" 
+					   value="{{_onedit.ResumenNo}}" multiline rows="3"></paper-input>
 		  <paper-input label="Metodo" floatinglabel id="Metodo" value="{{_onedit.Metodo}}"
-					   multiline rows="2"></paper-input>			
+					   multiline rows="2"></paper-input>
+		  </div>
+		  </core-pages>
 		  <paper-icon-button icon="cancel" dismissive></paper-icon-button>
 		  <paper-icon-button icon="check" 
 							 on-tap="{{ delegateSavePregunta }}"
@@ -128,11 +146,13 @@
 		handlerShowEditPregunta:function(e, detail, sender){	
 			this._current=sender.templateInstance.model.item;
 			this._onedit= Object.clone(this._current);
+			this.selectedTab=0;
 			this.$.dialog.toggle();
 		},		
 		handlerShowNuevaPregunta:function(){
 			this._current={Enunciado:"", Metodo:"", NoAplicaDisponible:false, IdCapitulo:"", IdGuias:[]};
 			this._onedit= Object.clone(this._current);
+			this.selectedTab=0;
 			this.$.dialog.toggle();
 		},		
 		handlerShowDeletePregunta:function(e, detail, sender){	
