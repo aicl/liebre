@@ -146,7 +146,7 @@
 	</div>
 	<div class="content">
 	   <div class="center" style="text-align: center;">
-	    <h2>Decreto 1443-2014</h2>
+	    <h2>Decreto 1443/2014</h2>
 	    <h3>Cumplimiento Por Capítulos</h3>
 		<table class="tb-min tb-index" style="text-align: left;">
 			<thead>
@@ -162,7 +162,7 @@
 
 	<div class="content" style="margin-top:20px; page-break-before: always;">
 		<div class="center" style="text-align: center;">
-			<h2>Decreto 1443-2014</h2>
+			<h2>Decreto 1443/2014</h2>
 			<h3>Cumplimiento Por Capítulos</h3>
 	    	<div id="spider" style="text-align: left;height: 700px; border-radius: 10px;border: 2px solid gray;	border-style: solid;background: #e7eef6"></div>
 	    	<!-- <span style='float:left'><div id="legend1"></div></span> !-->
@@ -247,15 +247,24 @@
 			//new Legend({chart: chart, horizontal: true}, "legend1");
 
 			var htmlIndiceRequisitos="";
-			arrayUtil.forEach(data.Requisitos, function(requisito,i){
-				
-				var valor= (requisito.TotalR/requisito.TotalQ)*100;
+
+			var normas= arrayUtil.filter(data.Normas, function(item){
+				return item.Alias===data.Norma;
+			});
+
+			normas= normas||[{Grupos:[]}];
+			var norma= normas[0];
+			console.log(data.Norma, data.Normas, norma);
+
+			arrayUtil.forEach(norma.Grupos, function(grupo,i){
+				//grupo.Titulo=grupo.Titulo||'No Aplica';
+				var valor= (grupo.TotalR/grupo.TotalQ)*100;
 				var green = "#259b24";
 				var red = (valor>=100)?"#259b24":"#d23f31";
                 htmlIndiceRequisitos += 
-                lang.replace("<tr><td>{requisito.Descripcion}</td><td><div class='hbar' style='background-image: linear-gradient( to right, {green}, {green} {valor}%, {red} 0% ); background: -webkit-gradient(linear, left top, right top, color-stop({valor}%,{green}), color-stop({valor}%,{red}), color-stop({valor}%,{red}), color-stop({valor}%,{red}));'>{requisito.TotalR}/{requisito.TotalQ}</div></td></tr>",
+                lang.replace("<tr><td>{grupo.Titulo}</td><td><div class='hbar' style='background-image: linear-gradient( to right, {green}, {green} {valor}%, {red} 0% ); background: -webkit-gradient(linear, left top, right top, color-stop({valor}%,{green}), color-stop({valor}%,{red}), color-stop({valor}%,{red}), color-stop({valor}%,{red}));'>{grupo.TotalR}/{grupo.TotalQ}</div></td></tr>",
                 {
-                	requisito:requisito,
+                	grupo:grupo,
                 	valor:valor,
                 	green:green,
                 	red:red
@@ -266,10 +275,15 @@
             //
 
             var htmlCumplimiento="";
-			arrayUtil.forEach(data.Requisitos, function(requisito,i){
-				var preguntas= arrayUtil.filter(data.Preguntas, function(item){ 
-					return item.Pregunta.Requisito.Codigo===requisito.Codigo
+			arrayUtil.forEach(norma.Grupos, function(grupo,i){
+				var preguntas=[];
+				arrayUtil.forEach(grupo.Codigos, function(codigo){
+					var pc= arrayUtil.filter(data.Preguntas, function(item){
+						return grupo.Titulo? item.Pregunta[data.Norma]===codigo:item.Pregunta.Numeral===codigo ;
+					});
+					preguntas= preguntas.concat(pc);
 				});
+
 				var filas="";
 				arrayUtil.forEach(preguntas, function(pregunta,j){
 					var marca= pregunta.Respuesta.Valor===1? 'Si': 'No';
@@ -287,13 +301,13 @@
                 lang.replace(
 '<table class="tb-min tb-cmp" style="margin-top:10px; page-break-after: always;">'+
 	//'<thead>'+
-		'<tr><th colspan="3">{requisito.Descripcion}: {requisito.TotalR}/{requisito.TotalQ}</th></tr>'+
+		'<tr><th colspan="3">{grupo.Titulo}: {grupo.TotalR}/{grupo.TotalQ}</th></tr>'+
 		'<tr><th></th><th>Comentario</th><th>Recomendación</th></tr>'+
 	//'</thead>'+
 	'<tbody>{filas}</tbody>'+
 '</table>',
                 {
-                	requisito:requisito,
+                	grupo:grupo,
                 	filas:filas
                 });
 				

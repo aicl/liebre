@@ -1,4 +1,4 @@
-﻿[{"Codigo":"NRM001", "Nombre":"Decreto 1443-2014", "Anotacion":"", "Titulo":"Artículo", "Contenido":"Numeral", "Alias":"Decreto",
+﻿[{"Codigo":"NRM001", "Nombre":"Decreto 1443/2014", "Anotacion":"", "Titulo":"Artículo", "Contenido":"Numeral", "Alias":"Decreto",
 	"Items":[{"Codigo":"1","Titulo":"El Primero del Decreto"}],
     "Grupos":[{"Codigos":["1"],"Titulo":"El primero del Decreto"}]
 },
