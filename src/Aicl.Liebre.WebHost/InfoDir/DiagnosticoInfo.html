@@ -159,7 +159,7 @@
 	    </table>
 	    </div>
 	</div>
-	<div class="content">
+	<div class="content" style="page-break-after: always;" >
 	   <div class="center" style="text-align: center;">
 	    <h3>Decreto 1443/2014</h3>
 	    <h4>Cumplimiento Por Capítulos</h4>
@@ -175,7 +175,7 @@
 		</div>
 	</div>
 
-	<div class="content" style="margin-top:20px; page-break-before: always;">
+	<div class="content" style="margin-top:20px; page-break-after: always;;">
 		<div class="center" style="text-align: center;">
 			<h3>Decreto 1443/2014</h3>
 			<h4>Cumplimiento Por Capítulos</h4>
@@ -184,7 +184,7 @@
 	    </div>
 	</div>
 
-	<div class="content" style="margin-top:20px; page-break-before: always;">
+	<div class="content" style="margin-top:20px; page-break-after: always;">
 	   <div class="center" style="text-align: center;">
 	    <h3 id="TituloGrupos"></h3>
 		<table class="tb-min tb-rq">
@@ -198,7 +198,7 @@
 		</div>
 	</div>
 
-	<div class="content" style="margin-top:5px; page-break-before: always;" >
+	<div class="content" style="margin-top:5px;" >
 		<div class="center" style="text-align: center;">
 	    	<h3 id="TituloDetalle"></h3>
 			<div id="Cumplimiento" style="text-align: center;"></div>
@@ -331,7 +331,7 @@
 				});
                 htmlCumplimiento += 
                 lang.replace(
-'<table class="tb-min tb-cmp" style="margin-top:10px; page-break-after: always;">'+
+'<table class="tb-min tb-cmp" style="margin-top:10px; page-break-after: {pagebreak};">'+
 	//'<thead>'+
 		'<tr><th colspan="5">{titulo}</th></tr>'+
 		'<tr><th></th><th></th><th>{numeralArticulo}</th><th>Comentario</th><th>Recomendación</th></tr>'+
@@ -348,7 +348,8 @@
                 	green:green,
                 	red:red,
                 	lis :lis,
-                	porc: valor.toFixed(2)
+                	porc: valor.toFixed(2),
+                	pagebreak: (norma.Grupos.length>i+1)?'always':'none'
                 });
             });
 			document.getElementById("ArticuloNumeral").innerHTML=norma.Titulo;
