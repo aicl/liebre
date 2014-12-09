@@ -113,13 +113,16 @@
 
 	    .hbar {background-color: #259b24;color: #fff;text-align: center;padding: 2px;font-size: medium; border-radius:2px;}
 
+	    [print-me]{
+	    	display: none !important;
+	    }
 
         @import "//ajax.googleapis.com/ajax/libs/dojo/1.10.2/dojo/resources/dojo.css";
 
     </style>
     <script type="text/javascript">
         var PhantomJSPrinting = {
-            header: { height: "1cm", contents: function(pageNum, numPages) { return pageNum + "/" + numPages; } },
+            header: { height: "1cm", contents: function(pageNum, numPages) { return ""; }}, //return pageNum + "/" + numPages; } },
             footer: { height: "1cm", 
                       contents: function(pageNum, numPages) {
                           return "<span style='float:right'>" + pageNum + " / " + numPages + "</span>" } }
@@ -129,7 +132,7 @@
 	<script src="//ajax.googleapis.com/ajax/libs/dojo/1.10.2/dojo/dojo.js" data-dojo-config="async: true"></script>
 </head>
 <body> 
-	<div class="s-header">
+	<div class="s-header" print-me style="page-break-after: always;" >
 		<div class="center">
 		    <table class="tb-s-header">
 		    	<thead>
@@ -383,7 +386,6 @@
             	sl.options.add(o);
             }
             sl.onchange=function(evt){
-            	console.log(evt.target.value);
             	norma =getNormaByAlias(data.Normas, evt.target.value, arrayUtil)
             	mostrarNorma(data, norma, arrayUtil, lang);
             };
