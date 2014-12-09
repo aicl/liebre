@@ -56,7 +56,7 @@
 		.tb-min, .tb-header, .tb-s-header, .tb-one-col, .tb-rq
 		{
 			/*font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;*/
-			font-size: small;
+			font-size: medium;
 			background: #fff;
 			width: 95%;
 			border-collapse: collapse;
@@ -179,7 +179,7 @@
 		<div class="center" style="text-align: center;">
 			<h3>Decreto 1443/2014</h3>
 			<h4>Cumplimiento Por Capítulos</h4>
-	    	<div id="spider" style="text-align: left;height: 700px; border-radius: 10px;border: 2px solid gray;	border-style: solid;background: #e7eef6"></div>
+	    	<div id="spider" style="font-size: small; text-align: left;height: 700px; border-radius: 10px;border: 2px solid gray;	border-style: solid;background: #e7eef6"></div>
 	    	<!-- <span style='float:left'><div id="legend1"></div></span> !-->
 	    </div>
 	</div>
@@ -274,13 +274,14 @@
 				var green = "#259b24";
 				var red = (valor>=100)?"#259b24":"#d23f31";
                 htmlIndiceRequisitos += 
-                lang.replace("<tr><td>{grupo.Codigos}</td><td>{titulo}</td><td><div class='hbar' style='background-image: linear-gradient( to right, {green}, {green} {valor}%, {red} 0% ); background: -webkit-gradient(linear, left top, right top, color-stop({valor}%,{green}), color-stop({valor}%,{red}), color-stop({valor}%,{red}), color-stop({valor}%,{red}));'>{grupo.TotalR}/{grupo.TotalQ}</div></td></tr>",
+                lang.replace("<tr><td>{grupo.Codigos}</td><td>{titulo}</td><td><div class='hbar' style='background-image: linear-gradient( to right, {green}, {green} {valor}%, {red} 0% ); background: -webkit-gradient(linear, left top, right top, color-stop({valor}%,{green}), color-stop({valor}%,{red}), color-stop({valor}%,{red}), color-stop({valor}%,{red}));'>{porc}%</div></td></tr>",
                 {
                 	titulo:titulo,
                 	grupo:grupo,
                 	valor:valor,
                 	green:green,
-                	red:red
+                	red:red,
+                	porc: valor.toFixed(2)
                 });
 				//tablas preguntas x grupo
 				var preguntas=[];
@@ -336,7 +337,7 @@
 		'<tr><th></th><th></th><th>{numeralArticulo}</th><th>Comentario</th><th>Recomendación</th></tr>'+
 	//'</thead>'+
 	'<tbody>{filas}</tbody>'+
-	'<tr><td colspan="4"><ul>{lis}</ul></td><td><div class="hbar center" style="width:50%;background-image: linear-gradient( to right, {green}, {green} {valor}%, {red} 0% ); background: -webkit-gradient(linear, left top, right top, color-stop({valor}%,{green}), color-stop({valor}%,{red}), color-stop({valor}%,{red}), color-stop({valor}%,{red}));">{grupo.TotalR}/{grupo.TotalQ}</td></th>'+
+	'<tr><td colspan="4"><ul>{lis}</ul></td><td><div class="hbar center" style="width:50%;background-image: linear-gradient( to right, {green}, {green} {valor}%, {red} 0% ); background: -webkit-gradient(linear, left top, right top, color-stop({valor}%,{green}), color-stop({valor}%,{red}), color-stop({valor}%,{red}), color-stop({valor}%,{red}));">{porc}%</td></th>'+
 '</table>',
                 {
                 	titulo:titulo,
@@ -346,7 +347,8 @@
                 	valor:valor,
                 	green:green,
                 	red:red,
-                	lis :lis
+                	lis :lis,
+                	porc: valor.toFixed(2)
                 });
             });
 			document.getElementById("ArticuloNumeral").innerHTML=norma.Titulo;
