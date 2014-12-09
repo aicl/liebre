@@ -297,14 +297,22 @@
 					var marca= pregunta.Respuesta.Valor===1? 'si': 'no';
 					var clave='';
 					var li='';
+					//  Si clave => li== ComentarioSi / o ComentarioNo dependiendo de marca ( Respuesta.Valor);
+					//  No Clave => li== ResumenSi /ResumenNo depedientod de marca 
 					if(marca==='si'){
-						if( pregunta.Pregunta.ResumenSi) li=  pregunta.Pregunta.ResumenSi;
+					    if(pregunta.Pregunta.Clave){
+					    	if(pregunta.Pregunta.RecomendacionSi) li=pregunta.Pregunta.RecomendacionSi;
+					    }
+						else if( pregunta.Pregunta.ResumenSi) li=  pregunta.Pregunta.ResumenSi;
 					}
 					else{
 						if(pregunta.Pregunta.Clave || pregunta.Pregunta.ResumenNo){
 							clave='warning';
-							if( pregunta.Pregunta.ResumenNo) li=  pregunta.Pregunta.ResumenNo;
 						}
+						if(pregunta.Pregunta.Clave){
+					    	if(pregunta.Pregunta.RecomendacionNo) li=pregunta.Pregunta.RecomendacionNo;
+					    }
+						else if( pregunta.Pregunta.ResumenNo) li=  pregunta.Pregunta.ResumenNo;
 					}
 					if(li){
 						lis+= '<li>'+ li + '</li>';
