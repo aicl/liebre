@@ -358,7 +358,7 @@
             document.getElementById("TituloDetalle").innerHTML=norma.Nombre+ " - Cumplimiento de Requisitos";
             document.getElementById("IndiceRequisitos").innerHTML= htmlIndiceRequisitos;		
             document.getElementById("Cumplimiento").innerHTML= htmlCumplimiento;
-            document.getElementById("Nota").innerHTML=norma.Anotacion;
+            document.getElementById("Nota").innerHTML=norma.Anotacion||'';
 			var body = document.querySelector("body");
             body.setAttribute("_ready", "true");
         });
