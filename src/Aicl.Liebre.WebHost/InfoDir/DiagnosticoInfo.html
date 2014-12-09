@@ -136,7 +136,7 @@
 	<script src="//ajax.googleapis.com/ajax/libs/dojo/1.10.2/dojo/dojo.js" data-dojo-config="async: true"></script>
 </head>
 <body> 
-	<div class="s-header" print-me style="page-break-after: always;" >
+	<div class="s-header" hidden style="page-break-after: always;" >
 		<div class="center">
 		    <table class="tb-s-header">
 		    	<thead>
@@ -379,7 +379,7 @@
 			mostrarNorma(data, norma, arrayUtil, lang);
 
 			var body = document.querySelector("body");
-            body.setAttribute("_ready", "true");
+            body.setAttribute("_ready", '');
 
             var sl = document.getElementById("NormaSelect");
             for (var i in data.Normas){
