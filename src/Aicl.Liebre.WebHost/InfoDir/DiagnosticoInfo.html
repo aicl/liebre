@@ -126,16 +126,28 @@
     </style>
     <script type="text/javascript">
         var PhantomJSPrinting = {
-            header: { height: "1cm", contents: function(pageNum, numPages) { return ""; }}, //return pageNum + "/" + numPages; } },
-            footer: { height: "1cm", 
-                      contents: function(pageNum, numPages) {
-                          return "<span style='float:right'>" + pageNum + " / " + numPages + "</span>" } }
+            header: { height: "1cm", contents: function(pageNum, numPages) { 
+            		return '<div '+ 
+            		'style="margin:-10px; text-align: right; padding:5px;font-size:small; background: #6b6b6b; color:'+(pageNum>1?'white;':'#6b6b6b;')+'">'+
+  'Reporte de Cumplimiento Decreto 1443/2014 '+   
+'</div>'; 
+            	}
+            }, //return pageNum + "/" + numPages; } },
+            footer: { height: "0.6cm", contents: function(pageNum, numPages) {
+                          //return "<span style='float:right'>" + pageNum + " / " + numPages + "</span>" 
+                    return '<div '+ 
+            		'style="margin:-10px; text-align: right; padding:5px;font-size:small; background: #3F832C; color:'+(pageNum>1?'white;':'#3F832C;')+'">'+
+  pageNum + " / " + numPages +
+'</div>'; 
+
+                } 
+            }
         };
         window.PhantomJSPrinting=PhantomJSPrinting;
     </script>
 	<script src="//ajax.googleapis.com/ajax/libs/dojo/1.10.2/dojo/dojo.js" data-dojo-config="async: true"></script>
 </head>
-<body> 
+<body style="margin: 0px;"> 
 	<div class="s-header" hidden style="page-break-after: always;" >
 		<div class="center">
 		    <table class="tb-s-header">
