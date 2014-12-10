@@ -434,6 +434,63 @@ namespace Aicl.Liebre.Data
 			return response;
 		}
 
+		public Result<Plantilla> ClonarPlantilla (Plantilla data)
+		{
+			var cl = GetCollection<Plantilla> ();
+
+			if (cl.FindOne (Query<Plantilla>.EQ (e => e.Id, data.Id)) == default(Plantilla)) {
+				throw new Exception ("No Exite plantilla con Id:'{0}'".Fmt (data.Id));
+			}
+
+			var clGuias = GetCollection<Guia> ();
+			var guias = clGuias.Find(Query<Guia>.EQ(e=>e.IdPlantilla,data.Id)).ToList();
+
+			var clCapitulos = GetCollection<Capitulo> ();
+			var capitulos= clCapitulos.Find(Query<Capitulo>.EQ(e=>e.IdPlantilla, data.Id)).ToList();
+			var capIds = capitulos.ConvertAll (e => e.Id);
+
+			var clPreguntas = GetCollection<Pregunta> ();
+			var preguntas = clPreguntas.Find(Query<Pregunta>.In(e=>e.IdCapitulo, capIds)).ToList();
+
+			data.Id = string.Empty;
+			var wcr = cl.Insert (data);
+
+			var gIds = new List<string> ();
+			guias.ForEach (g => {
+				gIds.Add(g.Id);
+				g.IdPlantilla= data.Id;
+				g.Id= string.Empty;
+			});
+
+			clGuias.InsertBatch (guias);
+
+			capitulos.ForEach (c => {
+				c.Id=string.Empty;
+				c.IdPlantilla= data.Id;
+			});
+
+			clCapitulos.InsertBatch (capitulos);
+
+			preguntas.ForEach (p => {
+
+				var ic = capIds.FindIndex(i=>i==p.IdCapitulo);
+				p.IdCapitulo= capitulos[ic].Id;
+
+				var ng = new List<string>();
+				p.IdGuias.ForEach(x=> {
+					var ig = gIds.FindIndex(i=>i== x);
+					ng.Add( guias[ig].Id);
+				});
+				p.IdGuias=ng;
+
+				p.Id=string.Empty;
+
+			});
+
+			clPreguntas.InsertBatch (preguntas);
+			return Store.CreateResult (data, wcr);
+		}
+
 		static string NormalizeNumeral(string numeral){
 			var a = numeral.Split ('.');
 			var t = new StringBuilder ();

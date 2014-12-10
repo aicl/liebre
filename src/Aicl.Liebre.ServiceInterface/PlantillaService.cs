@@ -30,7 +30,12 @@ namespace Aicl.Liebre.ServiceInterface
 			return Store.Delete<Plantilla> (request);
 
 		}
-			
+
+		public object Post(ClonePlantilla request)
+		{
+			return Store.ClonarPlantilla(request.Data);
+		}
+
 	}
 }
 

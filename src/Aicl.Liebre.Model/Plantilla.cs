@@ -89,4 +89,17 @@ namespace Aicl.Liebre.Model
 		public WriteResult WriteResult{ get; set; }
 	}
 
+	[Route("/clone/plantilla","POST")]
+	public class ClonePlantilla:IReturn<ClonePlantillaResponse>,IHasDataProperty<Plantilla>
+	{
+		public Plantilla Data { get; set; }
+	}
+
+	public class ClonePlantillaResponse: IHasResponseStatus 
+	{
+		public Plantilla Data { get; set; }
+		public ResponseStatus ResponseStatus {get;set;}
+		public WriteResult WriteResult{ get; set; }
+	}
+
 }
