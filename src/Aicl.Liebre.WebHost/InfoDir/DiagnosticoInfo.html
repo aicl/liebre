@@ -290,7 +290,7 @@
 		'<tr><th></th><th></th><th>{numeralArticulo}</th><th>Comentario</th><th>Recomendación</th></tr>'+
 	//'</thead>'+
 	'<tbody>{filas}</tbody>'+
-	'<tr><td colspan="4"><ul>{lis}</ul></td><td><div class="hbar center" style="width:50%;background-image: linear-gradient( to right, {green}, {green} {valor}%, {red} 0% ); background: -webkit-gradient(linear, left top, right top, color-stop({valor}%,{green}), color-stop({valor}%,{red}), color-stop({valor}%,{red}), color-stop({valor}%,{red}));">{porc}%</td></th>'+
+	'<tr><td colspan="4"><ul><span style="font-weight: bold;">{tituloLis}</span>{lis}</ul></td><td><div class="hbar center" style="width:50%;background-image: linear-gradient( to right, {green}, {green} {valor}%, {red} 0% ); background: -webkit-gradient(linear, left top, right top, color-stop({valor}%,{green}), color-stop({valor}%,{red}), color-stop({valor}%,{red}), color-stop({valor}%,{red}));">{porc}%</td></th>'+
 '</table>',
                 {
                 	titulo:titulo,
@@ -300,6 +300,7 @@
                 	valor:valor,
                 	green:green,
                 	red:red,
+                	tituloLis:lis?'Aspectos Claves':'',
                 	lis :lis,
                 	porc: valor.toFixed(0),
                 	pagebreak: (norma.Grupos.length>i+1)?'always':'none'
