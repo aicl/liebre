@@ -1,0 +1,43 @@
+<polymer-element name="clone-ajax"  extends="core-ajax">
+	<script>
+		Polymer({				
+			dataProperty:"Data",
+			action:"clone",
+			model:"",
+			baseUrl:"",
+			method:"post",
+			handleAs:"json",
+			
+			created:function(){
+						
+				this.data={};
+				var self=this;		
+				
+				this.addEventListener("core-response", function(e) {
+					if(e.detail.xhr.status===0){
+						self.fire("clone-error-connection", {xhr:e.detail.xhr});
+					}
+					else{
+						self.data=e.detail.response[self.dataProperty];
+						self.fire("clone-response", {data:self.data});
+					}
+				});
+								
+				this.addEventListener("core-error", function(e) {
+					self.fire("clone-error", {xhr:e.detail.xhr});
+				});
+				
+				this.addEventListener("core-complete", function(e) {
+					self.fire("clone-complete", {xhr:e.detail.xhr});
+				});
+				this.super(); 
+			},
+			
+			go:function(){				
+				this.data={};
+				this.url=this.baseUrl+"/"+this.action+"/"+ this.model+"?format=json";
+				this.super();
+			}
+		})
+	</script>
+</polymer-element>
