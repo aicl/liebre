@@ -102,6 +102,32 @@
 			  ajaxdelete.completeHandler(e);
 		  }
 		});
+		
+		var ajaxClone= document.querySelector('#clone');
+		ajaxClone.addEventListener('clone-response', function(e){
+		  if(ajaxClone.responseHandler){
+			  ajaxClone.responseHandler(e);
+		  }
+		});
+
+		ajaxClone.addEventListener('clone-error-connection', function(e){
+		  if(ajaxClone.errorConnectionHandler){
+			  ajaxClone.errorConnectionHandler(e);
+		  }
+		});
+
+		ajaxClone.addEventListener('clone-error', function(e){
+		  if(ajaxClone.errorHandler){
+			  ajaxClone.errorHandler(e);
+		  }
+		});
+
+		ajaxClone.addEventListener('clone-complete', function(e){
+		  if(ajaxClone.completeHandler){
+			  ajaxClone.completeHandler(e);
+		  }
+		});
+		
 		var app = document.querySelector('x-app');
 		app.go();
 	});
