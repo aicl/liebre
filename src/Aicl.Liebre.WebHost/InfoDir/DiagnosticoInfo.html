@@ -85,6 +85,10 @@
 			width: 100%;
 		}
 
+		table.tb-index {
+			width: 90%;
+		}
+
 		table.tb-index tr td:first-child, table.tb-index tr th:first-child{
 			width: 80%;
 		}
@@ -93,10 +97,12 @@
 			text-align:center;
 		}
 
-		table.tb-cmp tr td:first-child+td+td+td, table.tb-cmp tr td:first-child+td+td+td+td{
-			width:47%;
-		}
+		.tb-cmp{	width:90%;}
 
+		table.tb-cmp tr td:first-child+td+td+td, table.tb-cmp tr td:first-child+td+td+td+td{
+			width:48%;
+		}
+		.tb-cmp td	{ padding: 4px 8px;}
 
 		table.tb-s-header tr td:first-child, table.tb-s-header tr th:first-child{
 			width: 20%;
@@ -136,8 +142,8 @@
 
 div.cn {
   display: table-cell;
-  width: 800px;
-  height: 930px;
+  width: 850px;
+  height: 960px;
   vertical-align: middle;
   text-align: center;
 }
@@ -145,7 +151,6 @@ div.cn {
 div.inner {
   display: inline-block;
   width: 500px;
-  height: 400px;
   text-align: left;
   color:white;
 }
@@ -155,20 +160,21 @@ div.inner {
     </style>
     <script type="text/javascript">
         var PhantomJSPrinting = {
-            header: { height: "1cm", contents: function(pageNum, numPages) { 
+            header: { height: "1.25cm", contents: function(pageNum, numPages) { 
             		return '<div '+ 
-            		'style="margin:-10px; text-align: right; padding:10px 5px;font-size:small; background: #6b6b6b; color:'+(pageNum>1?'white;':'#6b6b6b;')+'">'+
+            		'style="margin: 0px -10px 2px -10px ; text-align: right; padding:10px 5px;font-size:small; background: #6b6b6b; color:'+(pageNum>1?'white;':'#6b6b6b;')+'">'+
   'Reporte de Cumplimiento Decreto 1443/2014 '+   
-'</div>'; 
+'</div>'+
+'<div style="width:100%; height:4px; background:white;"></div>'; 
             	}
-            }, //return pageNum + "/" + numPages; } },
-            footer: { height: "1.cm", contents: function(pageNum, numPages) {
+            }, 
+            footer: { height: "1.1cm", contents: function(pageNum, numPages) {
                           //return "<span style='float:right'>" + pageNum + " / " + numPages + "</span>" 
-                    return '<div '+ 
-            		'style="margin:-10px; text-align: right; padding:10px 5px;font-size:small; background: #3F832C; color:'+(pageNum>1?'white;':'#3F832C;')+'">'+
+                    return '<div style="width:100%; height:5px; background:white;"></div>'+ 
+'<div '+ 
+      'style="margin:0px -10px; text-align: right; padding:10px 5px;font-size:small; background: #3F832C; color:'+(pageNum>1?'white;':'#3F832C;')+'">'+
   pageNum + " / " + numPages +
-'</div>'; 
-
+'</div>';
                 } 
             }
         };
@@ -178,17 +184,19 @@ div.inner {
 </head>
 <body style="margin: 0px;"> 
 
+	<div class="content" style="page-break-after: always;" >
     <div class="cn" print-me style="page-break-after: always;"><div class="inner">
    		<div style="background: rgb(182, 159, 99);color: white;font-size: xx-large;padding: 10px;border-radius: 8px;margin-bottom: 5px">Reporte de Cumplimiento Decreto 1443/2014</div>
    		<div style="background: #6b6b6b; color: white;font-size: xx-large;padding: 10px;border-radius: 8px;margin-bottom: 5px">Detalle de Resultados</div>
    		<div id="Empresa.Nombre" style="color:black; font-size: xx-large;padding: 10px;border-radius: 8px;margin-bottom: 5px"></div>
     </div></div>
+	</div>
 
 	<div class="content" style="page-break-after: always;" >
 	   <div class="center" style="text-align: center;">
 	    <h3 no-print>Decreto 1443/2014</h3>
 	    <h4>Cumplimiento Por Capítulos</h4>
-		<table class="tb-min tb-index" style="text-align: left;">
+		<table class="center tb-min tb-index" style="text-align: left;">
 			<thead>
 				<tr>
 					<th>Capítulo</th>
@@ -204,7 +212,7 @@ div.inner {
 		<div class="center" style="text-align: center;">
 			<h3 no-print>Decreto 1443/2014</h3>
 			<h4>Cumplimiento Por Capítulos</h4>
-	    	<div id="spider" style="font-size: small; text-align: left;height: 700px; border-radius: 10px;border: 2px solid gray;	border-style: solid;background: #e7eef6;"></div>
+	    	<div id="spider" style="font-size: small; text-align: left;height: 550px; border-radius: 10px;border: 2px solid gray;	border-style: solid;background: #e7eef6;"></div>
 	    	<!-- <span style='float:left'><div id="legend1"></div></span> !-->
 	    </div>
 	</div>
@@ -302,14 +310,14 @@ div.inner {
 				});
                 htmlCumplimiento += 
                 lang.replace(
-'<div style="height:1px;width:100%;"></div><table class="tb-min tb-cmp" style="margin-top:10px; page-break-after: {pagebreak};">'+
+'<div style="height:1px;width:100%;"></div><table class="center tb-min tb-cmp" style="margin-top:10px; page-break-after: {pagebreak};">'+
 	//'<thead>'+
 		'<tr><th colspan="5">{titulo}</th></tr>'+
 		'<tr><th></th><th></th><th>{numeralArticulo}</th><th>Comentario</th><th>Recomendación</th></tr>'+
 	//'</thead>'+
-	'<tbody>{filas}</tbody>'+
+	'<tbody>{filas}'+
 	'<tr><td colspan="4"><ul><span style="font-weight: bold;">{tituloLis}</span>{lis}</ul></td><td><div class="hbar center" style="width:50%;background-image: linear-gradient( to right, {green}, {green} {valor}%, {red} 0% ); background: -webkit-gradient(linear, left top, right top, color-stop({valor}%,{green}), color-stop({valor}%,{red}), color-stop({valor}%,{red}), color-stop({valor}%,{red}));">{porc}%</td></th>'+
-'</table>',
+'</tbody></table>',
                 {
                 	titulo:titulo,
                 	grupo:grupo,
