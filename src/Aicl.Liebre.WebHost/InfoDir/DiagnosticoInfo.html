@@ -5,10 +5,12 @@
     <meta charset="utf-8">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<meta name="description" content="Diagnostico SGSST, Decreto 1443 de 2014">
+	<meta name="description" content="Diagnostico SGSST, Decreto 1443 de 2014, OHSAS, RUC">
 	<meta name="mobile-web-app-capable" content="yes" />
 	<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0"/>
     <style>
+        .center { margin-left: auto;    margin-right: auto;    width: 95%;  }
+
 		div[red]{
 			background:#d23f31;
 			color:#fff
@@ -67,8 +69,8 @@
 			font-size: medium;
 			font-weight: normal;
 			color: #039;
-			padding: 10px 8px;
-			border-bottom: 2px solid #6678b1;
+			padding: 0px 8px;
+			border-bottom: 1px solid #6678b1;
 			text-align:center;
 		}
 		.tb-min td
@@ -95,23 +97,33 @@
 			width:47%;
 		}
 
+
 		table.tb-s-header tr td:first-child, table.tb-s-header tr th:first-child{
 			width: 20%;
 		}
 
 		table.tb-rq tr td:first-child{
-			width: 5%;
+			width: 10%;
 		}
 		table.tb-rq tr td:first-child+td{
-			width: 60%;
+			width: 70%;
+		}
+
+		.tb-rq{	width:90%;}
+
+		.tb-rq td
+		{
+			border-bottom: 1px solid #ccc;
+			color: #669;
+			padding: 1px 4px;
+			text-align: justify;
 		}
 
 		div.content, div.header, div.s-header{
 			padding:0px 0px 0px 10px;
 			width:auto;
 		}
-	    .center { margin-left: auto;    margin-right: auto;    width: 95%;  }
-
+	    
 	    .hbar {background-color: #259b24;color: #fff;text-align: center;padding: 2px;font-size: medium; border-radius:2px;}
 
 	    [print-me]{
@@ -145,15 +157,15 @@ div.inner {
         var PhantomJSPrinting = {
             header: { height: "1cm", contents: function(pageNum, numPages) { 
             		return '<div '+ 
-            		'style="margin:-10px; text-align: right; padding:5px;font-size:small; background: #6b6b6b; color:'+(pageNum>1?'white;':'#6b6b6b;')+'">'+
+            		'style="margin:-10px; text-align: right; padding:10px 5px;font-size:small; background: #6b6b6b; color:'+(pageNum>1?'white;':'#6b6b6b;')+'">'+
   'Reporte de Cumplimiento Decreto 1443/2014 '+   
 '</div>'; 
             	}
             }, //return pageNum + "/" + numPages; } },
-            footer: { height: "0.6cm", contents: function(pageNum, numPages) {
+            footer: { height: "1.cm", contents: function(pageNum, numPages) {
                           //return "<span style='float:right'>" + pageNum + " / " + numPages + "</span>" 
                     return '<div '+ 
-            		'style="margin:-10px; text-align: right; padding:5px;font-size:small; background: #3F832C; color:'+(pageNum>1?'white;':'#3F832C;')+'">'+
+            		'style="margin:-10px; text-align: right; padding:10px 5px;font-size:small; background: #3F832C; color:'+(pageNum>1?'white;':'#3F832C;')+'">'+
   pageNum + " / " + numPages +
 '</div>'; 
 
@@ -174,7 +186,7 @@ div.inner {
 
 	<div class="content" style="page-break-after: always;" >
 	   <div class="center" style="text-align: center;">
-	    <h3>Decreto 1443/2014</h3>
+	    <h3 no-print>Decreto 1443/2014</h3>
 	    <h4>Cumplimiento Por Capítulos</h4>
 		<table class="tb-min tb-index" style="text-align: left;">
 			<thead>
@@ -188,9 +200,9 @@ div.inner {
 		</div>
 	</div>
 
-	<div class="content" style="margin-top:20px; page-break-after: always;">
+	<div  class="content" style="margin-top:20px; page-break-after: always;">
 		<div class="center" style="text-align: center;">
-			<h3>Decreto 1443/2014</h3>
+			<h3 no-print>Decreto 1443/2014</h3>
 			<h4>Cumplimiento Por Capítulos</h4>
 	    	<div id="spider" style="font-size: small; text-align: left;height: 700px; border-radius: 10px;border: 2px solid gray;	border-style: solid;background: #e7eef6;"></div>
 	    	<!-- <span style='float:left'><div id="legend1"></div></span> !-->
@@ -204,7 +216,7 @@ div.inner {
 	<div class="content" style="margin-top:20px; page-break-after: always;">
 	   <div class="center" style="text-align: center;">
 	    <h3 id="TituloGrupos"></h3>
-		<table class="tb-min tb-rq">
+		<table class="center tb-min tb-rq">
 			<thead>
 				<tr>
 					<th id="ArticuloNumeral"></th><th>Título</th><th>Resultado</th>
@@ -290,7 +302,7 @@ div.inner {
 				});
                 htmlCumplimiento += 
                 lang.replace(
-'<table class="tb-min tb-cmp" style="margin-top:10px; page-break-after: {pagebreak};">'+
+'<div style="height:1px;width:100%;"></div><table class="tb-min tb-cmp" style="margin-top:10px; page-break-after: {pagebreak};">'+
 	//'<thead>'+
 		'<tr><th colspan="5">{titulo}</th></tr>'+
 		'<tr><th></th><th></th><th>{numeralArticulo}</th><th>Comentario</th><th>Recomendación</th></tr>'+
@@ -313,8 +325,8 @@ div.inner {
                 });
             });
 			document.getElementById("ArticuloNumeral").innerHTML=norma.Titulo;
-            document.getElementById("TituloGrupos").innerHTML= norma.Nombre+ " - Cumplimiento de Requisitos";
-            document.getElementById("TituloDetalle").innerHTML=norma.Nombre+ " - Cumplimiento de Requisitos";
+            document.getElementById("TituloGrupos").innerHTML= norma.Alias!=="Decreto"? (norma.Nombre+ " - Cumplimiento de Requisitos"):"Cumplimiento de Requisitos";
+            document.getElementById("TituloDetalle").innerHTML=norma.Alias!=="Decreto"? (norma.Nombre+ " - Cumplimiento de Requisitos"):"Cumplimiento de Requisitos";
             document.getElementById("IndiceRequisitos").innerHTML= htmlIndiceRequisitos;		
             document.getElementById("Cumplimiento").innerHTML= htmlCumplimiento;
             document.getElementById("Nota").innerHTML=norma.Anotacion||'';
