@@ -121,6 +121,22 @@
 	    	display: none !important;
 	    }
 
+div.cn {
+  display: table-cell;
+  width: 800px;
+  height: 930px;
+  vertical-align: middle;
+  text-align: center;
+}
+
+div.inner {
+  display: inline-block;
+  width: 500px;
+  height: 400px;
+  text-align: left;
+  color:white;
+}
+
         @import "//ajax.googleapis.com/ajax/libs/dojo/1.10.2/dojo/resources/dojo.css";
 
     </style>
@@ -148,36 +164,13 @@
 	<script src="//ajax.googleapis.com/ajax/libs/dojo/1.10.2/dojo/dojo.js" data-dojo-config="async: true"></script>
 </head>
 <body style="margin: 0px;"> 
-	<div class="s-header" hidden style="page-break-after: always;" >
-		<div class="center">
-		    <table class="tb-s-header">
-		    	<thead>
-					<tr>
-						<th>Logo de la Empresa</th>
-						<th>Nombre de la Empresa</th>
-					</tr>
-				</thead>
-				<tbody>
-				</tbody>
-		    </table>
-	    </div>
-	</div>
-	<div class="header">
-		<div class="center">
-	    <table class="tb-header">
-	    	<thead>
-				<tr>
-					<th><h3 id="Empresa.Nombre">@data.Empresa.Nombre</h3></th>
-				</tr>
-				<tr>
-					<th><span id="Empresa.Nit">@data.Empresa.Nit</span></th>
-				</tr>
-			</thead>
-			<tbody>
-			</tbody>
-	    </table>
-	    </div>
-	</div>
+
+    <div class="cn" print-me style="page-break-after: always;"><div class="inner">
+   		<div style="background: rgb(182, 159, 99);color: white;font-size: xx-large;padding: 10px;border-radius: 8px;margin-bottom: 5px">Reporte de Cumplimiento Decreto 1443/2014</div>
+   		<div style="background: #6b6b6b; color: white;font-size: xx-large;padding: 10px;border-radius: 8px;margin-bottom: 5px">Detalle de Resultados</div>
+   		<div id="Empresa.Nombre" style="color:black; font-size: xx-large;padding: 10px;border-radius: 8px;margin-bottom: 5px"></div>
+    </div></div>
+
 	<div class="content" style="page-break-after: always;" >
 	   <div class="center" style="text-align: center;">
 	    <h3>Decreto 1443/2014</h3>
@@ -194,7 +187,7 @@
 		</div>
 	</div>
 
-	<div class="content" style="margin-top:20px; page-break-after: always;;">
+	<div class="content" style="margin-top:20px; page-break-after: always;">
 		<div class="center" style="text-align: center;">
 			<h3>Decreto 1443/2014</h3>
 			<h4>Cumplimiento Por Capítulos</h4>
@@ -343,7 +336,6 @@
         ready(function(){  
 			
 			document.getElementById("Empresa.Nombre").innerHTML= data.Empresa.Nombre;
-			document.getElementById("Empresa.Nit").innerHTML= data.Empresa.Nit;
 
 			var htmlIndice="";
 			var data1={};
