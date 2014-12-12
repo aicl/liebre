@@ -1,1 +1,1 @@
-﻿<%@ Application Inherits="Aicl.Liebre.WebHost.MvcApplication" %>
+﻿<%@ Application Inherits="Aicl.Liebre.WebHost.Global" %>

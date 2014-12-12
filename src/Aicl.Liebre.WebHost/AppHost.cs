@@ -4,8 +4,6 @@ using Funq;
 using Aicl.Liebre.Data;
 using ServiceStack.Configuration;
 using MongoDB.Bson.Serialization.Conventions;
-using System.Web.Mvc;
-using ServiceStack.Mvc;
 using System;
 using ServiceStack.Logging;
 using ServiceStack.Formats;
@@ -41,8 +39,6 @@ namespace Aicl.Liebre.WebHost
 			container.Register<Store> (new Store (url));
 			container.Register<AppConfig> (new AppConfig (appSettings));
 
-			ControllerBuilder.Current.SetControllerFactory (
-				new FunqControllerFactory (container));
 		}
 	}
 }

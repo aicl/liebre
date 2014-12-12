@@ -1,4 +1,5 @@
-﻿using System;
+﻿/*
+using System;
 using ServiceStack.Mvc;
 using System.Web.Mvc;
 using ServiceStack;
@@ -9,7 +10,7 @@ using MongoDB.Bson;
 
 namespace Aicl.Liebre.WebHost
 {
-	/*
+
 	public class DiagnosticoInfoController:ServiceStackController
 	{
 		public ActionResult Index ()
@@ -25,5 +26,6 @@ namespace Aicl.Liebre.WebHost
 			}
 		}
 	}
-	*/
+
 }
+*/

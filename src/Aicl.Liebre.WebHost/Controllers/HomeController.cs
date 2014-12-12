@@ -1,4 +1,5 @@
-﻿using System.Web.Mvc;
+﻿/*
+using System.Web.Mvc;
 using ServiceStack.Mvc;
 
 namespace Aicl.Liebre.WebHost
@@ -10,5 +11,6 @@ namespace Aicl.Liebre.WebHost
 			return Redirect ("/");
 		}
 	}
-}
 
+}
+*/
