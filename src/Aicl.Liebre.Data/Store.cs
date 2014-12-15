@@ -358,11 +358,11 @@ namespace Aicl.Liebre.Data
 		{
 			var response = new DiagnosticoInfoResponse ();
 			response.Norma = request.Norma;
-			response.Normas = ReadNorma (new Aicl.Liebre.Model.ReadNorma ()).Data;
+			response.Normas = ReadNorma (new ReadNorma ()).Data;
 
-			response.Diagnostico = GetById<Diagnostico> (request.Id);
-			response.Plantilla = GetById<Plantilla> (response.Diagnostico.IdPlantilla);
-			response.Empresa = GetById<Empresa> ( response.Diagnostico.IdEmpresa);
+			response.Diagnostico = GetById<Diagnostico> (request.Id) ?? new Diagnostico();
+			response.Plantilla = GetById<Plantilla> (response.Diagnostico.IdPlantilla) ?? new Plantilla();
+			response.Empresa = GetById<Empresa> ( response.Diagnostico.IdEmpresa)?? new Empresa();
 
 			response.Capitulos = GetByQuery<CapituloInfo> (typeof(Capitulo), q => q.IdPlantilla == response.Diagnostico.IdPlantilla)
 				.OrderBy( q=> NormalizeNumeral(q.Numeral)).ToList();
@@ -372,14 +372,6 @@ namespace Aicl.Liebre.Data
 			var p = GetCollection<Pregunta>().Find( Query<Pregunta>.In ((q) => q.IdCapitulo, capIds ))
 				.OrderBy(q=>NormalizeNumeral( q.Numeral)).ToList();
 			var r = GetByQuery<Respuesta> (q => q.IdDiagnostico == response.Diagnostico.Id, q=>q.IdPregunta);
-
-			/*var g = GetByQuery<Guia> (q => q.IdPlantilla == response.Plantilla.Id, q=>q.Id);
-			var rg = GetByQuery<RespuestaGuiaInfo> (typeof(RespuestaGuia),q => q.IdDiagnostico == response.Diagnostico.Id, q=>q.IdGuia);
-			g.ForEach (q => response.Guias.Add (new ViewGuiaInfo { 
-				Guia = q, 
-				Respuesta = rg.FirstOrDefault (rq => rq.IdGuia == q.Id) ??
-					new RespuestaGuiaInfo { IdGuia = q.Id, IdDiagnostico = response.Diagnostico.Id }
-			}));*/
 
 			p.ForEach (q =>{
 				var vp=  new ViewPreguntaInfo {
@@ -391,7 +383,6 @@ namespace Aicl.Liebre.Data
 						Respuestas=new List<bool>(q.Preguntas.Count),
 						Valor = (q.Preguntas.Count > 0 ? (short)0 : default(short?))
 					},
-					//Guias=response.Guias.FindAll(_g=> q.IdGuias.Contains(_g.Guia.Id)),
 				};
 
 				response.Preguntas.Add(vp);
