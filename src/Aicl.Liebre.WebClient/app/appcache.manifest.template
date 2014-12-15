@@ -15,6 +15,7 @@ flatiron-director/flatiron-director.html
 flatiron-director/director.min.js
 elements/elements.vulcanized.html
 scripts/vendor/ydn.db-is-core-qry.js
+scripts/vendor/underscore-min.js
 scripts/app.js
 
 
