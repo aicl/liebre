@@ -95,9 +95,10 @@ namespace Aicl.Liebre.Data
 		public Result<T> Put<T>(T  request ) where T:class, IDocument
 		{
 			var cl= GetCollection<T> ();
-
-			return Store.CreateResult (request,
-				cl.Update (Query<T>.EQ (e => e.Id, request.Id), Update<T>.Replace (request))); 
+			return Store.CreateResult(request, cl.UpdateOnly (request));
+			//Update<T>.Set ();
+			//return Store.CreateResult (request,
+			//	cl.Update (Query<T>.EQ (e => e.Id, request.Id), Update<T>.Replace (request))); 
 
 		}
 

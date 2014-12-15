@@ -11,7 +11,7 @@ namespace Aicl.Liebre.Model
 		public CIIU ()
 		{
 		}
-		[BsonRepresentation(BsonType.ObjectId)]
+
 		public string Id { get { return Codigo; } set{ Codigo = value; } }
 		public string Seccion { get; set; }
 		public string Division { get; set; }

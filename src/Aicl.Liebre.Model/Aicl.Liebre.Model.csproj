@@ -59,6 +59,7 @@
     <Compile Include="DiagnosticoInfo.cs" />
     <Compile Include="DynamicSerializer.cs" />
     <Compile Include="Norma.cs" />
+    <Compile Include="Plan.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="ServiceStack.Common">

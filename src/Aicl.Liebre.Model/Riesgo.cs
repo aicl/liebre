@@ -10,7 +10,6 @@ namespace Aicl.Liebre.Model
 		public Riesgo ()
 		{
 		}
-		[BsonRepresentation(BsonType.ObjectId)]
 		public string Id { get { return Codigo; } set{ Codigo = value; } }
 		public string Codigo { get; set; }
 		public string Clase { get; set; }
