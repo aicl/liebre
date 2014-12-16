@@ -84,6 +84,12 @@ namespace Aicl.Liebre.Data
 			return cl.FindOne(Query<T>.Where(predicate))?? new T();
 		}
 
+		public T Single<T>( IMongoQuery query) where T: class, new()
+		{
+			var cl= GetCollection<T> ();
+			return cl.FindOne (query) ?? new T ();
+		}
+
 		public Result<T> Post<T>(T request) where T:class, IDocument
 		{
 			var cl = GetCollection<T> ();
@@ -548,7 +554,7 @@ namespace Aicl.Liebre.Data
 
 			for(int i = 0;i<passwordLength;i++) 
 			{ 
-				Random randomObj = new Random(); 
+				var randomObj = new Random(); 
 				randomObj.NextBytes(randomBytes); 
 				chars[i] = allowedChars[(int)randomBytes[i] % allowedCharCount]; 
 			} 

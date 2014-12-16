@@ -68,6 +68,9 @@
     <Reference Include="ServiceStack.Client">
       <HintPath>..\..\lib\ServiceStack.Client.dll</HintPath>
     </Reference>
+    <Reference Include="MongoDB.Driver">
+      <HintPath>..\..\lib\MongoDB.Driver.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Aicl.Liebre.Model\Aicl.Liebre.Model.csproj">

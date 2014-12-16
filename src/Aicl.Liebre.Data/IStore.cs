@@ -7,7 +7,7 @@ namespace Aicl.Liebre.Data
 {
 	public interface IStore
 	{
-		T Single<T> (Expression<Func<T, bool>> predicate) where T:class, IDocument, new();
+		T Single<T> (IMongoQuery query) where T: class, new();
 		bool Exists<T> (IMongoQuery query) where T: class;
 	}
 }

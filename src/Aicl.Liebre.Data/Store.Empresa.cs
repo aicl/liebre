@@ -1,5 +1,7 @@
-﻿using Aicl.Liebre.Model;
+﻿using ServiceStack;
+using Aicl.Liebre.Model;
 using ServiceStack.FluentValidation;
+using MongoDB.Driver.Builders;
 
 namespace Aicl.Liebre.Data
 {
@@ -40,7 +42,17 @@ namespace Aicl.Liebre.Data
 		{
 
 			var ne = request.Data;
-			var plan = Single<Plan> (q => q.Demo == true && q.Aprobado == true);
+			Plan plan = default(Plan);
+
+			if (!ne.IdPlan.IsNullOrEmpty ()) {
+				plan = GetById<Plan> (ne.IdPlan);
+				if(plan!=default(Plan) && (!plan.Aprobado || !plan.Demo)){
+					plan = default(Plan);			
+				}
+			}
+			if (plan == default(Plan))
+				plan = GetDemo ();
+
 			ne.IdPlan = plan.Id;
 			var validator = new EmpresaValidator (this);
 			validator.ValidateAndThrow (ne, "create");
@@ -48,6 +60,10 @@ namespace Aicl.Liebre.Data
 			var r = Post<Empresa> (ne);
 			r.Data.Plan = plan;
 			return r;
+		}
+
+		Plan GetDemo(){
+			return Single<Plan> (Query.And (Query<Plan>.EQ (q => q.Demo, true), Query<Plan>.EQ (q => q.Aprobado, true)));
 		}
 
 	}

@@ -5,6 +5,8 @@ namespace Aicl.Liebre.ServiceInterface
 {
 	public class EmpresaService:ServiceBase
 	{
+
+		// TODO: autorizado y con privilegios de operados ( contien la llave !);
 		public object Get(ReadEmpresa request){
 			return ServiceBase.CreateResponse (Store.Get<Empresa> (q=>q.Nombre));
 		}
@@ -32,9 +34,7 @@ namespace Aicl.Liebre.ServiceInterface
 
 		public object Post(CreateRegistroEmpresa request)
 		{
-			request.Data.Llave = Aicl.Liebre.Data.Store.CreateRandomPassword (48);
-			request.Data.IdPlan = null;
-			return Store.Post<Empresa> (request.Data);
+			return Store.CreateRegistroEmpresa (request);
 		}
 
 	}

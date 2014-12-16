@@ -8,11 +8,15 @@ namespace Aicl.Liebre.Data
 {
 	public class EmpresaValidator: AbstractValidator<Empresa>
 	{
+		Empresa _ee=default(Empresa);
+
+		IStore Store{ get; set; }
 
 		public Func<Empresa,bool> NoExistsValidator{ get; set; }
 
 		public EmpresaValidator (IStore store)
 		{
+			Store = store;
 			Action common = () => {
 				RuleFor (x => x.Nombre).NotEmpty ().WithMessage ("Indique el nombre de la empresa");
 				//RuleFor (x => x.Direccion).NotEmpty ().WithMessage ("Indique la dirección de la empresa");
@@ -23,22 +27,19 @@ namespace Aicl.Liebre.Data
 			RuleSet ("create", () => {
 				common();
 				RuleFor (x => x.Nit)
-					.Must ( (x,y) => {
-				var ee = store.Single<Empresa> (q => q.Nit == y);
-				return ee.Id.IsNullOrEmpty ();
-					}).WithMessage ("Nit ya Existe");
+					.Must ((x, y) => !store.Exists<Empresa>(Query<Empresa>.EQ (q => q.Nit, y)))
+					.WithMessage ("Nit ya Existe");
 				});
 
 			RuleSet ("update", () => {
+				Console.WriteLine ("udpate validador");
 				common();
 				RuleFor (x => x.Id)
-					.Must ((x,y) => {
-					var ee = store.Single<Empresa> (q => q.Id == y);
-					if (ee.Nit == x.Nit)
-						return true;
-					var se = store.Single<Empresa> (q => q.Nit == x.Nit);
-					return se.Id.IsNullOrEmpty ();
-				}).WithMessage ("Nit ya Existe");
+					.Must ((x, y) => GetById (y).Nit == x.Nit || !store.Exists<Empresa> (Query<Empresa>.EQ (q => q.Nit, x.Nit)))
+					.WithMessage ("Nit ya Existe");
+				RuleFor(x=>x.Llave)
+					.Must((x, y) => GetById (x.Id).Llave == y)
+					.WithMessage("Llave incorrecta");
 			});
 
 			RuleSet ("delete", () =>
@@ -47,6 +48,14 @@ namespace Aicl.Liebre.Data
 				.WithMessage ("La Empresa tiene Diagnostico Asociados")
 			);
 
+		}
+
+
+		Empresa GetById(string id){
+			Console.WriteLine ("GetById validador {0}", id);
+			if (_ee == default(Empresa) || _ee.Id != id)
+				_ee = Store.Single<Empresa> (Query<Empresa>.EQ (q => q.Id, id));
+			return _ee;
 		}
 	}
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using Aicl.Liebre.Model;
+using MongoDB.Driver.Builders;
 
 namespace Aicl.Liebre.ServiceInterface
 {
@@ -12,7 +13,7 @@ namespace Aicl.Liebre.ServiceInterface
 
 		public object Get(SinglePlantilla request){
 
-			return ServiceBase.CreateResponse (Store.Single<Plantilla> (q => q.Id == request.Id));
+			return ServiceBase.CreateResponse (Store.Single<Plantilla> (Query<Plantilla>.EQ (q => q.Id, request.Id)));
 		}
 
 		public object Post(CreatePlantilla request)
