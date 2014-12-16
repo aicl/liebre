@@ -12,6 +12,7 @@ namespace Aicl.Liebre.Model
 
 		public Empresa ()
 		{
+			Plan = new Plan ();
 		}
 		[BsonRepresentation(BsonType.ObjectId)]
 		public string Id{ get; set; }
@@ -21,8 +22,11 @@ namespace Aicl.Liebre.Model
 		public string Telefono { get; set; }
 		public string Email { get; set; }
 		public string Contacto { get; set; }
-		/*public string IdPlan { get; set; }
-		public string Llave { get; set; }*/
+		public string IdPlan { get; set; }
+		public string Llave { get; set; }
+		[BsonIgnore]
+		public Plan Plan {get;set;}
+
 	}
 
 	[Route("/read/empresa","GET")]
@@ -74,6 +78,12 @@ namespace Aicl.Liebre.Model
 		public Empresa Data { get; set; }
 		public ResponseStatus ResponseStatus {get;set;}
 		public WriteResult WriteResult{ get; set; }
+	}
+
+	[Route("/create/registroempresa","POST")]
+	public class CreateRegistroEmpresa:IReturn<CreateEmpresaResponse>,IHasDataProperty<Empresa>
+	{
+		public Empresa Data { get; set; }
 	}
 }
 

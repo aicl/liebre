@@ -9,20 +9,32 @@ namespace Aicl.Liebre.ServiceInterface
 			return ServiceBase.CreateResponse (Store.Get<Empresa> (q=>q.Nombre));
 		}
 
-
+		// TODO: autorizado y con privilegios de operador!
 		public object Post(CreateEmpresa request)
 		{
-			return Store.Post<Empresa> (request.Data);
+			return Store.CreateEmpresa (request);
 		}
 
+
+		// TODO: autorizado y con privilegios de operador!
 		public object Post(UpdateEmpresa request)
 		{
-			return Store.Put<Empresa> (request.Data);
+			return Store.UpdateEmpresa (request);
 		}
 
+		// TODO: autorizado y con privilegios de operador!
 		public object Post(DeleteEmpresa request)
 		{
-			return Store.Delete<Empresa> (request);
+			return Store.DeleteEmpresa (request);
+		}
+
+
+
+		public object Post(CreateRegistroEmpresa request)
+		{
+			request.Data.Llave = Aicl.Liebre.Data.Store.CreateRandomPassword (48);
+			request.Data.IdPlan = null;
+			return Store.Post<Empresa> (request.Data);
 		}
 
 	}

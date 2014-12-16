@@ -29,7 +29,8 @@ namespace Aicl.Liebre.Data
 			foreach (var pi in prop){
 
 				var bs = pi.FirstAttribute<BsonRepresentationAttribute>();
-				if (bs != null && bs.Representation == BsonType.ObjectId)
+				if ((bs != null && bs.Representation == BsonType.ObjectId )
+					|| pi.FirstAttribute<BsonIgnoreAttribute>() !=null)
 					continue;
 				var nv =pi.GetValue (document);
 				var value = nv!=null? BsonValue.Create (nv):BsonNull.Value;

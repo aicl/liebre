@@ -2,7 +2,7 @@
 
 namespace Aicl.Liebre.Model
 {
-	public class Plan
+	public class Plan:IDocument
 	{
 		public Plan ()
 		{

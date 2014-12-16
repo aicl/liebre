@@ -12,7 +12,7 @@ namespace Aicl.Liebre.ServiceInterface
 
 		public object Get(SinglePlantilla request){
 
-			return ServiceBase.CreateResponse (Store.GetById<Plantilla> (request));
+			return ServiceBase.CreateResponse (Store.Single<Plantilla> (q => q.Id == request.Id));
 		}
 
 		public object Post(CreatePlantilla request)

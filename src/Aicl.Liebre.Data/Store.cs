@@ -14,7 +14,7 @@ using System.Text;
 
 namespace Aicl.Liebre.Data
 {
-	public class Store
+	public partial class Store:IStore
 	{
 		MongoUrl Url { get; set; }
 		MongoDatabase Db { get; set; }
@@ -44,7 +44,7 @@ namespace Aicl.Liebre.Data
 		public T GetById<T>(IHasStringId request) where T:class, IDocument, new() 
 		{
 			var cl= GetCollection<T> ();
-			return cl.FindOne(Query<T>.EQ(e=>e.Id,request.Id))??new T() ;
+			return cl.FindOne(Query<T>.EQ(e=>e.Id,request.Id));
 		}
 
 		public T GetById<T>(string id) where T:class, IDocument
@@ -81,8 +81,7 @@ namespace Aicl.Liebre.Data
 		public T Single<T>( Expression<Func<T, bool>> predicate) where T:class, IDocument, new()
 		{
 			var cl= GetCollection<T> ();
-			var doc= cl.FindOne(Query<T>.Where(predicate));
-			return doc?? new T();
+			return cl.FindOne(Query<T>.Where(predicate))?? new T();
 		}
 
 		public Result<T> Post<T>(T request) where T:class, IDocument
@@ -96,10 +95,7 @@ namespace Aicl.Liebre.Data
 		{
 			var cl= GetCollection<T> ();
 			return Store.CreateResult(request, cl.UpdateOnly (request));
-			//Update<T>.Set ();
-			//return Store.CreateResult (request,
-			//	cl.Update (Query<T>.EQ (e => e.Id, request.Id), Update<T>.Replace (request))); 
-
+			//return Store.CreateResult (request,cl.Update (Query<T>.EQ (e => e.Id, request.Id), Update<T>.Replace (request))); 
 		}
 
 		public Result<T> Save<T>(T request ) where T:class, IDocument
@@ -110,14 +106,14 @@ namespace Aicl.Liebre.Data
 		public Result<T> Delete<T>(IHasStringId request) where T:class, IDocument, new() 
 		{
 			var cl= GetCollection<T> ();
-			return Store.CreateResult (new T{Id=request.Id}, cl.Remove (Query<T>.EQ (e => e.Id, request.Id)));
+			return Store.CreateResult (new T{ Id = request.Id }, cl.Remove (Query<T>.EQ (e => e.Id, request.Id)));
 		}
 
 
 		public Result<T> Delete<T>(string id) where T:class, IDocument, new()
 		{
 			var cl= GetCollection<T> ();
-			return Store.CreateResult (new T{Id=id}, cl.Remove (Query<T>.EQ (e => e.Id, id)));
+			return Store.CreateResult (new T{ Id = id }, cl.Remove (Query<T>.EQ (e => e.Id, id)));
 		}
 
 		public Result<T> Delete<T>(Expression<Func<T, bool>> predicate) where T:class, IDocument, new()
@@ -543,7 +539,7 @@ namespace Aicl.Liebre.Data
 			};
 		}
 
-		static string CreateRandomPassword(int passwordLength=32) 
+		public static string CreateRandomPassword(int passwordLength=32) 
 		{ 
 			const string allowedChars = "abcdefghijkmnpqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ23456789!@$?"; 
 			Byte[] randomBytes = new Byte[passwordLength]; 
@@ -558,6 +554,18 @@ namespace Aicl.Liebre.Data
 			} 
 
 			return new string(chars); 
+		}
+
+		public bool Exists<T> (string id) where T: class, IDocument
+		{
+			var cl = GetCollection<T> ();
+			return cl.FindOne (Query<T>.EQ (e => e.Id, id)) != null;
+		}
+
+		public bool Exists<T> (IMongoQuery query) where T: class
+		{
+			var cl = GetCollection<T> ();
+			return cl.FindOne (query) != null;
 		}
 
 	}

@@ -35,6 +35,10 @@
     <Compile Include="MongoExtensions.cs" />
     <Compile Include="AppConfig.cs" />
     <Compile Include="InfoFormat.cs" />
+    <Compile Include="Store.Empresa.cs" />
+    <Compile Include="EmpresaValidator.cs" />
+    <Compile Include="IStore.cs" />
+    <Compile Include="IValidatorExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Aicl.Liebre.Model\Aicl.Liebre.Model.csproj">
