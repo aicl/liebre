@@ -52,6 +52,7 @@
     <Compile Include="RequisitoService.cs" />
     <Compile Include="Phantomjs.cs" />
     <Compile Include="DiagnosticoInfoService.cs" />
+    <Compile Include="PlanService.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="ServiceStack">

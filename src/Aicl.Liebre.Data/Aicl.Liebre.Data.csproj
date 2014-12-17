@@ -39,6 +39,8 @@
     <Compile Include="EmpresaValidator.cs" />
     <Compile Include="IStore.cs" />
     <Compile Include="IValidatorExtensions.cs" />
+    <Compile Include="DiagnosticoValidator.cs" />
+    <Compile Include="PlantillaValidator.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Aicl.Liebre.Model\Aicl.Liebre.Model.csproj">

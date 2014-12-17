@@ -85,5 +85,39 @@ namespace Aicl.Liebre.Model
 	{
 		public Empresa Data { get; set; }
 	}
+
+	[Route("/update/registroempresa","POST")]
+	public class UpdateRegistroEmpresa:IReturn<CreateEmpresaResponse>,IHasDataProperty<Empresa>
+	{
+		public Empresa Data { get; set; }
+	}
+
+	[Route("/read/registroempresa","GET")]
+	public class ReadRegistroEmpresa:IReturn<ReadRegistroEmpresaResponse>
+	{
+		public string Nit { get; set; }
+		public string Llave { get; set; }
+
+	}
+
+	[Route("/update/llaveempresa","POST")]
+	public class UpdateLlaveEmpresa:IReturn<UpdateLlaveEmpresaResponse>
+	{
+		public string Nit { get; set; }
+		public string Llave { get; set; }
+	}
+		
+	public class ReadRegistroEmpresaResponse
+	{
+		public Empresa Data {get;set;}
+		public ResponseStatus ResponseStatus {get;set;}
+	}
+
+	public class UpdateLlaveEmpresaResponse
+	{
+		public Empresa Data {get;set;}
+		public ResponseStatus ResponseStatus {get;set;}
+	}
+
 }
 

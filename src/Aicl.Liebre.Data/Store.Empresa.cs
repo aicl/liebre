@@ -2,18 +2,42 @@
 using Aicl.Liebre.Model;
 using ServiceStack.FluentValidation;
 using MongoDB.Driver.Builders;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Aicl.Liebre.Data
 {
 	public partial class Store
 	{
+		public List<Empresa> GetEmpresas(ReadEmpresa request){
+
+			var e = Get<Empresa> (q => q.Nombre);
+			var ids = e.ConvertAll (x => x.IdPlan).Distinct ().Where (x => !x.IsNullOrEmpty ());;
+			var planes = GetCollection<Plan> ().Find (Query<Plan>.In (x => x.Id, ids));
+			e.ForEach (x => {
+				x.Plan = x.IdPlan.IsNullOrEmpty() ? new Plan () : planes.FirstOrDefault (y => y.Id == x.IdPlan)??new Plan();
+			});
+
+			return e;
+		}
+
+		public Empresa GetEmpresa(ReadRegistroEmpresa request){
+
+			var validator = new EmpresaValidator (this);
+			validator.ValidateReadRegistro (new Empresa{ Nit = request.Nit, Llave = request.Llave });
+
+			var empresa = Single<Empresa> (Query.And (Query<Empresa>.EQ (q => q.Nit, request.Nit), Query<Empresa>.EQ (q => q.Llave, request.Llave)));
+			empresa.Plan = Single<Plan> (empresa.IdPlan);
+			return empresa;
+		}
+
+
 		public Result<Empresa> CreateEmpresa(CreateEmpresa request)
 		{
-
 			var ne = request.Data;
-			var plan = Single<Plan> (q => q.Id == ne.IdPlan);
+			var plan = Single<Plan> (ne.IdPlan);
 			var validator = new EmpresaValidator (this);
-			validator.ValidateAndThrow (ne, "create");
+			validator.ValidateCreate(ne);
 			ne.Llave = Store.CreateRandomPassword (48);
 			var r = Post<Empresa> (ne);
 			r.Data.Plan = plan;
@@ -24,8 +48,10 @@ namespace Aicl.Liebre.Data
 		{
 			var ne = request.Data;
 			var validator = new EmpresaValidator (this);
-			validator.ValidateAndThrow (ne, "update");
-			return Put<Empresa> (ne);
+			validator.ValidateUpdate (ne);
+			var r = Put<Empresa> (ne);
+			r.Data.Plan = Single<Plan> (r.Data.IdPlan);
+			return r;
 		}
 
 		public Result<Empresa> DeleteEmpresa(DeleteEmpresa request)
@@ -33,7 +59,7 @@ namespace Aicl.Liebre.Data
 
 			var ne = new Empresa{ Id = request.Id };
 			var validator = new EmpresaValidator (this);
-			validator.ValidateAndThrow (ne, "delete");
+			validator.ValidateDelete (ne);
 			return Delete<Empresa> (ne);
 
 		}
@@ -55,13 +81,38 @@ namespace Aicl.Liebre.Data
 
 			ne.IdPlan = plan.Id;
 			var validator = new EmpresaValidator (this);
-			validator.ValidateAndThrow (ne, "create");
+			validator.ValidateCreateRegistro (ne);
 			ne.Llave = Store.CreateRandomPassword (48);
 			var r = Post<Empresa> (ne);
 			r.Data.Plan = plan;
 			return r;
 		}
 
+		public Result<Empresa> UpdateRegistroEmpresa(UpdateRegistroEmpresa request)
+		{
+			var ne = request.Data;
+			var validator = new EmpresaValidator (this);
+			validator.ValidateUpdateRegistro (ne);
+
+			var r = Put<Empresa> (ne);
+			r.Data.Plan = Single<Plan> (r.Data.IdPlan);
+			return r;
+		}
+
+
+		public Result<Empresa> UpdateLlaveEmpresa(UpdateLlaveEmpresa request){
+
+			var validator = new EmpresaValidator (this);
+			validator.ValidateReadRegistro (new Empresa{ Nit = request.Nit, Llave = request.Llave });
+
+			var empresa = Single<Empresa> (Query.And (Query<Empresa>.EQ (q => q.Nit, request.Nit), Query<Empresa>.EQ (q => q.Llave, request.Llave)));
+			validator.ValidateUpdate (empresa);
+			empresa.Llave = CreateRandomPassword (48);
+			var r= Put<Empresa> (empresa);
+			r.Data.Plan = Single<Plan> (empresa.IdPlan);
+			return r;
+		}
+			
 		Plan GetDemo(){
 			return Single<Plan> (Query.And (Query<Plan>.EQ (q => q.Demo, true), Query<Plan>.EQ (q => q.Aprobado, true)));
 		}

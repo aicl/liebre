@@ -38,6 +38,18 @@ namespace Aicl.Liebre.Data
 			};
 			return collection.Update (Query<T>.EQ (e => e.Id, document.Id), ub);
 		}
+	}
+
+	public static class StringExtensions{
+
+		public static string HideContent(this string email, int step=2){
+			email = email ?? string.Empty;
+			var chars = new char[email.Length]; 
+			for (var i = 0; i < email.Length; i++) {
+				chars [i] = i%step!=0  || email[i]=='@' ? email [i]:'*';
+			}
+			return new string (chars);
+		}
 
 	}
 }

@@ -84,6 +84,11 @@ namespace Aicl.Liebre.Data
 			return cl.FindOne(Query<T>.Where(predicate))?? new T();
 		}
 
+		public T Single<T>(string id) where T:class, IDocument, new()
+		{
+			return !id.IsNullOrEmpty () ? Single<T> (Query<T>.EQ (q => q.Id, id)) : new T ();
+		}
+
 		public T Single<T>( IMongoQuery query) where T: class, new()
 		{
 			var cl= GetCollection<T> ();

@@ -1,6 +1,8 @@
 ﻿using System;
 using Aicl.Liebre.Model;
 using MongoDB.Driver.Builders;
+using Aicl.Liebre.Data;
+using ServiceStack.FluentValidation;
 
 namespace Aicl.Liebre.ServiceInterface
 {
@@ -28,8 +30,9 @@ namespace Aicl.Liebre.ServiceInterface
 
 		public object Post(DeletePlantilla request)
 		{
+			var v = new PlantillaValidator (Store);
+			v.ValidateAndThrow (new Plantilla{ Id = request.Id }, "delete");
 			return Store.Delete<Plantilla> (request);
-
 		}
 
 		public object Post(ClonePlantilla request)

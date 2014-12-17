@@ -33,6 +33,17 @@ namespace Aicl.Liebre.Data
 		{
 			return validationResult.Errors.SerializeToString();	
 		}
+
+		public static void MyValidate<T>(this IValidator<T> validator, T instance, params string[] rules){
+			var selector = new RulesetValidatorSelector (rules);
+
+			var context = new ValidationContext<T> (instance, new PropertyChain (), selector);
+			var validationResult= validator.Validate (context);
+			if (!validationResult.IsValid) {
+				throw new ValidationException (validationResult.Errors);
+			}
+		}
+
 	}
 }
 

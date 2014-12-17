@@ -1,4 +1,6 @@
 ﻿using Aicl.Liebre.Model;
+using Aicl.Liebre.Data;
+using ServiceStack.FluentValidation;
 
 namespace Aicl.Liebre.ServiceInterface
 {
@@ -22,12 +24,9 @@ namespace Aicl.Liebre.ServiceInterface
 
 		public object Post(DeleteDiagnostico request)
 		{
-
-			var r = Store.Delete<Respuesta> (q=> q.IdDiagnostico== request.Id);
-			if (!r.WriteResult.Ok)	return r;
-
-			var g = Store.Delete<RespuestaGuia> (q => q.IdDiagnostico == request.Id);
-			return !g.WriteResult.Ok ? (object)g : Store.Delete<Diagnostico> (request);					
+			var v = new DiagnosticoValidator ( Store);
+			v.ValidateAndThrow (new Diagnostico{ Id = request.Id }, "delete");
+			return Store.Delete<Diagnostico> (request);					
 		}
 	}
 }
