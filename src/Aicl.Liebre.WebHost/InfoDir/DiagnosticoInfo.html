@@ -202,14 +202,21 @@ div.inner {
     <div class="cn" print-me>
     <div class="inner" style="border-collapse:separate; border-spacing:0 5px;">
     	<div style="display:table-row;">
-   			<div style="height:150px;background: rgb(182, 159, 99);color: white;font-size: xx-large;padding: 10px;border-radius: 8px;display: table-cell;vertical-align: middle;">Reporte de Cumplimiento Decreto 1443/2014</div>
+   			<div style="height:100px;background: rgb(182, 159, 99);color: white;font-size: xx-large;padding: 10px;border-radius: 8px;display: table-cell;vertical-align: middle;">Reporte de Cumplimiento Decreto 1443/2014</div>
    		</div>
 		<div style="display:table-row;">
-   			<div style="height:150px;background: #6b6b6b; color: white;font-size: xx-large;padding: 10px;border-radius: 8px;display: table-cell;vertical-align: middle;">Detalle de Resultados</div>
+   			<div style="height:100px;background: #6b6b6b; color: white;font-size: xx-large;padding: 10px;border-radius: 8px;display: table-cell;vertical-align: middle;">Detalle de Resultados</div>
 		</div>
-		<div style="display:table-row;">
-   			<div id="Empresa.Nombre" style="color:black; font-size: xx-large;padding: 10px;border-radius: 8px;"></div>
-   		</div>
+   		<div style="display:table-row;">
+   		<div style="display:table; color:black; width:100%;">
+   		    <div style="display:table-row;">
+   		        <div id="Empresa.Logo" style="display: table-cell;  width: 100px;"></div>
+   		        <div style="display:table-cell;vertical-align: middle;">
+   		            <div id="Empresa.Nombre" style="font-size: xx-large;padding: 10px;border-radius: 8px;"></div>
+   		            <div id="Empresa.Nit" style="color: black; padding: 0px 10px;"></div>
+   		        </div>
+   		    </div>
+   		</div></div>
     </div></div></div></div>
 
 	<div class="content" style="page-break-after: always;" >
@@ -369,7 +376,6 @@ div.inner {
                 	pagebreak: (norma.Grupos.length>i+1)?'always':'none'
                 });
             });
-            console.log(claves);
             for (var c in claves){
             	htmlClaves+= lang.replace('<tr><td class={clave.respuesta}></td><td>{clave.codigo}</td><td>{clave.observacion}</td></tr>',
             	{
@@ -406,6 +412,9 @@ div.inner {
         ready(function(){  
 			
 			document.getElementById("Empresa.Nombre").innerHTML= data.Empresa.Nombre;
+			if(data.Empresa.Logo){
+			    document.getElementById("Empresa.Logo").innerHTML= '<img src="data:image/png;base64,'+ data.Empresa.Logo+'">';
+			}
 
 			var htmlIndice="";
 			var data1={};

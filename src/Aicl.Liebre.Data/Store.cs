@@ -41,15 +41,15 @@ namespace Aicl.Liebre.Data
 			return orderBy == null ? docs.ToList () : docs.OrderBy (orderBy).ToList();
 		}
 
-		public T GetById<T>(IHasStringId request) where T:class, IDocument, new() 
+		public T GetById<T>(IHasStringId request, Type rootType=null) where T:class, IDocument, new() 
 		{
-			var cl= GetCollection<T> ();
+			var cl= rootType==null? GetCollection<T> (): GetCollection<T>(rootType);
 			return cl.FindOne(Query<T>.EQ(e=>e.Id,request.Id));
 		}
 
-		public T GetById<T>(string id) where T:class, IDocument
+		public T GetById<T>(string id, Type rootType=null) where T:class, IDocument
 		{
-			var cl= GetCollection<T> ();
+			var cl= rootType==null? GetCollection<T> (): GetCollection<T>(rootType);
 			return cl.FindOne (Query<T>.EQ (e => e.Id, id));
 		}
 
@@ -369,7 +369,7 @@ namespace Aicl.Liebre.Data
 
 			response.Diagnostico = GetById<Diagnostico> (request.Id) ?? new Diagnostico();
 			response.Plantilla = GetById<Plantilla> (response.Diagnostico.IdPlantilla) ?? new Plantilla();
-			response.Empresa = GetById<Empresa> ( response.Diagnostico.IdEmpresa)?? new Empresa();
+			response.Empresa = GetById<EmpresaConLogo> (response.Diagnostico.IdEmpresa, typeof(Empresa)) ?? new EmpresaConLogo ();
 
 			response.Capitulos = GetByQuery<CapituloInfo> (typeof(Capitulo), q => q.IdPlantilla == response.Diagnostico.IdPlantilla)
 				.OrderBy( q=> NormalizeNumeral(q.Numeral)).ToList();

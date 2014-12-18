@@ -29,6 +29,11 @@ namespace Aicl.Liebre.Model
 
 	}
 
+	public class EmpresaConLogo:Empresa{
+		public string LogoType { get; set; }
+		public string Logo { get; set; }
+	}
+
 	[Route("/read/empresa","GET")]
 	public class ReadEmpresa:IReturn<ReadEmpresaResponse>
 	{
