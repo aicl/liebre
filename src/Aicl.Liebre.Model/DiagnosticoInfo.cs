@@ -6,7 +6,7 @@ using MongoDB.Bson;
 namespace Aicl.Liebre.Model
 {
 	[Route("/read/diagnosticoinfo","GET")]
-	public class DiagnosticoInfo
+	public class DiagnosticoInfo:IReturn<DiagnosticoInfoResponse>
 	{
 		public DiagnosticoInfo ()
 		{

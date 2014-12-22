@@ -65,4 +65,5 @@ test/temp
 .tmp
 test/bower_components/
 
+logos/
 .*~

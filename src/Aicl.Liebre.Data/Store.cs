@@ -306,7 +306,11 @@ namespace Aicl.Liebre.Data
 			    ((bwr.UpsertsCount + bwr.MatchedCount) ==
 					(request.Data.Respuestas.Count + request.Data.RespuestasGuias.Count))) {
 				descarga.Estado = "green";
-				Put (descarga);
+				Put (descarga); 
+				GetCollection<Diagnostico> ().FindAndModify (new FindAndModifyArgs{ 
+					Query=Query<Diagnostico>.EQ(x=>x.Id,descarga.IdDiagnostico),
+					Update= Update<Diagnostico>.Inc(x=>x.Version,1)
+				});
 			}
 		
 			return CreateResult (descarga, bwr);
