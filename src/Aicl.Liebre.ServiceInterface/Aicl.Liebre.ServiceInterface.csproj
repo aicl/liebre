@@ -72,6 +72,9 @@
     <Reference Include="MongoDB.Driver">
       <HintPath>..\..\lib\MongoDB.Driver.dll</HintPath>
     </Reference>
+    <Reference Include="OpenShift.Model">
+      <HintPath>..\..\lib\OpenShift.Model.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Aicl.Liebre.Model\Aicl.Liebre.Model.csproj">

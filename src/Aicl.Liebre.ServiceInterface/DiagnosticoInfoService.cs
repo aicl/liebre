@@ -10,18 +10,15 @@ namespace Aicl.Liebre.ServiceInterface
 	public class DiagnosticoInfoService:ServiceBase
 	{
 		public object Get(DiagnosticoInfo request){
-			var response= Store.ReadDiagnosticoInfo (request);
-			return response;
+			return  Store.ReadDiagnosticoInfo (request);
 		}
 
 		public IHttpResult Get(DiagnosticoInfoPdf request){
 			using (var client = new JsonServiceClient(AppConfig.PhantonjsURL)){
 				try{
-					var httpResponse = client.Get<HttpWebResponse>("/phn-api/read/diagnosticoinfopdf?Id={0}&Norma={1}".Fmt(request.Id,request.Norma));
+					var httpResponse = client.Get<HttpWebResponse>(new OpenShift.Model.DiagnosticoInfoPdf{Id= request.Id, Norma=request.Norma});
 					var responseStream= httpResponse.GetResponseStream();
-					var cd = new System.Net.Mime.ContentDisposition {
-						Inline=true
-					};
+					var cd = new System.Net.Mime.ContentDisposition {Inline=true};
 					Response.AddHeader ("Content-Disposition", cd.ToString ());
 					return new HttpResult(responseStream, httpResponse.ContentType);
 				}
