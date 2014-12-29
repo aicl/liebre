@@ -11,14 +11,12 @@ namespace Aicl.Liebre.Data
 	public class InfoFormat:IPlugin
 	{
 		IAppHost AppHost { get; set; }
-		public string InfoDir{ get; set;}
-		public string InfoFormatFile{ get; set;}
-		public const string ErrorStatusKey = "__errorStatus";
+		public static readonly string InfoDir = "InfoDir";
+		public static readonly string InfoFormatFile = "InfoFormat";
+		public static readonly string ErrorStatusKey = "__errorStatus";
 
 		public InfoFormat ()
 		{
-			InfoDir = "InfoDir";
-			InfoFormatFile="InfoFormat";
 		}
 
 		#region IPlugin implementation
