@@ -14,7 +14,7 @@ namespace Aicl.Liebre.ServiceInterface
 		}
 
 		public IHttpResult Get(DiagnosticoInfoPdf request){
-			using (var client = new JsonServiceClient(AppConfig.PhantonjsURL)){
+			using (var client = new JsonServiceClient(AppConfig.PhantonjApiUrl)){
 				try{
 					var httpResponse = client.Get<HttpWebResponse>(new OpenShift.Model.DiagnosticoInfoPdf{Id= request.Id, Norma=request.Norma});
 					var responseStream= httpResponse.GetResponseStream();
