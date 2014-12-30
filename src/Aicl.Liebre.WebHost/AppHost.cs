@@ -37,6 +37,7 @@ namespace Aicl.Liebre.WebHost
 			ConventionRegistry.Register ("IgnoreExtraElements", conventions, _ => true);
 
 			container.Register<Store> (new Store (url));
+			container.Register<IInformant> (new Informant ());
 			container.Register<AppConfig> (new AppConfig (appSettings));
 
 		}

@@ -95,7 +95,7 @@ namespace Aicl.Liebre.Data
 		}
 
 
-		string GetHtml(IRequest request, string requestName){
+		static string GetHtml(IRequest request, string requestName){
 
 			var info = request.QueryString["template"]??request.QueryString["Template"]??requestName;
 

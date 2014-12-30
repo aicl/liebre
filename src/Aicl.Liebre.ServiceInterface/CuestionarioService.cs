@@ -11,6 +11,7 @@ namespace Aicl.Liebre.ServiceInterface
 			
 		public object Post(UpdateCuestionario request){
 			var r= Store.UpdateCuestionario (request);
+			return r;
 
 			/*if (r.Data.Estado == "green") {
 
@@ -19,7 +20,12 @@ namespace Aicl.Liebre.ServiceInterface
 				});
 
 			}*/
-			return r;
+			/*
+			var files =Informant.GetAllFileInfo<DiagnosticoInfo> ();
+			foreach (var f in files)
+				Informant.GetHtml<DiagnosticoInfo> (new DiagnosticoInfo (), f);
+
+			return new {};*/
 		}
 	}
 }

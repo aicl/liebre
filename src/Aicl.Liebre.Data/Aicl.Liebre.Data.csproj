@@ -41,6 +41,8 @@
     <Compile Include="IValidatorExtensions.cs" />
     <Compile Include="DiagnosticoValidator.cs" />
     <Compile Include="PlantillaValidator.cs" />
+    <Compile Include="Informant.cs" />
+    <Compile Include="IInformant.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Aicl.Liebre.Model\Aicl.Liebre.Model.csproj">
