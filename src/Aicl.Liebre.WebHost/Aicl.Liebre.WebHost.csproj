@@ -99,6 +99,7 @@
     <Folder Include="App_Data\" />
     <Folder Include="Content\Scripts\" />
     <Folder Include="InfoDir\" />
+    <Folder Include="MailTemplates\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Global.asax.cs">
@@ -181,6 +182,7 @@
     <Content Include="InfoDir\DiagnosticoInfo.html" />
     <Content Include="InfoDir\InfoFormat.html" />
     <Content Include="json\normas.json" />
+    <Content Include="MailTemplates\DiagnosticoInfoResponseSend.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

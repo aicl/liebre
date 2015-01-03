@@ -9,8 +9,10 @@ namespace Aicl.Liebre.ServiceInterface
 		public Store Store{ get; set; }
 
 		public AppConfig AppConfig { get; set; }
-
+	
 		public IInformant Informant { get; set; }
+
+		public IHtmlBodyMail HtmlBodyMail { get; set; }
 
 		protected static object CreateResponse(object data){
 			return new {

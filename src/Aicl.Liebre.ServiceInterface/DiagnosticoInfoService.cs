@@ -27,5 +27,24 @@ namespace Aicl.Liebre.ServiceInterface
 				}
 			}
 		}
+
+		public object Post(CreateDiagnosticoInfo request)
+		{
+			var di =Store.ReadDiagnosticoInfo (new DiagnosticoInfo{ 
+				Id= request.Id,
+			});
+
+			di.Empresa.Nombre = "Super Aicl";
+
+			var html = HtmlBodyMail.RenderToHtml("DiagnosticoInfoResponseSend", di);
+			Console.WriteLine(html);
+
+			var files =Informant.GetAllFileInfo<DiagnosticoInfo> ();
+			foreach (var f in files)
+				Informant.GetHtml<DiagnosticoInfo> (new DiagnosticoInfo (), f);
+
+			return new CreateDiagnosticoInfoResponse ();
+		}
+
 	}
 }

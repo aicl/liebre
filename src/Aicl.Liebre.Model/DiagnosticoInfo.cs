@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using MongoDB.Bson.Serialization.Attributes;
 using MongoDB.Bson;
+using ServiceStack.Web;
 
 namespace Aicl.Liebre.Model
 {
@@ -17,7 +18,7 @@ namespace Aicl.Liebre.Model
 	}
 
 	[Route("/read/diagnosticoinfopdf","GET")]
-	public class DiagnosticoInfoPdf
+	public class DiagnosticoInfoPdf:IReturn<IHttpResult>
 	{
 		public DiagnosticoInfoPdf ()
 		{
@@ -27,14 +28,23 @@ namespace Aicl.Liebre.Model
 		public string Norma { get; set; }
 	}
 
-	public class DiagnosticoInfoPdfResponse: IHasResponseStatus
+	[Route("/create/diagnosticoinfo","POST")]
+	public class CreateDiagnosticoInfo:IReturn<CreateDiagnosticoInfoResponse>
 	{
-		public DiagnosticoInfoPdfResponse(){
+		public string Id{ get; set; }
+	}
+		
+	public class CreateDiagnosticoInfoResponse:IHasResponseStatus
+	{
+		public CreateDiagnosticoInfoResponse(){
 			ResponseStatus = new ResponseStatus ();
 		}
 
-		public int ExitCode { get; set; }
-		public ResponseStatus ResponseStatus { get; set; }
+		public ResponseStatus ResponseStatus {
+			get;
+			set;
+		}
+
 	}
 
 	public class DiagnosticoInfoResponse: IHasResponseStatus

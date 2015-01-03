@@ -38,6 +38,7 @@ namespace Aicl.Liebre.WebHost
 
 			container.Register<Store> (new Store (url));
 			container.Register<IInformant> (new Informant ());
+			container.Register<IHtmlBodyMail> (new HtmlBodyMail ());
 			container.Register<AppConfig> (new AppConfig (appSettings));
 
 		}

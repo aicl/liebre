@@ -43,6 +43,8 @@
     <Compile Include="PlantillaValidator.cs" />
     <Compile Include="Informant.cs" />
     <Compile Include="IInformant.cs" />
+    <Compile Include="HtmlBodyMail.cs" />
+    <Compile Include="IHtmlBodyMail.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Aicl.Liebre.Model\Aicl.Liebre.Model.csproj">
@@ -76,5 +78,11 @@
     </Reference>
     <Reference Include="System.Net" />
     <Reference Include="System.Web" />
+    <Reference Include="System.Web.Razor">
+      <HintPath>..\..\lib\System.Web.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="ServiceStack.Razor">
+      <HintPath>..\..\lib\ServiceStack.Razor.dll</HintPath>
+    </Reference>
   </ItemGroup>
 </Project>

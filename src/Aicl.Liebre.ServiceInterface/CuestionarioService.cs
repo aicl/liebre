@@ -11,21 +11,16 @@ namespace Aicl.Liebre.ServiceInterface
 			
 		public object Post(UpdateCuestionario request){
 			var r= Store.UpdateCuestionario (request);
+
+			if (r.Data.Estado == "green") {
+
+				var s =ResolveService<DiagnosticoInfoService> ();
+
+				s.Post (new CreateDiagnosticoInfo{ Id = r.Data.IdDiagnostico });
+			}
+
 			return r;
 
-			/*if (r.Data.Estado == "green") {
-
-				var di =Store.ReadDiagnosticoInfo (new DiagnosticoInfo{ 
-					Id= r.Data.IdDiagnostico
-				});
-
-			}*/
-			/*
-			var files =Informant.GetAllFileInfo<DiagnosticoInfo> ();
-			foreach (var f in files)
-				Informant.GetHtml<DiagnosticoInfo> (new DiagnosticoInfo (), f);
-
-			return new {};*/
 		}
 	}
 }
