@@ -34,14 +34,37 @@ namespace Aicl.Liebre.ServiceInterface
 				Id= request.Id,
 			});
 
-			di.Empresa.Nombre = "Super Aicl";
+			var rq = new OpenShift.Model.DiagnosticoInfo {
+				ApiKey = AppConfig.PhantonjsApikey,
+				Id = di.Diagnostico.Id,
+				IdEmpresa = di.Empresa.Id,
+				Revision= di.Diagnostico.Revision
+			};
 
-			var html = HtmlBodyMail.RenderToHtml("DiagnosticoInfoResponseSend", di);
-			Console.WriteLine(html);
+			rq.Mail.Html = HtmlBodyMail.RenderToHtml (di, typeof (DiagnosticoInfo));
+			Console.WriteLine(rq.Mail.Html);
 
 			var files =Informant.GetAllFileInfo<DiagnosticoInfo> ();
 			foreach (var f in files)
-				Informant.GetHtml<DiagnosticoInfo> (new DiagnosticoInfo (), f);
+				rq.Informes.Add (new OpenShift.Model.Informe {
+					Formato =	Informant.GetUtf8Bytes (di, f),
+					Nombre = f.Name
+				});
+
+			rq.Mail.To.Add (di.Empresa.Email);
+			rq.Mail.Subject = "Informe Diagnostico SG-SST";
+
+			using (var client = new JsonServiceClient(AppConfig.PhantonjsOneWayUrl)){
+				try{
+
+					client.Post(rq);
+
+				}
+				catch(Exception e){
+					throw new HttpError (e.Message);
+				}
+			}
+
 
 			return new CreateDiagnosticoInfoResponse ();
 		}

@@ -4,6 +4,7 @@ using ServiceStack.Razor;
 using ServiceStack.VirtualPath;
 using ServiceStack.Testing;
 using System.IO;
+using System;
 
 namespace Aicl.Liebre.Data
 {
@@ -33,8 +34,8 @@ namespace Aicl.Liebre.Data
 			}.Init();
 		}
 
-		public string RenderToHtml<T>(string template, T model){
-			return Razor.RenderToHtml ("/{0}.cshtml".Fmt (template), model);
+		public string RenderToHtml<T>( T model, Type requestType){
+			return Razor.RenderToHtml ("/{0}.cshtml".Fmt (requestType.GetOperationName ()),	model);
 		}
 	}
 }

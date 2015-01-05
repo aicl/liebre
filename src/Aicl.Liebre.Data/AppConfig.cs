@@ -26,6 +26,10 @@ namespace Aicl.Liebre.Data
 			get { return "{0}/json/reply".Fmt (PhantonjApiUrl); }
 		}
 
+		public string PhantonjsApikey{
+			get { return Settings.Get<string> ("PHN_API_KEY", ""); }
+		}
+
 		AppSettings Settings { get; set; }
 
 		public AppConfig (AppSettings settings)

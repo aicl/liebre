@@ -309,7 +309,7 @@ namespace Aicl.Liebre.Data
 				Put (descarga); 
 				GetCollection<Diagnostico> ().FindAndModify (new FindAndModifyArgs{ 
 					Query=Query<Diagnostico>.EQ(x=>x.Id,descarga.IdDiagnostico),
-					Update= Update<Diagnostico>.Inc(x=>x.Version,1)
+					Update= Update<Diagnostico>.Inc(x=>x.Revision,1)
 				});
 			}
 		

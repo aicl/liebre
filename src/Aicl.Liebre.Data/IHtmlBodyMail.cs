@@ -4,7 +4,7 @@ namespace Aicl.Liebre.Data
 {
 	public interface IHtmlBodyMail
 	{
-		string RenderToHtml<T> (string template, T model);
+		string RenderToHtml<T> ( T model, Type request);
 	}
 }
 

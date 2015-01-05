@@ -182,7 +182,7 @@
     <Content Include="InfoDir\DiagnosticoInfo.html" />
     <Content Include="InfoDir\InfoFormat.html" />
     <Content Include="json\normas.json" />
-    <Content Include="MailTemplates\DiagnosticoInfoResponseSend.cshtml" />
+    <Content Include="MailTemplates\DiagnosticoInfo.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

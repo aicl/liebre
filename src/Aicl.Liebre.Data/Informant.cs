@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using ServiceStack;
 using ServiceStack.IO;
 using System.Linq;
+using ServiceStack.Serialization;
 
 namespace Aicl.Liebre.Data
 {
@@ -40,13 +41,15 @@ namespace Aicl.Liebre.Data
 
 		}
 
-		public string GetHtml<T>(T request, IVirtualFile vf){
+		public string GetHtml<T>(T response, IVirtualFile vf){
+			var json = JsonDataContractSerializer.Instance.SerializeToString(response) ?? "null";
+			json = json.Replace("<", "&lt;").Replace(">", "&gt;");
+			return vf.ReadAllText ().Replace ("${Dto}", json);
+		}
 
-			Console.WriteLine (vf.Name); 
-
-			return vf.Name;
+		public byte[] GetUtf8Bytes<T>(T response, IVirtualFile vf){
+			return GetHtml<T> (response, vf).ToUtf8Bytes ();
 		}
 
 	}
 }
-

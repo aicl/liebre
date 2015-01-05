@@ -8,6 +8,7 @@ namespace Aicl.Liebre.Data
 	{
 		IEnumerable<IVirtualFile> GetAllFileInfo<T> ();
 		string GetHtml<T> (T request, IVirtualFile vf);
+		byte[] GetUtf8Bytes<T> (T request, IVirtualFile vf);
 	}
 }
 
