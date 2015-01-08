@@ -5,6 +5,7 @@ using ServiceStack.VirtualPath;
 using ServiceStack.Testing;
 using System.IO;
 using System;
+using System.Text.RegularExpressions;
 
 namespace Aicl.Liebre.Data
 {
@@ -34,8 +35,11 @@ namespace Aicl.Liebre.Data
 			}.Init();
 		}
 
-		public string RenderToHtml<T>( T model, Type requestType){
-			return Razor.RenderToHtml ("/{0}.cshtml".Fmt (requestType.GetOperationName ()),	model);
+		public string GetHtml<T>( T model, Type requestType){
+			var html =Razor.RenderToHtml ("/{0}.cshtml".Fmt (requestType.GetOperationName ()),	model);
+			html = Regex.Replace(html, @"\n|\t", " "); 
+			html = Regex.Replace(html, @">\s+<", "><").Trim(); 
+			return Regex.Replace (html, @"\s{2,}", " ");
 		}
 	}
 }

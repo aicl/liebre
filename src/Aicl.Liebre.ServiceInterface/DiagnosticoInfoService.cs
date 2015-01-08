@@ -41,8 +41,7 @@ namespace Aicl.Liebre.ServiceInterface
 				Revision= di.Diagnostico.Revision
 			};
 
-			rq.Mail.Html = HtmlBodyMail.RenderToHtml (di, typeof (DiagnosticoInfo));
-			Console.WriteLine(rq.Mail.Html);
+			rq.Mail.Html = HtmlBodyMail.GetHtml (di, typeof (DiagnosticoInfo));
 
 			var files =Informant.GetAllFileInfo<DiagnosticoInfo> ();
 			foreach (var f in files)
@@ -56,18 +55,20 @@ namespace Aicl.Liebre.ServiceInterface
 
 			using (var client = new JsonServiceClient(AppConfig.PhantonjsOneWayUrl)){
 				try{
-
 					client.Post(rq);
-
 				}
 				catch(Exception e){
 					throw new HttpError (e.Message);
 				}
 			}
 
-
 			return new CreateDiagnosticoInfoResponse ();
 		}
 
 	}
 }
+
+// TODO : // probar los parametros adicionales de inline true para quitar los stilos, y ignoreElements="#mobile";
+// TODO : remover \n \r \t del resultado antes de enviarlo: html = Regex.Replace(html, @"\n|\t", " "); h = Regex.Replace(h, @">\s+<", "><").Trim(); h = Regex.Replace(h, @"\s{2,}", " ");
+//        
+// TODO : cambiar button por div  

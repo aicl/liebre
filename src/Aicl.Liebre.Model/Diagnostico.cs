@@ -22,6 +22,7 @@ namespace Aicl.Liebre.Model
 		public DateTime Creado { get; set; }
 		public string Descripcion { get; set; }
 		public int Revision{ get; set; }
+		public DateTime? FechaRevision { get; set; }
 		//public DateTime? FechaInicio { get; set; }
 		[BsonIgnore]
 		public List<Descarga> Descargas { get; set; }

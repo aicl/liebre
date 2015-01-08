@@ -176,7 +176,7 @@ div.inner {
             header: { height: "1.25cm", contents: function(pageNum, numPages) { 
             		return '<div '+ 
             		'style="margin: 0px -10px 2px -10px ; text-align: right; padding:10px 5px;font-size:small; background: #6b6b6b; color:'+(pageNum>1?'white;':'#6b6b6b;')+'">'+
-  'Reporte de Cumplimiento Decreto 1443/2014 '+   
+  'Diagnóstico Cumplimiento Decreto 1443/2014 '+   
 '</div>'+
 '<div style="width:100%; height:4px; background:white;"></div>'; 
             	}
@@ -202,10 +202,13 @@ div.inner {
     <div class="cn" print-me>
     <div class="inner" style="border-collapse:separate; border-spacing:0 5px;">
     	<div style="display:table-row;">
-   			<div style="height:100px;background: rgb(182, 159, 99);color: white;font-size: xx-large;padding: 10px;border-radius: 8px;display: table-cell;vertical-align: middle;">Reporte de Cumplimiento Decreto 1443/2014</div>
+   			<div style="height:100px;background: rgb(182, 159, 99);color: white;font-size: xx-large;padding: 0px 10px;border-radius: 8px;display: table-cell;vertical-align: middle;">
+   			<p>Diagnóstico Cumplimiento Decreto 1443/2014</p>
+   			<p style="font-size:large;" id="Revision"></p>
+   			</div>
    		</div>
 		<div style="display:table-row;">
-   			<div style="height:100px;background: #6b6b6b; color: white;font-size: xx-large;padding: 10px;border-radius: 8px;display: table-cell;vertical-align: middle;">Detalle de Resultados</div>
+   			<div style="height:100px;background: #6b6b6b; color: white;font-size: xx-large;padding: 10px;border-radius: 8px;display: table-cell;vertical-align: middle;">Informe Completo</div>
 		</div>
    		<div style="display:table-row;">
    		<div style="display:table; color:black; width:100%;">
@@ -284,6 +287,30 @@ div.inner {
 		</div>
 	</div>
 	<script>
+		var meses = {"01":"Enero", "02":"Febrero", "03":"Marzo", "04":"Abril", "05":"Mayo","06":"Junio",
+					"07":"Julio", "08":"Agosto", "09":"Septiembre", "10":"Octubre", "11":"Noviembre", "12":"Diciembre"};
+		var convertToJsDate= function(v){
+			if (!v) {
+				return null;
+			}
+			if (typeof v !== 'string'){
+				return v;
+			}
+			return new Date(parseFloat(/Date\(([^)]+)\)/.exec(v)[1])); // thanks demis bellot!
+		}
+		
+	    var buildRevision=function(data){
+	    	if( ! data.Diagnostico.Revision ) return "<br>";
+	    	var f = "";
+	    	if(data.Diagnostico.FechaRevision){
+	    		var date = convertToJsDate(data.Diagnostico.FechaRevision);
+	    		date.setMinutes(date.getMinutes() - date.getTimezoneOffset());
+	    		var sd= date.toJSON().slice(0, 10);
+	    		f = " del " + ds.slice(8,10) + " de " + meses[ds.slice(5,7)] + " de " + ds.slice(0,4)
+	    	}
+	    	return "Revision No "+ data.Diagnostico.Revision+ f;
+	    };
+
 		var mostrarNorma=function(data, norma, arrayUtil, lang){
 			var htmlIndiceRequisitos="";
 			var htmlCumplimiento="";
@@ -291,6 +318,7 @@ div.inner {
 			var claves=[];
 			arrayUtil.forEach(norma.Grupos, function(grupo,i){
 				// indice de grupos
+				if(grupo.TotalQ>0){
 				var valor= (grupo.TotalR/grupo.TotalQ)*100;
 				var titulo= grupo.Titulo||'';
 				var green = "#259b24";
@@ -320,7 +348,7 @@ div.inner {
 					var respuesta= pregunta.Respuesta.Valor===1? 'si': 'no';
 					var signo='';
 					var li='';
-					//   signo =  alera => respuesta=='no' y  ResumenNo
+					//   signo =  alerta => respuesta=='no' y  ResumenNo
 					//   li= ResumenSi /ResumenNo depediento de respuesta 
 					if(respuesta==='si'){
 					    if(pregunta.Pregunta.Clave){
@@ -375,6 +403,7 @@ div.inner {
                 	porc: valor.toFixed(0),
                 	pagebreak: (norma.Grupos.length>i+1)?'always':'none'
                 });
+				}
             });
             for (var c in claves){
             	htmlClaves+= lang.replace('<tr><td class={clave.respuesta}></td><td>{clave.codigo}</td><td>{clave.observacion}</td></tr>',
@@ -411,6 +440,7 @@ div.inner {
         function(lang, Chart, Default, Spider, PlotKit,  arrayUtil, ready){
         ready(function(){  
 			
+			document.getElementById("Revision").innerHTML= buildRevision(data);
 			document.getElementById("Empresa.Nombre").innerHTML= data.Empresa.Nombre;
 			if(data.Empresa.Logo){
 			    document.getElementById("Empresa.Logo").innerHTML= '<img src="data:image/png;base64,'+ data.Empresa.Logo+'">';
@@ -420,15 +450,16 @@ div.inner {
 			var data1={};
 			var data2={};
 			arrayUtil.forEach(data.Capitulos, function(capitulo,i){
-				
-				var estado= capitulo.TotalR>=capitulo.TotalQ?"green":"red";
-                htmlIndice += lang.replace("<tr><td>{capitulo.Numeral}  {capitulo.Titulo}</td><td><button fab {estado}>{capitulo.TotalR}/{capitulo.TotalQ}</button></td></tr>",
-                {
-                	capitulo:capitulo,
-                	estado:estado
-                });
-				data1[capitulo.Titulo]= 100;
-				data2[capitulo.Titulo]= (capitulo.TotalR/capitulo.TotalQ)*100;
+				if(capitulo.TotalQ>0){
+					var estado= capitulo.TotalR>=capitulo.TotalQ?"green":"red";
+	                htmlIndice += lang.replace("<tr><td>{capitulo.Numeral}  {capitulo.Titulo}</td><td><button fab {estado}>{capitulo.TotalR}/{capitulo.TotalQ}</button></td></tr>",
+	                {
+	                	capitulo:capitulo,
+	                	estado:estado
+	                });
+					data1[capitulo.Titulo]= 100;
+					data2[capitulo.Titulo]= (capitulo.TotalR/capitulo.TotalQ)*100;
+				}
             });
             document.getElementById("Indice").innerHTML= htmlIndice;
                         
@@ -484,4 +515,3 @@ div.inner {
     </script>
 </body>
 </html>
-
