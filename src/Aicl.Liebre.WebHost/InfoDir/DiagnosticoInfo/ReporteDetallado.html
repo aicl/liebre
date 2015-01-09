@@ -1,0 +1,420 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>${Title}</title>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="description" content="Diagnostico SGSST, Decreto 1443 de 2014, OHSAS, RUC">
+	<meta name="mobile-web-app-capable" content="yes" />
+	<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0"/>
+    <style>
+        .center { margin-left: auto;    margin-right: auto;    width: 95%;  }
+
+		div[red]{
+			background:#d23f31;
+			color:#fff
+		}
+		div[green]{
+			background:#259b24;
+			color:#fff
+		}
+		button[fab]{
+			display: inline-block;
+			position: relative;
+			outline: none;
+			-webkit-user-select: none;
+			user-select: none;
+			cursor: pointer;
+			z-index: 0;
+			box-sizing: border-box;
+			width: 56px;
+			height: 56px;
+			border-radius: 50%;
+			font-size:medium;
+			border:0px;
+		}
+		button[fab][red]{
+			background:#d23f31;
+			color:#fff
+		}
+		button[fab][green]{
+			background:#259b24;
+			color:#fff
+		}
+		.no{
+		background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAAK/INwWK6QAAABl0RVh0U29mdHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAAIhSURBVDjLlZPrThNRFIWJicmJz6BWiYbIkYDEG0JbBiitDQgm0PuFXqSAtKXtpE2hNuoPTXwSnwtExd6w0pl2OtPlrphKLSXhx07OZM769qy19wwAGLhM1ddC184+d18QMzoq3lfsD3LZ7Y3XbE5DL6Atzuyilc5Ciyd7IHVfgNcDYTQ2tvDr5crn6uLSvX+Av2Lk36FFpSVENDe3OxDZu8apO5rROJDLo30+Nlvj5RnTlVNAKs1aCVFr7b4BPn6Cls21AWgEQlz2+Dl1h7IdA+i97A/geP65WhbmrnZZ0GIJpr6OqZqYAd5/gJpKox4Mg7pD2YoC2b0/54rJQuJZdm6Izcgma4TW1WZ0h+y8BfbyJMwBmSxkjw+VObNanp5h/adwGhaTXF4NWbLj9gEONyCmUZmd10pGgf1/vwcgOT3tUQE0DdicwIod2EmSbwsKE1P8QoDkcHPJ5YESjgBJkYQpIEZ2KEB51Y6y3ojvY+P8XEDN7uKS0w0ltA7QGCWHCxSWWpwyaCeLy0BkA7UXyyg8fIzDoWHeBaDN4tQdSvAVdU1Aok+nsNTipIEVnkywo/FHatVkBoIhnFisOBoZxcGtQd4B0GYJNZsDSiAEadUBCkstPtN3Avs2Msa+Dt9XfxoFSNYF/Bh9gP0bOqHLAm2WUF1YQskwrVFYPWkf3h1iXwbvqGfFPSGW9Eah8HSS9fuZDnS32f71m8KFY7xs/QZyu6TH2+2+FAAAAABJRU5ErkJggg==");
+		background-repeat: no-repeat;background-position: 50% 50%;
+		}
+		.alerta{
+		background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABzElEQVQ4jaWSMWhUQRCGv0uueHazoJAHFrdC4J5Y3FuwiF22i+WlMmKhVwWDIFfZC4JEBDksRBvhpQgYQXhXJkXgtJBcYaGVm+5ZCLvlFiks3oWouQsRpxpm5v/5ZnbhP6Mxq1Htd7WrwveDjwcAauN5CNPm5mYZuCqUOrfYez2IFLPm5qcVR9u2K6m+n14zqGaFksZidtF/GH6KP85FIIkUqpXz7MkuGw8c4UKOStXwXCuM3tq+SlXy5uWYvNNFZ4bbd3bIO7IwWJfemQbVfldkQTalY3GHHnfo8JXHR4/ODCrl9ZkGzoVCaQOAzhTOOcbfxvRuGUCwK4bBuhRTDUbbVmutb0pLA2CXdU3gPasrGgiICCZXa4OHok8TREpp55Pck7chRIfJQFRdq8kAKI9l8wDlK2uvXs/7yeUrk8FA+OlRCUjawCxCchTgKBJjIMZ46UYr+TL8HL/OASihlLaZeAaI4Fxgdw92tuDde/fH4UwbSOrP1Sxf5H29ZJMa3UEE8GgNPjh8DKwua4ieQADqVUxG8viuFE3nwqYVDcFP/D3EgOApnipAnYijP8GIIAndRvFIjzwsKcDHv18ZwrHo994kF2HrtOIf4xf3L7IS97bhXgAAAABJRU5ErkJggg==");
+		background-repeat: no-repeat;background-position: 50% 50%;
+		}
+		.si{
+		background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAAK/INwWK6QAAABl0RVh0U29mdHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAAKfSURBVDjLpZPrS1NhHMf9O3bOdmwDCWREIYKEUHsVJBI7mg3FvCxL09290jZj2EyLMnJexkgpLbPUanNOberU5taUMnHZUULMvelCtWF0sW/n7MVMEiN64AsPD8/n83uucQDi/id/DBT4Dolypw/qsz0pTMbj/WHpiDgsdSUyUmeiPt2+V7SrIM+bSss8ySGdR4abQQv6lrui6VxsRonrGCS9VEjSQ9E7CtiqdOZ4UuTqnBHO1X7YXl6Daa4yGq7vWO1D40wVDtj4kWQbn94myPGkCDPdSesczE2sCZShwl8CzcwZ6NiUs6n2nYX99T1cnKqA2EKui6+TwphA5k4yqMayopU5mANV3lNQTBdCMVUA9VQh3GuDMHiVcLCS3J4jSLhCGmKCjBEx0xlshjXYhApfMZRP5CyYD+UkG08+xt+4wLVQZA1tzxthm2tEfD3JxARH7QkbD1ZuozaggdZbxK5kAIsf5qGaKMTY2lAU/rH5HW3PLsEwUYy+YCcERmIjJpDcpzb6l7th9KtQ69fi09ePUej9l7cx2DJbD7UrG3r3afQHOyCo+V3QQzE35pvQvnAZukk5zL5qRL59jsKbPzdheXoBZc4saFhBS6AO7V4zqCpiawuptwQG+UAa7Ct3UT0hh9p9EnXT5Vh6t4C22QaUDh6HwnECOmcO7K+6kW49DKqS2DrEZCtfuI+9GrNHg4fMHVSO5kE7nAPVkAxKBxcOzsajpS4Yh4ohUPPWKTUh3PaQEptIOr6BiJjcZXCwktaAGfrRIpwblqOV3YKdhfXOIvBLeREWpnd8ynsaSJoyESFphwTtfjN6X1jRO2+FxWtCWksqBApeiFIR9K6fiTpPiigDoadqCEag5YUFKl6Yrciw0VOlhOivv/Ff8wtn0KzlebrUYwAAAABJRU5ErkJggg==");
+		background-repeat: no-repeat;background-position: 50% 50%;
+		}
+		/* tabla */
+		.tb-min, .tb-header, .tb-s-header, .tb-one-col, .tb-rq
+		{
+			/*font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;*/
+			font-size: medium;
+			background: #fff;
+			width: 95%;
+			border-collapse: collapse;
+			text-align: left;
+		}
+		.tb-min th
+		{
+			font-size: medium;
+			font-weight: normal;
+			color: #039;
+			padding: 0px 8px;
+			border-bottom: 1px solid #6678b1;
+			text-align:center;
+		}
+		.tb-min td
+		{
+			border-bottom: 1px solid #ccc;
+			color: #669;
+			padding: 4px 8px;
+			text-align: justify;
+		}
+
+		table.tb-one-col > tr td:first-child{
+			width: 100%;
+		}
+
+		table.tb-index {
+			width: 90%;
+		}
+
+		table.tb-index tr td:first-child, table.tb-index tr th:first-child{
+			width: 80%;
+			font-size:larger;
+		}
+
+		table.tb-index tr td:first-child+td{
+			text-align:center;
+		}
+
+		.tb-cmp{	width:90%;}
+
+		table.tb-cmp tr td:first-child+td+td+td, table.tb-cmp tr td:first-child+td+td+td+td{
+			width:48%;
+		}
+		.tb-cmp td	{ padding: 4px 8px;}
+
+		table.tb-s-header tr td:first-child, table.tb-s-header tr th:first-child{
+			width: 20%;
+		}
+
+		table.tb-rq tr td:first-child{
+			width: 10%;
+			text-align:center;
+		}
+		table.tb-rq tr td:first-child+td{
+			width: 70%;
+		}
+
+		table.tb-rq{	width:90%;}
+
+		table.tb-rq td
+		{
+			border-bottom: 1px solid #ccc;
+			color: #669;
+			padding: 1px 4px;
+			text-align: justify;
+		}
+
+		table.tb-claves{ width:80%};
+		table.tb-claves tr td:first-child{
+			width: 5%;
+		}
+		table.tb-claves tr td:first-child+td+td{
+			width: 90%;
+			padding-left:40px;
+		}
+		table.tb-claves tr td:first-child+td{
+			width: 5%;
+
+		}
+
+		div.content, div.header, div.s-header{
+			padding:0px 0px 0px 10px;
+			width:auto;
+		}
+	    
+	    .hbar {background-color: #259b24;color: #fff;text-align: center;padding: 2px;font-size: medium; border-radius:2px;}
+
+	    [print-me]{
+	    	display: none !important;
+	    }
+
+	    [hidden]{
+	    	display: none !important;
+	    }
+
+div.cn {
+  display: table-cell;
+  height: 960px;
+  vertical-align: middle;
+  text-align: center;
+}
+
+div.inner {
+  display: inline-block;
+  text-align: left;
+  color:white;
+}
+
+        @import "http://ajax.googleapis.com/ajax/libs/dojo/1.10.2/dojo/resources/dojo.css";
+
+    </style>
+    <script type="text/javascript">
+        var PhantomJSPrinting = {
+            header: { height: "1.25cm", contents: function(pageNum, numPages) { 
+            		return '<div '+ 
+            		'style="margin: 0px -10px 2px -10px ; text-align: right; padding:10px 5px;font-size:small; background: #6b6b6b; color:'+(pageNum>1?'white;':'#6b6b6b;')+'">'+
+  'Diagnóstico Cumplimiento Decreto 1443/2014 '+   
+'</div>'+
+'<div style="width:100%; height:4px; background:white;"></div>'; 
+            	}
+            }, 
+            footer: { height: "1.1cm", contents: function(pageNum, numPages) {
+                          //return "<span style='float:right'>" + pageNum + " / " + numPages + "</span>" 
+                    return '<div style="width:100%; height:5px; background:white;"></div>'+ 
+'<div '+ 
+      'style="margin:0px -10px; text-align: right; padding:10px 5px;font-size:small; background: #3F832C; color:'+(pageNum>1?'white;':'#3F832C;')+'">'+
+  pageNum + " / " + numPages +
+'</div>';
+                } 
+            }
+        };
+        window.PhantomJSPrinting=PhantomJSPrinting;
+    </script>
+	<script src="http://ajax.googleapis.com/ajax/libs/dojo/1.10.2/dojo/dojo.js" data-dojo-config="async: true"></script>
+</head>
+<body style="margin: 0px;"> 
+
+	<div class="content" style="xpage-break-after: always;" >
+	<div style="display:table" class="center">
+    <div class="cn" print-me>
+    <div class="inner" style="border-collapse:separate; border-spacing:0 5px;">
+    	<div style="display:table-row;">
+   			<div style="height:100px;background: rgb(182, 159, 99);color: white;font-size: xx-large;padding: 0px 10px;border-radius: 8px;display: table-cell;vertical-align: middle;">
+   			<p>Diagnóstico Cumplimiento Decreto 1443/2014</p>
+   			<p style="font-size:large;" id="Revision"></p>
+   			</div>
+   		</div>
+		<div style="display:table-row;">
+   			<div style="height:100px;background: #6b6b6b; color: white;font-size: xx-large;padding: 10px;border-radius: 8px;display: table-cell;vertical-align: middle;">Reporte Detallado</div>
+		</div>
+   		<div style="display:table-row;">
+   		<div style="display:table; color:black; width:100%;">
+   		    <div style="display:table-row;">
+   		        <div id="Empresa.Logo" style="display: table-cell;  width: 100px;"></div>
+   		        <div style="display:table-cell;vertical-align: middle;">
+   		            <div id="Empresa.Nombre" style="font-size: xx-large;padding: 10px;border-radius: 8px;"></div>
+   		            <div id="Empresa.Nit" style="color: black; padding: 0px 10px;"></div>
+   		        </div>
+   		    </div>
+   		</div></div>
+    </div></div></div></div>
+   		
+	<div no-print class="center" style="margin-top:20px; padding:20px; border-radius: 10px;border: 2px solid gray;	border-style: solid;background: #e7eef6;">
+		<select id="NormaSelect" style="width:300px; height:30px;"></select>
+	</div>
+
+	<div class="content" style="margin-top:20px; page-break-after: always;">
+	   <div class="center" style="text-align: center;">
+	    <h3 id="TituloGrupos"></h3>
+		<table class="center tb-min tb-rq">
+			<thead>
+				<tr>
+					<th name="ArticuloNumeral"></th><th>Título</th><th>Resultado</th>
+				</tr>
+			</thead>
+			<tbody id="IndiceRequisitos"></tbody>
+		</table>
+		</div>
+	</div>
+
+	<div class="content" style="margin-top:5px;" >
+		<div class="center" style="text-align: center;">
+	    	<h3 id="TituloDetalle"></h3>
+			<div id="Cumplimiento" style="text-align: center;"></div>
+			<div id="Nota" style="text-align: left;" ></div>
+		</div>
+	</div>
+	<script>
+		var meses = {"01":"Enero", "02":"Febrero", "03":"Marzo", "04":"Abril", "05":"Mayo","06":"Junio",
+					"07":"Julio", "08":"Agosto", "09":"Septiembre", "10":"Octubre", "11":"Noviembre", "12":"Diciembre"};
+		var convertToJsDate= function(v){
+			if (!v) {
+				return null;
+			}
+			if (typeof v !== 'string'){
+				return v;
+			}
+			return new Date(parseFloat(/Date\(([^)]+)\)/.exec(v)[1])); // thanks demis bellot!
+		}
+		
+	    var buildRevision=function(data){
+	    	if( ! data.Diagnostico.Revision ) return "<br>";
+	    	var f = "";
+	    	if(data.Diagnostico.FechaRevision){
+	    		var date = convertToJsDate(data.Diagnostico.FechaRevision);
+	    		date.setMinutes(date.getMinutes() - date.getTimezoneOffset());
+	    		var sd= date.toJSON().slice(0, 10);
+	    		f = " del " + ds.slice(8,10) + " de " + meses[ds.slice(5,7)] + " de " + ds.slice(0,4)
+	    	}
+	    	return "Revision No "+ data.Diagnostico.Revision+ f;
+	    };
+
+		var mostrarNorma=function(data, norma, arrayUtil, lang){
+			var htmlIndiceRequisitos="";
+			var htmlCumplimiento="";
+
+			arrayUtil.forEach(norma.Grupos, function(grupo,i){
+				// indice de grupos
+				if(grupo.TotalQ>0){
+				var valor= (grupo.TotalR/grupo.TotalQ)*100;
+				var titulo= grupo.Titulo||'';
+				var green = "#259b24";
+				var red = (valor>=100)?"#259b24":"#d23f31";
+                htmlIndiceRequisitos += 
+                lang.replace("<tr><td>{grupo.Codigos}</td><td>{titulo}</td><td><div class='hbar' style='background-image: linear-gradient( to right, {green}, {green} {valor}%, {red} 0% ); background: -webkit-gradient(linear, left top, right top, color-stop({valor}%,{green}), color-stop({valor}%,{red}), color-stop({valor}%,{red}), color-stop({valor}%,{red}));'>{porc}%</div></td></tr>",
+                {
+                	titulo:titulo,
+                	grupo:grupo,
+                	valor:valor,
+                	green:green,
+                	red:red,
+                	porc: valor.toFixed(0)
+                });
+				//tablas preguntas x grupo
+				var preguntas=[];
+				arrayUtil.forEach(grupo.Codigos, function(codigo){
+					var pc= arrayUtil.filter(data.Preguntas, function(item){
+						return grupo.Titulo? item.Pregunta[norma.Alias]===codigo:item.Pregunta.Numeral===codigo ;
+					});
+					preguntas= preguntas.concat(pc);
+				});
+				var filas="";
+				var lis="";
+				arrayUtil.forEach(preguntas, function(pregunta,j){
+					var codigo = pregunta.Pregunta[norma.Alias]|| pregunta.Pregunta.Numeral;
+					var respuesta= pregunta.Respuesta.Valor===1? 'si': 'no';
+					var signo='';
+					var li='';
+					//   signo =  alerta => respuesta=='no' y  ResumenNo
+					//   li= ResumenSi /ResumenNo depediento de respuesta 
+					if(respuesta==='si'){
+					    
+						if( pregunta.Pregunta.ResumenSi) li=  pregunta.Pregunta.ResumenSi;
+					}
+					else{
+						if( pregunta.Pregunta.ResumenNo){
+							signo='alerta';
+						}
+						if( pregunta.Pregunta.ResumenNo) li=  pregunta.Pregunta.ResumenNo;
+					}
+					if(li){
+						lis+= '<li>'+ li + '</li>';
+					}
+					var comentario= pregunta.Respuesta.Valor===1? (pregunta.Pregunta.ComentarioSi)||'OK': (pregunta.Pregunta.ComentarioNo)||'Mal';
+					var recomendacion= pregunta.Respuesta.Valor===1? (pregunta.Pregunta.RecomendacionSi)||'Continuar': (pregunta.Pregunta.RecomendacionNo)||'Resolver y Documentar';
+					filas+=
+					lang.replace('<tr><td class={signo}></td><td class={respuesta}></td><td>{codigo}</td><td>{comentario}</td><td>{recomendacion}</td></tr>',{
+						respuesta:respuesta,
+						comentario:comentario,
+						recomendacion:recomendacion,
+						codigo: codigo,
+						signo:signo
+					});
+				});
+                htmlCumplimiento += 
+                lang.replace(
+'<div style="height:1px;width:100%;"></div><table class="center tb-min tb-cmp" style="margin-top:10px; page-break-after: {pagebreak};">'+
+	//'<thead>'+
+		'<tr><th colspan="5">{titulo}</th></tr>'+
+		'<tr><th colspan="3">{articuloNumeral}</th><th>Comentario</th><th>Recomendación</th></tr>'+
+	//'</thead>'+
+	'<tbody>{filas}'+
+	'<tr><td colspan="4"><ul><span style="font-weight: bold;">{tituloLis}</span>{lis}</ul></td><td><div class="hbar center" style="width:50%;background-image: linear-gradient( to right, {green}, {green} {valor}%, {red} 0% ); background: -webkit-gradient(linear, left top, right top, color-stop({valor}%,{green}), color-stop({valor}%,{red}), color-stop({valor}%,{red}), color-stop({valor}%,{red}));">{porc}%</td></th>'+
+'</tbody></table>',
+                {
+                	titulo:titulo,
+                	grupo:grupo,
+                	filas:filas,
+                	articuloNumeral:norma.Titulo,
+                	valor:valor,
+                	green:green,
+                	red:red,
+                	tituloLis:lis?'Aspectos Claves':'',
+                	lis :lis,
+                	porc: valor.toFixed(0),
+                	pagebreak: (norma.Grupos.length>i+1)?'always':'none'
+                });
+				}
+            });
+
+			var an = document.querySelectorAll("[name=ArticuloNumeral]");
+			for (var i =0; i<an.length;i++){
+				an[i].innerHTML=norma.Titulo;
+			}
+            document.getElementById("TituloGrupos").innerHTML= norma.Alias!=="Decreto"? (norma.Nombre+ " - Cumplimiento de Requisitos"):"Cumplimiento de Requisitos";
+            document.getElementById("TituloDetalle").innerHTML=norma.Alias!=="Decreto"? (norma.Nombre+ " - Cumplimiento de Requisitos"):"Cumplimiento de Requisitos";
+            document.getElementById("IndiceRequisitos").innerHTML= htmlIndiceRequisitos;
+            document.getElementById("Cumplimiento").innerHTML= htmlCumplimiento;
+            document.getElementById("Nota").innerHTML=norma.Anotacion||'';
+		}
+		var getNormaByAlias= function(normas, alias, arrayUtil){
+			var _normas= arrayUtil.filter(normas, function(item){
+				return item.Alias===alias;
+			});
+			_normas= _normas||[{Grupos:[]}];
+			return  _normas[0];
+		}
+	</script>
+    <script>
+    // <![CDATA[
+    	var data = ${Dto};
+
+        require(["dojo/_base/lang", "dojo/_base/array", "dojo/ready"],
+        function(lang, arrayUtil, ready){
+        ready(function(){  
+			
+			document.getElementById("Revision").innerHTML= buildRevision(data);
+			document.getElementById("Empresa.Nombre").innerHTML= data.Empresa.Nombre;
+			if(data.Empresa.Logo){
+			    document.getElementById("Empresa.Logo").innerHTML= '<img src="data:image/png;base64,'+ data.Empresa.Logo+'">';
+			}
+			    
+			var norma= getNormaByAlias(data.Normas, data.Norma, arrayUtil)
+
+			mostrarNorma(data, norma, arrayUtil, lang);
+
+			var body = document.querySelector("body");
+            body.setAttribute("_ready", '');
+
+            var sl = document.getElementById("NormaSelect");
+            for (var i in data.Normas){
+            	var o = document.createElement('option');
+            	o.selected= data.Normas[i].Alias===data.Norma;
+            	o.value= data.Normas[i].Alias;
+            	o.innerHTML= data.Normas[i].Nombre;
+            	sl.options.add(o);
+            }
+            sl.onchange=function(evt){
+            	norma =getNormaByAlias(data.Normas, evt.target.value, arrayUtil)
+            	mostrarNorma(data, norma, arrayUtil, lang);
+            };
+
+        });
+        });
+    // ]]>
+    </script>
+</body>
+</html>

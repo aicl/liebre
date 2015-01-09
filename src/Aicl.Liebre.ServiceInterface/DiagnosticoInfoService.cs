@@ -4,6 +4,7 @@ using ServiceStack;
 using System.IO;
 using ServiceStack.Web;
 using System.Net;
+using System.Threading.Tasks;
 
 namespace Aicl.Liebre.ServiceInterface
 {
@@ -52,16 +53,16 @@ namespace Aicl.Liebre.ServiceInterface
 
 			rq.Mail.To.Add (di.Empresa.Email);
 			rq.Mail.Subject = "Informe Diagnostico SG-SST";
-
-			using (var client = new JsonServiceClient(AppConfig.PhantonjsOneWayUrl)){
-				try{
-					client.Post(rq);
+			//Task.Factory.StartNew (() => {
+				using (var client = new JsonServiceClient (AppConfig.PhantonjsOneWayUrl)) {
+					try {
+						client.Post (rq);
+					} catch (Exception e) {
+						Console.WriteLine ("error en envio de peticion: {0}", e.Message);
+						throw new HttpError (e.Message);
+					}
 				}
-				catch(Exception e){
-					throw new HttpError (e.Message);
-				}
-			}
-
+			//});
 			return new CreateDiagnosticoInfoResponse ();
 		}
 
