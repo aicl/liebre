@@ -4,7 +4,6 @@ using ServiceStack;
 using System.IO;
 using ServiceStack.Web;
 using System.Net;
-using System.Threading.Tasks;
 
 namespace Aicl.Liebre.ServiceInterface
 {
@@ -53,23 +52,10 @@ namespace Aicl.Liebre.ServiceInterface
 
 			rq.Mail.To.Add (di.Empresa.Email);
 			rq.Mail.Subject = "Informe Diagnostico SG-SST";
-			//Task.Factory.StartNew (() => {
-				using (var client = new JsonServiceClient (AppConfig.PhantonjsOneWayUrl)) {
-					try {
-						client.Post (rq);
-					} catch (Exception e) {
-						Console.WriteLine ("error en envio de peticion: {0}", e.Message);
-						throw new HttpError (e.Message);
-					}
-				}
-			//});
+			PublishMessageToPhantonjs (rq);
+
 			return new CreateDiagnosticoInfoResponse ();
 		}
 
 	}
 }
-
-// TODO : // probar los parametros adicionales de inline true para quitar los stilos, y ignoreElements="#mobile";
-// TODO : remover \n \r \t del resultado antes de enviarlo: html = Regex.Replace(html, @"\n|\t", " "); h = Regex.Replace(h, @">\s+<", "><").Trim(); h = Regex.Replace(h, @"\s{2,}", " ");
-//        
-// TODO : cambiar button por div  

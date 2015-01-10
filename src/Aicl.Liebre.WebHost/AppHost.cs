@@ -7,6 +7,10 @@ using MongoDB.Bson.Serialization.Conventions;
 using System;
 using ServiceStack.Logging;
 using ServiceStack.Formats;
+using ServiceStack.Redis;
+using ServiceStack.Messaging.Redis;
+using ServiceStack.Messaging;
+using Aicl.Liebre.Model;
 
 namespace Aicl.Liebre.WebHost
 {
@@ -31,15 +35,25 @@ namespace Aicl.Liebre.WebHost
 
 			Plugins.Add(new CorsFeature());
 
-			var appSettings = new AppSettings();
-			var url = appSettings.Get("MONGOLAB_URI", appSettings.Get("MONGOTEST_URI") );
+			var appConfig = new AppConfig (new  AppSettings ());
+			var url = appConfig.MongoURI;
 			var conventions = new ConventionPack { new IgnoreExtraElementsConvention(true) };
 			ConventionRegistry.Register ("IgnoreExtraElements", conventions, _ => true);
 
 			container.Register<Store> (new Store (url));
 			container.Register<IInformant> (new Informant ());
 			container.Register<IHtmlBodyMail> (new HtmlBodyMail ());
-			container.Register<AppConfig> (new AppConfig (appSettings));
+			container.Register<AppConfig> (appConfig);
+
+			var redisFactory = new BasicRedisClientManager (appConfig.RedisURL);
+			container.Register<IRedisClientsManager>(redisFactory); // req. to log exceptions in redis
+
+			var mqServer = new RedisMqServer(container.Resolve<IRedisClientsManager>());
+			container.Register<IMessageService>(mqServer);
+			container.Register(mqServer.MessageFactory);
+
+			mqServer.RegisterHandler<CreateDiagnosticoInfo> (ServiceController.ExecuteMessage);
+			mqServer.Start();
 
 		}
 	}

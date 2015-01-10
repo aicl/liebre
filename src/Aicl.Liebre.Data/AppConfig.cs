@@ -30,6 +30,15 @@ namespace Aicl.Liebre.Data
 			get { return Settings.Get<string> ("PHN_API_KEY", ""); }
 		}
 
+		public string MongoURI {
+			get { return Settings.Get<string>("MONGOLAB_URI", Settings.Get<string>("MONGOTEST_URI","") ); }
+		}
+
+		public string RedisURL{
+			get { return Settings.Get<string>("REDIS_URL",
+				System.Environment.GetEnvironmentVariable("LBR_REDIS_URL") ).Replace("redis://redistogo:","").Replace("/",""); }
+		}
+
 		AppSettings Settings { get; set; }
 
 		public AppConfig (AppSettings settings)

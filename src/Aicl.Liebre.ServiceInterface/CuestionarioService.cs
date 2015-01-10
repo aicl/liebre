@@ -13,10 +13,7 @@ namespace Aicl.Liebre.ServiceInterface
 			var r= Store.UpdateCuestionario (request);
 
 			if (r.Data.Estado == "green") {
-
-				var s =ResolveService<DiagnosticoInfoService> ();
-
-				s.Post (new CreateDiagnosticoInfo{ Id = r.Data.IdDiagnostico });
+				TryPublishMessage (new CreateDiagnosticoInfo{ Id = r.Data.IdDiagnostico });
 			}
 
 			return r;
