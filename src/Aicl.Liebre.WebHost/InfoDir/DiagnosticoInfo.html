@@ -184,10 +184,12 @@ div.inner {
             footer: { height: "1.0cm", contents: function(pageNum, numPages) {
                           //return "<span style='float:right'>" + pageNum + " / " + numPages + "</span>" 
                     return '<div style="width:100%; height:6px; background:white;"></div>'+ 
-'<div '+ 
-      'style="margin:0px -10px; text-align: right; padding:8px 5px;font-size:small; background: #3F832C; color:'+(pageNum>1?'white;':'#3F832C;')+'">'+
-  pageNum + " / " + numPages +
-'</div>';
+'<div style="display:table; width:105%; margin:0px 0px 0px -8px; text-align: right; padding:8px 5px;font-size:small; background: #3F832C;color:'+(pageNum>1?'white;':'#3F832C;')+'">'+
+'<div style="display:table-row;">'+  
+  '<div style="display:table-cell; width:34%;">&nbsp</div>'+
+  '<div style="display:table-cell; width:33%; text-align:center;">Informe Completo</div>'+
+  '<div style="display:table-cell; width:33%;">'+pageNum + " / " + numPages +'</div>'+
+'</div></div>';
                 } 
             }
         };
