@@ -35,7 +35,7 @@ namespace Aicl.Liebre.Data
 		}
 
 		public string RedisURL{
-			get { return Settings.Get<string>("REDIS_URL",
+			get { return Settings.Get<string>("REDISTOGO_URL",
 				System.Environment.GetEnvironmentVariable("LBR_REDIS_URL") ).Replace("redis://redistogo:","").Replace("/",""); }
 		}
 
