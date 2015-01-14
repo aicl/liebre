@@ -4,6 +4,7 @@ using ServiceStack.FluentValidation;
 using MongoDB.Driver.Builders;
 using System.Collections.Generic;
 using System.Linq;
+using System;
 
 namespace Aicl.Liebre.Data
 {
@@ -106,13 +107,34 @@ namespace Aicl.Liebre.Data
 			validator.ValidateReadRegistro (new Empresa{ Nit = request.Nit, Llave = request.Llave });
 
 			var empresa = Single<Empresa> (Query.And (Query<Empresa>.EQ (q => q.Nit, request.Nit), Query<Empresa>.EQ (q => q.Llave, request.Llave)));
-			validator.ValidateUpdate (empresa);
+			validator.ValidateExiste (empresa);
 			empresa.Llave = CreateRandomPassword (48);
 			var r= Put<Empresa> (empresa);
 			r.Data.Plan = Single<Plan> (empresa.IdPlan);
 			return r;
 		}
-			
+
+
+		public Result<Empresa> UpdateConfirmaRegistroEmpresa (UpdateConfirmaRegistroEmpresa request)
+		{
+			var validator = new EmpresaValidator (this);
+			validator.ValidateReadRegistro (new Empresa{ Nit = request.Nit, Llave = request.Llave });
+
+			var empresa = Single<Empresa> (Query.And (Query<Empresa>.EQ (q => q.Nit, request.Nit), Query<Empresa>.EQ (q => q.Llave, request.Llave)));
+			validator.ValidateConfirmar(empresa);
+
+			var fr = new EmpresaFechaRegistro{FechaRegistro=DateTime.UtcNow, Id= empresa.Id};
+
+			var r1 = Put(fr);
+			empresa.FechaRegistro= r1.Data.FechaRegistro;
+
+			return new Result<Empresa>{
+				Data= empresa,
+				WriteResult= r1.WriteResult,
+			};
+
+		}
+
 		Plan GetDemo(){
 			return Single<Plan> (Query.And (Query<Plan>.EQ (q => q.Demo, true), Query<Plan>.EQ (q => q.Aprobado, true)));
 		}

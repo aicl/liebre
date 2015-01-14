@@ -41,15 +41,15 @@ namespace Aicl.Liebre.Data
 			return orderBy == null ? docs.ToList () : docs.OrderBy (orderBy).ToList();
 		}
 
-		public T GetById<T>(IHasStringId request, Type rootType=null) where T:class, IDocument, new() 
+		public T GetById<T>(IHasStringId request) where T:class, IDocument, new() 
 		{
-			var cl= rootType==null? GetCollection<T> (): GetCollection<T>(rootType);
+			var cl= GetCollection<T> ();
 			return cl.FindOne(Query<T>.EQ(e=>e.Id,request.Id));
 		}
 
-		public T GetById<T>(string id, Type rootType=null) where T:class, IDocument
+		public T GetById<T>(string id) where T:class, IDocument
 		{
-			var cl= rootType==null? GetCollection<T> (): GetCollection<T>(rootType);
+			var cl= GetCollection<T> ();
 			return cl.FindOne (Query<T>.EQ (e => e.Id, id));
 		}
 
@@ -160,7 +160,7 @@ namespace Aicl.Liebre.Data
 
 			var capIds = response.Capitulos.ConvertAll (e => e.Id);
 
-			var p = GetCollection<PreguntaDescarga>(typeof(Pregunta)).Find( Query<Pregunta>.In ((q) => q.IdCapitulo, capIds ))
+			var p = GetCollection<PreguntaDescarga>().Find( Query<Pregunta>.In ((q) => q.IdCapitulo, capIds ))
 				.OrderBy(q=>NormalizeNumeral( q.Numeral)).ToList();
 			var r = GetByQuery<Respuesta> (q => q.IdDiagnostico == response.Diagnostico.Id, q=>q.IdPregunta);
 
@@ -373,7 +373,7 @@ namespace Aicl.Liebre.Data
 
 			response.Diagnostico = GetById<Diagnostico> (request.Id) ?? new Diagnostico();
 			response.Plantilla = GetById<Plantilla> (response.Diagnostico.IdPlantilla) ?? new Plantilla();
-			response.Empresa = GetById<EmpresaConLogo> (response.Diagnostico.IdEmpresa, typeof(Empresa)) ?? new EmpresaConLogo ();
+			response.Empresa = GetById<EmpresaLogo> (response.Diagnostico.IdEmpresa) ?? new EmpresaLogo ();
 
 			response.Capitulos = GetByQuery<CapituloInfo> (typeof(Capitulo), q => q.IdPlantilla == response.Diagnostico.IdPlantilla)
 				.OrderBy( q=> NormalizeNumeral(q.Numeral)).ToList();
@@ -518,9 +518,9 @@ namespace Aicl.Liebre.Data
 			return Db.GetCollection<T> (collection);
 		}
 
-		MongoCollection<T> GetCollection<T>(Type rootType){
-			return Db.GetCollection<T> (rootType.GetCollectionName());
-		}
+		//MongoCollection<T> GetCollection<T>(Type rootType){
+		//	return Db.GetCollection<T> (rootType.GetCollectionName());
+		//}
 
 		List<T> GetByQuery<T>(Type rootType, Expression<Func<T, bool>> predicate,Func<T, object> orderBy=null, string orderType="") where T:class, IDocument
 		{
@@ -582,6 +582,7 @@ namespace Aicl.Liebre.Data
 			var cl = GetCollection<T> ();
 			return cl.FindOne (query) != null;
 		}
+
 
 	}
 }

@@ -205,12 +205,15 @@ div.inner {
     <div class="inner" style="border-collapse:separate; border-spacing:0 5px;">
     	<div style="display:table-row;">
    			<div style="height:100px;background: rgb(182, 159, 99);color: white;font-size: xx-large;padding: 0px 10px;border-radius: 8px;display: table-cell;vertical-align: middle;">
-   			<p>Diagnóstico Cumplimiento Decreto 1443/2014</p>
+   			<p style="height:0px;">Diagnóstico Cumplimiento Decreto 1443/2014</p>
    			<p style="font-size:large;" id="Revision"></p>
    			</div>
    		</div>
 		<div style="display:table-row;">
-   			<div style="height:100px;background: #6b6b6b; color: white;font-size: xx-large;padding: 10px;border-radius: 8px;display: table-cell;vertical-align: middle;">Informe Completo</div>
+   			<div style="height:100px;background: #6b6b6b; color: white;font-size: xx-large;padding: 0px 10px;border-radius: 8px;display: table-cell;vertical-align: middle;">
+   			<p style="height:0px">Informe Completo</p>
+   			<p style="font-size:large;"><br></p>
+   			</div>
 		</div>
    		<div style="display:table-row;">
    		<div style="display:table; color:black; width:100%;">
@@ -307,7 +310,7 @@ div.inner {
 	    	if(data.Diagnostico.FechaRevision){
 	    		var date = convertToJsDate(data.Diagnostico.FechaRevision);
 	    		date.setMinutes(date.getMinutes() - date.getTimezoneOffset());
-	    		var sd= date.toJSON().slice(0, 10);
+	    		var ds= date.toJSON().slice(0, 10);
 	    		f = " del " + ds.slice(8,10) + " de " + meses[ds.slice(5,7)] + " de " + ds.slice(0,4)
 	    	}
 	    	return "Revision No "+ data.Diagnostico.Revision+ f;

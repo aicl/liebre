@@ -58,7 +58,7 @@ namespace Aicl.Liebre.Model
 			Normas = new List<Norma> ();
 		}
 
-		public EmpresaConLogo Empresa { get; set; }
+		public EmpresaLogo Empresa { get; set; }
 		public Diagnostico Diagnostico { get; set; }
 		public Plantilla Plantilla { get; set; }
 		public List<CapituloInfo> Capitulos { get; set; }

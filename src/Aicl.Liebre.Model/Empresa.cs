@@ -3,6 +3,7 @@ using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 using ServiceStack;
 using ServiceStack.Model;
+using System;
 
 namespace Aicl.Liebre.Model
 {
@@ -26,10 +27,21 @@ namespace Aicl.Liebre.Model
 		public string Llave { get; set; }
 		[BsonIgnore]
 		public Plan Plan {get;set;}
-
+		[ReadOnly]
+		public virtual DateTime? FechaRegistro{ get; set;}
 	}
 
-	public class EmpresaConLogo:Empresa{
+	[Collection(typeof(Empresa))]
+	public class EmpresaFechaRegistro:IDocument
+	{
+		[BsonRepresentation(BsonType.ObjectId)]
+		public string Id{ get; set; }
+		public  DateTime? FechaRegistro { get; set;}
+	}
+
+
+	public class EmpresaLogo:Empresa{
+
 		public string LogoType { get; set; }
 		public string Logo { get; set; }
 	}
@@ -105,6 +117,13 @@ namespace Aicl.Liebre.Model
 
 	}
 
+	[Route("/update/confirmaregistroempresa","POST")]
+	public class UpdateConfirmaRegistroEmpresa:IReturn<UpdateConfirmaRegistroEmpresaResponse>
+	{
+		public string Nit { get; set; }
+		public string Llave { get; set; }
+	}
+
 	[Route("/update/llaveempresa","POST")]
 	public class UpdateLlaveEmpresa:IReturn<UpdateLlaveEmpresaResponse>
 	{
@@ -119,6 +138,12 @@ namespace Aicl.Liebre.Model
 	}
 
 	public class UpdateLlaveEmpresaResponse
+	{
+		public Empresa Data {get;set;}
+		public ResponseStatus ResponseStatus {get;set;}
+	}
+
+	public class UpdateConfirmaRegistroEmpresaResponse:IHasResponseStatus, IHasDataProperty<Empresa>
 	{
 		public Empresa Data {get;set;}
 		public ResponseStatus ResponseStatus {get;set;}

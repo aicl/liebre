@@ -45,7 +45,7 @@ namespace Aicl.Liebre.Model
 		public Descarga Descarga { get; set; }
 	}
 
-
+	[Collection(typeof(Pregunta))]
 	public class PreguntaDescarga{
 
 		public PreguntaDescarga ()

@@ -60,6 +60,8 @@
     <Compile Include="DynamicSerializer.cs" />
     <Compile Include="Norma.cs" />
     <Compile Include="Plan.cs" />
+    <Compile Include="ReadOnlyAttribute.cs" />
+    <Compile Include="CollectionAttribute.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="ServiceStack.Common">

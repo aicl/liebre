@@ -33,10 +33,16 @@ namespace Aicl.Liebre.ServiceInterface
 		}
 
 
-		// TODO: enviar correo informado la llave
+		// TODO: enviar correo  para solicitar confirmacion informado la llave
 		public object Post(CreateRegistroEmpresa request)
 		{
 			return Store.CreateRegistroEmpresa (request);
+		}
+
+
+		// esto viene del correo
+		public object Post(UpdateConfirmaRegistroEmpresa request){
+			return Store.UpdateConfirmaRegistroEmpresa (request);
 		}
 
 		public object Post(UpdateRegistroEmpresa request)

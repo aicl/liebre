@@ -42,6 +42,9 @@ namespace Aicl.Liebre.Data
 					.WithMessage("Llave incorrecta");
 			});
 
+			RuleSet ("existe", () => 
+				RuleFor (x => x.Id).NotEmpty ().WithMessage ("No existe empresa con la información suministrada"));
+
 			RuleSet ("delete", () => {
 				RuleFor (x => x.Id).NotEmpty ().WithMessage ("Debe indicar el Identificador de la empresa");
 				RuleFor (x=> x.Id )
@@ -59,6 +62,9 @@ namespace Aicl.Liebre.Data
 				RuleFor(x=>x.Nit).NotEmpty().WithMessage("Debe indicar el Nit de la empresa");
 				RuleFor(x=>x.Llave).NotEmpty().WithMessage("Debe indicar la Llave de la empresa");
 			});
+
+			RuleSet ("confirmar", () => 
+				RuleFor (x => x.FechaRegistro).Must ((x, y) =>!y.HasValue).WithMessage ("Empresa ya confirmada"));
 
 		}
 
@@ -84,6 +90,14 @@ namespace Aicl.Liebre.Data
 		}
 		public void ValidateReadRegistro(Empresa instance){
 			IValidatorExtensions.MyValidate (this,instance, "readregistro");
+		}
+
+		public void ValidateExiste(Empresa instance){
+			IValidatorExtensions.MyValidate (this,instance, "existe");
+		}
+
+		public void ValidateConfirmar(Empresa instance){
+			IValidatorExtensions.MyValidate (this,instance, "existe","confirmar");
 		}
 
 		Empresa GetById(string id){

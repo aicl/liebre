@@ -30,7 +30,7 @@ namespace Aicl.Liebre.Data
 
 				var bs = pi.FirstAttribute<BsonRepresentationAttribute>();
 				if ((bs != null && bs.Representation == BsonType.ObjectId )
-					|| pi.FirstAttribute<BsonIgnoreAttribute>() !=null)
+					|| pi.FirstAttribute<BsonIgnoreAttribute>() !=null || pi.FirstAttribute<ReadOnlyAttribute>()!=null)
 					continue;
 				var nv =pi.GetValue (document);
 				var value = nv!=null? BsonValue.Create (nv):BsonNull.Value;

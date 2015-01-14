@@ -7,7 +7,9 @@ namespace Aicl.Liebre.Model
 	public static class Extensions
 	{
 		public static string GetCollectionName(this Type model) {
-			return model.Name.ToLower ();
+			var attr = model.FirstAttribute<CollectionAttribute> () 
+				?? new CollectionAttribute (model.BaseType==typeof(object)? model:model.BaseType);
+			return attr.CollectionType.Name.ToLower ();
 		}
 
 		public static string GetUserDataUrn(this Type type, string sessionId, string key){
