@@ -51,7 +51,7 @@ namespace Aicl.Liebre.ServiceInterface
 				});
 
 			rq.Mail.To.Add (di.Empresa.Email);
-			rq.Mail.Subject = "Informe Diagnostico SG-SST";
+			rq.Mail.Subject = "Informe Diagnostico SG-SST No: {0}".Fmt (di.Diagnostico.Revision);
 			PublishMessageToPhantonjs (rq);
 
 			return new CreateDiagnosticoInfoResponse ();
