@@ -33,14 +33,12 @@ namespace Aicl.Liebre.ServiceInterface
 			var di =Store.ReadDiagnosticoInfo (new DiagnosticoInfo{ 
 				Id= request.Id,
 			});
-
 			var rq = new OpenShift.Model.DiagnosticoInfo {
 				ApiKey = AppConfig.PhantonjsApikey,
 				Id = di.Diagnostico.Id,
 				IdEmpresa = di.Empresa.Id,
 				Revision= di.Diagnostico.Revision
 			};
-
 			rq.Mail.Html = HtmlBodyMail.GetHtml (di, typeof (DiagnosticoInfo));
 
 			var files =Informant.GetAllFileInfo<DiagnosticoInfo> ();
@@ -49,11 +47,9 @@ namespace Aicl.Liebre.ServiceInterface
 					Formato =	Informant.GetUtf8Bytes (di, f),
 					Nombre = f.Name
 				});
-
 			rq.Mail.To.Add (di.Empresa.Email);
 			rq.Mail.Subject = "Informe Diagnóstico SG-SST No: {0}".Fmt (di.Diagnostico.Revision);
 			PublishMessageToPhantonjs (rq);
-
 			return new CreateDiagnosticoInfoResponse ();
 		}
 

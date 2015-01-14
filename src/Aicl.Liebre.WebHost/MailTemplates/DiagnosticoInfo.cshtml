@@ -910,14 +910,14 @@ body.outlook p {
                                 	}
                                 	q=q+cap.TotalQ;
                                 	r=r+cap.TotalR;
-                                	porc = Math.Round((double)(cap.TotalR)/(double)(cap.TotalQ)*100);
+                                	porc = System.Math.Round((double)(cap.TotalR)/(double)(cap.TotalQ)*100);
                                 	valor = porc;
                                 	red = (valor>=100)?"#259b24":"#d23f31";
                                 	fab=cap.TotalR>=cap.TotalQ?"fab green": "fab red";
                                 	<tr><td style="vertical-align:middle; padding:0px 5px 10px 0px;">@cap.Numeral @cap.Titulo</td>
                                 	<td style="text-align:center;"><div class="@fab"><div style="text-align: center; padding: 15px 0px;">@porc%</div></div></td></tr>
                                 }
-                                	porc =Math.Round( (double)(r)/(double)(q)*100);
+                                	porc =System.Math.Round( (double)(r)/(double)(q)*100);
                                 	valor= porc;
                                 	red = (valor>=100)?"#259b24":"#d23f31";
                                 	fab= r>=q?"fab green": "fab red";
