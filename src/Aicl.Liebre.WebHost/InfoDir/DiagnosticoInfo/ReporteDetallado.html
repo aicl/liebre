@@ -271,7 +271,7 @@ div.inner {
 	    	if(data.Diagnostico.FechaRevision){
 	    		var date = convertToJsDate(data.Diagnostico.FechaRevision);
 	    		date.setMinutes(date.getMinutes() - date.getTimezoneOffset());
-	    		var sd= date.toJSON().slice(0, 10);
+	    		var ds= date.toJSON().slice(0, 10);
 	    		f = " del " + ds.slice(8,10) + " de " + meses[ds.slice(5,7)] + " de " + ds.slice(0,4)
 	    	}
 	    	return "Revision No "+ data.Diagnostico.Revision+ f;
