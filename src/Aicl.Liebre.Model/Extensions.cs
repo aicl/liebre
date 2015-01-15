@@ -3,6 +3,7 @@ using ServiceStack;
 using System.Text.RegularExpressions;
 using System.Linq.Expressions;
 using System.Reflection;
+using System.Collections.Generic;
 
 namespace Aicl.Liebre.Model
 {
@@ -74,7 +75,7 @@ namespace Aicl.Liebre.Model
 		public static string GetPropertyName<TObject> (this TObject type,
 			Expression<Func<TObject, object>> propertyRefExpr)
 		{
-			return GetPropertyNameCore (propertyRefExpr.Body);
+			return GetPropertyInfoCore (propertyRefExpr).Name;
 		}
 
 		public static PropertyInfo GetPropertyInfo<TObject> (this TObject type, 
@@ -83,10 +84,47 @@ namespace Aicl.Liebre.Model
 			return GetPropertyInfoCore (propertyRefExpr.Body);
 		}
 
+		public static List<PropertyInfo> GetPropertyInfoList<TObject>(this TObject type,Expression<Func<TObject, object>> propertyRefExpr)
+		{
+			var lst = new List<PropertyInfo>();
+			if (propertyRefExpr.Body.NodeType == ExpressionType.MemberAccess) {
+				lst.Add (GetPropertyInfoCore (propertyRefExpr.Body));
+			} else if (propertyRefExpr.Body.NodeType == ExpressionType.New) {
+				var nex = propertyRefExpr.Body as NewExpression;
+				foreach (var a in nex.Arguments) {
+					lst.Add (GetPropertyInfoCore (a));
+				}
+			}
+			return lst;
+		}
+
+		public static List<string> GetPropertyNameList<TObject> (this TObject type,
+			Expression<Func<TObject, object>> propertyRefExpr)
+		{
+			return GetPropertyInfoList (type, propertyRefExpr).ConvertAll (x => x.Name);
+		}
+
+
 		public static string GetName<TObject> (Expression<Func<TObject, object>> propertyRefExpr)
 		{
-			return GetPropertyNameCore (propertyRefExpr.Body);
+			return GetPropertyInfoCore (propertyRefExpr).Name;
 		}
+
+		public static PropertyInfo GetInfo<TObject> (Expression<Func<TObject, object>> propertyRefExpr)
+		{
+			return GetPropertyInfoCore (propertyRefExpr.Body);
+		}
+
+		public static List<string> GetNames<TObject> (Expression<Func<TObject, object>> propertyRefExpr)
+		{
+			return GetPropertyInfoList<TObject>(default(TObject), propertyRefExpr).ConvertAll (x => x.Name);
+		}
+
+		public static List<PropertyInfo> GetInfos<TObject> (Expression<Func<TObject, object>> propertyRefExpr)
+		{
+			return GetPropertyInfoList<TObject> (default(TObject), propertyRefExpr);
+		}
+
 
 		static PropertyInfo GetPropertyInfoCore (Expression propertyRefExpr)
 		{
@@ -107,10 +145,7 @@ namespace Aicl.Liebre.Model
 				"propertyRefExpr");
 		}
 
-		static string GetPropertyNameCore (Expression propertyRefExpr)
-		{
-			return GetPropertyInfoCore (propertyRefExpr).Name;
-		}
+
 	}
 
 }

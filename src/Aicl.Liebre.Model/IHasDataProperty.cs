@@ -33,6 +33,7 @@ namespace Aicl.Liebre.Model
 
 		public Result (){
 			ResponseStatus = new ResponseStatus ();
+			WriteResult = new WriteResult{ Ok = true };
 		}
 
 		public WriteResult WriteResult { get; set; }

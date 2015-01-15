@@ -39,7 +39,7 @@ namespace Aicl.Liebre.Data
 			var ne = request.Data;
 			var validator = new EmpresaValidator (this);
 			validator.ValidateUpdate (ne);
-			var r = Put<Empresa> (ne);
+			var r = Put<Empresa> (ne, fieldsToIgnore: e => new { e.Llave, e.IdPlan});
 			r.Data.Plan = Single<Plan> (r.Data.IdPlan);
 			return r;
 		}
@@ -102,7 +102,7 @@ namespace Aicl.Liebre.Data
 			var validator = new EmpresaValidator (this);
 			validator.ValidateUpdateRegistro (ne);
 
-			var r = Put<Empresa> (ne);
+			var r = Put<Empresa> (ne, fieldsToIgnore: e => new {e.Llave, e.IdPlan});
 			r.Data.Plan = Single<Plan> (r.Data.IdPlan);
 			return r;
 		}
@@ -115,12 +115,13 @@ namespace Aicl.Liebre.Data
 
 			var empresa = Single<Empresa> (Query.And (Query<Empresa>.EQ (q => q.Nit, request.Nit), Query<Empresa>.EQ (q => q.Llave, request.Llave)));
 			validator.ValidateExiste (empresa);
-			if (request.Regenerar) 
+			if (request.Regenerar) {
 				empresa.Llave = CreateRandomPassword (48);
-			var r = Put<Empresa> (empresa);
-			r.Data.Plan = Single<Plan> (empresa.IdPlan);
-			return r;
-
+				var r = Put<Empresa> (empresa, e=>e.Llave);
+				r.Data.Plan = Single<Plan> (empresa.IdPlan);
+				return r;
+			}
+			return new Result<Empresa>{ Data = empresa };
 		}
 
 

@@ -6,6 +6,8 @@ using Aicl.Liebre.Model;
 using ServiceStack;
 using MongoDB.Bson.Serialization.Attributes;
 using MongoDB.Bson;
+using System.Linq.Expressions;
+using System.Linq;
 
 namespace Aicl.Liebre.Data
 {
@@ -21,16 +23,20 @@ namespace Aicl.Liebre.Data
 		}
 			
 
-		public static WriteConcernResult UpdateOnly<T> (this MongoCollection collection, T document)where T:class, IDocument
+		public static WriteConcernResult UpdateOnly<T> (this MongoCollection collection, T document,
+			Expression<Func<T, object>> fieldsToUpdate=null,
+			Expression<Func<T, object>> fieldsToIgnore=null)where T:class, IDocument
 		{
 			var type = typeof(T);
-			var prop = type.GetProperties ();
+			var prop = fieldsToUpdate==null? type.GetProperties (): PropertyUtil.GetInfos(fieldsToUpdate).ToArray();
+			var ign = fieldsToIgnore==null? new string[]{}: PropertyUtil.GetNames(fieldsToIgnore).ToArray();
 			var ub = new UpdateBuilder ();
 			foreach (var pi in prop){
-
 				var bs = pi.FirstAttribute<BsonRepresentationAttribute>();
 				if ((bs != null && bs.Representation == BsonType.ObjectId )
-					|| pi.FirstAttribute<BsonIgnoreAttribute>() !=null || pi.FirstAttribute<ReadOnlyAttribute>()!=null)
+					|| pi.FirstAttribute<BsonIgnoreAttribute>() !=null || pi.FirstAttribute<ReadOnlyAttribute>()!=null
+					|| ign.Contains(pi.Name)
+				)
 					continue;
 				var nv =pi.GetValue (document);
 				var value = nv!=null? BsonValue.Create (nv):BsonNull.Value;

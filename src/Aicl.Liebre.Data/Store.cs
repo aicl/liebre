@@ -102,10 +102,11 @@ namespace Aicl.Liebre.Data
 			return Store.CreateResult(request, cl.Insert (request));
 		}
 
-		public Result<T> Put<T>(T  request ) where T:class, IDocument
+		public Result<T> Put<T>(T  request, Expression<Func<T, object>> fieldsToUpdate=null, 
+			Expression<Func<T, object>> fieldsToIgnore=null ) where T:class, IDocument
 		{
 			var cl= GetCollection<T> ();
-			return Store.CreateResult(request, cl.UpdateOnly (request));
+			return Store.CreateResult(request, cl.UpdateOnly (request, fieldsToUpdate,fieldsToIgnore));
 			//return Store.CreateResult (request,cl.Update (Query<T>.EQ (e => e.Id, request.Id), Update<T>.Replace (request))); 
 		}
 
