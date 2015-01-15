@@ -11,9 +11,6 @@ namespace Aicl.Liebre.Data
 
 		IStore Store{ get; set; }
 
-		//string contacto = string.Empty;
-		//string email = string.Empty;
-
 		public EmpresaValidator (IStore store)
 		{
 			Store = store;
@@ -53,7 +50,7 @@ namespace Aicl.Liebre.Data
 			});
 				
 			RuleSet ("updateregistro", () => {
-				RuleFor (x => x.IdPlan).Must ((x, y) => GetById (x.Id).IdPlan == y).WithMessage ("No puede cambiar su plan");
+				RuleFor (x => x.IdPlan).Must ((x, y) => y.IsNullOrEmpty() || GetById (x.Id).IdPlan == y).WithMessage ("No puede cambiar su plan");
 				RuleFor(x=>x.Llave)
 					.Must((x, y) => GetById (x.Id).Llave == y)
 					.WithMessage("Llave incorrecta");
@@ -76,34 +73,34 @@ namespace Aicl.Liebre.Data
 
 
 		public void ValidateCreate(Empresa instance){
-			IValidatorExtensions.MyValidate (this,instance, "common","create");
+			this.MyValidate (instance, "common", "create");
 		}
 
 		public void ValidateUpdate(Empresa instance){
-			IValidatorExtensions.MyValidate (this,instance, "common","update");
+			this.MyValidate (instance, "common", "update");
 		}
 
 		public void ValidateDelete(Empresa instance){
-			IValidatorExtensions.MyValidate (this,instance, "delete");
+			this.MyValidate (instance, "delete");
 		}
 
 		public void ValidateCreateRegistro(Empresa instance){
-			IValidatorExtensions.MyValidate (this,instance, "common","createregistro");
+			this.MyValidate (instance, "common", "createregistro");
 		}
 
 		public void ValidateUpdateRegistro(Empresa instance){
-			IValidatorExtensions.MyValidate (this,instance, "common","update","updateregistro");
+			this.MyValidate (instance, "common", "update", "updateregistro");
 		}
 		public void ValidateReadRegistro(Empresa instance){
-			IValidatorExtensions.MyValidate (this,instance, "readregistro");
+			this.MyValidate (instance, "readregistro");
 		}
 
 		public void ValidateExiste(Empresa instance){
-			IValidatorExtensions.MyValidate (this,instance, "existe");
+			this.MyValidate (instance, "existe");
 		}
 
 		public void ValidateConfirmar(Empresa instance){
-			IValidatorExtensions.MyValidate (this,instance, "existe","confirmar");
+			this.MyValidate (instance, "existe", "confirmar");
 		}
 
 		Empresa GetById(string id){
