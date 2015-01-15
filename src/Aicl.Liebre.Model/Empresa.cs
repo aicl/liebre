@@ -29,6 +29,8 @@ namespace Aicl.Liebre.Model
 		public Plan Plan {get;set;}
 		[ReadOnly]
 		public virtual DateTime? FechaRegistro{ get; set;}
+		[ReadOnly]
+		public virtual DateTime FechaLLave{ get; set;}
 	}
 
 	[Collection(typeof(Empresa))]
@@ -97,19 +99,22 @@ namespace Aicl.Liebre.Model
 		public WriteResult WriteResult{ get; set; }
 	}
 
-	[Route("/create/registroempresa","POST")]
-	public class CreateRegistroEmpresa:IReturn<CreateEmpresaResponse>,IHasDataProperty<Empresa>
+	//Autogestion
+
+	[Route("/createregistroempresa","POST")]
+	public class CreateRegistroEmpresa:IReturn<CreateRegistroEmpresaResponse>,IHasDataProperty<Empresa>
 	{
 		public Empresa Data { get; set; }
 	}
 
-	[Route("/update/registroempresa","POST")]
-	public class UpdateRegistroEmpresa:IReturn<CreateEmpresaResponse>,IHasDataProperty<Empresa>
+
+	[Route("/updateregistroempresa","POST")]
+	public class UpdateRegistroEmpresa:IReturn<UpdateRegistroEmpresaResponse>,IHasDataProperty<Empresa>
 	{
 		public Empresa Data { get; set; }
 	}
 
-	[Route("/read/registroempresa","GET")]
+	[Route("/readregistroempresa","GET")]
 	public class ReadRegistroEmpresa:IReturn<ReadRegistroEmpresaResponse>
 	{
 		public string Nit { get; set; }
@@ -117,33 +122,41 @@ namespace Aicl.Liebre.Model
 
 	}
 
-	[Route("/update/confirmaregistroempresa","POST")]
-	public class UpdateConfirmaRegistroEmpresa:IReturn<UpdateConfirmaRegistroEmpresaResponse>
+	[Route("/confirmarregistroempresa","POST")]
+	public class ConfirmarRegistroEmpresa:IReturn<ConfirmarRegistroEmpresaResponse>
 	{
 		public string Nit { get; set; }
 		public string Llave { get; set; }
 	}
 
-	[Route("/update/llaveempresa","POST")]
-	public class UpdateLlaveEmpresa:IReturn<UpdateLlaveEmpresaResponse>
+	[Route("/recuperarllaveempresa","POST")]
+	public class RecuperarLlaveEmpresa:IReturn<RecuperarLlaveEmpresaResponse>
 	{
 		public string Nit { get; set; }
 		public string Llave { get; set; }
+		public bool Regenerar { get; set; }
 	}
-		
-	public class ReadRegistroEmpresaResponse
+
+	public class CreateRegistroEmpresaResponse:CreateEmpresaResponse {
+	}
+
+	public class UpdateRegistroEmpresaResponse:UpdateEmpresaResponse{
+	}
+
+
+	public class ReadRegistroEmpresaResponse:IHasResponseStatus
 	{
 		public Empresa Data {get;set;}
 		public ResponseStatus ResponseStatus {get;set;}
 	}
 
-	public class UpdateLlaveEmpresaResponse
+	public class RecuperarLlaveEmpresaResponse:IHasResponseStatus
 	{
 		public Empresa Data {get;set;}
 		public ResponseStatus ResponseStatus {get;set;}
 	}
 
-	public class UpdateConfirmaRegistroEmpresaResponse:IHasResponseStatus, IHasDataProperty<Empresa>
+	public class ConfirmarRegistroEmpresaResponse:IHasResponseStatus
 	{
 		public Empresa Data {get;set;}
 		public ResponseStatus ResponseStatus {get;set;}

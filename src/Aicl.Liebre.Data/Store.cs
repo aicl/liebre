@@ -109,10 +109,12 @@ namespace Aicl.Liebre.Data
 			//return Store.CreateResult (request,cl.Update (Query<T>.EQ (e => e.Id, request.Id), Update<T>.Replace (request))); 
 		}
 
-		public Result<T> Save<T>(T request ) where T:class, IDocument
+		Result<T> Save<T>(T request ) where T:class, IDocument
 		{
-			return request.Id.IsNullOrEmpty () ? Post (request) : Put (request);
+			var cl = GetCollection<T> ();
+			return Store.CreateResult(request, cl.Save (request));
 		}
+
 
 		public Result<T> Delete<T>(IHasStringId request) where T:class, IDocument, new() 
 		{

@@ -37,9 +37,6 @@ namespace Aicl.Liebre.Data
 				RuleFor (x => x.Id)
 					.Must ((x, y) => GetById (y).Nit == x.Nit || NoNit (x.Nit))
 					.WithMessage ("Nit ya Existe" );
-				RuleFor(x=>x.Llave)
-					.Must((x, y) => GetById (x.Id).Llave == y)
-					.WithMessage("Llave incorrecta");
 			});
 
 			RuleSet ("existe", () => 
@@ -55,8 +52,12 @@ namespace Aicl.Liebre.Data
 					.WithMessage ("La Empresa tiene Diagnostico Asociados");
 			});
 				
-			RuleSet ("updateregistro", () => 
-				RuleFor (x => x.IdPlan).Must ((x, y) => GetById (x.Id).IdPlan == y).WithMessage ("No puede cambiar su plan"));
+			RuleSet ("updateregistro", () => {
+				RuleFor (x => x.IdPlan).Must ((x, y) => GetById (x.Id).IdPlan == y).WithMessage ("No puede cambiar su plan");
+				RuleFor(x=>x.Llave)
+					.Must((x, y) => GetById (x.Id).Llave == y)
+					.WithMessage("Llave incorrecta");
+			});
 
 			RuleSet ("readregistro", () => {
 				RuleFor(x=>x.Nit).NotEmpty().WithMessage("Debe indicar el Nit de la empresa");
@@ -65,6 +66,11 @@ namespace Aicl.Liebre.Data
 
 			RuleSet ("confirmar", () => 
 				RuleFor (x => x.FechaRegistro).Must ((x, y) =>!y.HasValue).WithMessage ("Empresa ya confirmada"));
+
+			RuleSet ("createregistro", () =>
+				RuleFor (x => x.FechaRegistro).Must ((x, y) => !y.HasValue && (System.DateTime.UtcNow - x.FechaLLave).Days > 1)
+				.When (x => !x.Id.IsNullOrEmpty ())
+				.WithMessage ("La empresa ya esta Registrada"));
 
 		}
 
@@ -82,7 +88,7 @@ namespace Aicl.Liebre.Data
 		}
 
 		public void ValidateCreateRegistro(Empresa instance){
-			IValidatorExtensions.MyValidate (this,instance, "common","create");
+			IValidatorExtensions.MyValidate (this,instance, "common","createregistro");
 		}
 
 		public void ValidateUpdateRegistro(Empresa instance){
@@ -108,8 +114,6 @@ namespace Aicl.Liebre.Data
 
 		bool NoNit(string nit){
 			var e= Store.Single<Empresa> (Query<Empresa>.EQ (q => q.Nit, nit));
-			//contacto = e.Contacto.HideContent ();
-			//email = e.Email.HideContent ();
 			return e.Id.IsNullOrEmpty ();
 
 		}

@@ -5,8 +5,7 @@ namespace Aicl.Liebre.ServiceInterface
 {
 	public class EmpresaService:ServiceBase
 	{
-
-		// TODO: autorizado y con privilegios de operador ( contien la llave !);
+		// TODO: autorizado y con privilegios de operador ( contiene la llave !);
 		public object Get(ReadEmpresa request)
 		{
 			return ServiceBase.CreateResponse (Store.GetEmpresas (request));
@@ -32,7 +31,7 @@ namespace Aicl.Liebre.ServiceInterface
 			return Store.DeleteEmpresa (request);
 		}
 
-
+		// Autogestion
 		// TODO: enviar correo  para solicitar confirmacion informado la llave
 		public object Post(CreateRegistroEmpresa request)
 		{
@@ -41,8 +40,8 @@ namespace Aicl.Liebre.ServiceInterface
 
 
 		// esto viene del correo
-		public object Post(UpdateConfirmaRegistroEmpresa request){
-			return Store.UpdateConfirmaRegistroEmpresa (request);
+		public object Post(ConfirmarRegistroEmpresa request){
+			return Store.ConfirmarRegistroEmpresa (request);
 		}
 
 		public object Post(UpdateRegistroEmpresa request)
@@ -51,13 +50,12 @@ namespace Aicl.Liebre.ServiceInterface
 		}
 
 		public object Get(ReadRegistroEmpresa request){
-			return ServiceBase.CreateResponse (Store.GetEmpresa (request));
+			return ServiceBase.CreateResponse (Store.ReadRegistroEmpresa (request));
 		}
 
-
 		// TODO: enviar correo informado la llave
-		public object Post(UpdateLlaveEmpresa request){
-			return Store.UpdateLlaveEmpresa (request);
+		public object Post(RecuperarLlaveEmpresa request){
+			return Store.RecuperarLlaveEmpresa (request);
 		}
 
 	}
