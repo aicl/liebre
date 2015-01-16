@@ -25,7 +25,8 @@ namespace Aicl.Liebre.Data
 		public Result<Empresa> CreateEmpresa(CreateEmpresa request)
 		{
 			var ne = request.Data;
-			var plan = Single<Plan> (ne.IdPlan);
+			var plan = GetDemo();
+			ne.IdPlan = plan.Id;
 			var validator = new EmpresaValidator (this);
 			validator.ValidateCreate(ne);
 			ne.Llave = Store.CreateRandomPassword (48);
@@ -76,22 +77,13 @@ namespace Aicl.Liebre.Data
 			var validator = new EmpresaValidator (this);
 			validator.ValidateCreateRegistro (empresa);
 
-
-			Plan plan = default(Plan);
-			if (!empresa.IdPlan.IsNullOrEmpty ()) {
-				plan = GetById<Plan> (empresa.IdPlan);
-				if(plan!=default(Plan) && (!plan.Aprobado || !plan.Demo)){
-					plan = default(Plan);			
-				}
-			}
-			if (plan == default(Plan))
-				plan = GetDemo ();
-
+			Plan plan = GetDemo ();
 			empresa.IdPlan = plan.Id;
 
 			empresa.Llave = Store.CreateRandomPassword (48);
 			empresa.FechaLLave = DateTime.UtcNow;
 			var r = Save(empresa);
+			r.Data.Llave = "";
 			r.Data.Plan = plan;
 			return r;
 		}
@@ -108,23 +100,6 @@ namespace Aicl.Liebre.Data
 		}
 
 
-		public Result<Empresa> RecuperarLlaveEmpresa(RecuperarLlaveEmpresa request){
-
-			var validator = new EmpresaValidator (this);
-			validator.ValidateReadRegistro (new Empresa{ Nit = request.Nit, Llave = request.Llave });
-
-			var empresa = Single<Empresa> (Query.And (Query<Empresa>.EQ (q => q.Nit, request.Nit), Query<Empresa>.EQ (q => q.Llave, request.Llave)));
-			validator.ValidateExiste (empresa);
-			if (request.Regenerar) {
-				empresa.Llave = CreateRandomPassword (48);
-				var r = Put<Empresa> (empresa, e=>e.Llave);
-				r.Data.Plan = Single<Plan> (empresa.IdPlan);
-				return r;
-			}
-			return new Result<Empresa>{ Data = empresa };
-		}
-
-
 		public Result<Empresa> ConfirmarRegistroEmpresa (ConfirmarRegistroEmpresa request)
 		{
 			var validator = new EmpresaValidator (this);
@@ -137,13 +112,31 @@ namespace Aicl.Liebre.Data
 
 			var r1 = Put(fr);
 			empresa.FechaRegistro= r1.Data.FechaRegistro;
-
+			empresa.Plan = Single<Plan> (empresa.IdPlan);
 			return new Result<Empresa>{
 				Data= empresa,
 				WriteResult= r1.WriteResult,
 			};
 
 		}
+
+		public Result<Empresa> RecuperarLlaveEmpresa(RecuperarLlaveEmpresa request){
+
+			var validator = new EmpresaValidator (this);
+			validator.ValidateReadRegistro (new Empresa{ Nit = request.Nit, Llave = request.Llave });
+
+			var empresa = Single<Empresa> (Query.And (Query<Empresa>.EQ (q => q.Nit, request.Nit), Query<Empresa>.EQ (q => q.Llave, request.Llave)));
+			empresa.Plan = Single<Plan> (empresa.IdPlan);
+			validator.ValidateExiste (empresa);
+			if (request.Regenerar) {
+				empresa.Llave = CreateRandomPassword (48);
+				var r = Put<Empresa> (empresa, e=>e.Llave);
+				r.Data.Plan = empresa.Plan;
+				return r;
+			}
+			return new Result<Empresa>{ Data = empresa };
+		}
+
 
 		Plan GetDemo(){
 			return Single<Plan> (Query.And (Query<Plan>.EQ (q => q.Demo, true), Query<Plan>.EQ (q => q.Aprobado, true)));

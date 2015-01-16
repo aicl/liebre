@@ -1,6 +1,7 @@
 ﻿using Aicl.Liebre.Data;
 using ServiceStack;
 using ServiceStack.Text;
+using System;
 
 namespace Aicl.Liebre.ServiceInterface
 {
@@ -45,18 +46,40 @@ namespace Aicl.Liebre.ServiceInterface
 			using (var client = new JsonServiceClient (AppConfig.PhantonjsOneWayUrl)) {
 				try {
 					client.Post (request);
-				} catch (System.Exception e) {
+				} catch (Exception e) {
 					LogPublishException (request, e, "phn-remoto");
 					throw new HttpError (e.Message);
 				}
 			}
 		}
 
-		void LogPublishException<T>(T request, System.Exception e, string channel){
-			System.Console.WriteLine ("error en envio de peticion: {0}:{1} {2}", channel, typeof(T), e.Message);
-			dynamic message = new {Message=e.Message, Data= request};
-			var serializedMessage = JsonSerializer.SerializeToString((object)message);
-			Redis.PublishMessage (channel, serializedMessage);
+		public void TryPublishMessageToPhantonjs<T>(T request){
+			try{
+				PublishMessageToPhantonjs(request);
+			}
+			catch(HttpError){
+			}
 		}
+
+
+		public void TrySendMail(Action<OpenShift.Model.Email> mail){
+			var m = new OpenShift.Model.SendMail{ ApiKey = AppConfig.PhantonjsApikey };
+			mail (m.Email); 
+			TryPublishMessageToPhantonjs (m);
+		}
+
+		public void SendMail(Action<OpenShift.Model.Email> mail){
+			var m = new OpenShift.Model.SendMail{ ApiKey = AppConfig.PhantonjsApikey };
+			mail (m.Email); 
+			PublishMessageToPhantonjs (m);
+		}
+
+		void LogPublishException<T>(T request, System.Exception e, string channel){
+			Console.WriteLine ("error en envio de peticion: {0}:{1} {2}", channel, typeof(T), e.Message);
+			dynamic message = new {e.Message, Data = request, Type = typeof(T)};
+			var serializedMessage = JsonSerializer.SerializeToString((object)message);
+			Redis.PushItemToList (channel, serializedMessage);
+		}
+			
 	}
 }

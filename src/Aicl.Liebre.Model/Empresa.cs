@@ -31,6 +31,7 @@ namespace Aicl.Liebre.Model
 		public virtual DateTime? FechaRegistro{ get; set;}
 		[ReadOnly]
 		public virtual DateTime FechaLLave{ get; set;}
+		// Saldo : cuantos le quedaron del plan anterior ?
 	}
 
 	[Collection(typeof(Empresa))]
@@ -122,7 +123,7 @@ namespace Aicl.Liebre.Model
 
 	}
 
-	[Route("/confirmarregistroempresa","POST")]
+	[Route("/confirmarregistroempresa","GET")]
 	public class ConfirmarRegistroEmpresa:IReturn<ConfirmarRegistroEmpresaResponse>
 	{
 		public string Nit { get; set; }

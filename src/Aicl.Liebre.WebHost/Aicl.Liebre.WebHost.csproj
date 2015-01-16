@@ -195,6 +195,8 @@
     <Content Include="MailTemplates\DiagnosticoInfo.cshtml" />
     <Content Include="InfoDir\DiagnosticoInfo\ReporteDetallado.html" />
     <Content Include="InfoDir\DiagnosticoInfo\ResumenEjecutivo.html" />
+    <Content Include="MailTemplates\CreateRegistroEmpresa.cshtml" />
+    <Content Include="MailTemplates\ConfirmarRegistroEmpresa.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

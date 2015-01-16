@@ -22,6 +22,7 @@ namespace Aicl.Liebre.Model
 		public string IdPlantilla  { get; set; }
 		public bool Demo { get; set; }
 		public bool Aprobado { get; set; }
+		public int Servicios { get; set; }
 	}
 
 	[Route("/read/plan","GET")]
